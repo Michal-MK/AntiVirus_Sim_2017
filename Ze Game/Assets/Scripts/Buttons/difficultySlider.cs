@@ -6,7 +6,7 @@ public class difficultySlider : MonoBehaviour {
 
 	public Spike score;
 	public float diff;
-	public static float difficulty = 1;
+	public static float difficulty;
 
 	void Update(){
 		diff = gameObject.GetComponent<Slider> ().value;
