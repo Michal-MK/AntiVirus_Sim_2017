@@ -5,10 +5,17 @@ using UnityEngine.UI;
 public class Spike : MonoBehaviour {
 	public CameraMovement cam;
 	public GameObject deathBlock;
+	public RectTransform BG;
 	GameObject player;
+	public Boundary bounds;
+	public Guide guide;
+
+
 
 	void Start(){
 		player = GameObject.Find ("Asset");
+
+
 	}
 
 	public int i = 0;
@@ -16,31 +23,39 @@ public class Spike : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D col){
 		timer.run = true;
 		Vector3 old_pos = transform.position;
+		float Xscale = gameObject.transform.lossyScale.x / 2;
+		float Yscale = gameObject.transform.lossyScale.y / 2;
 
 
 		if (col.name == "Asset") {
 			Vector3 newpos = transform.position;
 
-			while (Mathf.Abs(Vector3.Distance(newpos, old_pos)) < 5) {
-				
+			while (Mathf.Abs(Vector3.Distance(newpos, old_pos)) < 10) {
+
+				float x = Random.Range ((-BG.sizeDelta.x/10)/2 + Xscale , (BG.sizeDelta.x/10)/2) - Xscale;
+				float y = Random.Range ((-BG.sizeDelta.y/10)/2 + Yscale, (BG.sizeDelta.y/10)/2) - Yscale;
 				float z = 0f;
-				float y = Random.Range (-17.2f, +17.2f);
-				float x = Random.Range (-31.2f, +31.2f);
 
 				newpos = new Vector3(x, y, z);
+
 			}
-
-
-
+				
 			gameObject.transform.position = newpos;
 
+			//Debug.Log ("Current pos: " + newpos.ToString ());
+
+			guide.SendMessage ("init");
+
 			i = i+1;
-			for (int count = 0; count < (i + 5 * difficultySlider.difficulty); count++) {
+
+
+			for (int count = 0; count < (int)(i + 5 * difficultySlider.difficulty); count++) {
 				
 				Vector2 couldpos = (Vector2)player.transform.position;
 				while (Vector2.Distance (player.transform.position, couldpos) < 10) {
-					float y = Random.Range (-17.2f, +17.2f);
-					float x = Random.Range (-31.2f, +31.2f);
+					
+					float x = Random.Range ((-BG.sizeDelta.x/10)/2 + Xscale , (BG.sizeDelta.x/10)/2) - Xscale;
+					float y = Random.Range ((-BG.sizeDelta.y/10)/2 + Yscale, (BG.sizeDelta.y/10)/2) - Yscale;
 					couldpos = new Vector2 (x, y);
 
 				}
@@ -52,11 +67,18 @@ public class Spike : MonoBehaviour {
 				newBlock.name = "killerblock";
 				newBlock.transform.parent = transform.parent;
 			}
+
+			if (i == 4) {
+				bounds.SendMessage ("clearPassage");
+			}
+
 			if (i == 5) {
 				
 				Spike.Destroy (gameObject);
 				player.SendMessage ("GameOver");
 			}
+
+
 		}
 	}
 	public void saveScore(){

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Boundary : MonoBehaviour {
 	public M_Player scr;
+	public Spike count;
+	public GameObject Door;
 
 
 	void OnTriggerEnter2D (Collider2D coll){
@@ -17,7 +19,7 @@ public class Boundary : MonoBehaviour {
 			scr.stepUp = 0;
 
 		}
-		if (coll.name == "2") {
+		if (coll.name == "2" || coll.name == "2door") {
 			scr.stepRight = 0;
 
 		}
@@ -40,7 +42,7 @@ public class Boundary : MonoBehaviour {
 			scr.stepUp = 1;
 
 		}
-		if (coll.name == "2") {
+		if (coll.name == "2" || coll.name == "2door") {
 			scr.stepRight = 1;
 
 		}
@@ -50,9 +52,9 @@ public class Boundary : MonoBehaviour {
 		}
 		return;
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-	}
+	public void clearPassage(){
+			Destroy (Door.gameObject);
+		
+	}	
 }
