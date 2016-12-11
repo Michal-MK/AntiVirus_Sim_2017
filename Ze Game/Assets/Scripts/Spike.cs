@@ -6,10 +6,6 @@ public class Spike : MonoBehaviour {
 	public CameraMovement cam;
 	public GameObject deathBlock;
 	GameObject player;
-	public Boundary bounds;
-	public Guide guide;
-
-
 
 	void Start(){
 		player = GameObject.Find ("Asset");
@@ -39,9 +35,6 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = newpos;
 
 			i = i+1;
-			guide.SendMessage ("init");
-
-
 			for (int count = 0; count < (i + 5 * difficultySlider.difficulty); count++) {
 				
 				Vector2 couldpos = (Vector2)player.transform.position;
@@ -59,18 +52,11 @@ public class Spike : MonoBehaviour {
 				newBlock.name = "killerblock";
 				newBlock.transform.parent = transform.parent;
 			}
-
-			if (i == 4) {
-				bounds.SendMessage ("clearPassage");
-			}
-
 			if (i == 5) {
 				
 				Spike.Destroy (gameObject);
 				player.SendMessage ("GameOver");
 			}
-
-
 		}
 	}
 	public void saveScore(){
