@@ -3,7 +3,7 @@ using System.Collections;
 
 	public class M_Player : MonoBehaviour {
 	public int attemptNr;
-	public float speed = 20f;
+	public float speed = 1f;
 	public bool step;
 	public int stepUp = 1;
 	public int stepDown = 1;
@@ -15,54 +15,75 @@ using System.Collections;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
 	public Spike nr;
+	public CameraMovement cam;
+	public GameObject CRTriggerRight;
+	public GameObject CRTriggerLeft;
+
 
 	void Start() {
 		quitButton.SetActive (false);
 		restartButton.SetActive (false);
 		quitToMenu.SetActive (false);
 		attemptNr = 11;
+
+
 	}
+
 
 	void FixedUpdate () {
 		move = new Vector3 (0, 0, 0);
-		if (stepRight == 1 && Input.GetAxis ("Mouse X") > 0) {
-			move.x = Input.GetAxis ("Mouse X");
-		} 
-		else if (stepLeft == 1 && Input.GetAxis ("Mouse X") < 0) {
-			move.x = Input.GetAxis ("Mouse X");
-		}
-		if (stepUp == 1 && Input.GetAxis ("Mouse Y") > 0) {
-			move.y = Input.GetAxis ("Mouse Y");
-		} 
-		else if (stepDown == 1 && Input.GetAxis ("Mouse Y") < 0) {
-			move.y = Input.GetAxis ("Mouse Y");
-		}
+//		if (stepRight == 1 && Input.GetAxis ("Mouse X") > 0) {
+//			move.x = + Input.GetAxis ("Mouse X");
+//		} 
+//		else if (stepLeft == 1 && Input.GetAxis ("Mouse X") < 0) {
+//			move.x = + Input.GetAxis ("Mouse X");
+//		}
+//		if (stepUp == 1 && Input.GetAxis ("Mouse Y") > 0) {
+//			move.y = + Input.GetAxis ("Mouse Y");
+//		} 
+//		else if (stepDown == 1 && Input.GetAxis ("Mouse Y") < 0) {
+//			move.y = + Input.GetAxis ("Mouse Y");
+//		}
+
+
+
 
 		if (Input.GetKey (KeyCode.UpArrow)) {
-			move.y = + stepUp;
+			move.y = +stepUp;
 		}
 
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			move.y = - stepDown;
+			move.y = -stepDown;
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			move.x = + stepRight;
+			move.x = +stepRight;
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			move.x = - stepLeft;
+			move.x = -stepLeft;
 		}
 			
 		if (doNotMove == false) {
-			gameObject.transform.position += move *Time.deltaTime* speed;
-		} 
-	}
-	void OnTriggerEnter2D (Collider2D col){
-		if (col.name == "killerblock") {
-			GameOver();
+			gameObject.transform.position += move * Time.deltaTime * speed;
 		}
 	}
+
+	void OnTriggerEnter2D (Collider2D col){
+		if (col.name == "killerblock") {
+			GameOver ();
+		}
+		if (col.name == "CRTriggerRight") {
+			cam.cam_pos.x = CRTriggerRight.transform.position.x + 20;
+			Debug.Log ("TouchedR");
+		}
+		if (col.name == "CRTriggerLeft") {
+			cam.cam_pos.x = CRTriggerRight.transform.position.x - 20;
+			Debug.Log ("TouchedL");
+		}
+	}
+
+
 	public void GameOver(){
 
 		if (nr.i == 5) {
