@@ -24,11 +24,6 @@ public class timer : MonoBehaviour {
 				FYT.SetActive(true);
 				time_er = time_er + Time.fixedDeltaTime;
 				text.text = "Time: " + (Mathf.Round(time_er * 100) / 100);		
-			
-			if (time_er == 0) {
-				
-
-			}
 
 			if (time_er >= 0 && time_er <=9.95) {
 				FYT.gameObject.transform.position =  new Vector3(transform.position.x + 30,transform.position.y,0);
@@ -37,7 +32,7 @@ public class timer : MonoBehaviour {
 			if (time_er >= 10 && time_er <= 10.02) {
 				FYT.gameObject.transform.position =  new Vector3(transform.position.x + 45,transform.position.y,0);
 			}
-			if (time_er >= 11 && time_er <= 11.02) {
+			if (time_er >= 60 && time_er <= 60.02) {
 				FYT.SetActive (false);
 				Vector3 textpos = new Vector3 (text.transform.position.x, text.transform.position.y, 0);
 				Destroy (text.gameObject);

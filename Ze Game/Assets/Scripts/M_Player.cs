@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 	public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -16,12 +17,13 @@ using System.Collections;
 	public GameObject quitToMenu;
 	public Spike nr;
 	public CameraMovement cam;
-	public GameObject CRTriggerRight;
-	public GameObject CRTriggerLeft;
+//	public GameObject CRTriggerRight;
+//	public GameObject CRTriggerLeft;
+	private bool toggle;
+
 
 
 	void Start() {
-		quitButton.SetActive (false);
 		restartButton.SetActive (false);
 		quitToMenu.SetActive (false);
 		attemptNr = 11;
@@ -67,20 +69,47 @@ using System.Collections;
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * speed;
 		}
+
+		if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene ().buildIndex == 1) {
+			toggle = !toggle;
+
+			if (toggle) {
+				
+				M_Player.doNotMove = true;
+				Cursor.visible = true;
+				timer.run = false;
+				restartButton.SetActive (true);
+				quitToMenu.SetActive (true);
+			
+			} else {
+				M_Player.doNotMove = false;
+				Cursor.visible = false;
+				timer.run = true;
+				restartButton.SetActive (false);
+				quitToMenu.SetActive (false);
+			
+			}
+
+
+		}
+
+
 	}
+
+
 
 	void OnTriggerEnter2D (Collider2D col){
 		if (col.name == "killerblock") {
 			GameOver ();
 		}
-		if (col.name == "CRTriggerRight") {
-			cam.cam_pos.x = CRTriggerRight.transform.position.x + 20;
-			Debug.Log ("TouchedR");
-		}
-		if (col.name == "CRTriggerLeft") {
-			cam.cam_pos.x = CRTriggerRight.transform.position.x - 20;
-			Debug.Log ("TouchedL");
-		}
+//		if (col.name == "CRTriggerRight") {
+//			cam.cam_pos.x = CRTriggerRight.transform.position.x + 20;
+//			Debug.Log ("TouchedR");
+//		}
+//		if (col.name == "CRTriggerLeft") {
+//			cam.cam_pos.x = CRTriggerRight.transform.position.x - 20;
+//			Debug.Log ("TouchedL");
+//		}
 	}
 
 
@@ -88,7 +117,7 @@ using System.Collections;
 
 		if (nr.i == 5) {
 			
-			quitButton.SetActive (true);
+
 			restartButton.SetActive (true);
 			quitToMenu.SetActive (true);
 			M_Player.doNotMove = true;
@@ -98,7 +127,7 @@ using System.Collections;
 
 		}
 		else{
-			quitButton.SetActive (true);
+
 			restartButton.SetActive (true);
 			quitToMenu.SetActive (true);
 			M_Player.doNotMove = true;
