@@ -6,19 +6,20 @@ public class Spike : MonoBehaviour {
 	public CameraMovement cam;
 	public GameObject deathBlock;
 	public RectTransform BG;
-	GameObject player;
+	public GameObject player;
 	public Boundary bounds;
 	public Guide guide;
 
 
 
 	void Start(){
-		player = GameObject.Find ("Asset");
+		player = GameObject.Find ("Player");
 
 
 	}
-
 	public int i = 0;
+
+
 
 	void OnTriggerEnter2D (Collider2D col){
 		timer.run = true;
@@ -27,7 +28,7 @@ public class Spike : MonoBehaviour {
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 
 
-		if (col.name == "Asset") {
+		if (col.name == player.name) {
 			Vector3 newpos = transform.position;
 
 			while (Mathf.Abs(Vector3.Distance(newpos, old_pos)) < 10) {
@@ -69,7 +70,7 @@ public class Spike : MonoBehaviour {
 			}
 
 			if (i == 4) {
-				bounds.SendMessage ("clearPassage");
+				bounds.clearPassageToRoom1();
 			}
 
 			if (i == 5) {

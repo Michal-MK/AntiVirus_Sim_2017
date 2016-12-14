@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Boundary : MonoBehaviour {
 	public M_Player scr;
@@ -7,53 +8,80 @@ public class Boundary : MonoBehaviour {
 	public GameObject Door;
 
 
-	void OnTriggerEnter2D (Collider2D coll){
-		//Debug.Log ("enter " + coll.name);
+	public List<Collider2D> touching  = new List<Collider2D>();
 
-		if (coll.name == "1") {
-			
-			scr.stepDown = 0;
 
-		}
-		if (coll.name == "3") {
-			scr.stepUp = 0;
 
-		}
-		if (coll.name == "2" || coll.name == "2door") {
-			scr.stepRight = 0;
-
-		}
-		if (coll.name == "4") {
-			scr.stepLeft = 0;
-
-		}
-
-		return;
+	void Start (){
+		
 	}
 
-	void OnTriggerExit2D (Collider2D coll) {
-		//Debug.Log ("exit " + coll.name);
 
-		if(coll.name == "1"){
-			scr.stepDown = 1;
 
-		}
-		if (coll.name == "3") {
-			scr.stepUp = 1;
+//	void OnTriggerEnter2D (Collider2D coll){
+//		Debug.Log ("enter " + coll.name);
+//
+//		touching.Add (coll);
+//
+//		if (coll.name == "1") {
+//			
+//			scr.stepDown = 0;
+//
+//		}
+//		if (coll.name == "3") {
+//			scr.stepUp = 0;
+//
+//		}
+//		if (coll.name == "2door" || coll.name == "2"  ) {
+//			scr.stepRight = 0;
+//		}
+//
+//		if (coll.name == "4") {
+//			scr.stepLeft = 0;
+//
+//		}
+//
+//		return;
+//	}
+//
+//	void OnTriggerExit2D (Collider2D coll) {
+//		Debug.Log ("exit " + coll.name);
+//		touching.Remove (coll);
+//
+//		if(coll.name == "1"){
+//			scr.stepDown = 1;
+//
+//		}
+//		if (coll.name == "3") {
+//			scr.stepUp = 1;
+//
+//		}
+//		if (coll.name == "2door" || coll.name == "2") {
+//			if (touching.Count > 0) {
+//				foreach (Collider2D collider in touching) {
+//					if (collider.name == "2door") {
+//						Debug.Log ("NAY");
+//
+//					} else {
+//						Debug.Log ("Noice");
+//						scr.stepRight = 1;
+//					}
+//				}
+//			} 
+//			else {
+//				scr.stepRight = 1;
+//			}
+//		}
+//		if (coll.name == "4") {
+//			scr.stepLeft = 1;
+//
+//		}
+////		touching.Remove (coll);
+//		return;
+//
+//	}
 
-		}
-		if (coll.name == "2" || coll.name == "2door") {
-			scr.stepRight = 1;
-
-		}
-		if (coll.name == "4") {
-			scr.stepLeft = 1;
-
-		}
-		return;
-	}
-
-	public void clearPassage(){
+	public void clearPassageToRoom1(){
 			Destroy (Door.gameObject);
 		
 	}	

@@ -13,19 +13,19 @@ public class difficultySlider : MonoBehaviour {
 	}
 	void FixedUpdate(){
 		if (diff == 0) {
-			difficulty = 1f; 
+			difficulty = 2f; 
 		}
 		if (diff == 1) {
-			difficulty = 1.2f; 
+			difficulty = 2.5f; 
 		}
 		if (diff == 2) {
-			difficulty = 1.5f; 
+			difficulty = 3f; 
 		}
 		if (diff == 3) {
-			difficulty = 1.7f; 
+			difficulty = 3.5f; 
 		}
 		if (diff == 4) {
-			difficulty = 2f; 
+			difficulty = 4f; 
 		}
 	}
 }

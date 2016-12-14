@@ -28,7 +28,7 @@ public class TextRender : MonoBehaviour {
 			textToScreen.text = "You have touched the spike " + score.i + " times!";
 		}
 
-		if (score.i == 1) {
+		if (score.i == 5) {
 			textToScreen.transform.position = new Vector3 (canvas.transform.position.x,canvas.transform.position.y+ 100, 0);
 			textToScreen.text = "The Spike is gone!";
 			textToScreen.fontSize = 52;

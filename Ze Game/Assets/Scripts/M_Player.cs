@@ -4,12 +4,7 @@ using UnityEngine.SceneManagement;
 
 	public class M_Player : MonoBehaviour {
 	public int attemptNr;
-	public float speed = 1f;
-	public bool step;
-	public int stepUp = 1;
-	public int stepDown = 1;
-	public int stepLeft = 1;
-	public int stepRight = 1;
+	public float speed = 20f;
 	public static bool doNotMove;
 	public Vector3 move;
 	public GameObject quitButton;
@@ -17,8 +12,6 @@ using UnityEngine.SceneManagement;
 	public GameObject quitToMenu;
 	public Spike nr;
 	public CameraMovement cam;
-//	public GameObject CRTriggerRight;
-//	public GameObject CRTriggerLeft;
 	private bool toggle;
 
 
@@ -28,12 +21,14 @@ using UnityEngine.SceneManagement;
 		quitToMenu.SetActive (false);
 		attemptNr = 11;
 
-
 	}
 
-
 	void FixedUpdate () {
+
+
+
 		move = new Vector3 (0, 0, 0);
+
 //		if (stepRight == 1 && Input.GetAxis ("Mouse X") > 0) {
 //			move.x = + Input.GetAxis ("Mouse X");
 //		} 
@@ -48,24 +43,82 @@ using UnityEngine.SceneManagement;
 //		}
 
 
-
-
 		if (Input.GetKey (KeyCode.UpArrow)) {
-			move.y = +stepUp;
+
+			float distanceToWall = 0;
+
+
+			Debug.DrawRay (transform.position, Vector2.up * 1000, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,Mathf.Infinity);
+			if (result.Length > 1) {
+				distanceToWall = result [1].distance;
+
+
+			}
+			if (distanceToWall > 2.01f) {
+				move.y = 1;
+			} 
+			else {
+				move.y = distanceToWall - 2;
+			}
 		}
 
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			move.y = -stepDown;
+			float distanceToWall = 0;
+
+
+			Debug.DrawRay (transform.position, Vector2.down * 1000, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,Mathf.Infinity);
+			if (result.Length > 1) {
+				distanceToWall = result [1].distance;
+
+
+			}
+			if (distanceToWall > 2.4f) {
+				move.y = -1;
+			} 
+			else {
+				move.y = -distanceToWall + 2;
+			}
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			move.x = +stepRight;
+			float distanceToWall = 0;
+
+
+			Debug.DrawRay (transform.position, Vector2.right * 1000, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,Mathf.Infinity);
+			if (result.Length > 1) {
+				distanceToWall = result [1].distance;
+
+
+			}
+			if (distanceToWall > 2.4f) {
+				move.x = 1;
+			} 
+			else {
+				move.x = distanceToWall - 2;
+			}
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			move.x = -stepLeft;
+			float distanceToWall = 0;
+
+
+			Debug.DrawRay (transform.position, Vector2.left * 1000, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,Mathf.Infinity);
+			if (result.Length > 1) {
+				distanceToWall = result [1].distance;
+
+
+			}
+			if (distanceToWall > 2.4f) {
+				move.x = -1;
+			} 
+			else {
+				move.x = -distanceToWall + 2;
+			}
 		}
-			
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * speed;
 		}
@@ -89,29 +142,23 @@ using UnityEngine.SceneManagement;
 				quitToMenu.SetActive (false);
 			
 			}
-
-
 		}
-
-
 	}
-
-
-
 	void OnTriggerEnter2D (Collider2D col){
 		if (col.name == "killerblock") {
 			GameOver ();
 		}
-//		if (col.name == "CRTriggerRight") {
-//			cam.cam_pos.x = CRTriggerRight.transform.position.x + 20;
-//			Debug.Log ("TouchedR");
-//		}
-//		if (col.name == "CRTriggerLeft") {
-//			cam.cam_pos.x = CRTriggerRight.transform.position.x - 20;
-//			Debug.Log ("TouchedL");
-//		}
 	}
 
+	public void Rayer() {
+		Debug.DrawRay (transform.position, move * 1000, Color.red);
+		RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, (Vector2)move,Mathf.Infinity);
+		if (result.Length > 1) {
+			Debug.Log (result[1].distance);
+		}
+
+		return;
+	}
 
 	public void GameOver(){
 

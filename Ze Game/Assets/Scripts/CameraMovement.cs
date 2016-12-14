@@ -30,18 +30,23 @@ public class CameraMovement : MonoBehaviour {
 
 	}
 	public float determineX () {
-		if (player.position.x > maxValues.x || player.position.x < minValues.x){
-		return transform.position.x;
-		}
+		if (player.position.x > maxValues.x) {
+			return maxValues.x;
+		} else if (player.position.x < minValues.x) {
+			return -maxValues.x;
+		} 
 		else {
-		return player.position.x;
+			return player.position.x;
 		}
+
 	}
 
 	public float determineY () {
-		if (player.position.y > maxValues.y || player.position.y < minValues.y) {
-			return transform.position.y;
-		}
+		if (player.position.y > maxValues.y) {
+			return maxValues.y;
+		} else if (player.position.y < minValues.y) {
+			return -maxValues.y;
+		} 
 		else {
 			return player.position.y;
 		}
