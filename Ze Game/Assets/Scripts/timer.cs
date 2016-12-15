@@ -33,13 +33,13 @@ public class timer : MonoBehaviour {
 				FYT.gameObject.transform.position =  new Vector3(transform.position.x + 45,transform.position.y,0);
 			}
 			if (time_er >= 60 && time_er <= 60.02) {
-				FYT.SetActive (false);
-				Vector3 textpos = new Vector3 (text.transform.position.x, text.transform.position.y, 0);
-				Destroy (text.gameObject);
-				GameObject timetext = (GameObject)Instantiate (Timer_text, new Vector3 (textpos.x, textpos.y, 0), Quaternion.identity);
-				timetext.GetComponent<Text> ().text = "Are you even trying ?";
-				timetext.transform.parent = transform.parent;
 				run = false;
+				FYT.SetActive (false);
+//				Vector3 textpos = new Vector3 (text.transform.position.x, text.transform.position.y, 0);
+//				GameObject timetext = (GameObject)Instantiate (Timer_text, new Vector3 (textpos.x, textpos.y, 0), Quaternion.identity);
+				text.text = "Are you even trying ?";
+
+
 	
 			}
 		}	

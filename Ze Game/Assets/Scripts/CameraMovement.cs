@@ -15,10 +15,10 @@ public class CameraMovement : MonoBehaviour {
 		Cursor.visible = false;
 
 		thisone = this.GetComponent<Camera> ();
-//		Debug.Log (thisone.aspect  * thisone.orthographicSize);
+//		Debug.Log (thisone.aspect + thisone.orthographicSize);
 		maxValues.y = referencePointMax.position.y - thisone.orthographicSize;
-		minValues.y = referencePointMin.position.y + thisone.orthographicSize;
 		maxValues.x = referencePointMax.position.x - thisone.aspect  * thisone.orthographicSize;
+		minValues.y = referencePointMin.position.y + thisone.orthographicSize;
 		minValues.x = referencePointMin.position.x + thisone.aspect  * thisone.orthographicSize;
 	}
 
@@ -33,7 +33,7 @@ public class CameraMovement : MonoBehaviour {
 		if (player.position.x > maxValues.x) {
 			return maxValues.x;
 		} else if (player.position.x < minValues.x) {
-			return -maxValues.x;
+			return minValues.x;
 		} 
 		else {
 			return player.position.x;
@@ -45,7 +45,7 @@ public class CameraMovement : MonoBehaviour {
 		if (player.position.y > maxValues.y) {
 			return maxValues.y;
 		} else if (player.position.y < minValues.y) {
-			return -maxValues.y;
+			return minValues.y;
 		} 
 		else {
 			return player.position.y;

@@ -45,17 +45,19 @@ using UnityEngine.SceneManagement;
 
 		if (Input.GetKey (KeyCode.UpArrow)) {
 
-			float distanceToWall = 0;
+			float distanceToWall = Mathf.Infinity;
 
 
-			Debug.DrawRay (transform.position, Vector2.up * 1000, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,Mathf.Infinity);
-			if (result.Length > 1) {
-				distanceToWall = result [1].distance;
-
-
+			Debug.DrawRay (transform.position, Vector2.up * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall") {
+					distanceToWall = hits.distance;
+					break;
+				}
+			
 			}
-			if (distanceToWall > 2.01f) {
+			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
 				move.y = 1;
 			} 
 			else {
@@ -64,57 +66,63 @@ using UnityEngine.SceneManagement;
 		}
 
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			float distanceToWall = 0;
+			float distanceToWall = Mathf.Infinity;
 
 
-			Debug.DrawRay (transform.position, Vector2.down * 1000, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,Mathf.Infinity);
-			if (result.Length > 1) {
-				distanceToWall = result [1].distance;
-
+			Debug.DrawRay (transform.position, Vector2.down * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall") {
+					distanceToWall = hits.distance;
+					break;
+				}
 
 			}
-			if (distanceToWall > 2.4f) {
+			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
 				move.y = -1;
-			} 
+			}  
 			else {
 				move.y = -distanceToWall + 2;
 			}
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			float distanceToWall = 0;
+			float distanceToWall = Mathf.Infinity;
 
 
-			Debug.DrawRay (transform.position, Vector2.right * 1000, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,Mathf.Infinity);
-			if (result.Length > 1) {
-				distanceToWall = result [1].distance;
-
+			Debug.DrawRay (transform.position, Vector2.right * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall") {
+					distanceToWall = hits.distance;
+					break;
+				}
 
 			}
-			if (distanceToWall > 2.4f) {
+			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
 				move.x = 1;
-			} 
+			}  
 			else {
 				move.x = distanceToWall - 2;
 			}
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			float distanceToWall = 0;
+			float distanceToWall = Mathf.Infinity;
 
 
-			Debug.DrawRay (transform.position, Vector2.left * 1000, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,Mathf.Infinity);
-			if (result.Length > 1) {
-				distanceToWall = result [1].distance;
-
+			Debug.DrawRay (transform.position, Vector2.left * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall") {
+					distanceToWall = hits.distance;
+					break;
+				}
 
 			}
-			if (distanceToWall > 2.4f) {
+			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
 				move.x = -1;
-			} 
+			}   
 			else {
 				move.x = -distanceToWall + 2;
 			}
