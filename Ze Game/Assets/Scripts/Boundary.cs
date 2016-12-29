@@ -7,13 +7,8 @@ public class Boundary : MonoBehaviour {
 	public GameObject Door;
 
 
-	void Start (){
-
-	}
-
 	public void clearPassageToRoom1(){
 		Destroy(Door);
-		Debug.Log ("AAAA");	
 
 	}	
 }

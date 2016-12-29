@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class difficultySlider : MonoBehaviour {
 
 	public Spike score;
-	public float diff;
-	public static float difficulty = 1;
+	public static float diff;
+	public static float difficulty = 1f;
 
 	void Update(){
 		diff = gameObject.GetComponent<Slider> ().value;
@@ -27,5 +27,7 @@ public class difficultySlider : MonoBehaviour {
 		if (diff == 4) {
 			difficulty = 4f; 
 		}
+
+		PlayerPrefs.SetInt ("difficulty", (int)diff);
 	}
 }

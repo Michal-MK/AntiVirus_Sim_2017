@@ -42,7 +42,7 @@ GameObject:
   - 61: {fileID: 61000011704740270}
   m_Layer: 0
   m_Name: Door_HCenter
-  m_TagString: Wall
+  m_TagString: Wall/Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

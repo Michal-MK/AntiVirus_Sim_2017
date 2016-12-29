@@ -6,15 +6,9 @@ public class quitTM : MonoBehaviour {
 
 	public void quitToMM(int menuIndex){
 		
-		#if UNITY_EDITOR
-		UnityEditor.EditorApplication.isPlaying = false;
+		SceneManager.LoadScene (0);
+		Spike.i = 0;
+		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
-
-		#else
-		M_Player.doNotMove = false;
-		SceneManager.LoadScene (menuIndex);
-	
-		#endif
-
 	}
 }

@@ -8,7 +8,7 @@ public class loadScene : MonoBehaviour {
 
 		#if UNITY_EDITOR
 		M_Player.doNotMove = false;
-		UnityEditor.EditorApplication.isPlaying = false;
+		SceneManager.LoadScene (1);
 
 		#else
 		M_Player.doNotMove = false;

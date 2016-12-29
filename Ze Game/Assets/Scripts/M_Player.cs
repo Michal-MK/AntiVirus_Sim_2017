@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 	public class M_Player : MonoBehaviour {
 	public int attemptNr;
-	public float speed = 20f;
+	public float speed = 10f;
 	public static bool doNotMove;
 	public Vector3 move;
 	public GameObject quitButton;
@@ -13,15 +13,36 @@ using UnityEngine.SceneManagement;
 	public Spike nr;
 	public CameraMovement cam;
 	private bool toggle;
+	public static float distanceToWall;
+	public static int gameProgression;
+	public static string currentBG_name;
 
 
 
 	void Start() {
 		restartButton.SetActive (false);
 		quitToMenu.SetActive (false);
-		attemptNr = 11;
+		currentBG_name = "";
+
+
+		if (PlayerPrefs.GetInt ("difficulty") == 0) {
+			attemptNr = 10;
+		}
+		if (PlayerPrefs.GetInt ("difficulty") == 1) {
+			attemptNr = 21;
+		}
+		if (PlayerPrefs.GetInt ("difficulty") == 2) {
+			attemptNr = 32;
+		}
+		if (PlayerPrefs.GetInt ("difficulty") == 3) {
+			attemptNr = 43;
+		}
+		if (PlayerPrefs.GetInt ("difficulty") == 4) {
+			attemptNr = 54;
+		}
 
 	}
+
 
 	void FixedUpdate () {
 
@@ -29,29 +50,110 @@ using UnityEngine.SceneManagement;
 
 		move = new Vector3 (0, 0, 0);
 
-//		if (stepRight == 1 && Input.GetAxis ("Mouse X") > 0) {
-//			move.x = + Input.GetAxis ("Mouse X");
-//		} 
-//		else if (stepLeft == 1 && Input.GetAxis ("Mouse X") < 0) {
-//			move.x = + Input.GetAxis ("Mouse X");
-//		}
-//		if (stepUp == 1 && Input.GetAxis ("Mouse Y") > 0) {
-//			move.y = + Input.GetAxis ("Mouse Y");
-//		} 
-//		else if (stepDown == 1 && Input.GetAxis ("Mouse Y") < 0) {
-//			move.y = + Input.GetAxis ("Mouse Y");
-//		}
+		if (Input.GetAxis ("Mouse X") > 0) {
+			distanceToWall = Mathf.Infinity;
 
 
-		if (Input.GetKey (KeyCode.UpArrow)) {
+			Debug.DrawRay (transform.position, Vector2.right * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
 
-			float distanceToWall = Mathf.Infinity;
+			}
+			float totalDist = Input.GetAxis ("Mouse X") * Time.deltaTime * speed;
+			if (totalDist >= distanceToWall - 2) {
+				move.x = distanceToWall - 2;
+			} 
+			else {
+				move.x = Input.GetAxis ("Mouse X");
+			}
+				
+		} 
+		else if (Input.GetAxis ("Mouse X") < 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay (transform.position, Vector2.left * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Mathf.Abs(Input.GetAxis ("Mouse X") * Time.deltaTime * speed);
+			if (totalDist >= distanceToWall - 2) {
+				move.x = -distanceToWall + 2;
+			} 
+			else {
+				move.x = Input.GetAxis ("Mouse X");
+			}
+
+
+
+		}
+		if (Input.GetAxis ("Mouse Y") > 0) {
+
+			distanceToWall = Mathf.Infinity;
 
 
 			Debug.DrawRay (transform.position, Vector2.up * 100, Color.red);
 			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,1000);
 			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall") {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Input.GetAxis ("Mouse Y") * Time.deltaTime * speed;
+			if (totalDist >= distanceToWall - 2) {
+				move.y = distanceToWall - 2;
+			} 
+			else {
+				move.y = Input.GetAxis ("Mouse Y");
+			}
+				
+		} 
+		else if (Input.GetAxis ("Mouse Y") < 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay (transform.position, Vector2.down * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Mathf.Abs(Input.GetAxis ("Mouse Y") * Time.deltaTime * speed);
+			if (totalDist >= distanceToWall - 2) {
+				move.y = -distanceToWall + 2;
+			} 
+			else {
+				move.y = Input.GetAxis ("Mouse Y");
+			}
+				
+		}
+
+
+		if (Input.GetKey (KeyCode.UpArrow)) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay (transform.position, Vector2.up * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,1000);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
 					break;
 				}
@@ -66,13 +168,13 @@ using UnityEngine.SceneManagement;
 		}
 
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			float distanceToWall = Mathf.Infinity;
+			distanceToWall = Mathf.Infinity;
 
 
 			Debug.DrawRay (transform.position, Vector2.down * 100, Color.red);
 			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,1000);
 			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall") {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
 					break;
 				}
@@ -87,13 +189,13 @@ using UnityEngine.SceneManagement;
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			float distanceToWall = Mathf.Infinity;
+			distanceToWall = Mathf.Infinity;
 
 
 			Debug.DrawRay (transform.position, Vector2.right * 100, Color.red);
 			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,1000);
 			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall") {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
 					break;
 				}
@@ -108,13 +210,13 @@ using UnityEngine.SceneManagement;
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			float distanceToWall = Mathf.Infinity;
+			distanceToWall = Mathf.Infinity;
 
 
 			Debug.DrawRay (transform.position, Vector2.left * 100, Color.red);
 			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,1000);
 			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall") {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
 					break;
 				}
@@ -152,25 +254,25 @@ using UnityEngine.SceneManagement;
 			}
 		}
 	}
+
+
+
+
 	void OnTriggerEnter2D (Collider2D col){
 		if (col.name == "killerblock") {
 			GameOver ();
 		}
-	}
+		if (col.transform.tag == "BG") {
+			currentBG_name = col.name;
+			cam.SendMessage ("Progress");
 
-	public void Rayer() {
-		Debug.DrawRay (transform.position, move * 1000, Color.red);
-		RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, (Vector2)move,Mathf.Infinity);
-		if (result.Length > 1) {
-			Debug.Log (result[1].distance);
 		}
-
-		return;
 	}
+		
 
 	public void GameOver(){
 
-		if (nr.i == 5) {
+		if (Spike.i == 5) {
 			
 
 			restartButton.SetActive (true);
