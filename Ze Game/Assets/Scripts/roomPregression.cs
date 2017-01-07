@@ -4,48 +4,65 @@ using System.Collections;
 
 public class roomPregression : MonoBehaviour {
 
-	public GameObject[] door;
+	public GameObject[] doors;
 	public Sprite sprtOff;
 	public Sprite sprtOn;
 
+	SpriteRenderer ic_S;
+	SpriteRenderer ic_1a;
+	SpriteRenderer ic_1b;
+	SpriteRenderer ic_2;
+	SpriteRenderer ic_3;
+
 	void Start(){
 
+		ic_S = GameObject.Find ("Door_status_S").GetComponent <SpriteRenderer>();
+		ic_1a = GameObject.Find ("Door_status_1a").GetComponent <SpriteRenderer>();
+		ic_1b = GameObject.Find ("Door_status_1b").GetComponent <SpriteRenderer>();
+		ic_2 = GameObject.Find ("Door_status_2").GetComponent <SpriteRenderer>();
+		ic_3 = GameObject.Find ("Door_status_3").GetComponent <SpriteRenderer>();
+
+
 	}
-
-
 
 	public void Progress () {
 
 		if (M_Player.gameProgression == 1) {
-			door [0].SetActive (false);
-			door[1].SetActive (false);
-
-
-			GameObject indicatecolor = GameObject.Find ("Indicator_status_1");
-
-			indicatecolor.GetComponent <SpriteRenderer>().sprite = sprtOn;
+			doors [0].SetActive (false);
+			doors [1].SetActive (false);
+			ic_S.sprite = sprtOn;
+			print (ic_S);
 		}
 
 		if (M_Player.gameProgression == 2) {
-			door [2].SetActive (false);
-			door [3].SetActive (false);
+			doors [2].SetActive (false);
+			doors [3].SetActive (false);
+			ic_1a.sprite = sprtOn;
 		
 		}
 		if (M_Player.gameProgression == 3) {
-			door [4].SetActive (false);
-			door [5].SetActive (false);
+			doors [4].SetActive (false);
+			doors [5].SetActive (false);
+			ic_1b.sprite = sprtOn;
 
 		}
 		if (M_Player.gameProgression == 4) {
-			door [6].SetActive (false);
-			door [7].SetActive (false);
+			doors [6].SetActive (false);
+			doors [7].SetActive (false);
+			ic_2.sprite = sprtOn;
+		}
+		if (M_Player.gameProgression == 10) {
+			CameraMovement cam = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent <CameraMovement> ();
+			RectTransform bossBG = GameObject.Find ("Background_room_Boss_1").GetComponent <RectTransform>();
+			Guide guide = GameObject.Find ("Arrow").GetComponent <Guide> ();
 
+			guide.enabled = false;
+			cam.cam_pos = bossBG.transform.position;
+			cam.camHeight = bossBG.sizeDelta.y * bossBG.localScale.y;
+			cam.camWidht = bossBG.sizeDelta.x * bossBG.localScale.x;
+			cam.enabled = false;
+		
 		}
 			
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
 	}
 }

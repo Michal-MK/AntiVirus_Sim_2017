@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 	public GameObject quitToMenu;
 	public Spike nr;
 	public CameraMovement cam;
+	public EnemySpawner spawner;
 	private bool toggle;
 	public static float distanceToWall;
 	public static int gameProgression;
@@ -45,8 +46,9 @@ using UnityEngine.SceneManagement;
 
 
 	void FixedUpdate () {
-
-
+		if (gameProgression == -1) {
+			GameOver ();
+		}
 
 		move = new Vector3 (0, 0, 0);
 
@@ -55,7 +57,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.right * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -78,7 +80,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.left * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -103,7 +105,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.up * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -126,7 +128,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.down * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -151,7 +153,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.up * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.up,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -172,7 +174,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.down * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.down,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -193,7 +195,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.right * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.right,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -214,7 +216,7 @@ using UnityEngine.SceneManagement;
 
 
 			Debug.DrawRay (transform.position, Vector2.left * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,1000);
+			RaycastHit2D[] result = Physics2D.RaycastAll ((Vector2)transform.position, Vector2.left,100);
 			foreach (RaycastHit2D hits in result) {
 				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
 					distanceToWall = hits.distance;
@@ -243,6 +245,7 @@ using UnityEngine.SceneManagement;
 				timer.run = false;
 				restartButton.SetActive (true);
 				quitToMenu.SetActive (true);
+				Time.timeScale = 0;
 			
 			} else {
 				M_Player.doNotMove = false;
@@ -250,6 +253,7 @@ using UnityEngine.SceneManagement;
 				timer.run = true;
 				restartButton.SetActive (false);
 				quitToMenu.SetActive (false);
+				Time.timeScale = 1;
 			
 			}
 		}
@@ -259,12 +263,14 @@ using UnityEngine.SceneManagement;
 
 
 	void OnTriggerEnter2D (Collider2D col){
+
 		if (col.name == "killerblock") {
 			GameOver ();
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
 			cam.SendMessage ("Progress");
+			spawner.SendMessage ("spawnArrowTrap");
 
 		}
 	}
@@ -281,6 +287,7 @@ using UnityEngine.SceneManagement;
 			Cursor.visible = true;
 			timer.run = false;
 			nr.SendMessage ("saveScore");
+			Time.timeScale = 0;
 
 		}
 		else{
@@ -290,7 +297,27 @@ using UnityEngine.SceneManagement;
 			M_Player.doNotMove = true;
 			Cursor.visible = true;
 			timer.run = false;
-				
+			Time.timeScale = 0;	
+			Destroy (GameObject.Find ("Enemies").gameObject);	
 		}
 	}
+
+
+
+//	private IEnumerator coroutine;
+//
+//	void Start()
+//	{
+//		print ("Starting " + Time.time);
+//		coroutine = WaitAndPrint(2.0f);
+//		StartCoroutine(coroutine);
+//	}
+//
+//	// every 2 seconds perform the print()
+//	private IEnumerator WaitAndPrint(float waitTime) {
+//		while (true) {
+//			yield return new WaitForSeconds(waitTime);
+//			print("WaitAndPrint " + Time.time);
+//		}
+//	}
 }

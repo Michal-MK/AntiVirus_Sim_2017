@@ -15,6 +15,7 @@ public class CameraMovement : MonoBehaviour {
 	public Vector3 middle;
 	public float currentBGX;
 	public float currentBGY;
+	public static GameObject[] loadedZones;
 
 
 
@@ -64,7 +65,6 @@ public class CameraMovement : MonoBehaviour {
 			if (hits.transform.tag == "BG" && BackGroundS.Contains (hits.transform.gameObject) == false) {
 
 					GameObject hitObj = hits.transform.gameObject;
-//					Debug.Log (hitObj.name);
 					BackGroundS.Add (hitObj);
 				
 			}
@@ -83,7 +83,6 @@ public class CameraMovement : MonoBehaviour {
 				
 					
 					GameObject hitObj = hits.transform.gameObject;
-//					Debug.Log (hitObj.name);
 					BackGroundS.Add (hitObj);
 
 				}
@@ -104,7 +103,6 @@ public class CameraMovement : MonoBehaviour {
 				
 
 					GameObject hitObj = hits.transform.gameObject;
-//					Debug.Log (hitObj.name);
 					BackGroundS.Add (hitObj);
 				}
 
@@ -122,7 +120,6 @@ public class CameraMovement : MonoBehaviour {
 			if (hits.transform.tag == "BG" && BackGroundS.Contains (hits.transform.gameObject) == false) {
 					
 					GameObject hitObj = hits.transform.gameObject;
-//					Debug.Log (hitObj.name);
 					BackGroundS.Add (hitObj);
 
 			}
@@ -135,7 +132,6 @@ public class CameraMovement : MonoBehaviour {
 
 
 	public void calculateArea(){
-		Debug.Log (BackGroundS.Count);
 		currentBGX = 0;
 		currentBGY = 0;
 		int i = 0;
@@ -143,12 +139,15 @@ public class CameraMovement : MonoBehaviour {
 		bool Horisontal = true;
 		GameObject[] BGarray = new GameObject[BackGroundS.Count];
 
-		Vector3 FirstPoint;
-		Vector3 LastPoint;
 		bg = GameObject.Find (M_Player.currentBG_name).GetComponent <RectTransform>();
 
 		BGarray = BackGroundS.ToArray ();
-
+		loadedZones = new GameObject[BGarray.Length];
+		loadedZones = BGarray;
+		foreach (GameObject zones in loadedZones) {
+			Debug.Log (i + "  " + zones);
+			i++;
+		} 
 
 		float xForAll = 0;
 		float yForAll = 0;
@@ -157,8 +156,6 @@ public class CameraMovement : MonoBehaviour {
 				xForAll = gg.transform.position.x;
 				yForAll = gg.transform.position.y;
 			}
-			Debug.Log (i + "   " + gg);
-			i++;
 			if (gg.transform.position.x != xForAll) {
 				Vertical = false;
 			}
@@ -173,7 +170,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		if (Vertical == true) {
-			Debug.Log ("Vertical " + M_Player.currentBG_name);
+//			Debug.Log ("Vertical " + M_Player.currentBG_name);
 			float TopBorder = -Mathf.Infinity;
 			float BottomBorder = Mathf.Infinity;
 			foreach (GameObject BackGroundRect in BGarray) {
@@ -183,8 +180,6 @@ public class CameraMovement : MonoBehaviour {
 				currentBGY += BackGroundRect.GetComponent<RectTransform> ().sizeDelta.y / 2;
 				float specificTop = BackGroundRect.transform.position.y + BackGroundRect.GetComponent<RectTransform> ().sizeDelta.y / 2;
 				float specificBottom = BackGroundRect.transform.position.y - BackGroundRect.GetComponent<RectTransform> ().sizeDelta.y / 2;
-				//				Debug.Log (BackGroundRect.name + "'s Left border's pos is " + specificLeft);				
-				//				Debug.Log (BackGroundRect.name + "'s Right border's pos is " + specificRight);
 				if (specificBottom < BottomBorder) {
 					BottomBorder = specificBottom;
 				}
@@ -199,7 +194,7 @@ public class CameraMovement : MonoBehaviour {
 			middle.y = (BottomBorder + TopBorder) / 2;
 
 		} else if (Horisontal == true) {
-			Debug.Log ("Horizontal " + M_Player.currentBG_name);
+//			Debug.Log ("Horizontal " + M_Player.currentBG_name);
 			float LeftBorder = Mathf.Infinity;
 			float RightBorder = -Mathf.Infinity;
 			foreach (GameObject BackGroundRect in BGarray) {
@@ -209,8 +204,7 @@ public class CameraMovement : MonoBehaviour {
 				currentBGX += BackGroundRect.GetComponent<RectTransform> ().sizeDelta.x / 2;
 				float specificLeft = BackGroundRect.transform.position.x - BackGroundRect.GetComponent<RectTransform> ().sizeDelta.x / 2;
 				float specificRight = BackGroundRect.transform.position.x + BackGroundRect.GetComponent<RectTransform> ().sizeDelta.x / 2;
-//				Debug.Log (BackGroundRect.name + "'s Left border's pos is " + specificLeft);				
-//				Debug.Log (BackGroundRect.name + "'s Right border's pos is " + specificRight);
+
 				if (specificLeft < LeftBorder) {
 					LeftBorder = specificLeft;
 				}
@@ -223,15 +217,13 @@ public class CameraMovement : MonoBehaviour {
 		}
 		else 
 		{
-			Debug.Log ("I never asked for this. Objects not in line or only one Object in Array " + M_Player.currentBG_name);
+//			Debug.Log ("I never asked for this. Objects not in line or only one Object in Array " + M_Player.currentBG_name);
 
 			float TopBorder = -Mathf.Infinity;
 			float BottomBorder = Mathf.Infinity;
 			foreach (GameObject BackGroundRect in BGarray) {
 				float specificTop = BackGroundRect.transform.position.y + BackGroundRect.GetComponent<RectTransform> ().sizeDelta.y / 2;
 				float specificBottom = BackGroundRect.transform.position.y - BackGroundRect.GetComponent<RectTransform> ().sizeDelta.y / 2;
-				//				Debug.Log (BackGroundRect.name + "'s Left border's pos is " + specificLeft);				
-				//				Debug.Log (BackGroundRect.name + "'s Right border's pos is " + specificRight);
 				if (specificBottom < BottomBorder) {
 					BottomBorder = specificBottom;
 				}
@@ -250,9 +242,6 @@ public class CameraMovement : MonoBehaviour {
 
 				float specificLeft = BackGroundRect.transform.position.x - BackGroundRect.GetComponent<RectTransform> ().sizeDelta.x / 2;
 				float specificRight = BackGroundRect.transform.position.x + BackGroundRect.GetComponent<RectTransform> ().sizeDelta.x / 2;
-				//				Debug.Log (BackGroundRect.name + "'s Left border's pos is " + specificLeft);				
-				//				Debug.Log (BackGroundRect.name + "'s Right border's pos is " + specificRight);
-
 				if (specificLeft < LeftBorder) {
 					LeftBorder = specificLeft;
 				}

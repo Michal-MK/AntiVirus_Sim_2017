@@ -8,6 +8,7 @@ TagManager:
   - Canvas
   - BG
   - Wall/Door
+  - Enemy
   layers:
   - Default
   - TransparentFX

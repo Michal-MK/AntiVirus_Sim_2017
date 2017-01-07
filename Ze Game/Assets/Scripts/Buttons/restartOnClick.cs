@@ -9,6 +9,7 @@ public class restartOnClick : MonoBehaviour {
 		M_Player.doNotMove = false;
 		Spike.i = 0;
 		M_Player.gameProgression = 0;
+		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
 	}

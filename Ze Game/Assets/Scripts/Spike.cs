@@ -8,7 +8,7 @@ public class Spike : MonoBehaviour {
 	public RectTransform BG;
 	public GameObject player;
 	public Guide guide;
-	GameObject enemy;
+	public EnemySpawner spawn;
 
 	public static int i = 0;
 
@@ -16,12 +16,9 @@ public class Spike : MonoBehaviour {
 
 	void Start(){
 		player = GameObject.Find ("Player");
-		enemy = GameObject.Find ("Enemies");
-
 
 		if (PlayerPrefs.HasKey ("difficulty") == false) {
 			PlayerPrefs.SetInt ("difficluty", 0);
-
 		}
 	}
 
@@ -31,7 +28,6 @@ public class Spike : MonoBehaviour {
 		Vector3 old_pos = transform.position;
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
-		float scale;
 
 
 		if (col.name == player.name) {
@@ -58,60 +54,41 @@ public class Spike : MonoBehaviour {
 			i = i+1;
 
 
-			for (int count = 0; count < (int)(i + 5 * difficultySlider.difficulty); count++) {
-				scale = Random.Range (0.5f, 2);
 
-				Vector2 couldpos = (Vector2)player.transform.position;
-				while (Vector2.Distance (player.transform.position, couldpos) < 10) {
 
-					float x = Random.Range (-BG.sizeDelta.x/2 + scale , BG.sizeDelta.x/2 - scale);
-					float y = Random.Range (-BG.sizeDelta.y/2 + scale, BG.sizeDelta.y/2 - scale);
-					couldpos = new Vector2 (x, y);
 
-				}
-					
-
-				GameObject newBlock = (GameObject)Instantiate (deathBlock, new Vector3 (couldpos.x, couldpos.y, 0), Quaternion.identity);
-				newBlock.transform.localScale = new Vector3 (scale,scale, 1);
-				newBlock.name = "killerblock";
-				newBlock.transform.SetParent (enemy.transform);
-			}
 			if (i == 1) {
 				M_Player.gameProgression = 1;
 				player.GetComponent<roomPregression>().Progress();
 				cam.Progress ();
-
+				spawn.spawnKillerBlock ();
 			}
 
 			if (i == 2) {
 				M_Player.gameProgression = 2;
 				player.GetComponent<roomPregression>().Progress();
-//				cam.Progress ();
-
+				spawn.spawnKillerBlock ();
 			}
 
 			if (i == 3) {
 				M_Player.gameProgression = 3;
 				player.GetComponent<roomPregression>().Progress();
-//				cam.Progress ();
-
+				spawn.spawnKillerBlock ();
 			}
 
 
 			if (i == 4) {
 				M_Player.gameProgression = 4;
 				player.GetComponent<roomPregression>().Progress();
-//				cam.Progress ();
-
+				spawn.spawnKillerBlock ();
 			}
 
 			if (i == 5) {
 				
-				Spike.Destroy (gameObject);
+				//M_Player.gameProgression = 10;
 				player.SendMessage ("GameOver");
+				gameObject.SetActive (false);
 			}
-
-
 		}
 	}
 
@@ -253,9 +230,9 @@ public class Spike : MonoBehaviour {
 			}
 		
 		}
-		for (int i = 9; i > 0; i--) {
-			Debug.Log (i.ToString () + "    " + PlayerPrefs.GetFloat (i.ToString ()));
-		}
+//		for (int i = 9; i > 0; i--) {
+//			Debug.Log (i.ToString () + "    " + PlayerPrefs.GetFloat (i.ToString ()));
+//		}
 	}
 }
 
