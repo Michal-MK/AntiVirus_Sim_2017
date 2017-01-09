@@ -9,6 +9,7 @@ public class Spike : MonoBehaviour {
 	public GameObject player;
 	public Guide guide;
 	public EnemySpawner spawn;
+	public GameObject teleporter;
 
 	public static int i = 0;
 
@@ -24,72 +25,54 @@ public class Spike : MonoBehaviour {
 
 
 	void OnTriggerEnter2D (Collider2D col){
-		timer.run = true;
+		
+
 		Vector3 old_pos = transform.position;
+
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 
 
-		if (col.name == player.name) {
+		if (col.name == player.name && i >= 0 || i <= 4) {
+			timer.run = true;
+			
+			print (i+1);
 			Vector3 newpos = transform.position;
 
-			while (Mathf.Abs(Vector3.Distance(newpos, old_pos)) < 30) {
+			while (Mathf.Abs (Vector3.Distance (newpos, old_pos)) < 30) {
 
-				float x = Random.Range (-BG.sizeDelta.x/2 + Xscale , BG.sizeDelta.x/2 - Xscale);
-				float y = Random.Range (-BG.sizeDelta.y/2 + Yscale, BG.sizeDelta.y/2 - Yscale);
+				float x = Random.Range (-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
+				float y = Random.Range (-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
 				float z = 0f;
 
-
-
-				newpos = new Vector3(x, y, z);
-
-
+				newpos = new Vector3 (x, y, z);
 			}
-				
+
 			gameObject.transform.position = newpos;
 
+			i = i + 1;
 
-			guide.SendMessage ("init");
+			guide.SendMessage ("Recalculate");
+		}
 
-			i = i+1;
-
-
-
-
-
-			if (i == 1) {
-				M_Player.gameProgression = 1;
-				player.GetComponent<roomPregression>().Progress();
-				cam.Progress ();
-				spawn.spawnKillerBlock ();
+		if (i >= 1 || i <= 4) {
+			M_Player.gameProgression = i;
+			cam.raycastForRooms ();
+			spawn.spawnKillerBlock ();
 			}
 
-			if (i == 2) {
-				M_Player.gameProgression = 2;
-				player.GetComponent<roomPregression>().Progress();
-				spawn.spawnKillerBlock ();
-			}
-
-			if (i == 3) {
-				M_Player.gameProgression = 3;
-				player.GetComponent<roomPregression>().Progress();
-				spawn.spawnKillerBlock ();
-			}
-
-
-			if (i == 4) {
-				M_Player.gameProgression = 4;
-				player.GetComponent<roomPregression>().Progress();
-				spawn.spawnKillerBlock ();
-			}
 
 			if (i == 5) {
-				
-				//M_Player.gameProgression = 10;
-				player.SendMessage ("GameOver");
-				gameObject.SetActive (false);
+
+			GameObject bossTeleporter = (GameObject)Instantiate (teleporter, Vector3.zero, Quaternion.identity);
+			bossTeleporter.transform.SetParent (gameObject.transform.parent);
+			bossTeleporter.name = "Boss1_teleporter";
+			guide.disableGuide ();
+			disableSpike ();
 			}
-		}
+	}
+	public void disableSpike(){
+		gameObject.SetActive (false);
 	}
 
 	public void saveScore(){
@@ -228,11 +211,7 @@ public class Spike : MonoBehaviour {
 					count = -1;
 				}
 			}
-		
 		}
-//		for (int i = 9; i > 0; i--) {
-//			Debug.Log (i.ToString () + "    " + PlayerPrefs.GetFloat (i.ToString ()));
-//		}
 	}
 }
 

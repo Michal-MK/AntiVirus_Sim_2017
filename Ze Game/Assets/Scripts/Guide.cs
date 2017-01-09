@@ -10,24 +10,30 @@ public class Guide : MonoBehaviour {
 	private Vector3 playerpos;
 	public GameObject Arrow;
 	GameObject pointArrow;
+	Transform GuideObj;
 
 
-	void init () {
-
+	void Start(){
 		
+		GuideObj = GameObject.Find ("Guide").transform;
+	}
+
+
+	void Recalculate () {
+
+		Destroy (pointArrow);
 
 		spikepos = new Vector3 (spike.transform.position.x, spike.transform.position.y, 0);
 		playerpos = new Vector3 (player.transform.position.x, player.transform.position.y, 0);
 
-		Destroy (pointArrow);
 
 		pointArrow = (GameObject)Instantiate (Arrow, new Vector3 (0,-1,0), Quaternion.FromToRotation (Vector3.up, (spikepos-playerpos)));
-		pointArrow.transform.SetParent(transform.parent);
+		pointArrow.transform.SetParent(GuideObj);
 
 		}
 
 	void Update() {
-
+		
 
 		if (pointArrow != null && timer.run == true) {
 			Vector2 PlayToSpike =  (Vector2) spike.transform.position - (Vector2)player.transform.position;
@@ -155,5 +161,8 @@ public class Guide : MonoBehaviour {
 				}
 			}
 		}
+	}
+	public void disableGuide(){
+		gameObject.SetActive (false);
 	}
 }

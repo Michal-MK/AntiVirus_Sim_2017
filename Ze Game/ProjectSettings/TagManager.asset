@@ -9,6 +9,8 @@ TagManager:
   - BG
   - Wall/Door
   - Enemy
+  - ArrowTrap
+  - Spike
   layers:
   - Default
   - TransparentFX

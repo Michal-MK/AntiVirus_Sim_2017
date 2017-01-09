@@ -7,12 +7,18 @@ public class roomPregression : MonoBehaviour {
 	public GameObject[] doors;
 	public Sprite sprtOff;
 	public Sprite sprtOn;
+	public static roomPregression script;
 
 	SpriteRenderer ic_S;
 	SpriteRenderer ic_1a;
 	SpriteRenderer ic_1b;
 	SpriteRenderer ic_2;
 	SpriteRenderer ic_3;
+
+	void Awake(){
+		script = this;
+	}
+
 
 	void Start(){
 
@@ -31,7 +37,7 @@ public class roomPregression : MonoBehaviour {
 			doors [0].SetActive (false);
 			doors [1].SetActive (false);
 			ic_S.sprite = sprtOn;
-			print (ic_S);
+//			print (ic_S);
 		}
 
 		if (M_Player.gameProgression == 2) {
@@ -52,17 +58,11 @@ public class roomPregression : MonoBehaviour {
 			ic_2.sprite = sprtOn;
 		}
 		if (M_Player.gameProgression == 10) {
-			CameraMovement cam = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent <CameraMovement> ();
-			RectTransform bossBG = GameObject.Find ("Background_room_Boss_1").GetComponent <RectTransform>();
-			Guide guide = GameObject.Find ("Arrow").GetComponent <Guide> ();
-
-			guide.enabled = false;
-			cam.cam_pos = bossBG.transform.position;
-			cam.camHeight = bossBG.sizeDelta.y * bossBG.localScale.y;
-			cam.camWidht = bossBG.sizeDelta.x * bossBG.localScale.x;
-			cam.enabled = false;
-		
-		}
+			print ("Entering Boss Arena!");
 			
+			CameraMovement cam = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent <CameraMovement> ();
+
+			cam.bossFightCam (1);
+		}
 	}
 }

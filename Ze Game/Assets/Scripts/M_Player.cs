@@ -269,9 +269,24 @@ using UnityEngine.SceneManagement;
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
-			cam.SendMessage ("Progress");
+			cam.SendMessage ("raycastForRooms");
 			spawner.SendMessage ("spawnArrowTrap");
 
+		}
+		if (col.name == "Boss1_teleporter") {
+			gameProgression = 10;
+			roomPregression.script.Progress ();
+			TextRender.script.Disable ();
+
+		}
+		if (col.transform.tag == "Spike") {
+			roomPregression.script.Progress ();
+			if (Spike.i >= 0 || Spike.i <= 4) {
+				TextRender.script.infoRenderer (Spike.i);
+			}
+			if (Spike.i == 5) {
+				TextRender.script.stageComplete ();
+			}
 		}
 	}
 		

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
+	public float zero = 0;
 	public RectTransform bg;
 	public Transform player;
 	public M_Player playerScript;
@@ -16,6 +17,8 @@ public class CameraMovement : MonoBehaviour {
 	public float currentBGX;
 	public float currentBGY;
 	public static GameObject[] loadedZones;
+	public bool inBossRoom = false;
+	public RectTransform bossRoom;
 
 
 
@@ -29,8 +32,9 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = thisone.orthographicSize;
 
 	}
+		
 
-	public void Progress(){
+	public void raycastForRooms(){
 
 		BackGroundS.Clear ();
 
@@ -132,6 +136,7 @@ public class CameraMovement : MonoBehaviour {
 
 
 	public void calculateArea(){
+
 		currentBGX = 0;
 		currentBGY = 0;
 		int i = 0;
@@ -257,10 +262,16 @@ public class CameraMovement : MonoBehaviour {
 
 	void LateUpdate(){
 
-		
-		cam_pos = new Vector3 (camX (), camY (), player.position.z - 10);
-		gameObject.transform.position = cam_pos;
-
+		if (inBossRoom == false) {
+			cam_pos = new Vector3 (camX (), camY (), player.position.z - 10);
+			gameObject.transform.position = cam_pos;
+		}
+		else {
+			if (zero < 10) {
+				zero += Time.deltaTime / 100;
+				Camera.main.orthographicSize = Mathf.SmoothStep (Camera.main.orthographicSize, bossRoom.sizeDelta.x * 2 * Screen.height / Screen.width * 0.5f, zero);
+			}
+		}
 	}
 
 
@@ -294,5 +305,19 @@ public class CameraMovement : MonoBehaviour {
 			
 			return player.position.y;
 		}
+	}
+
+	public void bossFightCam(int bossNo){
+		inBossRoom = true;
+
+		bossRoom = GameObject.Find ("Background_room_Boss_" + bossNo).GetComponent <RectTransform>();
+
+		float bossX = bossRoom.position.x;
+		float bossY = bossRoom.position.y;
+
+		player.position = new Vector3 (bossX, bossY, 0);
+		gameObject.transform.position = new Vector3 (bossX, bossY, -10);
+		float elapsed = 0;
+
 	}
 }
