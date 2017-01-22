@@ -35,14 +35,16 @@ public class Spike : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col) {
 
-		spikesCollected = spikesCollected + 1;
+		if (col.tag == "Player") {
 
-		M_Player.gameProgression = spikesCollected;
+			spikesCollected = spikesCollected + 1;
 
-		gameObject.SetActive(false);
+			M_Player.gameProgression = spikesCollected;
 
-		guide.disableGuide();
+			gameObject.SetActive(false);
 
+			guide.disableGuide();
+		}
 		if (spikesCollected >= 0 || spikesCollected <= 4) {
 			anim.Play("Highlight Text");
 			

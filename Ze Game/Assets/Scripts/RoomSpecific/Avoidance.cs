@@ -30,7 +30,7 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(true);
 		spawner.spawnAvoidance();
 		StartCoroutine("hold");
-		//StartCoroutine("print");
+		StartCoroutine("print");
 		Projectile.spawnedByAvoidance = true;
 	}
 
@@ -41,7 +41,9 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(false);
 		StopAllCoroutines();
 		Projectile.projectileSpeed = 10;
+		print(Projectile.projectileSpeed);
 		spike.SetPosition();
+		StopAvoidance();
 
 	}
 	private IEnumerator print() {
@@ -50,5 +52,9 @@ public class Avoidance : MonoBehaviour {
 			print(Projectile.projectileSpeed);
 			print(TurretAttack.turretSpawnRate);
 		}
+	}
+	public void StopAvoidance() {
+		Projectile.projectileSpeed = 10;
+		print("Pls Work!");
 	}
 }
