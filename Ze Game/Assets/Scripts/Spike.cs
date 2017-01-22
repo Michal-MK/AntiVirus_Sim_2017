@@ -1,216 +1,136 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
 public class Spike : MonoBehaviour {
 	public CameraMovement cam;
-	public GameObject deathBlock;
-	public RectTransform BG;
+	public RectTransform BGS;
+	public RectTransform BG1;
+	public RectTransform BG2a;
 	public GameObject player;
 	public Guide guide;
 	public EnemySpawner spawn;
 	public GameObject teleporter;
+	Animator anim;
 
-	public static int i = 0;
+	public static int spikesCollected = 0;
 
 
 
-	void Start(){
-		player = GameObject.Find ("Player");
+	void Start() {
 
-		if (PlayerPrefs.HasKey ("difficulty") == false) {
-			PlayerPrefs.SetInt ("difficluty", 0);
+		player = GameObject.Find("Player");
+		anim = GameObject.Find("scoreText").GetComponent<Animator>();
+		anim.Play("TransformPos");
+
+		if (PlayerPrefs.HasKey("difficulty") == false) {
+			PlayerPrefs.SetInt("difficluty", 0);
 		}
 	}
 
+	private void OnEnable() {
+		guide.enableGuide();
+		guide.Recalculate(gameObject, true);
+	}
 
-	void OnTriggerEnter2D (Collider2D col){
+	void OnTriggerEnter2D(Collider2D col) {
+
+		spikesCollected = spikesCollected + 1;
+
+		M_Player.gameProgression = spikesCollected;
+
+		gameObject.SetActive(false);
+
+		guide.disableGuide();
+
+		if (spikesCollected >= 0 || spikesCollected <= 4) {
+			anim.Play("Highlight Text");
+			
+		}
+
+
+		if (spikesCollected == 5) {
+			anim.Play("TransformPos");
+			RectTransform lastBG = GameObject.Find("Background_room_3").GetComponent<RectTransform>();
+			M_Player.gameProgression = 1;
+			GameObject bossTeleporter = Instantiate(teleporter, new Vector3(lastBG.position.x, lastBG.position.y, 0), Quaternion.identity);
+			bossTeleporter.transform.SetParent(gameObject.transform.parent);
+			bossTeleporter.name = "Boss1_teleporter";
+			guide.disableGuide();
+		}
+	}
+	public void SetPosition() {
+		int stage = M_Player.gameProgression;
 		
-
-		Vector3 old_pos = transform.position;
 
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 
+		if (stage == 0) {
 
-		if (col.name == player.name && i >= 0 || i <= 4) {
-			timer.run = true;
-			
-			print (i+1);
-			Vector3 newpos = transform.position;
+			float x = BGS.position.x;
+			float y = BGS.position.y;
+			float z = 0f;
 
-			while (Mathf.Abs (Vector3.Distance (newpos, old_pos)) < 30) {
-
-				float x = Random.Range (-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
-				float y = Random.Range (-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
-				float z = 0f;
-
-				newpos = new Vector3 (x, y, z);
-			}
-
-			gameObject.transform.position = newpos;
-
-			i = i + 1;
-
-			guide.SendMessage ("Recalculate");
-		}
-
-		if (i >= 1 || i <= 4) {
-			M_Player.gameProgression = i;
-			cam.raycastForRooms ();
-			spawn.spawnKillerBlock ();
-			}
-
-
-			if (i == 5) {
-
-			GameObject bossTeleporter = (GameObject)Instantiate (teleporter, Vector3.zero, Quaternion.identity);
-			bossTeleporter.transform.SetParent (gameObject.transform.parent);
-			bossTeleporter.name = "Boss1_teleporter";
-			guide.disableGuide ();
-			disableSpike ();
-			}
-	}
-	public void disableSpike(){
-		gameObject.SetActive (false);
-	}
-
-	public void saveScore(){
-		int difficulty = PlayerPrefs.GetInt ("difficulty");
-
-		if (difficulty == 0) {
-
-
-			int q = 0;
-			int count = 10;
-
-
-			PlayerPrefs.SetFloat (count.ToString (), Mathf.Round (timer.time_er * 1000) / 1000);
-			Debug.Log (PlayerPrefs.GetFloat ("10"));
-			while (q < count) {
-
-				if (PlayerPrefs.HasKey ((count - 1).ToString ()) == true) {
-
-					if (PlayerPrefs.GetFloat ((count - 1).ToString ()) > PlayerPrefs.GetFloat (count.ToString ())) {
-
-						float temp = PlayerPrefs.GetFloat ((count - 1).ToString ()); 
-						PlayerPrefs.SetFloat ((count - 1).ToString (), PlayerPrefs.GetFloat (count.ToString ()));
-						PlayerPrefs.SetFloat (count.ToString (), temp);
-					}
-					count -= 1;
-					PlayerPrefs.SetFloat ("10", 500f);
-				} else {
-					count = -1;
-				}
-			}
-		}
-
-		if (difficulty == 1) {
-
-			int q = 11;
-			int count = 21;
-
-
-			PlayerPrefs.SetFloat (count.ToString (), Mathf.Round (timer.time_er * 1000) / 1000);
-
-			while (q < count) {
-
-				if (PlayerPrefs.HasKey ((count - 1).ToString ()) == true) {
-
-					if (PlayerPrefs.GetFloat ((count - 1).ToString ()) > PlayerPrefs.GetFloat (count.ToString ())) {
-
-						float temp = PlayerPrefs.GetFloat ((count - 1).ToString ()); 
-						PlayerPrefs.SetFloat ((count - 1).ToString (), PlayerPrefs.GetFloat (count.ToString ()));
-						PlayerPrefs.SetFloat (count.ToString (), temp);
-					}
-					count -= 1;
-					PlayerPrefs.SetFloat ("21", 500f);
-				} else {
-					count = -1;
-				}
-			}
-	
-		}
-
-		if (difficulty == 2) {
-
-			int q = 22;
-			int count = 32;
-
-
-			PlayerPrefs.SetFloat (count.ToString (), Mathf.Round (timer.time_er * 1000) / 1000);
-
-			while (q < count) {
-
-				if (PlayerPrefs.HasKey ((count - 1).ToString ()) == true) {
-
-					if (PlayerPrefs.GetFloat ((count - 1).ToString ()) > PlayerPrefs.GetFloat (count.ToString ())) {
-
-						float temp = PlayerPrefs.GetFloat ((count - 1).ToString ()); 
-						PlayerPrefs.SetFloat ((count - 1).ToString (), PlayerPrefs.GetFloat (count.ToString ()));
-						PlayerPrefs.SetFloat (count.ToString (), temp);
-					}
-					count -= 1;
-					PlayerPrefs.SetFloat ("32", 500f);
-				} else {
-					count = -1;
-				}
-			}
+			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.SetActive(true);
+			guide.enableGuide();
+			guide.Recalculate(gameObject, true);
 
 		}
-
-		if (difficulty == 3) {
-
-			int q = 33;
-			int count = 43;
+		if (stage == 1) {
 
 
-			PlayerPrefs.SetFloat (count.ToString (), Mathf.Round (timer.time_er * 1000) / 1000);
+			float x = Random.Range(BG1.position.x + (-BG1.sizeDelta.x / 2) + Xscale, BG1.position.x + (BG1.sizeDelta.x / 2) - Xscale);
+			float y = Random.Range(BG1.position.y + (-BG1.sizeDelta.y / 2) + Yscale, BG1.position.y + (BG1.sizeDelta.y / 2) - Yscale);
+			float z = 0f;
 
-			while (q < count) {
 
-				if (PlayerPrefs.HasKey ((count - 1).ToString ()) == true) {
-
-					if (PlayerPrefs.GetFloat ((count - 1).ToString ()) > PlayerPrefs.GetFloat (count.ToString ())) {
-
-						float temp = PlayerPrefs.GetFloat ((count - 1).ToString ()); 
-						PlayerPrefs.SetFloat ((count - 1).ToString (), PlayerPrefs.GetFloat (count.ToString ()));
-						PlayerPrefs.SetFloat (count.ToString (), temp);
-					}
-					count -= 1;
-					PlayerPrefs.SetFloat ("43", 500f);
-				} else {
-					count = -1;
-				}
-			}
-
+			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.SetActive(true);
+			guide.enableGuide();
+			guide.Recalculate(gameObject, true);
 
 		}
+		if (stage == 2) {
 
-		if (difficulty == 4) {
-			
-			int q = 44;
-			int count = 54;
+			float x = Random.Range(BG2a.position.x + (-BG2a.sizeDelta.x / 2) + Xscale, BG2a.position.x + (BG2a.sizeDelta.x / 2) - Xscale);
+			float y = Random.Range(BG2a.position.y + (-BG2a.sizeDelta.y / 2) + Yscale, BG2a.position.y + (BG2a.sizeDelta.y / 2) - Yscale);
+			float z = 0f;
 
+			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.SetActive(true);
+			guide.enableGuide();
+			guide.Recalculate(gameObject, true);
 
-			PlayerPrefs.SetFloat (count.ToString (), Mathf.Round (timer.time_er * 1000) / 1000);
+		}
+		//if (stage == 3) {
+		//	print(stage);
+		//	float x = Random.Range(-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
+		//	float y = Random.Range(-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
+		//	float z = 0f;
 
-			while (q < count) {
+		//	gameObject.transform.position = new Vector3(x, y, z);
+		//	gameObject.SetActive(true);
+		//	guide.enableGuide();
+		//	guide.Recalculate(gameObject, true);
 
-				if (PlayerPrefs.HasKey ((count - 1).ToString ()) == true) {
+		//}
+		//if (stage == 4) {
+		//	print(stage);
+		//	float x = Random.Range(-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
+		//	float y = Random.Range(-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
+		//	float z = 0f;
 
-					if (PlayerPrefs.GetFloat ((count - 1).ToString ()) > PlayerPrefs.GetFloat (count.ToString ())) {
+		//	gameObject.transform.position = new Vector3(x, y, z);
+		//	gameObject.SetActive(true);
+		//	guide.enableGuide();
+		//	guide.Recalculate(gameObject, true);
 
-						float temp = PlayerPrefs.GetFloat ((count - 1).ToString ()); 
-						PlayerPrefs.SetFloat ((count - 1).ToString (), PlayerPrefs.GetFloat (count.ToString ()));
-						PlayerPrefs.SetFloat (count.ToString (), temp);
-					}
-					count -= 1;
-					PlayerPrefs.SetFloat ("54", 500f);
-				} else {
-					count = -1;
-				}
-			}
+		//}
+		if (stage == 5) {
+			print(stage);
+			gameObject.SetActive(false);
 		}
 	}
 }

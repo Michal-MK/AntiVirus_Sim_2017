@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -7,23 +7,31 @@ public class TurretAttack : MonoBehaviour {
 	public GameObject projectile;
 	private IEnumerator waitforAttack;
 	private Transform enemy;
+	public static float turretSpawnRate;
 
 
 
 	void Start(){
 		enemy = GameObject.Find ("Enemies").transform;
-		StartCoroutine (waitForAttack (2.0f));
+		StartCoroutine (waitForAttack (turretSpawnRate));
 	}
 
 
 	private IEnumerator waitForAttack(float waitTime){
+
 		while(true){
 			yield return new WaitForSeconds (waitTime);
+			waitTime = turretSpawnRate;
+
 			for (int i = 0; i < 6; i++) {
+				int angle = Random.Range (0, 360);
+
+				gameObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.back);
+
 				GameObject bullet = ObjectPooler.script.GetPool ();
 
 
-				bullet.transform.rotation = Quaternion.AngleAxis (30 * (i * 2), new Vector3 (0, 0, 1));
+				bullet.transform.rotation = Quaternion.AngleAxis (angle + 30 * (i * 2), new Vector3 (0, 0, 1));
 				bullet.transform.position = transform.position - (bullet.transform.rotation * new Vector3(0,1,0))*2;
 				bullet.transform.SetParent (enemy);
 				bullet.SetActive (true);
@@ -35,6 +43,7 @@ public class TurretAttack : MonoBehaviour {
 			}
 		}
 	}
+
 	void OnDestroy(){
 		StopAllCoroutines ();
 	}

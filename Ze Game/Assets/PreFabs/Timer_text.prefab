@@ -21,7 +21,6 @@ GameObject:
   - 224: {fileID: 224000013337142754}
   - 222: {fileID: 222000014077042694}
   - 114: {fileID: 114000010891915832}
-  - 114: {fileID: 114000012967402866}
   m_Layer: 5
   m_Name: Timer_text
   m_TagString: Untagged
@@ -62,19 +61,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Time: 0'
---- !u!114 &114000012967402866
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012802169374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7951d44e896f06740bfeee2e4d3f4d68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FYT: {fileID: 0}
-  Timer_text: {fileID: 1000012802169374}
 --- !u!222 &222000014077042694
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -88,7 +74,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012802169374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -96,6 +82,6 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 98.5, y: -61.5}
+  m_AnchoredPosition: {x: 98.5, y: -59.30078}
   m_SizeDelta: {x: 151, y: 19}
   m_Pivot: {x: 0.5, y: 0.5}

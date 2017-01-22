@@ -1,10 +1,10 @@
-﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class timer : MonoBehaviour {
-	public static float time_er;
+	public static float time;
 	public static bool run;
 	public CameraMovement cam;
 	GameObject seconds;
@@ -17,9 +17,7 @@ public class timer : MonoBehaviour {
 		Timer_text.SetActive (false);
 		seconds = GameObject.Find ("seconds");
 		seconds.SetActive (false);
-
-		print (Timer_text.activeInHierarchy);
-		time_er = 0f;
+		time = 0f;
 	}
 
 
@@ -33,20 +31,19 @@ public class timer : MonoBehaviour {
 			Timer_text.SetActive (true);
 			seconds.SetActive (true);
 
-			time_er = time_er + Time.fixedDeltaTime;
-			Timer_text.GetComponent <Text> ().text = "Time: " + (Mathf.Round (time_er * 100) / 100);		
+			time = time + Time.fixedDeltaTime;
+			Timer_text.GetComponent <Text> ().text = "Time: " + (Mathf.Round (time * 100) / 100);		
 
-			if (time_er >= 0 && time_er <= 9.95) {
-				seconds.gameObject.transform.position = new Vector3 (Timer_text.transform.position.x + 30, Timer_text.transform.position.y, 0);
+			if (time <= 10) {
+				seconds.transform.position = Timer_text.transform.position + new Vector3(44,0,0);
 			}
 		
-			if (time_er >= 10 && time_er <= 10.02) {
-				seconds.gameObject.transform.position = new Vector3 (Timer_text.transform.position.x + 40, Timer_text.transform.position.y, 0);
+			if (time >= 10 && time <= 100) {
+				seconds.transform.position = Timer_text.transform.position + new Vector3(54, 0, 0);
 			}
-			if (time_er >= 60 && time_er <= 60.02) {
-				run = false;
-				seconds.SetActive (false);
-				Timer_text.GetComponent <Text> ().text = "Are you even trying ?";
+			if (time >= 100) {
+				seconds.transform.position = Timer_text.transform.position + new Vector3(172, 0, 0);
+				Timer_text.GetComponent <Text> ().text = "Are you even trying ? " + (Mathf.Round (time * 100) / 100);
 			}
 		}
 		else {

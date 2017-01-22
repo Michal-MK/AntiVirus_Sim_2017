@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -10,10 +10,10 @@ using UnityEngine.SceneManagement;
 	public GameObject quitButton;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
+	public GameObject continueButton;
 	public Spike nr;
 	public CameraMovement cam;
 	public EnemySpawner spawner;
-	private bool toggle;
 	public static float distanceToWall;
 	public static int gameProgression;
 	public static string currentBG_name;
@@ -22,8 +22,8 @@ using UnityEngine.SceneManagement;
 
 	void Start() {
 		restartButton.SetActive (false);
-		quitToMenu.SetActive (false);
-		currentBG_name = "";
+		quitToMenu.SetActive(false);
+		//continueButton.SetActive(false);
 
 
 		if (PlayerPrefs.GetInt ("difficulty") == 0) {
@@ -47,7 +47,7 @@ using UnityEngine.SceneManagement;
 
 	void FixedUpdate () {
 		if (gameProgression == -1) {
-			GameOver ();
+			FloorComlpete ();
 		}
 
 		move = new Vector3 (0, 0, 0);
@@ -235,42 +235,18 @@ using UnityEngine.SceneManagement;
 			gameObject.transform.position += move * Time.deltaTime * speed;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene ().buildIndex == 1) {
-			toggle = !toggle;
 
-			if (toggle) {
-				
-				M_Player.doNotMove = true;
-				Cursor.visible = true;
-				timer.run = false;
-				restartButton.SetActive (true);
-				quitToMenu.SetActive (true);
-				Time.timeScale = 0;
-			
-			} else {
-				M_Player.doNotMove = false;
-				Cursor.visible = false;
-				timer.run = true;
-				restartButton.SetActive (false);
-				quitToMenu.SetActive (false);
-				Time.timeScale = 1;
-			
-			}
-		}
 	}
-
-
-
 
 	void OnTriggerEnter2D (Collider2D col){
 
-		if (col.name == "killerblock") {
+		if (col.tag == "Enemy") {
 			GameOver ();
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
-			cam.SendMessage ("raycastForRooms");
-			spawner.SendMessage ("spawnArrowTrap");
+			cam.raycastForRooms();
+			spawner.spawnArrowTrap();
 
 		}
 		if (col.name == "Boss1_teleporter") {
@@ -281,58 +257,43 @@ using UnityEngine.SceneManagement;
 		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress ();
-			if (Spike.i >= 0 || Spike.i <= 4) {
-				TextRender.script.infoRenderer (Spike.i);
+			if (Spike.spikesCollected >= 0 || Spike.spikesCollected <= 4) {
+				TextRender.script.infoRenderer (Spike.spikesCollected);
 			}
-			if (Spike.i == 5) {
+			if (Spike.spikesCollected == 5) {
 				TextRender.script.stageComplete ();
 			}
+		}
+		if (col.name == "Background_room_1") {
+			spawner.InvokeRepeatingScript ("spawnKillerWall");
+		}
+	}
+	void OnTriggerExit2D(Collider2D col){
+		if (col.name == "Background_room_1") {
+			spawner.CancelInvoking ();
 		}
 	}
 		
 
-	public void GameOver(){
+	public void FloorComlpete(){
 
-		if (Spike.i == 5) {
-			
+		restartButton.SetActive (true);
+		quitToMenu.SetActive (true);
+		doNotMove = true;
+		Cursor.visible = true;
+		timer.run = false;
+        SaveGame.script.saveScore();
+		Time.timeScale = 0;
 
-			restartButton.SetActive (true);
-			quitToMenu.SetActive (true);
-			M_Player.doNotMove = true;
-			Cursor.visible = true;
-			timer.run = false;
-			nr.SendMessage ("saveScore");
-			Time.timeScale = 0;
-
-		}
-		else{
-
-			restartButton.SetActive (true);
-			quitToMenu.SetActive (true);
-			M_Player.doNotMove = true;
-			Cursor.visible = true;
-			timer.run = false;
-			Time.timeScale = 0;	
-			Destroy (GameObject.Find ("Enemies").gameObject);	
-		}
 	}
-
-
-
-//	private IEnumerator coroutine;
-//
-//	void Start()
-//	{
-//		print ("Starting " + Time.time);
-//		coroutine = WaitAndPrint(2.0f);
-//		StartCoroutine(coroutine);
-//	}
-//
-//	// every 2 seconds perform the print()
-//	private IEnumerator WaitAndPrint(float waitTime) {
-//		while (true) {
-//			yield return new WaitForSeconds(waitTime);
-//			print("WaitAndPrint " + Time.time);
-//		}
-//	}
+	public void GameOver(){
+		
+		restartButton.SetActive (true);
+		quitToMenu.SetActive (true);
+        doNotMove = true;
+		Cursor.visible = true;
+		timer.run = false;
+		Time.timeScale = 0;	
+		Destroy (GameObject.Find ("Enemies").gameObject);
+	}
 }
