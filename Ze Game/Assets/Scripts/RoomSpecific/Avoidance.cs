@@ -39,11 +39,11 @@ public class Avoidance : MonoBehaviour {
 		yield return new WaitForSeconds(35);
 
 		door1.SetActive(false);
-		StopAllCoroutines();
 		Projectile.projectileSpeed = 10;
 		print(Projectile.projectileSpeed);
 		spike.SetPosition();
-		StopAvoidance();
+		StopAllCoroutines();
+
 
 	}
 	private IEnumerator print() {
@@ -52,9 +52,5 @@ public class Avoidance : MonoBehaviour {
 			print(Projectile.projectileSpeed);
 			print(TurretAttack.turretSpawnRate);
 		}
-	}
-	public void StopAvoidance() {
-		Projectile.projectileSpeed = 10;
-		print("Pls Work!");
 	}
 }
