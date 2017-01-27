@@ -43,9 +43,14 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(false);
 		Projectile.projectileSpeed = 10;
 		spike.SetPosition();
+<<<<<<< HEAD
 		Canvas_Renderer.script.infoRenderer("Uff... it's over. Get the Spike and go to the next room.");
 		StopAllCoroutines();
 		
+=======
+		StopAllCoroutines();
+
+>>>>>>> origin/master
 
 	}
 	private IEnumerator print() {
