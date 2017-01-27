@@ -7,22 +7,20 @@ public class Spike : MonoBehaviour {
 	public RectTransform BGS;
 	public RectTransform BG1;
 	public RectTransform BG2a;
+	public RectTransform BG2b;
+	public RectTransform BG3;
+
 	public GameObject player;
 	public Guide guide;
 	public EnemySpawner spawn;
 	public GameObject teleporter;
-	Animator anim;
+	public Animator anim;
 
 	public static int spikesCollected = 0;
 
 
 
 	void Start() {
-
-		player = GameObject.Find("Player");
-		anim = GameObject.Find("scoreText").GetComponent<Animator>();
-		anim.Play("TransformPos");
-
 		if (PlayerPrefs.HasKey("difficulty") == false) {
 			PlayerPrefs.SetInt("difficluty", 0);
 		}
@@ -33,21 +31,24 @@ public class Spike : MonoBehaviour {
 		guide.Recalculate(gameObject, true);
 	}
 
+	bool st = true;
 	void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Player") {
 
 			spikesCollected = spikesCollected + 1;
-
 			M_Player.gameProgression = spikesCollected;
-
 			gameObject.SetActive(false);
-
 			guide.disableGuide();
-		}
-		if (spikesCollected >= 0 || spikesCollected <= 4) {
-			anim.Play("Highlight Text");
-			
+			if (st == true) {
+				st = false;
+				Canvas_Renderer.script.infoRenderer("Follow the blinking arrows.");
+			}
+
+			if (spikesCollected >= 0 || spikesCollected <= 4) {
+				Canvas_Renderer.script.Counters("Spike");
+				anim.Play("Highlight Text");
+			}
 		}
 
 
@@ -83,8 +84,8 @@ public class Spike : MonoBehaviour {
 		if (stage == 1) {
 
 
-			float x = Random.Range(BG1.position.x + (-BG1.sizeDelta.x / 2) + Xscale, BG1.position.x + (BG1.sizeDelta.x / 2) - Xscale);
-			float y = Random.Range(BG1.position.y + (-BG1.sizeDelta.y / 2) + Yscale, BG1.position.y + (BG1.sizeDelta.y / 2) - Yscale);
+			float x = Random.Range(BG1.position.x + (-BG1.sizeDelta.x / 2) + Xscale*4, BG1.position.x + (BG1.sizeDelta.x / 2) - Xscale*4);
+			float y = Random.Range(BG1.position.y + (-BG1.sizeDelta.y / 2) + Yscale*4, BG1.position.y + (BG1.sizeDelta.y / 3) - Yscale*4);
 			float z = 0f;
 
 
@@ -106,30 +107,30 @@ public class Spike : MonoBehaviour {
 			guide.Recalculate(gameObject, true);
 
 		}
-		//if (stage == 3) {
-		//	print(stage);
-		//	float x = Random.Range(-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
-		//	float y = Random.Range(-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
-		//	float z = 0f;
+		if (stage == 3) {
+			print(stage);
+			float x = Random.Range(-BG2b.sizeDelta.x / 2 + Xscale, BG2b.sizeDelta.x / 2 - Xscale);
+			float y = Random.Range(-BG2b.sizeDelta.y / 2 + Yscale, BG2b.sizeDelta.y / 2 - Yscale);
+			float z = 0f;
 
-		//	gameObject.transform.position = new Vector3(x, y, z);
-		//	gameObject.SetActive(true);
-		//	guide.enableGuide();
-		//	guide.Recalculate(gameObject, true);
+			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.SetActive(true);
+			guide.enableGuide();
+			guide.Recalculate(gameObject, true);
 
-		//}
-		//if (stage == 4) {
-		//	print(stage);
-		//	float x = Random.Range(-BG.sizeDelta.x / 2 + Xscale, BG.sizeDelta.x / 2 - Xscale);
-		//	float y = Random.Range(-BG.sizeDelta.y / 2 + Yscale, BG.sizeDelta.y / 2 - Yscale);
-		//	float z = 0f;
+		}
+		if (stage == 4) {
+			print(stage);
+			float x = Random.Range(-BG3.sizeDelta.x / 2 + Xscale, BG3.sizeDelta.x / 2 - Xscale);
+			float y = Random.Range(-BG3.sizeDelta.y / 2 + Yscale, BG3.sizeDelta.y / 2 - Yscale);
+			float z = 0f;
 
-		//	gameObject.transform.position = new Vector3(x, y, z);
-		//	gameObject.SetActive(true);
-		//	guide.enableGuide();
-		//	guide.Recalculate(gameObject, true);
+			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.SetActive(true);
+			guide.enableGuide();
+			guide.Recalculate(gameObject, true);
 
-		//}
+		}
 		if (stage == 5) {
 			print(stage);
 			gameObject.SetActive(false);

@@ -15,6 +15,9 @@ public class Guide : MonoBehaviour {
 	private bool isStaticGlobal;
 	GameObject destinationGlobal;
 
+	public Sprite guide;
+	public float r;
+
 
 	void Start(){
 		
@@ -51,11 +54,19 @@ public class Guide : MonoBehaviour {
 			float m = player.transform.position.x;
 			float n = player.transform.position.y;
 			float c = -a * m - b * n;
-			float r = Mathf.Clamp(Vector3.Distance (playerpos, destinationpos),5,10);
+			if (Vector3.Distance(playerpos, destinationpos) > 10) {
+
+				r = Mathf.Clamp(Vector3.Distance(playerpos, destinationpos), 5, 10);
+				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
+				sprt.sprite = guide;
+			}
+			else if(Vector3.Distance(playerpos, destinationpos) <= 10) {
+				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
+				sprt.sprite = null;
+			}
 
 
-
-			Debug.DrawRay (new Vector3 (m, n, 0), (Vector3)PlayToDestination);
+			Debug.DrawRay (new Vector3 (m, n, 0), PlayToDestination);
 
 			destinationpos = new Vector3 (destinationGlobal.transform.position.x, destinationGlobal.transform.position.y, 0);
 			playerpos = new Vector3 (player.transform.position.x, player.transform.position.y, 0);

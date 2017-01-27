@@ -23,7 +23,6 @@ using UnityEngine.SceneManagement;
 	void Start() {
 		restartButton.SetActive (false);
 		quitToMenu.SetActive(false);
-		//continueButton.SetActive(false);
 
 
 		if (PlayerPrefs.GetInt ("difficulty") == 0) {
@@ -42,13 +41,13 @@ using UnityEngine.SceneManagement;
 			attemptNr = 54;
 		}
 
+		Canvas_Renderer.script.infoRenderer("Collect the coins and find your first Spike.");
+
 	}
 
 
 	void FixedUpdate () {
-		if (gameProgression == -1) {
-			FloorComlpete ();
-		}
+
 
 		move = new Vector3 (0, 0, 0);
 
@@ -241,6 +240,7 @@ using UnityEngine.SceneManagement;
 	void OnTriggerEnter2D (Collider2D col){
 
 		if (col.tag == "Enemy") {
+			col.transform.parent = GameObject.Find("Collectibles").transform;
 			GameOver ();
 		}
 		if (col.transform.tag == "BG") {
@@ -248,30 +248,34 @@ using UnityEngine.SceneManagement;
 			cam.raycastForRooms();
 			spawner.spawnArrowTrap();
 
+			if (col.name == "Background_room_1") {
+				spawner.InvokeRepeatingScript("spawnKillerWall");
+				Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
+				if (gameProgression == 3) {
+					Canvas_Renderer.script.infoRenderer("Go down even further");
+				}
+			}
+
+
 		}
 		if (col.name == "Boss1_teleporter") {
 			gameProgression = 10;
 			roomPregression.script.Progress ();
-			TextRender.script.Disable ();
+			Canvas_Renderer.script.Disable ();
 
 		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress ();
-			if (Spike.spikesCollected >= 0 || Spike.spikesCollected <= 4) {
-				TextRender.script.infoRenderer (Spike.spikesCollected);
-			}
+
 			if (Spike.spikesCollected == 5) {
-				TextRender.script.stageComplete ();
+				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
 		}
-		if (col.name == "Background_room_1") {
-			spawner.InvokeRepeatingScript ("spawnKillerWall");
-		}
-	}
-	void OnTriggerExit2D(Collider2D col){
-		if (col.name == "Background_room_1") {
-			spawner.CancelInvoking ();
-		}
+		//if (col.name == "Background_room_1") {
+		//	spawner.InvokeRepeatingScript ("spawnKillerWall");
+		//	Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
+
+		//}
 	}
 		
 

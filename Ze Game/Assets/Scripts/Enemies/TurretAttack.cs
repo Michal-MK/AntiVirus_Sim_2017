@@ -8,10 +8,12 @@ public class TurretAttack : MonoBehaviour {
 	private IEnumerator waitforAttack;
 	private Transform enemy;
 	public static float turretSpawnRate;
+	ObjectPooler pooler;
 
 
 
 	void Start(){
+		pooler = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
 		enemy = GameObject.Find ("Enemies").transform;
 		StartCoroutine (waitForAttack (turretSpawnRate));
 	}
@@ -28,7 +30,7 @@ public class TurretAttack : MonoBehaviour {
 
 				gameObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.back);
 
-				GameObject bullet = ObjectPooler.script.GetPool ();
+				GameObject bullet = pooler.GetPool ();
 
 
 				bullet.transform.rotation = Quaternion.AngleAxis (angle + 30 * (i * 2), new Vector3 (0, 0, 1));

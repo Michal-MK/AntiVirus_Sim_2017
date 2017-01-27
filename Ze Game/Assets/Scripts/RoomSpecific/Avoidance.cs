@@ -32,18 +32,20 @@ public class Avoidance : MonoBehaviour {
 		StartCoroutine("hold");
 		StartCoroutine("print");
 		Projectile.spawnedByAvoidance = true;
+		Canvas_Renderer.script.infoRenderer("!SURVIVE!");
+
 	}
 
 
 	private IEnumerator hold() {
 		yield return new WaitForSeconds(35);
-
+		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
-		StopAllCoroutines();
 		Projectile.projectileSpeed = 10;
-		print(Projectile.projectileSpeed);
 		spike.SetPosition();
-		StopAvoidance();
+		Canvas_Renderer.script.infoRenderer("Uff... it's over. Get the Spike and go to the next room.");
+		StopAllCoroutines();
+		
 
 	}
 	private IEnumerator print() {
@@ -52,9 +54,5 @@ public class Avoidance : MonoBehaviour {
 			print(Projectile.projectileSpeed);
 			print(TurretAttack.turretSpawnRate);
 		}
-	}
-	public void StopAvoidance() {
-		Projectile.projectileSpeed = 10;
-		print("Pls Work!");
 	}
 }

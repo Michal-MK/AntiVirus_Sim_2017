@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -7,6 +7,7 @@ public class roomPregression : MonoBehaviour {
 	public GameObject[] doors;
 	public Sprite sprtOff;
 	public Sprite sprtOn;
+	public Canvas_Renderer rnd;
 	public static roomPregression script;
 
 
@@ -42,6 +43,7 @@ public class roomPregression : MonoBehaviour {
 			doors [0].SetActive (false);
 			doors [1].SetActive (false);
 			ic_S.sprite = sprtOn;
+			rnd.DisplayDirection(M_Player.gameProgression);
 		}
 
 		if (M_Player.gameProgression == 2) {
@@ -53,7 +55,8 @@ public class roomPregression : MonoBehaviour {
 			doors [2].SetActive (false);
 			doors [3].SetActive (false);
 			ic_1a.sprite = sprtOn;
-		
+			rnd.DisplayDirection(M_Player.gameProgression);
+
 		}
 		if (M_Player.gameProgression == 3) {
 			foreach (GameObject door in doors) {
@@ -66,6 +69,7 @@ public class roomPregression : MonoBehaviour {
 			doors [4].SetActive (false);
 			doors [5].SetActive (false);
 			ic_1b.sprite = sprtOn;
+			rnd.DisplayDirection(M_Player.gameProgression);
 
 		}
 		if (M_Player.gameProgression == 4) {
@@ -81,6 +85,7 @@ public class roomPregression : MonoBehaviour {
 			doors [6].SetActive (false);
 			doors [7].SetActive (false);
 			ic_2.sprite = sprtOn;
+			rnd.DisplayDirection(M_Player.gameProgression);
 		}
 		if (M_Player.gameProgression == 10) {
 			print ("Entering Boss Arena!");

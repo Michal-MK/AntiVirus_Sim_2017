@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour {
 
@@ -14,17 +15,16 @@ public class EnemySpawner : MonoBehaviour {
 	public M_Player player;
 	public bool amIHere = false;
 	public bool forTheFirstTime = true;
+	public GameObject KBPooler;
+	public GameObject EPPooler;
 
 
 
-	float scale;
-
-
-	void Start () {
-		killerblockBG = GameObject.Find ("Background_Start").GetComponent <RectTransform> ();
-		arrowtrapBG = GameObject.Find ("Background_room_2a").GetComponent <RectTransform> ();
-		killerWallBG = GameObject.Find ("Background_room_1").GetComponent <RectTransform> ();
-		enemy = GameObject.Find ("Enemies").transform;
+	void Start() {
+		killerblockBG = GameObject.Find("Background_Start").GetComponent<RectTransform>();
+		arrowtrapBG = GameObject.Find("Background_room_2a").GetComponent<RectTransform>();
+		killerWallBG = GameObject.Find("Background_room_1").GetComponent<RectTransform>();
+		enemy = GameObject.Find("Enemies").transform;
 	}
 
 	public void spawnArrowTrap() {
@@ -84,7 +84,7 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		StartCoroutine("hold");
 	}
-	
+
 	private IEnumerator hold() {
 		yield return new WaitForSeconds(30);
 		forTheFirstTime = false;
@@ -94,47 +94,92 @@ public class EnemySpawner : MonoBehaviour {
 		}
 	}
 
-	public void spawnKillerBlock(){
+	List<GameObject> Blocks = new List<GameObject>();
+	float scale;
+	Vector2 killerblockpos;
+	bool CRunning = false;
+
+	public void spawnKillerBlock() {
 
 		for (int count = 0; count < (int)(Spike.spikesCollected + 5 * difficultySlider.difficulty); count++) {
-			scale = Random.Range (0.5f, 2);
 
-			Vector2 couldpos = (Vector2)player.transform.position;
-			while (Vector2.Distance (player.transform.position, couldpos) < 10) {
+			scale = Random.Range(0.8f, 5);
+			GameObject block = KBPooler.GetComponent<ObjectPooler>().GetPool();
+			block.transform.position = GeneratePosition();
+			block.transform.localScale = new Vector3(scale, scale, 0);
+			block.name = "killerblock";
+			block.transform.SetParent(enemy);
+			block.SetActive(true);
+			Blocks.Add(block);
 
-				float x = Random.Range (-killerblockBG.sizeDelta.x / 2 + scale, killerblockBG.sizeDelta.x / 2 - scale);
-				float y = Random.Range (-killerblockBG.sizeDelta.y / 2 + scale, killerblockBG.sizeDelta.y / 2 - scale);
-				couldpos = new Vector2 (x, y);
-
-			}
-
-
-			GameObject newBlock = (GameObject)Instantiate (deathBlock, new Vector3 (couldpos.x, couldpos.y, 0), Quaternion.identity);
-			newBlock.transform.localScale = new Vector3 (scale, scale, 1);
-			newBlock.name = "killerblock";
-			newBlock.transform.SetParent (enemy);
-		}
-	}
-	public void spawnKillerWall(){
-		for(int i = 0; i < 3 ; i++){
-			GameObject wallShot = ObjectPooler.script.GetPool ();
-			wallShot.transform.rotation = Quaternion.AngleAxis (90, Vector3.back);
-			wallShot.transform.position = new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x/2, Random.Range ((int)killerWallBG.position.y - killerWallBG.sizeDelta.y / 2,(int)killerWallBG.position.y + killerWallBG.sizeDelta.y / 2),0);//
-			wallShot.transform.SetParent (enemy);
-			wallShot.SetActive (true);
-
-				
-
-
-			if (wallShot == null) {
-				return;
+			if (CRunning == false) {
+				StartCoroutine("KBCycle");
 			}
 		}
 	}
-	public void InvokeRepeatingScript(string name){
-		InvokeRepeating (name,0.5f,0.5f);
+
+
+	public IEnumerator KBCycle() {
+		CRunning = true;
+		while (true) {
+			yield return new WaitForSeconds(2);
+			for (int i = 0; i < Blocks.Count; i++) {
+				Blocks[i].GetComponent<Animator>().SetTrigger("Despawn");
+			}
+			yield return new WaitForSeconds(0.2f);
+			for (int i = 0; i < Blocks.Count; i++) {
+				Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
+				Blocks[i].SetActive(false);
+				Blocks[i].transform.position = GeneratePosition();
+				Blocks[i].SetActive(true);
+			}
+			if (M_Player.currentBG_name != killerblockBG.name) {
+				for (int i = 0; i < Blocks.Count; i++) {
+					Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
+					Blocks[i].SetActive(false);
+					CRunning = false;
+					StopCoroutine("KBCycle");
+				}
+			}
+		}
 	}
-	public void CancelInvoking(){
-		CancelInvoke ();
+
+
+
+	public Vector3 GeneratePosition() {
+		killerblockpos = player.transform.position;
+		while (Vector2.Distance(player.transform.position, killerblockpos) < 12) {
+
+			float x = Random.Range(-killerblockBG.sizeDelta.x / 2 + scale, killerblockBG.sizeDelta.x / 2 - scale);
+			float y = Random.Range(-killerblockBG.sizeDelta.y / 2 + scale, killerblockBG.sizeDelta.y / 2 - scale);
+			killerblockpos = new Vector2(x, y);
+		}
+		return killerblockpos;
+	}
+
+
+	List<GameObject> KWProjectiles = new List<GameObject>();
+
+	public void spawnKillerWall() {
+
+			for (int i = 0; i < 3; i++) {
+				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
+				wallShot.transform.position = new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x / 2, Random.Range((int)killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, (int)killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);//
+				wallShot.transform.SetParent(enemy);
+				wallShot.SetActive(true);
+				KWProjectiles.Add(wallShot);
+			}
+
+		if(M_Player.currentBG_name != killerWallBG.name) {
+			foreach(GameObject p in KWProjectiles) {
+				p.SetActive(false);
+			}
+			CancelInvoke();
+
+		}
+	}
+	public void InvokeRepeatingScript(string name) {
+		InvokeRepeating(name, 0.5f, 0.5f);
 	}
 }

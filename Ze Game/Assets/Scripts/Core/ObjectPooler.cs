@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class ObjectPooler : MonoBehaviour {
 
-	public static ObjectPooler script;
 	public GameObject pooledObject;
 	public int max;
 	public bool expandable = true;
@@ -12,10 +11,6 @@ public class ObjectPooler : MonoBehaviour {
 
 	public List<GameObject> pool;
 
-	void Awake(){
-		max = 150;
-		script = this;
-	}
 
 	void Start () {
 		pool = new List<GameObject> ();

@@ -11,17 +11,15 @@ public class Coins : MonoBehaviour {
 	public Guide guide;
 	public EnemySpawner spawner;
 	public Spike spike;
-	Text count;
+	
 	Vector3 oldpos;
 	Animator anim;
 
-	float coinsCollected = 0;
+	public static float coinsCollected = 0;
 
-	// Use this for initialization
 	void Start() {
 		oldpos = coin.transform.position;
 		anim = amount.GetComponent<Animator>();
-		count = amount.GetComponent<Text>();
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
@@ -34,7 +32,7 @@ public class Coins : MonoBehaviour {
 			oldpos = newpos;
 			timer.run = true;
 			spawner.spawnKillerBlock();
-			count.text = "x " + (coinsCollected + 1);
+			Canvas_Renderer.script.Counters("Coin");
 			anim.Play("MoreHighlights");
 
 			while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
@@ -47,20 +45,14 @@ public class Coins : MonoBehaviour {
 			}
 
 			gameObject.transform.position = newpos;
-
 			coinsCollected = coinsCollected + 1;
-
 			guide.Recalculate(coin.gameObject,true);
 
 		}
 		if (coinsCollected == 5) {
 			guide.disableGuide();
 			coin.gameObject.SetActive(false);
-			count.transform.localPosition = count.transform.localPosition + new Vector3(50, 0, 0);
-			count.text = "Completed!";
-
 			spike.SetPosition();
-
 		}
 	}
 }
