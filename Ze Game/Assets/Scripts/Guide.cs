@@ -12,7 +12,6 @@ public class Guide : MonoBehaviour {
 	public GameObject Arrow;
 	GameObject pointArrow;
 	Transform GuideObj;
-	private bool isStaticGlobal;
 	GameObject destinationGlobal;
 
 	public Sprite guide;
@@ -28,7 +27,6 @@ public class Guide : MonoBehaviour {
 
 	public void Recalculate (GameObject destination, bool isStatic) {
 
-		isStaticGlobal = isStatic;
 		destinationGlobal= destination;
 
 		Destroy (pointArrow);
@@ -37,7 +35,7 @@ public class Guide : MonoBehaviour {
 		playerpos = new Vector3 (player.transform.position.x, player.transform.position.y, 0);
 
 
-		pointArrow = Instantiate (Arrow, new Vector3 (0,-1,0), Quaternion.FromToRotation (Vector3.up, (destinationpos-playerpos)));
+		pointArrow = Instantiate (Arrow, Vector3.down, Quaternion.FromToRotation (Vector3.up, (destinationpos-playerpos)));
 		pointArrow.transform.SetParent(GuideObj);
 
 		}

@@ -11,7 +11,6 @@ public class Canvas_Renderer : MonoBehaviour {
 	public static Canvas_Renderer script;
 	Animator Front;
 	Animator Slide;
-	Color basic;
 	string infotext;
 
 	void Awake(){
@@ -27,7 +26,6 @@ public class Canvas_Renderer : MonoBehaviour {
 	public IEnumerator MoveWithText() {
 
 		yield return new WaitForSeconds(0.2f);
-		basic = info_F.color;
 		if (st != true) {
 			Slide.SetTrigger("Slideout");
 		}

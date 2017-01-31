@@ -13,13 +13,11 @@ public class Coins : MonoBehaviour {
 	public Spike spike;
 	
 	Vector3 oldpos;
-	Animator anim;
 
 	public static float coinsCollected = 0;
 
 	void Start() {
 		oldpos = coin.transform.position;
-		anim = amount.GetComponent<Animator>();
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
@@ -33,7 +31,6 @@ public class Coins : MonoBehaviour {
 			timer.run = true;
 			spawner.spawnKillerBlock();
 			Canvas_Renderer.script.Counters("Coin");
-			anim.Play("MoreHighlights");
 
 			while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
 

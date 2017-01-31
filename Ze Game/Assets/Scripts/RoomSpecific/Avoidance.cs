@@ -12,6 +12,7 @@ public class Avoidance : MonoBehaviour {
 	public EnemySpawner spawner;
 	float zero = 0;
 	public Spike spike;
+	float avoidDuration = 35;
 
 	private void Update() {
 		if (Mathf.Abs(Vector3.Distance(player.position, BG.position)) <= Mathf.Abs(BG.sizeDelta.y / 2 - 10) && preformed == false) {
@@ -21,16 +22,33 @@ public class Avoidance : MonoBehaviour {
 		}
 
 		if (zero <= 30 && Projectile.spawnedByAvoidance == true) {
-			zero += Time.deltaTime / 30 - Mathf.Pow(PlayerPrefs.GetInt("difficulty"),2);
-			Projectile.projectileSpeed = Mathf.Lerp(10, 30, zero);
-			TurretAttack.turretSpawnRate = Mathf.Lerp(1.5f, 1f, zero);
+			zero += Time.deltaTime / avoidDuration;
+			switch (PlayerPrefs.GetInt("difficulty")) {
+				case 0:
+				TurretAttack.turretSpawnRate = Mathf.Lerp(1.6f, 1.2f, zero);
+				break;
+				case 1:
+				TurretAttack.turretSpawnRate = Mathf.Lerp(1.5f, 1.2f, zero);
+				break;
+				case 2:
+				TurretAttack.turretSpawnRate = Mathf.Lerp(1.4f, 1.1f, zero);
+				break;
+				case 3:
+				TurretAttack.turretSpawnRate = Mathf.Lerp(1.4f, 1f, zero);
+				break;
+				case 4:
+				TurretAttack.turretSpawnRate = Mathf.Lerp(1.3f, 0.9f, zero);
+				break;
+
+			}
+			//TurretAttack.turretSpawnRate = Mathf.Lerp(1.5f, 1f, zero);
 		}
 	}
 	public void StartAvoidance() {
 		door1.SetActive(true);
 		spawner.spawnAvoidance();
 		StartCoroutine("hold");
-		StartCoroutine("print");
+		//StartCoroutine("print");
 		Projectile.spawnedByAvoidance = true;
 		Canvas_Renderer.script.infoRenderer("!SURVIVE!");
 
@@ -43,21 +61,16 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(false);
 		Projectile.projectileSpeed = 10;
 		spike.SetPosition();
-<<<<<<< HEAD
 		Canvas_Renderer.script.infoRenderer("Uff... it's over. Get the Spike and go to the next room.");
 		StopAllCoroutines();
 		
-=======
-		StopAllCoroutines();
-
->>>>>>> origin/master
 
 	}
 	private IEnumerator print() {
 		while (true) {
 			yield return new WaitForSeconds(0.5f);
-			print(Projectile.projectileSpeed);
 			print(TurretAttack.turretSpawnRate);
+			print(Time.deltaTime / avoidDuration);
 		}
 	}
 }

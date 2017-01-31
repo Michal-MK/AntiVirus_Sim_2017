@@ -15,10 +15,9 @@ public class EnemySpawner : MonoBehaviour {
 	public M_Player player;
 	public bool amIHere = false;
 	public bool forTheFirstTime = true;
-	public GameObject KBPooler;
+	public GameObject warningObj;
 	public GameObject EPPooler;
-
-
+	
 
 	void Start() {
 		killerblockBG = GameObject.Find("Background_Start").GetComponent<RectTransform>();
@@ -94,7 +93,10 @@ public class EnemySpawner : MonoBehaviour {
 		}
 	}
 
-	List<GameObject> Blocks = new List<GameObject>();
+
+	public List<GameObject> Blocks = new List<GameObject>();
+	public List<GameObject> Warnings = new List<GameObject>();
+
 	float scale;
 	Vector2 killerblockpos;
 	bool CRunning = false;
@@ -104,35 +106,67 @@ public class EnemySpawner : MonoBehaviour {
 		for (int count = 0; count < (int)(Spike.spikesCollected + 5 * difficultySlider.difficulty); count++) {
 
 			scale = Random.Range(0.8f, 5);
-			GameObject block = KBPooler.GetComponent<ObjectPooler>().GetPool();
-			block.transform.position = GeneratePosition();
+
+			GameObject warn = Instantiate(warningObj);
+			GameObject block = Instantiate(deathBlock);
+
+
+			Vector3 pos = KBPositions();
+
+			block.transform.position = pos;
+
 			block.transform.localScale = new Vector3(scale, scale, 0);
-			block.name = "killerblock";
+			warn.transform.localScale = new Vector3(scale / 3, scale / 3, 0);
+
+			block.name = "killerblock " + count;
+			warn.name = "Warning " + count;
+
 			block.transform.SetParent(enemy);
-			block.SetActive(true);
+			warn.transform.SetParent(enemy);
+
 			Blocks.Add(block);
+			Warnings.Add(warn);
 
-			if (CRunning == false) {
-				StartCoroutine("KBCycle");
-			}
 		}
-	}
+		if (CRunning == false) {
+			StartCoroutine("KBCycle");
+		}
 
+	}
 
 	public IEnumerator KBCycle() {
 		CRunning = true;
+
 		while (true) {
+
+			
+			for (int i = 0; i < Blocks.Count; i++) {
+				Warnings[i].SetActive(false);
+				Blocks[i].SetActive(true);
+			}
 			yield return new WaitForSeconds(2);
+
 			for (int i = 0; i < Blocks.Count; i++) {
 				Blocks[i].GetComponent<Animator>().SetTrigger("Despawn");
 			}
+
 			yield return new WaitForSeconds(0.2f);
-			for (int i = 0; i < Blocks.Count; i++) {
+			print(Blocks.Count + " " + Warnings.Count);
+
+			for (int i = 0; i < Warnings.Count; i++) {
 				Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
 				Blocks[i].SetActive(false);
-				Blocks[i].transform.position = GeneratePosition();
-				Blocks[i].SetActive(true);
+				Vector3 pos = KBPositions();
+				Blocks[i].transform.position = pos;
+				Warnings[i].transform.position = pos;
+				Warnings[i].SetActive(true);
+				Warnings[i].GetComponent<Animator>().SetTrigger("DespawnWarn");
+
+
 			}
+			yield return new WaitForSeconds(0.5f);
+
+
 			if (M_Player.currentBG_name != killerblockBG.name) {
 				for (int i = 0; i < Blocks.Count; i++) {
 					Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
@@ -145,8 +179,64 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 
+	public IEnumerator Warn(Vector3 pos, Vector3 scale) {
+		GameObject warning = Instantiate(warningObj);
+		warning.transform.position = pos;
+		warning.transform.localScale = scale;
+		warning.SetActive(true);
+		yield return new WaitForSeconds(1);
+		warning.SetActive(false);
+		StopCoroutine("Warn");
+	}
 
-	public Vector3 GeneratePosition() {
+
+
+
+	List<GameObject> KWProjectiles = new List<GameObject>();
+
+	public void spawnKillerWall() {
+
+		if (PlayerPrefs.GetInt("difficulty") <= 1) {
+
+
+			for (int i = 0; i < 1; i++) {
+				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
+				wallShot.transform.position = KWProjectilePositions();
+				wallShot.transform.SetParent(enemy);
+				wallShot.SetActive(true);
+				KWProjectiles.Add(wallShot);
+			}
+		}
+		if (PlayerPrefs.GetInt("difficulty") == 2) {
+			for (int i = 0; i < 2; i++) {
+				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
+				wallShot.transform.position = KWProjectilePositions();
+				wallShot.transform.SetParent(enemy);
+				wallShot.SetActive(true);
+				KWProjectiles.Add(wallShot);
+			}
+		}
+		if (PlayerPrefs.GetInt("difficulty") >= 3) {
+			for (int i = 0; i < 3; i++) {
+				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
+				wallShot.transform.position = KWProjectilePositions();
+				wallShot.transform.SetParent(enemy);
+				wallShot.SetActive(true);
+				KWProjectiles.Add(wallShot);
+			}
+		}
+		if (M_Player.currentBG_name != killerWallBG.name) {
+			foreach (GameObject p in KWProjectiles) {
+				p.SetActive(false);
+			}
+			CancelInvoke();
+		}
+	}
+
+	public Vector3 KBPositions() {
 		killerblockpos = player.transform.position;
 		while (Vector2.Distance(player.transform.position, killerblockpos) < 12) {
 
@@ -156,29 +246,11 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		return killerblockpos;
 	}
-
-
-	List<GameObject> KWProjectiles = new List<GameObject>();
-
-	public void spawnKillerWall() {
-
-			for (int i = 0; i < 3; i++) {
-				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
-				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
-				wallShot.transform.position = new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x / 2, Random.Range((int)killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, (int)killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);//
-				wallShot.transform.SetParent(enemy);
-				wallShot.SetActive(true);
-				KWProjectiles.Add(wallShot);
-			}
-
-		if(M_Player.currentBG_name != killerWallBG.name) {
-			foreach(GameObject p in KWProjectiles) {
-				p.SetActive(false);
-			}
-			CancelInvoke();
-
-		}
+	
+	public Vector3 KWProjectilePositions() {
+		return new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
 	}
+
 	public void InvokeRepeatingScript(string name) {
 		InvokeRepeating(name, 0.5f, 0.5f);
 	}

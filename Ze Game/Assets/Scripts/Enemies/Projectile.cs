@@ -2,13 +2,16 @@ using UnityEngine;
 using System.Collections;
 
 public class Projectile : MonoBehaviour {
-	public static float projectileSpeed = 10;
+	public static float projectileSpeed = 15;
 	public bool ready = false;
 	public static bool spawnedByAvoidance = false;
+	public Rigidbody2D self;
 
-	void OnEnable(){
+	void OnEnable() {
 		ready = true;
+		self.velocity = transform.rotation * Vector3.down * projectileSpeed;
 	}
+
 
 
 	void OnTriggerEnter2D(Collider2D coll){
@@ -23,12 +26,6 @@ public class Projectile : MonoBehaviour {
 		if (col.tag == "BG") { 
 			gameObject.SetActive (false);
 
-		}
-	}
-	void Update(){
-
-		if (ready == true) {
-			transform.position += transform.rotation * new Vector3 (0, -1, 0) * projectileSpeed * Time.deltaTime;
 		}
 	}
 

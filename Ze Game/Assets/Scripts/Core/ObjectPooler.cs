@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ObjectPooler : MonoBehaviour {
 
 	public GameObject pooledObject;
-	public int max;
+	public int max = 0;
 	public bool expandable = true;
 	public Transform enemy;
 
@@ -13,14 +13,16 @@ public class ObjectPooler : MonoBehaviour {
 
 
 	void Start () {
-		pool = new List<GameObject> ();
-		for (int i = 0; i < max; i++) {
-			GameObject obj = Instantiate (pooledObject);
 
+		pool = new List<GameObject> ();
+		
+		for (int i = 0; i < max; i++) {
+
+			GameObject obj = Instantiate (pooledObject);
 			obj.SetActive (false);
 			obj.transform.SetParent(enemy);
 			pool.Add (obj);
-			GetPool();
+	
 
 		}
 	}
