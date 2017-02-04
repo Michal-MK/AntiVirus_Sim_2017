@@ -17,10 +17,12 @@ public class CameraMovement : MonoBehaviour {
 	public float currentBGX;
 	public float currentBGY;
 	public static GameObject[] loadedZones;
-	public bool inBossRoom = false;
+
 	public RectTransform bossRoom;
+	public RectTransform MazeBG;
 
-
+	public bool inBossRoom = false;
+	public bool inMaze = false;
 
 	void Start(){
 		
@@ -149,10 +151,10 @@ public class CameraMovement : MonoBehaviour {
 		BGarray = BackGroundS.ToArray ();
 		loadedZones = new GameObject[BGarray.Length];
 		loadedZones = BGarray;
-		foreach (GameObject zones in loadedZones) {
-			Debug.Log (i + "  " + zones);
-			i++;
-		} 
+		//foreach (GameObject zones in loadedZones) {
+		//	Debug.Log (i + "  " + zones);
+		//	i++;
+		//} 
 
 		float xForAll = 0;
 		float yForAll = 0;
@@ -262,18 +264,35 @@ public class CameraMovement : MonoBehaviour {
 
 	void LateUpdate(){
 
-		if (inBossRoom == false) {
+		if (inBossRoom == false && inMaze == false) {
 			cam_pos = new Vector3 (camX (), camY (), player.position.z - 10);
 			gameObject.transform.position = cam_pos;
 
 		}
 		else {
-			if (zero < 10) {
+			if (zero < 0.15f && inMaze == true) {
 				zero += Time.deltaTime / 100;
-				Camera.main.orthographicSize = Mathf.SmoothStep (Camera.main.orthographicSize, bossRoom.sizeDelta.x * 2 * Screen.height / Screen.width * 0.5f, zero);
+				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, MazeBG.sizeDelta.x * 0.25f * Screen.height / Screen.width * 0.5f, zero);
+				if (zero >= 0.15f && zero < 0.2f) {
+					zero += Time.deltaTime / 100;
+					Camera.main.transform.position = new Vector3((Mathf.SmoothStep(Camera.main.transform.position.x, player.transform.position.x, zero)),
+																 (Mathf.SmoothStep(Camera.main.transform.position.y, player.transform.position.y, zero)));
+					if (zero > 0.3f) {
+						inMaze = false;
+						zero = 0;
+					}
+				}
+			}
+
+			if (zero < 10 && inBossRoom == true) {
+				zero += Time.deltaTime / 100;
+				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, bossRoom.sizeDelta.x * 2 * Screen.height / Screen.width * 0.5f, zero);
+				if (zero > 10 && zero < 20) {
+					inBossRoom = false;
+					zero = 0;
+				}
 			}
 		}
-
 	}
 
 
@@ -320,5 +339,13 @@ public class CameraMovement : MonoBehaviour {
 		player.position = new Vector3 (bossX, bossY, 0);
 		gameObject.transform.position = new Vector3 (bossX, bossY, -10);
 
+	}
+	public void mazeCam() {
+		inMaze = true;
+		RectTransform mazeBG = GameObject.Find("MazeBG").GetComponent<RectTransform>();
+		float mazeX = mazeBG.position.x;
+		float mazey = mazeBG.position.y;
+		print("Transfrom!");
+		gameObject.transform.position = new Vector3(mazeX, mazey, -10);
 	}
 }

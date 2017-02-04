@@ -111,7 +111,7 @@ public class M_Player : MonoBehaviour {
 				move.y = 1;
 			}
 			else {
-				move.y = distanceToWall - 2;
+				move.y = distanceToWall - 2 * transform.localScale.y;
 			}
 		}
 
@@ -132,7 +132,7 @@ public class M_Player : MonoBehaviour {
 				move.y = -1;
 			}
 			else {
-				move.y = -distanceToWall + 2;
+				move.y = -distanceToWall + 2 * transform.localScale.y;
 			}
 		}
 
@@ -153,7 +153,7 @@ public class M_Player : MonoBehaviour {
 				move.x = 1;
 			}
 			else {
-				move.x = distanceToWall - 2;
+				move.x = distanceToWall - 2 * transform.localScale.x;
 			}
 		}
 
@@ -174,13 +174,14 @@ public class M_Player : MonoBehaviour {
 				move.x = -1;
 			}
 			else {
-				move.x = -distanceToWall + 2;
+				move.x = -distanceToWall + 2 * transform.localScale.x;
 			}
 		}
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * speed;
 		}
 	}
+
 
 	public void Movement() {
 		move = new Vector3(0, 0, 0);

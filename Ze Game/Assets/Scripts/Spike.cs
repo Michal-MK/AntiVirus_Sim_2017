@@ -47,7 +47,7 @@ public class Spike : MonoBehaviour {
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
 				Canvas_Renderer.script.Counters("Spike");
-				anim.Play("Highlight Text");
+				anim.Play("Highlight Spike Count");
 			}
 		}
 

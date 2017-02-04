@@ -7,7 +7,9 @@ public class Canvas_Renderer : MonoBehaviour {
 	public Text info_F;
 	public Text info_S;
 	public Text SpikeC;
+	public Animator Spikec;
 	public Text CoinC;
+	public Animator Coinc;
 	public static Canvas_Renderer script;
 	Animator Front;
 	Animator Slide;
@@ -91,11 +93,11 @@ public class Canvas_Renderer : MonoBehaviour {
 
 		if (name == "Coin") {
 			CoinC.text = "x " + (Coins.coinsCollected + 1);
+			Coinc.Play("Highlight Coin Count");
 
 			if (Coins.coinsCollected == 4) {
 				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);
 				CoinC.text = "Completed!";
-				//infoRenderer("Hey look , there it is!");
 			}
 		}
 		if(name == "Spike") {
