@@ -23,6 +23,7 @@ public class M_Player : MonoBehaviour {
 
 
 	void Start() {
+		gameProgression = 2;
 		restartButton.SetActive (false);
 		quitToMenu.SetActive(false);
 
@@ -57,7 +58,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 
-	public void FixedUpdate() {
+	public void Update() {
 
 		if (experimentalMovement) {
 			ExpMove();

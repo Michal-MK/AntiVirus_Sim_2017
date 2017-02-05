@@ -24,9 +24,10 @@ public class Canvas_Renderer : MonoBehaviour {
 		Slide = info_S.gameObject.GetComponent<Animator>();
 	}
 	bool st = true;
+	bool isRunning = false;
 
 	public IEnumerator MoveWithText() {
-
+		isRunning = true;
 		yield return new WaitForSeconds(0.2f);
 		if (st != true) {
 			Slide.SetTrigger("Slideout");
@@ -38,15 +39,22 @@ public class Canvas_Renderer : MonoBehaviour {
 		Slide.Play("SlideIN");
 		yield return new WaitForSeconds(0.75f);
 		st = false;
+		isRunning = false;
 		StopCoroutine("MoveWithText");
 	}
 
 
-	public void infoRenderer (string text){
+	public void infoRenderer(string text) {
 		info_F.text = text;
 		infotext = text;
-		StartCoroutine("MoveWithText");
+		if (isRunning == false) {
+			StartCoroutine("MoveWithText");
+		}
+		else {
+			return;
+		}
 	}
+
 
 
 	public GameObject up;
@@ -97,7 +105,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 			if (Coins.coinsCollected == 4) {
 				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);
-				CoinC.text = "Completed!";
+				CoinC.text = CoinC.text + " Completed!";
 			}
 		}
 		if(name == "Spike") {

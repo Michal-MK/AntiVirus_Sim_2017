@@ -12,8 +12,9 @@ public class Maze : MonoBehaviour {
 	public GameObject player;
 	public CameraMovement cam;
 
-	public GameObject BG;
-	Vector3 hpos;
+	public GameObject MazePositon;
+	public RectTransform BG;
+	public Vector3 hpos;
 	public int rowcollCount;
 
 	float widhtHeight;
@@ -26,7 +27,7 @@ public class Maze : MonoBehaviour {
 
 
 	void Start() {
-
+		print(BG.transform.position);
 
 		MazeLevel();
 
@@ -38,13 +39,10 @@ public class Maze : MonoBehaviour {
 		wallsL = new GameObject[size, size];
 
 
-		widhtHeight = BG.GetComponent<RectTransform>().sizeDelta.x / (rowcollCount);
+		widhtHeight = MazePositon.GetComponent<RectTransform>().sizeDelta.x / (rowcollCount);
 
-		hpos = BG.transform.position;
-		//player.transform.position = hpos;
+		hpos = MazePositon.transform.position;
 
-		//cam.inMaze = true;
-		//cam.mazeCam();
 
 		for (int i = 0; i < rowcollCount; i++) {
 			for (int j = 0; j < rowcollCount; j++) {
@@ -87,21 +85,23 @@ public class Maze : MonoBehaviour {
 				wallsL[i, j] = wallL;
 			}
 		}
+		BG.transform.position = new Vector3(grid[rowcollCount / 2, rowcollCount / 2].transform.position.x, grid[rowcollCount / 2, rowcollCount / 2].transform.position.y, 0);
+		print(BG.transform.position + "  " + grid[rowcollCount / 2, rowcollCount / 2].name);
 		StartCoroutine(CreatePath());
 	}
 
 	public void MazeLevel() {
 		switch (PlayerPrefs.GetInt("difficulty")) {
 			case 0:
-			rowcollCount = 16;
+			rowcollCount = 15;
 			return;
 
 			case 1:
-			rowcollCount = 20;
+			rowcollCount = 21;
 			return;
 
 			case 2:
-			rowcollCount = 22;
+			rowcollCount = 23;
 			return;
 
 			case 3:
@@ -109,26 +109,26 @@ public class Maze : MonoBehaviour {
 			return;
 
 			case 4:
-			rowcollCount = 30;
+			rowcollCount = 29;
 			return;
 		}
 	}
 
 	public Vector3 CalculateScale() {
-		if (rowcollCount == 16) {
-			return new Vector3(2.61f, 2.61f, 0);
+		if (rowcollCount == 15) {
+			return new Vector3(2.7f, 2.7f, 1);
 		}
-		else if (rowcollCount == 20) {
-			return new Vector3(2.1f, 2.1f, 0);
+		else if (rowcollCount == 21) {
+			return new Vector3(2.1f, 2.1f, 1);
 		}
-		else if (rowcollCount == 22) {
-			return new Vector3(2f, 2f, 0);
+		else if (rowcollCount == 23) {
+			return new Vector3(1.9f, 1.9f, 1);
 		}
 		else if (rowcollCount == 25) {
-			return new Vector3(1.7f, 1.7f, 0);
+			return new Vector3(1.7f, 1.7f, 1);
 		}
-		else if (rowcollCount == 30) {
-			return new Vector3(1.45f, 1.45f, 0);
+		else if (rowcollCount == 29) {
+			return new Vector3(1.45f, 1.45f, 1);
 		}
 		else {
 			//impossible to happen
@@ -153,16 +153,13 @@ public class Maze : MonoBehaviour {
 		stack.Push(current);
 
 		while (stack.Count > 0 && run == true) {
-			if(stack.Count == 0) {
+			if (stack.Count == 0) {
 				MazeStopped();
-			}else {
+			}
+			else {
 				chosenNeighbor = GetNeighbor(XPosition, Yposition);
-				//M_Player.doNotMove = true;
-				//player.transform.position = hpos;
 			}
-			if (run == false) {
-				//M_Player.doNotMove = false;
-			}
+
 
 			yield return new WaitForSeconds(0.001f);
 
@@ -296,11 +293,11 @@ public class Maze : MonoBehaviour {
 
 		while (continuee == true && run == true) {
 
-			if(stack.Count <= 0) {
+			if (stack.Count <= 0) {
 				MazeStopped();
 			}
 
-			
+
 
 
 			if (currentPosX + 1 <= rowcollCount - 1) {
@@ -369,7 +366,7 @@ public class Maze : MonoBehaviour {
 				currentPosX = current.GetComponent<Cell>().selfX;
 				currentPosY = current.GetComponent<Cell>().selfY;
 
-				print("OVER!");
+				//print("OVER!");
 
 				MazeStopped();
 			}
@@ -378,7 +375,7 @@ public class Maze : MonoBehaviour {
 			int choice = Random.Range(0, neighbors.Count);
 
 			string name = neighbors[choice].name;
-			print(name);
+			//print(name);
 
 			if (name == "Cell " + RightX + " " + RightY) {
 				XPosition = RightX;
@@ -417,7 +414,6 @@ public class Maze : MonoBehaviour {
 		if (neighbors.Count == 0 && stack.Count <= 1) {
 			run = false;
 			StopAllCoroutines();
-			print("MazeStopped");
 		}
 	}
 }

@@ -7,7 +7,7 @@ public class Spike : MonoBehaviour {
 	public RectTransform BGS;
 	public RectTransform BG1;
 	public RectTransform BG2a;
-	public RectTransform BG2b;
+	public Maze Maze;
 	public RectTransform BG3;
 
 	public GameObject player;
@@ -48,6 +48,7 @@ public class Spike : MonoBehaviour {
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
 				Canvas_Renderer.script.Counters("Spike");
 				anim.Play("Highlight Spike Count");
+
 			}
 		}
 
@@ -109,14 +110,19 @@ public class Spike : MonoBehaviour {
 		}
 		if (stage == 3) {
 			print(stage);
-			float x = Random.Range(-BG2b.sizeDelta.x / 2 + Xscale, BG2b.sizeDelta.x / 2 - Xscale);
-			float y = Random.Range(-BG2b.sizeDelta.y / 2 + Yscale, BG2b.sizeDelta.y / 2 - Yscale);
+			GameObject lastPos = Maze.grid[Maze.rowcollCount/2, Maze.rowcollCount/2];
+
+
+			float x = lastPos.transform.position.x;
+			float y = lastPos.transform.position.y;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
+
+
 
 		}
 		if (stage == 4) {

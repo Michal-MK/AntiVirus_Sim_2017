@@ -41,7 +41,6 @@ public class Avoidance : MonoBehaviour {
 				break;
 
 			}
-			//TurretAttack.turretSpawnRate = Mathf.Lerp(1.5f, 1f, zero);
 		}
 	}
 	public void StartAvoidance() {

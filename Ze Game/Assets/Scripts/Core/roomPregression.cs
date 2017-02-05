@@ -69,7 +69,11 @@ public class roomPregression : MonoBehaviour {
 			doors [4].SetActive (false);
 			doors [5].SetActive (false);
 			ic_1b.sprite = sprtOn;
-			rnd.DisplayDirection(M_Player.gameProgression);
+			//rnd.DisplayDirection(M_Player.gameProgression);
+			Canvas_Renderer.script.infoRenderer("Let's get out of this maze.");
+			GameObject end = GameObject.Find("MazeRoomWIP");
+			end.SetActive(true);
+
 
 		}
 		if (M_Player.gameProgression == 4) {
@@ -85,7 +89,7 @@ public class roomPregression : MonoBehaviour {
 			doors [6].SetActive (false);
 			doors [7].SetActive (false);
 			ic_2.sprite = sprtOn;
-			rnd.DisplayDirection(M_Player.gameProgression);
+			//rnd.DisplayDirection(M_Player.gameProgression);
 		}
 		if (M_Player.gameProgression == 10) {
 			print ("Entering Boss Arena!");
@@ -95,5 +99,13 @@ public class roomPregression : MonoBehaviour {
 			cam.bossFightCam (1);
 		}
 		Camera.main.GetComponent <CameraMovement>().raycastForRooms ();
+	}
+
+	public static void resetGame() {
+		M_Player.gameProgression = 0;
+		Spike.spikesCollected = 0;
+		Coins.coinsCollected = 0;
+		Projectile.projectileSpeed = 15;
+
 	}
 }

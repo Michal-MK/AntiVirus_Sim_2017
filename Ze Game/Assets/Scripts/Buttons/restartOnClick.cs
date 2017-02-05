@@ -10,7 +10,7 @@ public class restartOnClick : MonoBehaviour {
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
 		M_Player.gameProgression = 0;
-		Projectile.projectileSpeed = 10;
+		Projectile.projectileSpeed = 15;
 		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 

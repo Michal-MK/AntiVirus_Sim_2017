@@ -261,6 +261,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 	}
 
+	float zero1 = 0;
 
 	void LateUpdate(){
 
@@ -272,14 +273,17 @@ public class CameraMovement : MonoBehaviour {
 		else {
 			if (zero < 0.15f && inMaze == true) {
 				zero += Time.deltaTime / 100;
-				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, MazeBG.sizeDelta.x * 0.25f * Screen.height / Screen.width * 0.5f, zero);
+				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, zero);
 				if (zero >= 0.15f && zero < 0.2f) {
-					zero += Time.deltaTime / 100;
-					Camera.main.transform.position = new Vector3((Mathf.SmoothStep(Camera.main.transform.position.x, player.transform.position.x, zero)),
-																 (Mathf.SmoothStep(Camera.main.transform.position.y, player.transform.position.y, zero)));
+
+					zero1 += Time.deltaTime / 100;
+					Camera.main.transform.position = new Vector3((Mathf.SmoothStep(Camera.main.transform.position.x, player.transform.position.x, zero1)),
+																 (Mathf.SmoothStep(Camera.main.transform.position.y, player.transform.position.y, zero1)),
+																  -10);
 					if (zero > 0.3f) {
 						inMaze = false;
 						zero = 0;
+						zero1 = 0;
 					}
 				}
 			}
