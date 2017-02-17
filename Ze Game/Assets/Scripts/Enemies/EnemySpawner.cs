@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	public void spawnArrowTrap() {
 		if (forTheFirstTime == false) {
-			print(forTheFirstTime + " Normal");
+		//	print(forTheFirstTime + " Normal");
 
 			foreach (GameObject zone in CameraMovement.loadedZones) {
 
@@ -116,7 +116,7 @@ public class EnemySpawner : MonoBehaviour {
 			block.transform.position = pos;
 
 			block.transform.localScale = new Vector3(scale, scale, 0);
-			warn.transform.localScale = new Vector3(scale / 3, scale / 3, 0);
+			warn.transform.localScale = new Vector3(scale / 2, scale / 2, 0);
 
 			block.name = "killerblock " + count;
 			warn.name = "Warning " + count;
@@ -151,7 +151,7 @@ public class EnemySpawner : MonoBehaviour {
 			}
 
 			yield return new WaitForSeconds(0.2f);
-			print(Blocks.Count + " " + Warnings.Count);
+			//print(Blocks.Count + " " + Warnings.Count);
 
 			for (int i = 0; i < Warnings.Count; i++) {
 				Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
@@ -169,7 +169,7 @@ public class EnemySpawner : MonoBehaviour {
 
 			if (M_Player.currentBG_name != killerblockBG.name) {
 				for (int i = 0; i < Blocks.Count; i++) {
-					Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
+					//Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
 					Blocks[i].SetActive(false);
 					CRunning = false;
 					StopCoroutine("KBCycle");

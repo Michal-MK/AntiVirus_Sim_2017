@@ -6,12 +6,23 @@ public class Projectile : MonoBehaviour {
 	public bool ready = false;
 	public static bool spawnedByAvoidance = false;
 	public Rigidbody2D self;
+	public bool byBoss = false;
 
 	void OnEnable() {
-		ready = true;
-		self.velocity = transform.rotation * Vector3.down * projectileSpeed;
+		if (!byBoss) {
+			ready = true;
+			self.velocity = transform.rotation * Vector3.down * projectileSpeed;
+		}
+		if (byBoss) {
+			StartCoroutine(BossAttack());
+		}
 	}
 
+	private IEnumerator BossAttack() {
+		yield return new WaitForSeconds(1);
+		self.velocity = transform.rotation * Vector3.down * projectileSpeed;
+		StopCoroutine(BossAttack());
+	}
 
 
 	void OnTriggerEnter2D(Collider2D coll){
@@ -31,5 +42,6 @@ public class Projectile : MonoBehaviour {
 
 	void OnDisable(){
 		ready = false;
+		byBoss = false;
 	}
 }

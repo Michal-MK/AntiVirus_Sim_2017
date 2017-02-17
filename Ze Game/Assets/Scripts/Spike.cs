@@ -50,19 +50,24 @@ public class Spike : MonoBehaviour {
 				anim.Play("Highlight Spike Count");
 
 			}
+			if (spikesCollected == 4) {
+				Maze.MazeEscape();
+			}
 		}
 
 
 		if (spikesCollected == 5) {
 			anim.Play("TransformPos");
 			RectTransform lastBG = GameObject.Find("Background_room_3").GetComponent<RectTransform>();
-			M_Player.gameProgression = 1;
+			M_Player.gameProgression = spikesCollected;
 			GameObject bossTeleporter = Instantiate(teleporter, new Vector3(lastBG.position.x, lastBG.position.y, 0), Quaternion.identity);
 			bossTeleporter.transform.SetParent(gameObject.transform.parent);
 			bossTeleporter.name = "Boss1_teleporter";
 			guide.disableGuide();
 		}
 	}
+
+
 	public void SetPosition() {
 		int stage = M_Player.gameProgression;
 		
@@ -121,6 +126,7 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(true);
 			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
+
 
 
 

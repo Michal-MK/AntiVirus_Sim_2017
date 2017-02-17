@@ -14,7 +14,7 @@ public class roomPregression : MonoBehaviour {
 	SpriteRenderer ic_S;
 	SpriteRenderer ic_1a;
 	SpriteRenderer ic_1b;
-	SpriteRenderer ic_2;
+//	SpriteRenderer ic_2;
 //	SpriteRenderer ic_3;
 
 	void Awake(){
@@ -27,7 +27,7 @@ public class roomPregression : MonoBehaviour {
 		ic_S = GameObject.Find ("Door_status_S").GetComponent <SpriteRenderer>();
 		ic_1a = GameObject.Find ("Door_status_1a").GetComponent <SpriteRenderer>();
 		ic_1b = GameObject.Find ("Door_status_1b").GetComponent <SpriteRenderer>();
-		ic_2 = GameObject.Find ("Door_status_2").GetComponent <SpriteRenderer>();
+//		ic_2 = GameObject.Find ("Door_status_2").GetComponent <SpriteRenderer>();
 //		ic_3 = GameObject.Find ("Door_status_3").GetComponent <SpriteRenderer>();
 
 
@@ -70,9 +70,6 @@ public class roomPregression : MonoBehaviour {
 			doors [5].SetActive (false);
 			ic_1b.sprite = sprtOn;
 			//rnd.DisplayDirection(M_Player.gameProgression);
-			Canvas_Renderer.script.infoRenderer("Let's get out of this maze.");
-			GameObject end = GameObject.Find("MazeRoomWIP");
-			end.SetActive(true);
 
 
 		}
@@ -88,7 +85,7 @@ public class roomPregression : MonoBehaviour {
 			doors [5].SetActive (false);
 			doors [6].SetActive (false);
 			doors [7].SetActive (false);
-			ic_2.sprite = sprtOn;
+			//ic_2.sprite = sprtOn;
 			//rnd.DisplayDirection(M_Player.gameProgression);
 		}
 		if (M_Player.gameProgression == 10) {

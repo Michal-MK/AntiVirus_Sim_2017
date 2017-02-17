@@ -5,7 +5,8 @@ using System;
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
-	public float speed = 10f;
+	public float RGspeed;
+	public float ARRspeed;
 	public static bool doNotMove;
 	public Vector3 move;
 	public GameObject quitButton;
@@ -19,78 +20,72 @@ public class M_Player : MonoBehaviour {
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
-	bool experimentalMovement = false;
 
 
 	void Start() {
-		gameProgression = 2;
-		restartButton.SetActive (false);
+		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 
 
-		if (PlayerPrefs.GetInt ("difficulty") == 0) {
+		if (PlayerPrefs.GetInt("difficulty") == 0) {
 			attemptNr = 10;
 		}
-		if (PlayerPrefs.GetInt ("difficulty") == 1) {
+		if (PlayerPrefs.GetInt("difficulty") == 1) {
 			attemptNr = 21;
 		}
-		if (PlayerPrefs.GetInt ("difficulty") == 2) {
+		if (PlayerPrefs.GetInt("difficulty") == 2) {
 			attemptNr = 32;
 		}
-		if (PlayerPrefs.GetInt ("difficulty") == 3) {
+		if (PlayerPrefs.GetInt("difficulty") == 3) {
 			attemptNr = 43;
 		}
-		if (PlayerPrefs.GetInt ("difficulty") == 4) {
+		if (PlayerPrefs.GetInt("difficulty") == 4) {
 			attemptNr = 54;
 		}
 
 		Canvas_Renderer.script.infoRenderer("Collect the coins and find your first Spike.");
 
 		rg.freezeRotation = true;
-
-		if(PlayerPrefs.GetInt("exp.") == 1) {
-			experimentalMovement = true;
-		}
-		else {
-			experimentalMovement = false;
-		}
-
 	}
 
 
 	public void Update() {
+		RGspeed = 100 * (Time.deltaTime + 3f);
+		ARRspeed = 10 * (Time.deltaTime + 1);
 
-		if (experimentalMovement) {
-			ExpMove();
-			ArrowMove();
+		if (cam.inBossRoom || cam.inMaze) {
+			RGspeed = RGspeed * 4;
+			ARRspeed = ARRspeed * 2;
 		}
-		else {
-			Movement();
-			ArrowMove();
-		}
+
+		Move();
+		ArrowMove();
+
 	}
-
-	public void ExpMove() {
+	//Moving the Character using a Rigidbody 2D
+	public void Move() {
 		move = new Vector3(0, 0, 0);
 
-		if (Input.GetAxis("Mouse X") > 0) {
-			rg.AddForce(new Vector2(200 * Mathf.Abs(Input.GetAxis("Mouse X"))*2, 0));
-		}
+		if (doNotMove == false) {
+			if (Input.GetAxis("Mouse X") > 0) {
+				rg.AddForce(new Vector2(RGspeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+			}
 
-		else if (Input.GetAxis("Mouse X") < 0) {
-			rg.AddForce(new Vector2(- 200 * Mathf.Abs(Input.GetAxis("Mouse X"))*2, 0));
-		}
+			else if (Input.GetAxis("Mouse X") < 0) {
+				rg.AddForce(new Vector2(-RGspeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+			}
 
-		if (Input.GetAxis("Mouse Y") > 0) {
-			rg.AddForce(new Vector2(0, + 200 * Mathf.Abs(Input.GetAxis("Mouse Y"))*2));
-		}
+			if (Input.GetAxis("Mouse Y") > 0) {
+				rg.AddForce(new Vector2(0, RGspeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+			}
 
-		else if (Input.GetAxis("Mouse Y") < 0) {
-			rg.AddForce(new Vector2(0, - 200 * Mathf.Abs(Input.GetAxis("Mouse Y"))*2));
-
+			else if (Input.GetAxis("Mouse Y") < 0) {
+				rg.AddForce(new Vector2(0, -RGspeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+			}
 		}
 	}
 
+	//Moving the Character using a Keyboard
 	public void ArrowMove() {
 		move = new Vector3(0, 0, 0);
 
@@ -179,11 +174,12 @@ public class M_Player : MonoBehaviour {
 			}
 		}
 		if (doNotMove == false) {
-			gameObject.transform.position += move * Time.deltaTime * speed;
+			gameObject.transform.position += move * Time.deltaTime * ARRspeed;
 		}
 	}
 
-
+	//Deprecated move function.
+	/*
 	public void Movement() {
 		move = new Vector3(0, 0, 0);
 
@@ -201,12 +197,12 @@ public class M_Player : MonoBehaviour {
 				}
 
 			}
-			float totalDist = Input.GetAxis("Mouse X") * Time.deltaTime * speed;
+			float totalDist = Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed;
 			if (totalDist >= distanceToWall - 2) {
 				move.x = distanceToWall - 2;
 			}
 			else {
-				move.x = Input.GetAxis("Mouse X")/2;
+				move.x = Input.GetAxis("Mouse X") / 2;
 			}
 
 		}
@@ -224,12 +220,12 @@ public class M_Player : MonoBehaviour {
 				}
 
 			}
-			float totalDist = Mathf.Abs(Input.GetAxis("Mouse X") * Time.deltaTime * speed);
+			float totalDist = Mathf.Abs(Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed);
 			if (totalDist >= distanceToWall - 2) {
 				move.x = -distanceToWall + 2;
 			}
 			else {
-				move.x = Input.GetAxis("Mouse X")/2;
+				move.x = Input.GetAxis("Mouse X") / 2;
 			}
 
 
@@ -249,12 +245,12 @@ public class M_Player : MonoBehaviour {
 				}
 
 			}
-			float totalDist = Input.GetAxis("Mouse Y") * Time.deltaTime * speed;
+			float totalDist = Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed;
 			if (totalDist >= distanceToWall - 2) {
 				move.y = distanceToWall - 2;
 			}
 			else {
-				move.y = Input.GetAxis("Mouse Y")/2;
+				move.y = Input.GetAxis("Mouse Y") / 2;
 			}
 
 		}
@@ -272,27 +268,27 @@ public class M_Player : MonoBehaviour {
 				}
 
 			}
-			float totalDist = Mathf.Abs(Input.GetAxis("Mouse Y") * Time.deltaTime * speed);
+			float totalDist = Mathf.Abs(Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed);
 			if (totalDist >= distanceToWall - 2) {
 				move.y = -distanceToWall + 2;
 			}
 			else {
-				move.y = Input.GetAxis("Mouse Y")/2;
+				move.y = Input.GetAxis("Mouse Y") / 2;
 			}
 		}
 		if (doNotMove == false) {
-			gameObject.transform.position += move * Time.deltaTime * speed*2;
+			gameObject.transform.position += move * Time.deltaTime * speed * 2;
 		}
 	}
+	*/
 
 
 
-
-	void OnTriggerEnter2D (Collider2D col){
+	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
 			col.transform.parent = GameObject.Find("Collectibles").transform;
-			GameOver ();
+			GameOver();
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
@@ -307,43 +303,42 @@ public class M_Player : MonoBehaviour {
 				}
 			}
 
-
 		}
-		if (col.name == "Boss1_teleporter") {
+		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
 			gameProgression = 10;
-			roomPregression.script.Progress ();
-			Canvas_Renderer.script.Disable ();
+			roomPregression.script.Progress();
+			Canvas_Renderer.script.Disable();
 
 		}
 		if (col.transform.tag == "Spike") {
-			roomPregression.script.Progress ();
+			roomPregression.script.Progress();
 
 			if (Spike.spikesCollected == 5) {
 				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
 		}
 	}
-		
 
-	public void FloorComlpete(){
 
-		restartButton.SetActive (true);
-		quitToMenu.SetActive (true);
+	public void FloorComplete() {
+
+		restartButton.SetActive(true);
+		quitToMenu.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
-        SaveGame.script.saveScore();
+		SaveGame.script.saveScore();
 		Time.timeScale = 0;
 
 	}
-	public void GameOver(){
-		
-		restartButton.SetActive (true);
-		quitToMenu.SetActive (true);
-        doNotMove = true;
+	public void GameOver() {
+
+		restartButton.SetActive(true);
+		quitToMenu.SetActive(true);
+		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
-		Time.timeScale = 0;	
-		Destroy (GameObject.Find ("Enemies").gameObject);
+		Time.timeScale = 0;
+		Destroy(GameObject.Find("Enemies").gameObject);
 	}
 }

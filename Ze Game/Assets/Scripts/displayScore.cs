@@ -7,9 +7,14 @@ public class displayScore : MonoBehaviour {
 
 	public GameObject textWScore;
 	GameObject textField;
-	GameObject[] results = new GameObject[55];
+	public GameObject[] results = new GameObject[55];
 
-	public void Start() {
+	private void Start() {
+		Display();
+	}
+
+
+	public void Display() {
 
 		Transform sort = GameObject.Find(("Results")).transform;
 
@@ -18,25 +23,25 @@ public class displayScore : MonoBehaviour {
 		for (int i = 0; i < 10; i++) {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) {
-				print("Score is not 500");
+				//print("Score is not 500");
 				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
-				print("Score is not 500");
+				//print("Score is not 500");
 				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
 
@@ -50,7 +55,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
@@ -60,7 +65,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
 
@@ -74,7 +79,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
@@ -84,7 +89,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
 
@@ -98,7 +103,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
@@ -108,7 +113,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
 
@@ -122,7 +127,7 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
@@ -133,17 +138,8 @@ public class displayScore : MonoBehaviour {
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
 
-				Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
+				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
-		}
-
-	}
-
-
-	public void clearScores() {
-		foreach (GameObject delResults in results) {
-			Destroy(delResults);
-
 		}
 	}
 }

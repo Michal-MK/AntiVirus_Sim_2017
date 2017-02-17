@@ -113,26 +113,6 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void Disable(){
 		info_F.gameObject.SetActive (false);
 		info_S.gameObject.SetActive(false);
