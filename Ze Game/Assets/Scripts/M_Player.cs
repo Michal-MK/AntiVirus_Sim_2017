@@ -1,7 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.SceneManagement;
-using System;
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -178,8 +175,7 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
-	//Deprecated move function.
-	/*
+	/* Dprecated move Function
 	public void Movement() {
 		move = new Vector3(0, 0, 0);
 

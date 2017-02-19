@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -308,10 +307,10 @@ void Start() {
 				}
 			}
 			if(Blocks.Count == 0) {
-				StopCoroutine(ClearBlocks());
-				print("Stopped clearing");
+				break;
 			}
 		}
+		StopCoroutine(ClearBlocks());
 	}
 
 	//Caged Attack Code
