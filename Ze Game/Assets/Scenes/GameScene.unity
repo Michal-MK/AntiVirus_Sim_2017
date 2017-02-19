@@ -8592,11 +8592,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1881603012}
   - component: {fileID: 1881603011}
-  - component: {fileID: 1881603013}
   - component: {fileID: 1881603009}
   - component: {fileID: 1881603010}
   - component: {fileID: 1881603015}
   - component: {fileID: 1881603014}
+  - component: {fileID: 1881603013}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
