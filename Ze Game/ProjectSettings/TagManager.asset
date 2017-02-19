@@ -12,6 +12,9 @@ TagManager:
   - ArrowTrap
   - Spike
   - Coin
+  - BossHitbox
+  - SpikeBullet
+  - BossWall
   layers:
   - Default
   - TransparentFX

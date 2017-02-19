@@ -9,44 +9,44 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000010274080126}
+  m_RootGameObject: {fileID: 1846436797495276}
   m_IsPrefabParent: 1
---- !u!1 &1000010274080126
+--- !u!1 &1846436797495276
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4000011021683032}
-  - component: {fileID: 212000010786213560}
-  - component: {fileID: 60000012491725514}
+  - component: {fileID: 4888166232438942}
+  - component: {fileID: 212119624832308304}
+  - component: {fileID: 60508756245368914}
   m_Layer: 0
-  m_Name: Boss1_teleporter
-  m_TagString: Untagged
+  m_Name: Spike
+  m_TagString: SpikeBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000011021683032
+--- !u!4 &4888166232438942
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010274080126}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 148, z: 0}
-  m_LocalScale: {x: 31.424917, y: 28.98551, z: 1}
+  m_GameObject: {fileID: 1846436797495276}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -100, y: -60, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &60000012491725514
+--- !u!60 &60508756245368914
 PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010274080126}
+  m_GameObject: {fileID: 1846436797495276}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -55,18 +55,18 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Points:
     m_Paths:
-    - - {x: -0.13744527, y: -0.09648693}
-      - {x: -0.16591439, y: -0.15877828}
-      - {x: -0.16, y: -0.16}
-      - {x: 0.16, y: -0.16}
-      - {x: 0.02199693, y: 0.14579996}
-      - {x: -0.013372354, y: 0.16641216}
---- !u!212 &212000010786213560
+    - - {x: -0.15586853, y: 2.0128899}
+      - {x: -1.9809799, y: -1.744545}
+      - {x: -2, y: -2}
+      - {x: 2, y: -2}
+      - {x: 1.9904938, y: -1.735035}
+      - {x: 0.11720276, y: 2.0257797}
+--- !u!212 &212119624832308304
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010274080126}
+  m_GameObject: {fileID: 1846436797495276}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -91,8 +91,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6281a1403875fcc4bbdb8055bb25308b, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 0814bfcf1689a22479af823dc4dc6e0b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

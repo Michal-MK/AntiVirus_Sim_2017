@@ -25,20 +25,31 @@ public class Projectile : MonoBehaviour {
 	}
 
 
-	void OnTriggerEnter2D(Collider2D coll){
+	private void OnTriggerEnter2D(Collider2D col){
 
-		if (coll.tag == "Wall" || coll.tag == "Wall/Door") {
+		if (col.tag == "Wall" || col.tag == "Wall/Door") {
+			print('A');
 			gameObject.SetActive (false);
 
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D col){
+	private void OnTriggerExit2D(Collider2D col){
 		if (col.tag == "BG") { 
 			gameObject.SetActive (false);
+			print('B');
 
 		}
 	}
+
+	private void OnCollisionEnter2D(Collision2D col) {
+		if (col.transform.tag == "Wall" || col.transform.tag == "Wall/Door") {
+			gameObject.SetActive(false);
+			print('C');
+
+		}
+	}
+
 
 	void OnDisable(){
 		ready = false;

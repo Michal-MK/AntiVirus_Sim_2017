@@ -307,8 +307,12 @@ public class M_Player : MonoBehaviour {
 		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
 			gameProgression = 10;
 			roomPregression.script.Progress();
-			Canvas_Renderer.script.Disable();
+			//Canvas_Renderer.script.Disable();
 
+		}
+		if(col.tag == "SpikeBullet") {
+			Spike.spikesCollected++;
+			Destroy(col.gameObject);
 		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress();

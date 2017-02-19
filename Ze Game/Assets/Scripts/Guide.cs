@@ -27,7 +27,7 @@ public class Guide : MonoBehaviour {
 
 	public void Recalculate (GameObject destination, bool isStatic) {
 
-		destinationGlobal= destination;
+		destinationGlobal = destination;
 
 		Destroy (pointArrow);
 

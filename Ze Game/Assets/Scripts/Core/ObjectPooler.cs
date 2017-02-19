@@ -35,6 +35,7 @@ public class ObjectPooler : MonoBehaviour {
 		if (expandable == true) {
 			GameObject obj = Instantiate (pooledObject);
 			pool.Add (obj);
+			obj.SetActive(false);
 			return obj;
 		}
 		else {
