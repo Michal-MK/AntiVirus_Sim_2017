@@ -8,6 +8,7 @@ public class CameraMovement : MonoBehaviour {
 	public M_Player playerScript;
 	public GameObject spike;
 	public Vector3 cam_pos;
+	public Animator anim;
 	Camera thisone; 
 	public List<GameObject> BackGroundS = new List<GameObject>();
 	public float camWidht;
@@ -15,6 +16,8 @@ public class CameraMovement : MonoBehaviour {
 	public Vector3 middle;
 	public float currentBGX;
 	public float currentBGY;
+
+
 	public static GameObject[] loadedZones;
 
 	public RectTransform bossRoom;
@@ -262,6 +265,13 @@ public class CameraMovement : MonoBehaviour {
 
 	float zero1 = 0;
 
+	private bool inBossRoomOnce = false;
+
+	private void Update() {
+		camWidht = thisone.aspect * thisone.orthographicSize;
+		camHeight = thisone.orthographicSize;
+	}
+
 	void LateUpdate(){
 
 		if (inBossRoom == false && inMaze == false) {
@@ -287,13 +297,16 @@ public class CameraMovement : MonoBehaviour {
 				}
 			}
 
-			if (zero < 10 && inBossRoom == true) {
-				zero += Time.deltaTime / 100;
-				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, bossRoom.sizeDelta.x * 2 * Screen.height / Screen.width * 0.5f, zero);
-				if (zero > 10 && zero < 20) {
-					inBossRoom = false;
+			if (inBossRoom && zero < 0.1f && !inBossRoomOnce) {
+				zero += Time.deltaTime * 0.01f;
+				//print(zero);
+				Camera.main.orthographicSize = Mathf.SmoothStep(Camera.main.orthographicSize, bossRoom.sizeDelta.x * 0.5f * Screen.height / Screen.width, zero);
+				if (zero > 0.1f) {
+					Camera.main.orthographicSize = 108;
+					inBossRoomOnce = true;
 					zero = 0;
 				}
+
 			}
 		}
 	}

@@ -301,6 +301,7 @@ public class M_Player : MonoBehaviour {
 
 		}
 		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
+			print(col.name);
 			gameProgression = 10;
 			roomPregression.script.Progress();
 			//Canvas_Renderer.script.Disable();

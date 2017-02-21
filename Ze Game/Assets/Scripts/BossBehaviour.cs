@@ -22,8 +22,10 @@ public class BossBehaviour : MonoBehaviour {
 	public GameObject Brimstone;
 	public GameObject block;
 
-	public ObjectPooler pool;
+	public ObjectPooler poolOfEnemyProjectiles;
+	public ObjectPooler poolOfKillerBlocks;
 
+	public RectTransform self;
 
 	GameObject player;
 	RectTransform BG;
@@ -40,7 +42,7 @@ public class BossBehaviour : MonoBehaviour {
 
 
 	public float IFrames = 2;
-	public float speed = 100;
+	public float speed = 1000;
 	public float animFrame = 0;
 
 
@@ -51,9 +53,9 @@ public class BossBehaviour : MonoBehaviour {
 	public Vector2 calculatedVec;
 
 
-#endregion
+	#endregion
 
-void Start() {
+	void Start() {
 		BG = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		rigid = gameObject.GetComponent<Rigidbody2D>();
@@ -63,11 +65,12 @@ void Start() {
 	}
 
 	private IEnumerator InterPhase() {
+		int choice = ChooseAttack();
 		yield return new WaitForSeconds(1);
-		StartCoroutine(Attacks(ChooseAttack()));
+		StartCoroutine(Attacks(choice));
 	}
 
-	public int ChooseAttack(){
+	public int ChooseAttack() {
 		int previous = attackNo;
 
 		while (previous == attackNo) {
@@ -92,9 +95,10 @@ void Start() {
 	RectTransform bottomRect;
 	RectTransform leftRect;
 	Coroutine mycor;
+	int changes = 0;
 
 	public IEnumerator Attacks(int attack) {
-		yield return new WaitForSecondsRealtime(2);
+		yield return new WaitForSecondsRealtime(10);
 
 		switch (attack) {
 
@@ -106,7 +110,7 @@ void Start() {
 			Attack1 = true;
 
 			anim.Play("Attack" + attack);
-			StartCoroutine(SpawnBlocks());
+			//StartCoroutine(SpawnBlocks());
 
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
 
@@ -123,8 +127,8 @@ void Start() {
 			Attack1 = false;
 
 			StartCoroutine(InterPhase());
-			StopCoroutine(SpawnBlocks());
-			StartCoroutine(ClearBlocks());
+			//StopCoroutine(SpawnBlocks());
+			//StartCoroutine(ClearBlocks());
 			StopCoroutine(Attacks(attack));
 
 			break;
@@ -134,7 +138,7 @@ void Start() {
 			//Caged Attack
 			#region case 2:
 			case 2:
-			
+
 			isAttacking = true;
 			Attack2 = true;
 
@@ -180,17 +184,48 @@ void Start() {
 			break;
 			#endregion
 
-			//Unimplemented
+			//Avoid KillerBlocks
 			#region case 3:
 			case 3:
+
 			isAttacking = true;
-			anim.Play("Attack" + attack);
+			Attack3 = true;
+			anim.Play("SpeedUp");
+			StartCoroutine(ChangeDir());
 
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
 
+			while (Attack3) {
+
+				GameObject BlockL = poolOfKillerBlocks.GetPool();
+				BlockL.SetActive(true);
+				GameObject BlockR = poolOfKillerBlocks.GetPool();
+				BlockR.SetActive(true);
+
+				BlockL.transform.position = new Vector3(transform.position.x - self.sizeDelta.x / 2, transform.position.y, 1);
+				BlockR.transform.position = new Vector3(transform.position.x + self.sizeDelta.x / 2, transform.position.y, 1);
+
+				BlockL.transform.localScale = new Vector3(3, 3, 1);
+				BlockR.transform.localScale = new Vector3(3, 3, 1);
+
+
+
+
+				BlockL.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
+				BlockR.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
+
+				yield return new WaitForSeconds(0.2f);
+				if (changes >= 20) {
+					anim.SetTrigger("Attack" + attack);
+					break;
+				}
+			}
+
+
+
 			yield return new WaitForSeconds(1);
 			isAttacking = false;
-
+			Attack3 = false;
 			StartCoroutine(InterPhase());
 			StopCoroutine(Attacks(attack));
 			break;
@@ -260,58 +295,54 @@ void Start() {
 	private List<GameObject> Blocks = new List<GameObject>();
 
 	public Vector2 AddABitOfRandomness(Vector2 current, bool horisontal) {
-		float randPos = UnityEngine.Random.Range(0, 1);
-		float randNeg = UnityEngine.Random.Range(-1, 0);
+		float randPositive = UnityEngine.Random.value;
+		float randNegative = -UnityEngine.Random.value;
 
 		if (horisontal) {
 
-			//print("Current is: " + current);
 			Vector2 directed = new Vector2(current.x, current.y * -1);
-			//print("Directed is: " + directed);
-
-			Vector2 changed = new Vector2(directed.x + randPos, directed.y + randNeg);
-			//print("Changed is: " + changed);
+			//print(directed.x);
+			//print(randPositive);
+			Vector2 changed = new Vector2(directed.x + randPositive, directed.y + randNegative);
+			//print(changed);
+			//print(changed.normalized);
 			oldvec = changed;
-			Debug.DrawLine(gameObject.transform.position, changed * 10, Color.red, 10);
 			return changed.normalized;
 		}
 		else {
-			//print("Current is: " + current);
 			Vector2 directed = new Vector2(current.x * -1, current.y);
 
-			//print("Directed is: " + directed);
 
-			Vector2 changed = new Vector2(directed.x + randNeg, directed.y + randPos);
-			//print("Changed is: " + changed);
+			Vector2 changed = new Vector2(directed.x + randNegative, directed.y + randPositive);
 			oldvec = changed;
-			Debug.DrawLine(gameObject.transform.position, changed * 10, Color.red, 10);
 			return changed.normalized;
 		}
 	}
-	public IEnumerator SpawnBlocks() {
-		while (Attack1) {
-			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 3));
-			GameObject Block = Instantiate(block, transform.position, Quaternion.identity);
-			float s = UnityEngine.Random.Range(6, 20);
-			Block.transform.localScale = new Vector3(s, s, 1);
-			Blocks.Add(Block);
-		}
-	}
-	public IEnumerator ClearBlocks() {
-		while (Blocks.Count >= 0) {
-			if(Blocks.Count > 0) {
-				foreach (GameObject block in Blocks.ToArray()) {
-					yield return new WaitForSeconds(1);
-					Blocks.Remove(block);
-					Destroy(block);
-				}
-			}
-			if(Blocks.Count == 0) {
-				break;
-			}
-		}
-		StopCoroutine(ClearBlocks());
-	}
+
+	//public IEnumerator SpawnBlocks() {
+	//	while (Attack1) {
+	//		yield return new WaitForSeconds(UnityEngine.Random.Range(2, 3));
+	//		GameObject Block = Instantiate(block, transform.position, Quaternion.identity);
+	//		float s = UnityEngine.Random.Range(6, 20);
+	//		Block.transform.localScale = new Vector3(s, s, 1);
+	//		Blocks.Add(Block);
+	//	}
+	//}
+	//public IEnumerator ClearBlocks() {
+	//	while (Blocks.Count >= 0) {
+	//		if(Blocks.Count > 0) {
+	//			foreach (GameObject block in Blocks.ToArray()) {
+	//				yield return new WaitForSeconds(1);
+	//				Blocks.Remove(block);
+	//				Destroy(block);
+	//			}
+	//		}
+	//		if(Blocks.Count == 0) {
+	//			break;
+	//		}
+	//	}
+	//	StopCoroutine(ClearBlocks());
+	//}
 
 	//Caged Attack Code
 	private List<GameObject> bullets = new List<GameObject>();
@@ -325,7 +356,7 @@ void Start() {
 			Vector3 target = GetPosInCage();
 
 			yield return new WaitForSeconds(waitTime);
-			GameObject bullet = pool.GetPool();
+			GameObject bullet = poolOfEnemyProjectiles.GetPool();
 
 			bullet.GetComponent<Projectile>().byBoss = true;
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, target - gameObject.transform.position);
@@ -346,6 +377,41 @@ void Start() {
 		}
 		Destroy(cage.gameObject);
 	}
+
+	//Dodge KillerBlocks Attack Code
+	public IEnumerator ChangeDir() {
+		while (Attack3) {
+			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(2, 6));
+			bool headingRight;
+			if (anim.GetFloat("Speed") > 0) {
+				headingRight = true;
+			}
+			else {
+				headingRight = false;
+			}
+
+			print("Now");
+
+			if(doOnceL || doOnceR) {
+				int r = Random.Range(0, 2);
+				if (r == 0) {
+					if (headingRight) {
+						anim.SetTrigger("RDist");
+						changes++;
+					}
+				}
+				else {
+					if (!headingRight) {
+						anim.SetTrigger("LDist");
+						changes++;
+					}
+				}
+			}
+
+
+		}
+	}
+
 
 
 	//Rotational "Brimstone" Attack
@@ -371,18 +437,24 @@ void Start() {
 		}
 	}
 
+
+
 	//Flappy bird like Attack Code
 
+	//
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (isAttacking == true || col.tag == "Wall") {
 
 			if (col.name == "Wall_Horizontal") {
+				//print("Proc");
 				calculatedVec = AddABitOfRandomness(oldvec, true);
 				rigid.velocity = calculatedVec * speed;
 
 			}
 			if (col.name == "Wall_Vertical") {
+				//print("Proc");
+
 				calculatedVec = AddABitOfRandomness(oldvec, false);
 				rigid.velocity = calculatedVec * speed;
 
@@ -390,10 +462,52 @@ void Start() {
 		}
 	}
 
+	public bool doOnceR = true;
+	public bool doOnceL = true;
+
 	private void Update() {
-		
+
 		if (Attack1 == true) {
 			rigid.velocity = calculatedVec * speed;
+		}
+
+		if (Attack3 == true) {
+			rigid.velocity = Vector2.right * anim.GetFloat("Speed");
+			RaycastHit2D[] right = Physics2D.RaycastAll(transform.position, transform.rotation * Vector3.right, BG.sizeDelta.x * 2);
+			RaycastHit2D[] left = Physics2D.RaycastAll(transform.position, transform.rotation * Vector3.left, BG.sizeDelta.x * 2);
+
+			foreach (RaycastHit2D hit in right) {
+				if (hit.transform.tag == "BossWall") {
+					float dist = Vector3.Distance(transform.position, hit.point);
+
+					if(dist > 50) {
+						doOnceR = true;
+					}
+					if (dist < 50) {
+						if (doOnceR) {
+							anim.SetTrigger("RDist");
+							changes++;
+							doOnceR = false;
+						}
+					}
+				}
+			}
+			foreach (RaycastHit2D hit in left) {
+				if (hit.transform.tag == "BossWall") {
+					float dist = Vector3.Distance(transform.position, hit.point);
+
+					if (dist > 50) {
+						doOnceL = true;
+					}
+					if (dist < 50) {
+						if (doOnceL) {
+							anim.SetTrigger("LDist");
+							changes++;
+							doOnceL = false;
+						}
+					}
+				}
+			}
 		}
 
 		if (Attack4 == true) {
