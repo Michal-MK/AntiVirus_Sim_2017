@@ -1,7 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.SceneManagement;
-using System;
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -178,8 +175,7 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
-	//Deprecated move function.
-	/*
+	/* Dprecated move Function
 	public void Movement() {
 		move = new Vector3(0, 0, 0);
 
@@ -305,10 +301,15 @@ public class M_Player : MonoBehaviour {
 
 		}
 		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
+			print(col.name);
 			gameProgression = 10;
 			roomPregression.script.Progress();
-			Canvas_Renderer.script.Disable();
+			//Canvas_Renderer.script.Disable();
 
+		}
+		if(col.tag == "SpikeBullet") {
+			Spike.spikesCollected++;
+			Destroy(col.gameObject);
 		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress();

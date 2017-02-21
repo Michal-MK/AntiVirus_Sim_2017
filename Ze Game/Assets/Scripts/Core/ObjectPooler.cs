@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectPooler : MonoBehaviour {
@@ -35,6 +34,7 @@ public class ObjectPooler : MonoBehaviour {
 		if (expandable == true) {
 			GameObject obj = Instantiate (pooledObject);
 			pool.Add (obj);
+			obj.SetActive(false);
 			return obj;
 		}
 		else {

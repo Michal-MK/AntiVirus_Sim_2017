@@ -28,7 +28,7 @@ public class Maze : MonoBehaviour {
 
 
 	void Start() {
-		print(BG.transform.position);
+		//print(BG.transform.position);
 
 		MazeLevel();
 
@@ -87,7 +87,7 @@ public class Maze : MonoBehaviour {
 			}
 		}
 		BG.transform.position = new Vector3(grid[rowcollCount / 2, rowcollCount / 2].transform.position.x, grid[rowcollCount / 2, rowcollCount / 2].transform.position.y, 0);
-		print(BG.transform.position + "  " + grid[rowcollCount / 2, rowcollCount / 2].name);
+		//print(BG.transform.position + "  " + grid[rowcollCount / 2, rowcollCount / 2].name);
 		StartCoroutine(CreatePath());
 	}
 
