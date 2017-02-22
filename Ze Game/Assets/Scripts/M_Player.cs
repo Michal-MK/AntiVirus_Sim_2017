@@ -17,6 +17,7 @@ public class M_Player : MonoBehaviour {
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
+	public BossBehaviour boss;
 
 
 	void Start() {
@@ -45,8 +46,11 @@ public class M_Player : MonoBehaviour {
 		rg.freezeRotation = true;
 	}
 
+	private Vector3 gravity = Vector3.down;// = new Vector3(Random.value, Random.value, 0);
+	private Vector3 vel;
 
 	public void Update() {
+
 		RGspeed = 100 * (Time.deltaTime + 3f);
 		ARRspeed = 10 * (Time.deltaTime + 1);
 
@@ -54,9 +58,14 @@ public class M_Player : MonoBehaviour {
 			RGspeed = RGspeed * 4;
 			ARRspeed = ARRspeed * 2;
 		}
-
-		Move();
-		ArrowMove();
+		if (boss == null || !boss.Attack5) {
+			Move();
+			ArrowMove();
+			//FlapLike();
+		}
+		else {
+			FlapLike();
+		}
 
 	}
 	//Moving the Character using a Rigidbody 2D
@@ -172,6 +181,15 @@ public class M_Player : MonoBehaviour {
 		}
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * ARRspeed;
+		}
+	}
+
+	//Moving the character FlappyBird style
+	public void FlapLike() {
+		transform.position += vel;
+		vel += gravity;
+		if (Input.GetMouseButtonDown(1)) {
+			vel = new Vector3(0,0.5f,0);
 		}
 	}
 
@@ -293,18 +311,18 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == "Background_room_1") {
 				spawner.InvokeRepeatingScript("spawnKillerWall");
-				Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
 				if (gameProgression == 3) {
 					Canvas_Renderer.script.infoRenderer("Go down even further");
+				}
+				else {
+					Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
 				}
 			}
 
 		}
 		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
-			print(col.name);
 			gameProgression = 10;
 			roomPregression.script.Progress();
-			//Canvas_Renderer.script.Disable();
 
 		}
 		if(col.tag == "SpikeBullet") {
@@ -318,8 +336,15 @@ public class M_Player : MonoBehaviour {
 				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
 		}
+		if(col.tag == "Wall") {
+			gravity = Vector3.zero;
+		}
 	}
-
+	private void OnTriggerExit2D(Collider2D col) {
+		if(col.tag == "Wall") {
+			gravity = Vector3.down;
+		}
+	}
 
 	public void FloorComplete() {
 

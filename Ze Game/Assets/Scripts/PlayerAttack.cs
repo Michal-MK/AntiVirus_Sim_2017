@@ -30,7 +30,7 @@ public class PlayerAttack : MonoBehaviour {
 			if (Input.GetMouseButtonDown(0)) {
 
 				//bullets = Spike.spikesCollected;
-				bullets = 10000;
+				bullets = Spike.spikesCollected;
 				if (bullets > 0) {
 					FireSpike();
 				}

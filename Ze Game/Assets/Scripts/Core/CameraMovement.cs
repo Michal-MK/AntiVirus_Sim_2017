@@ -29,7 +29,7 @@ public class CameraMovement : MonoBehaviour {
 	void Start(){
 		
 
-		//Cursor.visible = false;
+		Cursor.visible = false;
 		thisone = GetComponent<Camera> ();
 		BackGroundS.Add (bg.gameObject);
 		camWidht = thisone.aspect * thisone.orthographicSize;

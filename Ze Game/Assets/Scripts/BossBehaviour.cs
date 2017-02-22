@@ -34,15 +34,14 @@ public class BossBehaviour : MonoBehaviour {
 	public bool isHit = false;
 	public bool isAttacking = false;
 
-	private bool Attack1 = false;
-	private bool Attack2 = false;
-	private bool Attack3 = false;
-	private bool Attack4 = false;
-	private bool Attack5 = false;
+	public bool Attack1 = false;
+	public bool Attack2 = false;
+	public bool Attack3 = false;
+	public bool Attack4 = false;
+	public bool Attack5 = false;
 
 
 	public float IFrames = 2;
-	public float speed = 1000;
 	public float animFrame = 0;
 
 
@@ -51,17 +50,72 @@ public class BossBehaviour : MonoBehaviour {
 
 	public Vector2 oldvec;
 	public Vector2 calculatedVec;
+	#endregion
 
+	#region Inside References
+	float initX = 1;
+	float initY = 1;
+
+	public float speed = 0;
+
+	GameObject cage;
+
+	private GameObject topBrim;
+	private GameObject rightBrim;
+	private GameObject bottomBrim;
+	private GameObject leftBrim;
+
+	RectTransform topRect;
+	RectTransform rightRect;
+	RectTransform bottomRect;
+	RectTransform leftRect;
+	Coroutine mycor;
+	int changes = 0;
+
+	private List<GameObject> Blocks = new List<GameObject>();
+
+	private List<GameObject> bullets = new List<GameObject>();
+
+	private float cageSize;
+
+	private Vector2 upMid;
+	private Vector2 rightMid;
+	private Vector2 downMid;
+	private Vector2 leftMid;
+	private float z;
+	private Quaternion q;
+	private float rotationDelta = 0.1f;
+
+	public bool doOnceR = true;
+	public bool doOnceL = true;
+
+	Vector3 attack1StartPos;
+	Vector3 attack2StartPos;
+	Vector3 attack3StartPos;
+	Vector3 attack4StartPos;
+	Vector3 attack5StartPos;
+
+	Coroutine Atk;
 
 	#endregion
+
 
 	void Start() {
 		BG = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
+		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
+		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
 		rigid = gameObject.GetComponent<Rigidbody2D>();
+
+		attack1StartPos = BG.position;
+		attack2StartPos = new Vector3(-520, -70, 1);
+		attack3StartPos = new Vector3(-530, -70, 1);
+		attack4StartPos = BG.position;
+		//attack5StartPos = insert position
+
 		//StartCoroutine(InterPhase());
-		StartCoroutine(Attacks(1));
-		fullCircle = 2;
+		StartCoroutine(Attacks(4));
+		fullCircle = 1;
 	}
 
 	private IEnumerator InterPhase() {
@@ -76,30 +130,10 @@ public class BossBehaviour : MonoBehaviour {
 		while (previous == attackNo) {
 			attackNo = UnityEngine.Random.Range(1, 5);
 		}
-		print(attackNo);
 		return attackNo;
 	}
-
-
-	float initX = 1;
-	float initY = 1;
-
-
-	GameObject cage;
-	GameObject topBrim;
-	GameObject rightBrim;
-	GameObject bottomBrim;
-	GameObject leftBrim;
-	RectTransform topRect;
-	RectTransform rightRect;
-	RectTransform bottomRect;
-	RectTransform leftRect;
-	Coroutine mycor;
-	int changes = 0;
-
+	
 	public IEnumerator Attacks(int attack) {
-		yield return new WaitForSecondsRealtime(10);
-
 		switch (attack) {
 
 			//Bouncing Attack
@@ -108,27 +142,28 @@ public class BossBehaviour : MonoBehaviour {
 			case 1:
 			isAttacking = true;
 			Attack1 = true;
-
-			anim.Play("Attack" + attack);
-			//StartCoroutine(SpawnBlocks());
-
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
 
-			gameObject.transform.position = BG.position;
+			Atk = StartCoroutine(LerpPos(transform.position,attack1StartPos));
+			yield return new WaitForSecondsRealtime(2);
+
+			anim.Play("Attack" + attack);
+
+			
+			//Actual Attack --
+			//gameObject.transform.position = attack1StartPos;
 
 			calculatedVec = new Vector2(initX, initY);
 			oldvec = calculatedVec;
-
+			
 			yield return new WaitUntil(() => animFrame == 1800);
+			//--//
+
 
 			anim.SetTrigger("Attack" + attack);
-
 			isAttacking = false;
 			Attack1 = false;
-
 			StartCoroutine(InterPhase());
-			//StopCoroutine(SpawnBlocks());
-			//StartCoroutine(ClearBlocks());
 			StopCoroutine(Attacks(attack));
 
 			break;
@@ -141,11 +176,11 @@ public class BossBehaviour : MonoBehaviour {
 
 			isAttacking = true;
 			Attack2 = true;
-
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
+			Atk = StartCoroutine(LerpPos(transform.position, attack2StartPos));
+			yield return new WaitForSecondsRealtime(5);
 
-
-			gameObject.transform.position = new Vector3(-520, -70, 0);
+			//Actual Attack
 			player.transform.position = BG.transform.position;
 			cage = Instantiate(cageObj, BG.transform.position, Quaternion.identity);
 			float waitTime = 1.1f;
@@ -162,22 +197,19 @@ public class BossBehaviour : MonoBehaviour {
 
 				anim.SetTrigger("Attack" + attack);
 
-				yield return new WaitForSeconds(0.02f);
+				yield return new WaitForSeconds(Time.deltaTime);
 
 				StopCoroutine(mycor);
-
-
 			}
+			//--//
 
 			isAttacking = false;
 			Attack2 = false;
-
 			StopCoroutine(mycor);
 
 			yield return new WaitForSeconds(2f);
 
 			ClearBullets();
-
 			StartCoroutine(InterPhase());
 			StopCoroutine(Attacks(attack));
 
@@ -191,10 +223,14 @@ public class BossBehaviour : MonoBehaviour {
 			isAttacking = true;
 			Attack3 = true;
 			anim.Play("SpeedUp");
-			StartCoroutine(ChangeDir());
-
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
+			Atk = StartCoroutine(LerpPos(transform.position, attack3StartPos));
+			yield return new WaitForSecondsRealtime(2);
 
+
+			//Actual Attack
+			//gameObject.transform.position = attack3StartPos;
+			StartCoroutine(ChangeDir());
 			while (Attack3) {
 
 				GameObject BlockL = poolOfKillerBlocks.GetPool();
@@ -220,10 +256,9 @@ public class BossBehaviour : MonoBehaviour {
 					break;
 				}
 			}
-
-
-
 			yield return new WaitForSeconds(1);
+			//--//
+
 			isAttacking = false;
 			Attack3 = false;
 			StartCoroutine(InterPhase());
@@ -235,30 +270,35 @@ public class BossBehaviour : MonoBehaviour {
 			#region case 4:
 			case 4:
 			isAttacking = true;
-			Attack4 = true;
+
 			anim.Play("Attack" + attack);
-			transform.position = BG.transform.position;
-
 			Canvas_Renderer.script.infoRenderer("Chose Attack: " + attack);
+			Atk = StartCoroutine(LerpPos(transform.position, attack4StartPos));
+			yield return new WaitForSecondsRealtime(2);
 
-
+			//Actual Attack 
+			Attack4 = true;
 			topBrim = Instantiate(Brimstone);
 			topBrim.name = "Top";
 			topRect = topBrim.GetComponent<RectTransform>();
+
 			rightBrim = Instantiate(Brimstone);
 			rightBrim.name = "Right";
 			rightRect = rightBrim.GetComponent<RectTransform>();
+
 			bottomBrim = Instantiate(Brimstone);
 			bottomBrim.name = "Bottom";
 			bottomRect = bottomBrim.GetComponent<RectTransform>();
+
 			leftBrim = Instantiate(Brimstone);
 			leftBrim.name = "Left";
 			leftRect = leftBrim.GetComponent<RectTransform>();
-
+				
 			StartCoroutine(VariedRotation());
 
-
 			yield return new WaitForSeconds(20);
+			//--//
+
 			topBrim.SetActive(false);
 			rightBrim.SetActive(false);
 			bottomBrim.SetActive(false);
@@ -274,12 +314,13 @@ public class BossBehaviour : MonoBehaviour {
 			break;
 			#endregion
 
-			//Unimplemented
+			//Flappybird like Attack
 			#region case 5:
 			//case 5:
 			//isAttacking = true;
-			//print(attack);
-			//anim.Play("Attack" + attack);
+			//anim.Play("Attacks" + attack);
+			//Atk = StartCoroutine(LerpPos(transform.position, attack5StartPos));
+			//yield return new WaitForSecondsRealtime(2);
 
 
 
@@ -291,9 +332,8 @@ public class BossBehaviour : MonoBehaviour {
 		}
 	}
 
-	//Bouncing Attack Code
-	private List<GameObject> Blocks = new List<GameObject>();
 
+	//Bouncing Attack Code
 	public Vector2 AddABitOfRandomness(Vector2 current, bool horisontal) {
 		float randPositive = UnityEngine.Random.value;
 		float randNegative = -UnityEngine.Random.value;
@@ -301,11 +341,7 @@ public class BossBehaviour : MonoBehaviour {
 		if (horisontal) {
 
 			Vector2 directed = new Vector2(current.x, current.y * -1);
-			//print(directed.x);
-			//print(randPositive);
 			Vector2 changed = new Vector2(directed.x + randPositive, directed.y + randNegative);
-			//print(changed);
-			//print(changed.normalized);
 			oldvec = changed;
 			return changed.normalized;
 		}
@@ -318,36 +354,10 @@ public class BossBehaviour : MonoBehaviour {
 			return changed.normalized;
 		}
 	}
+	//
 
-	//public IEnumerator SpawnBlocks() {
-	//	while (Attack1) {
-	//		yield return new WaitForSeconds(UnityEngine.Random.Range(2, 3));
-	//		GameObject Block = Instantiate(block, transform.position, Quaternion.identity);
-	//		float s = UnityEngine.Random.Range(6, 20);
-	//		Block.transform.localScale = new Vector3(s, s, 1);
-	//		Blocks.Add(Block);
-	//	}
-	//}
-	//public IEnumerator ClearBlocks() {
-	//	while (Blocks.Count >= 0) {
-	//		if(Blocks.Count > 0) {
-	//			foreach (GameObject block in Blocks.ToArray()) {
-	//				yield return new WaitForSeconds(1);
-	//				Blocks.Remove(block);
-	//				Destroy(block);
-	//			}
-	//		}
-	//		if(Blocks.Count == 0) {
-	//			break;
-	//		}
-	//	}
-	//	StopCoroutine(ClearBlocks());
-	//}
 
 	//Caged Attack Code
-	private List<GameObject> bullets = new List<GameObject>();
-	private float cageSize;
-
 	public IEnumerator Caged(float waitTime) {
 
 		while (Attack2) {
@@ -377,6 +387,8 @@ public class BossBehaviour : MonoBehaviour {
 		}
 		Destroy(cage.gameObject);
 	}
+	//
+
 
 	//Dodge KillerBlocks Attack Code
 	public IEnumerator ChangeDir() {
@@ -411,18 +423,10 @@ public class BossBehaviour : MonoBehaviour {
 
 		}
 	}
-
+	//
 
 
 	//Rotational "Brimstone" Attack
-	private Vector2 upMid;
-	private Vector2 rightMid;
-	private Vector2 downMid;
-	private Vector2 leftMid;
-	private float z;
-	private Quaternion q;
-	private float rotationDelta = 0.1f;
-
 	public IEnumerator VariedRotation() {
 		while (true) {
 			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(2, 4));
@@ -436,34 +440,52 @@ public class BossBehaviour : MonoBehaviour {
 			}
 		}
 	}
-
+	//
 
 
 	//Flappy bird like Attack Code
 
 	//
 
+	//Bouce off walls
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (isAttacking == true || col.tag == "Wall") {
+		if (isAttacking == true && Attack1 && col.tag == "Wall" || col.tag == "BossWall") {
 
 			if (col.name == "Wall_Horizontal") {
-				//print("Proc");
 				calculatedVec = AddABitOfRandomness(oldvec, true);
 				rigid.velocity = calculatedVec * speed;
 
 			}
 			if (col.name == "Wall_Vertical") {
-				//print("Proc");
-
 				calculatedVec = AddABitOfRandomness(oldvec, false);
 				rigid.velocity = calculatedVec * speed;
 
 			}
 		}
 	}
+	//
 
-	public bool doOnceR = true;
-	public bool doOnceL = true;
+	public IEnumerator LerpPos(Vector3 start, Vector3 end) {
+
+		float sX = start.x;
+		float sY = start.y;
+		float eX = end.x;
+		float eY = end.y;
+
+
+		for (float t = 0; t < 1; t += Time.deltaTime * 0.8f) {
+			float newX = Mathf.SmoothStep(sX, eX, t);
+			float newY = Mathf.SmoothStep(sY, eY, t);
+			transform.position = new Vector3(newX, newY, 1);
+			if (t < 1) {
+				yield return null;
+			}
+			else {
+				StopCoroutine(Atk);
+			}
+		}
+	}
+
 
 	private void Update() {
 
@@ -529,18 +551,27 @@ public class BossBehaviour : MonoBehaviour {
 				if (hit.transform.tag == "BossWall") {
 					upMid = ((Vector2)transform.position + hit.point) / 2;
 					topBrim.transform.position = upMid;
-					topBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - transform.position));
+
 					float dist = Vector3.Distance(transform.position, hit.point);
 					topRect.transform.localScale = new Vector3(1, dist / topRect.sizeDelta.y, 1);
+
+					topBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x,transform.position.y,0)));
+
+					//topBrim.transform.rotation = Quaternion.Euler(0, 0, topBrim.transform.rotation.z);
+
+
 				}
 			}
 			foreach (RaycastHit2D hit in right) {
 				if (hit.transform.tag == "BossWall") {
 					rightMid = ((Vector2)transform.position + hit.point) / 2;
 					rightBrim.transform.position = rightMid;
-					rightBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - transform.position));
+
 					float dist = Vector3.Distance(transform.position, hit.point);
 					rightRect.transform.localScale = new Vector3(1, dist / rightRect.sizeDelta.y, 1);
+					rightBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
+					//rightBrim.transform.rotation = Quaternion.Euler(0, 0, rightBrim.transform.rotation.z);
+
 
 				}
 			}
@@ -548,9 +579,14 @@ public class BossBehaviour : MonoBehaviour {
 				if (hit.transform.tag == "BossWall") {
 					downMid = ((Vector2)transform.position + hit.point) / 2;
 					bottomBrim.transform.position = downMid;
-					bottomBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - transform.position));
+
 					float dist = Vector3.Distance(transform.position, hit.point);
 					bottomRect.transform.localScale = new Vector3(1, dist / bottomRect.sizeDelta.y, 1);
+
+					bottomBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
+					//bottomBrim.transform.rotation = Quaternion.Euler(0, 0, bottomBrim.transform.rotation.z);
+
+
 
 				}
 			}
@@ -558,9 +594,14 @@ public class BossBehaviour : MonoBehaviour {
 				if (hit.transform.tag == "BossWall") {
 					leftMid = ((Vector2)transform.position + hit.point) / 2;
 					leftBrim.transform.position = leftMid;
-					leftBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - transform.position));
+
 					float dist = Vector3.Distance(transform.position, hit.point);
 					leftRect.transform.localScale = new Vector3(1, dist / leftRect.sizeDelta.y, 1);
+
+					leftBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
+					//leftBrim.transform.rotation = Quaternion.Euler(0, 0, leftBrim.transform.rotation.z);
+
+
 				}
 			}
 		}
