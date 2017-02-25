@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -17,9 +20,16 @@ public class M_Player : MonoBehaviour {
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
+	public BossBehaviour boss;
+	public SaveGame save;
 
+	int mode = 0;
+	public float gravity;
+	public float UpVelocity;
+	public float linearDrag;
 
 	void Start() {
+		
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 
@@ -45,7 +55,6 @@ public class M_Player : MonoBehaviour {
 		rg.freezeRotation = true;
 	}
 
-
 	public void Update() {
 		RGspeed = 100 * (Time.deltaTime + 3f);
 		ARRspeed = 10 * (Time.deltaTime + 1);
@@ -55,8 +64,16 @@ public class M_Player : MonoBehaviour {
 			ARRspeed = ARRspeed * 2;
 		}
 
-		Move();
-		ArrowMove();
+		switch (mode) {
+			case 1:
+			Flappy();
+			break;
+
+			case 0:
+			Move();
+			ArrowMove();
+			break;
+		}
 
 	}
 	//Moving the Character using a Rigidbody 2D
@@ -173,6 +190,30 @@ public class M_Player : MonoBehaviour {
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * ARRspeed;
 		}
+	}
+
+	//Moving the character FlappyBird style
+	public void ChangeFlappy(bool start = false) {
+		switch (start) {
+			case true:
+			rg.gravityScale = gravity;
+			rg.drag = 0;
+			mode = 1;
+			break;
+
+
+			case false:
+			rg.gravityScale = 0;
+			rg.drag = linearDrag;
+			mode = 0;
+			break;
+		}
+	}
+	public void Flappy() {
+		if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+			rg.velocity = new Vector2(0, UpVelocity);
+		}
+
 	}
 
 	/* Dprecated move Function
@@ -293,47 +334,49 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == "Background_room_1") {
 				spawner.InvokeRepeatingScript("spawnKillerWall");
-				Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
 				if (gameProgression == 3) {
 					Canvas_Renderer.script.infoRenderer("Go down even further");
+				}
+				else {
+					Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
 				}
 			}
 
 		}
 		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
-			print(col.name);
 			gameProgression = 10;
 			roomPregression.script.Progress();
-			//Canvas_Renderer.script.Disable();
 
-		}
-		if(col.tag == "SpikeBullet") {
-			Spike.spikesCollected++;
-			Destroy(col.gameObject);
 		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress();
+			PlayerAttack.bullets++;
+			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) { 
+				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
+			}
 
 			if (Spike.spikesCollected == 5) {
 				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
+		}
+		if(col.name == "BombPickup") {
+			PlayerAttack.bombs++;
+			Destroy(col.gameObject);
 		}
 	}
 
 
 	public void FloorComplete() {
 
-		restartButton.SetActive(true);
-		quitToMenu.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
-		SaveGame.script.saveScore();
-		Time.timeScale = 0;
+		save.saveScore();
+		//Time.timeScale = 0;
 
 	}
 	public void GameOver() {
-
+		//StartCoroutine(FadeToBlack());
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		doNotMove = true;
@@ -342,4 +385,26 @@ public class M_Player : MonoBehaviour {
 		Time.timeScale = 0;
 		Destroy(GameObject.Find("Enemies").gameObject);
 	}
+
+	//public IEnumerator FadeToBlack() {
+	//	Image transition = GameObject.Find("TransitionCam").GetComponent<Image>();
+	//	byte a = 0;
+
+
+	//	for (float f = 0; f < 255; f += Time.deltaTime * 10){
+	//		a = (byte)Mathf.Lerp(0, 255, f);
+	//		Color32 newColor = new Color32(255, 255, 255, a);
+	//		transition.color = newColor;
+
+
+	//		if (f < 255) {
+	//			print(f);
+	//			yield return null;
+	//		}
+	//		else {
+	//			StopCoroutine(FadeToBlack());
+	//			Time.timeScale = 0;
+	//		}
+	//	}
+	//}
 }

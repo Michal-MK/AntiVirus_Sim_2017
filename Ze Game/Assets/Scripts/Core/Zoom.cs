@@ -19,7 +19,7 @@ public class Zoom : MonoBehaviour {
 					camScript.camWidht = cam.aspect * cam.orthographicSize;
 					camScript.camHeight = cam.orthographicSize;
 					cam.orthographicSize += 0.5f;
-					print(cam.orthographicSize);
+
 
 				}
 			}
@@ -28,7 +28,7 @@ public class Zoom : MonoBehaviour {
 					camScript.camWidht = cam.aspect * cam.orthographicSize;
 					camScript.camHeight = cam.orthographicSize;
 					cam.orthographicSize -= 0.5f;
-					print(cam.orthographicSize);
+
 
 				}
 			}
@@ -36,7 +36,6 @@ public class Zoom : MonoBehaviour {
 	}
 	private void LateUpdate() {
 		if(cam.orthographicSize > min && cam.orthographicSize < max && camScript.inBossRoom) {
-			print(true);
 			Vector3 cam_pos = new Vector3(camScript.camX(), camScript.camY(), -10);
 			cam.transform.position = cam_pos;
 		}

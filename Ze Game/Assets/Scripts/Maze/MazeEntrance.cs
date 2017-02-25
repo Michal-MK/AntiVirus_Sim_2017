@@ -7,7 +7,7 @@ public class MazeEntrance : MonoBehaviour {
 	public Spike spike;
 	public CameraMovement cam;
 	public Animator mazeEntrance;
-
+	public RectTransform MazeBG;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
@@ -22,14 +22,14 @@ public class MazeEntrance : MonoBehaviour {
 
 		mazeEntrance.Play("CamTransition");
 		yield return new WaitForSeconds(2);
+		StartCoroutine(cam.LerpSize(cam.camSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
 		spike.SetPosition();
 		cam.inMaze = true;
-		cam.mazeCam();
 		player.transform.position = maze.grid[GetRandomGridPos(true), GetRandomGridPos(false)].transform.position;
 		player.transform.localScale = new Vector3(2, 2, 0);
 		yield return new WaitForSeconds(3);
 		Canvas_Renderer.script.infoRenderer("What do we have here..?");
-		StopAllCoroutines();
+		StopCoroutine(TransToPos());
 	}
 
 

@@ -23,6 +23,11 @@ GameObject:
   - component: {fileID: 114000011878254912}
   - component: {fileID: 60000013277266662}
   - component: {fileID: 50000013035227332}
+  - component: {fileID: 58762758558591280}
+  - component: {fileID: 68124510752783894}
+  - component: {fileID: 58188430661934194}
+  - component: {fileID: 58849555256677624}
+  - component: {fileID: 58092614758245306}
   m_Layer: 0
   m_Name: Enemy_projectile
   m_TagString: Enemy
@@ -37,7 +42,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012561099258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 164.12766, y: 111.35362, z: 0}
+  m_LocalPosition: {x: -2, y: 42.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,8 +68,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &60000013277266662
-PolygonCollider2D:
+--- !u!58 &58092614758245306
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -72,9 +77,65 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
+--- !u!58 &58188430661934194
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: -2}
+  serializedVersion: 2
+  m_Radius: 0.1
+--- !u!58 &58762758558591280
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: -2, y: 1.5}
+  serializedVersion: 2
+  m_Radius: 0.2
+--- !u!58 &58849555256677624
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 2, y: 1.5}
+  serializedVersion: 2
+  m_Radius: 0.2
+--- !u!60 &60000013277266662
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: -0, y: 0}
   m_Points:
     m_Paths:
     - - {x: 0.96, y: -0.56}
@@ -121,6 +182,30 @@ PolygonCollider2D:
       - {x: 0.28, y: -1.76}
       - {x: 0.34, y: -1.52}
       - {x: 0.68, y: -0.7}
+--- !u!68 &68124510752783894
+EdgeCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+  - {x: -2.132141, y: 1.6758766}
+  - {x: -1.3265991, y: -0.23865128}
+  - {x: -0.67370605, y: -0.67466736}
+  - {x: -0.024475098, y: -2.0557594}
+  - {x: 0.6277466, y: -0.6606178}
+  - {x: 1.3754883, y: -0.10261917}
+  - {x: 2.1555786, y: 1.6811867}
+  - {x: 1.1192627, y: 1.4536896}
+  - {x: 0.0032348633, y: 0.78832245}
+  - {x: -1.1062622, y: 1.4282761}
+  - {x: -2.0576172, y: 1.7167549}
 --- !u!114 &114000011878254912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,6 +219,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ready: 0
   self: {fileID: 50000013035227332}
+  byBoss: 0
+  timeTillDestruct: -1337
+  DisableCollisions: 0
 --- !u!212 &212000011963600568
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -164,7 +252,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: cbeed01d3d2f6dc4f82d5ed24542963c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
