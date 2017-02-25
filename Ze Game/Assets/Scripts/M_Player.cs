@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -18,9 +21,15 @@ public class M_Player : MonoBehaviour {
 	public static string currentBG_name;
 	public Rigidbody2D rg;
 	public BossBehaviour boss;
+	public SaveGame save;
 
+	int mode = 0;
+	public float gravity;
+	public float UpVelocity;
+	public float linearDrag;
 
 	void Start() {
+		
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 
@@ -46,11 +55,7 @@ public class M_Player : MonoBehaviour {
 		rg.freezeRotation = true;
 	}
 
-	private Vector3 gravity = Vector3.down;// = new Vector3(Random.value, Random.value, 0);
-	private Vector3 vel;
-
 	public void Update() {
-
 		RGspeed = 100 * (Time.deltaTime + 3f);
 		ARRspeed = 10 * (Time.deltaTime + 1);
 
@@ -58,13 +63,16 @@ public class M_Player : MonoBehaviour {
 			RGspeed = RGspeed * 4;
 			ARRspeed = ARRspeed * 2;
 		}
-		if (boss == null || !boss.Attack5) {
+
+		switch (mode) {
+			case 1:
+			Flappy();
+			break;
+
+			case 0:
 			Move();
 			ArrowMove();
-			//FlapLike();
-		}
-		else {
-			FlapLike();
+			break;
 		}
 
 	}
@@ -185,12 +193,27 @@ public class M_Player : MonoBehaviour {
 	}
 
 	//Moving the character FlappyBird style
-	public void FlapLike() {
-		transform.position += vel;
-		vel += gravity;
-		if (Input.GetMouseButtonDown(1)) {
-			vel = new Vector3(0,0.5f,0);
+	public void ChangeFlappy(bool start = false) {
+		switch (start) {
+			case true:
+			rg.gravityScale = gravity;
+			rg.drag = 0;
+			mode = 1;
+			break;
+
+
+			case false:
+			rg.gravityScale = 0;
+			rg.drag = linearDrag;
+			mode = 0;
+			break;
 		}
+	}
+	public void Flappy() {
+		if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+			rg.velocity = new Vector2(0, UpVelocity);
+		}
+
 	}
 
 	/* Dprecated move Function
@@ -325,40 +348,35 @@ public class M_Player : MonoBehaviour {
 			roomPregression.script.Progress();
 
 		}
-		if(col.tag == "SpikeBullet") {
-			Spike.spikesCollected++;
-			Destroy(col.gameObject);
-		}
 		if (col.transform.tag == "Spike") {
 			roomPregression.script.Progress();
+			PlayerAttack.bullets++;
+			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) { 
+				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
+			}
 
 			if (Spike.spikesCollected == 5) {
 				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
 		}
-		if(col.tag == "Wall") {
-			gravity = Vector3.zero;
+		if(col.name == "BombPickup") {
+			PlayerAttack.bombs++;
+			Destroy(col.gameObject);
 		}
 	}
-	private void OnTriggerExit2D(Collider2D col) {
-		if(col.tag == "Wall") {
-			gravity = Vector3.down;
-		}
-	}
+
 
 	public void FloorComplete() {
 
-		restartButton.SetActive(true);
-		quitToMenu.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
-		SaveGame.script.saveScore();
-		Time.timeScale = 0;
+		save.saveScore();
+		//Time.timeScale = 0;
 
 	}
 	public void GameOver() {
-
+		//StartCoroutine(FadeToBlack());
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		doNotMove = true;
@@ -367,4 +385,26 @@ public class M_Player : MonoBehaviour {
 		Time.timeScale = 0;
 		Destroy(GameObject.Find("Enemies").gameObject);
 	}
+
+	//public IEnumerator FadeToBlack() {
+	//	Image transition = GameObject.Find("TransitionCam").GetComponent<Image>();
+	//	byte a = 0;
+
+
+	//	for (float f = 0; f < 255; f += Time.deltaTime * 10){
+	//		a = (byte)Mathf.Lerp(0, 255, f);
+	//		Color32 newColor = new Color32(255, 255, 255, a);
+	//		transition.color = newColor;
+
+
+	//		if (f < 255) {
+	//			print(f);
+	//			yield return null;
+	//		}
+	//		else {
+	//			StopCoroutine(FadeToBlack());
+	//			Time.timeScale = 0;
+	//		}
+	//	}
+	//}
 }

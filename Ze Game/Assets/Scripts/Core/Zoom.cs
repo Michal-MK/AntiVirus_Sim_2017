@@ -19,7 +19,7 @@ public class Zoom : MonoBehaviour {
 					camScript.camWidht = cam.aspect * cam.orthographicSize;
 					camScript.camHeight = cam.orthographicSize;
 					cam.orthographicSize += 0.5f;
-					print(cam.orthographicSize);
+
 
 				}
 			}
@@ -28,7 +28,7 @@ public class Zoom : MonoBehaviour {
 					camScript.camWidht = cam.aspect * cam.orthographicSize;
 					camScript.camHeight = cam.orthographicSize;
 					cam.orthographicSize -= 0.5f;
-					print(cam.orthographicSize);
+
 
 				}
 			}

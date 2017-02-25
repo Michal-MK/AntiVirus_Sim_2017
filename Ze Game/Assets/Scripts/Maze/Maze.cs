@@ -162,7 +162,7 @@ public class Maze : MonoBehaviour {
 			}
 
 
-			yield return new WaitForSeconds(0.001f);
+			yield return null;
 
 
 			if (chosenNeighbor.transform.position.x < current.transform.position.x) {

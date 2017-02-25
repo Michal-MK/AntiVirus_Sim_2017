@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4000011021683032}
   - component: {fileID: 212000010786213560}
-  - component: {fileID: 60000012491725514}
+  - component: {fileID: 114849772223464812}
+  - component: {fileID: 58761128545435068}
   m_Layer: 0
   m_Name: Boss1_teleporter
   m_TagString: Untagged
@@ -34,15 +35,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010274080126}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 148, z: 0}
-  m_LocalScale: {x: 31.424917, y: 28.98551, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &60000012491725514
-PolygonCollider2D:
+--- !u!58 &58761128545435068
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -53,14 +54,24 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: -0.13744527, y: -0.09648693}
-      - {x: -0.16591439, y: -0.15877828}
-      - {x: -0.16, y: -0.16}
-      - {x: 0.16, y: -0.16}
-      - {x: 0.02199693, y: 0.14579996}
-      - {x: -0.013372354, y: 0.16641216}
+  serializedVersion: 2
+  m_Radius: 0.57
+--- !u!114 &114849772223464812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010274080126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03b252a111677848b1127d6b3ec2a8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  boss: {fileID: 1882420910250402, guid: 4a4b50ad3bcc95f4db15110033a188aa, type: 2}
+  cam: {fileID: 0}
+  BossBG: {fileID: 0}
+  bossHP: {fileID: 0}
 --- !u!212 &212000010786213560
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -92,7 +103,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6281a1403875fcc4bbdb8055bb25308b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f76089c02eed7a94597d8ae5ca1a4a04, type: 3}
+  m_Color: {r: 1, g: 0.9724138, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0

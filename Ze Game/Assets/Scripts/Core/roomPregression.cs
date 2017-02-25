@@ -72,23 +72,23 @@ public class roomPregression : MonoBehaviour {
 
 
 		}
-		if (M_Player.gameProgression == 4) {
-			foreach (GameObject door in doors) {
-				door.SetActive (true);
-			}
-			doors [0].SetActive (false);
-			doors [1].SetActive (false);
-			doors [2].SetActive (false);
-			doors [3].SetActive (false);
-			doors [4].SetActive (false);
-			doors [5].SetActive (false);
-			doors [6].SetActive (false);
-			doors [7].SetActive (false);
-			//ic_2.sprite = sprtOn;
-			//rnd.DisplayDirection(M_Player.gameProgression);
-		}
+		//if (M_Player.gameProgression == 4) {
+		//	foreach (GameObject door in doors) {
+		//		door.SetActive (true);
+		//	}
+		//	doors [0].SetActive (false);
+		//	doors [1].SetActive (false);
+		//	doors [2].SetActive (false);
+		//	doors [3].SetActive (false);
+		//	doors [4].SetActive (false);
+		//	doors [5].SetActive (false);
+		//	doors [6].SetActive (false);
+		//	doors [7].SetActive (false);
+		//	//ic_2.sprite = sprtOn;
+		//	//rnd.DisplayDirection(M_Player.gameProgression);
+		//}
 		if (M_Player.gameProgression == 10) {
-			print ("Entering Boss Arena!");
+			//print ("Entering Boss Arena!");
 			
 			CameraMovement cam = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent <CameraMovement> ();
 

@@ -1,13 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class SaveGame : MonoBehaviour {
-
-    public static SaveGame script;
-
-    private void Awake() {
-        script = this;
-    }
-
 
     public void saveScore() {
         int difficulty = PlayerPrefs.GetInt("difficulty");

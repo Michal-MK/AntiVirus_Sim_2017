@@ -14,11 +14,12 @@ public class Spike : MonoBehaviour {
 	public GameObject teleporter;
 	public Animator anim;
 
-	public static int spikesCollected = 0;
-
+	public static int spikesCollected;
+	public int spikescollected;
 
 
 	void Start() {
+		spikesCollected = spikescollected;
 		if (PlayerPrefs.HasKey("difficulty") == false) {
 			PlayerPrefs.SetInt("difficluty", 0);
 		}
@@ -124,7 +125,7 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(true);
 			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
-
+			Canvas_Renderer.script.infoRenderer("Grab the spike and let's get out.");
 
 
 
