@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ public class KillerBlocks : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.tag == "Wall") {
+
 			self.velocity = Vector2.zero;
 			gameObject.SetActive(false);
 		}

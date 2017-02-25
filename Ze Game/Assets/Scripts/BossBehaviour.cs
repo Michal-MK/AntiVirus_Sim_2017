@@ -126,8 +126,8 @@ public class BossBehaviour : MonoBehaviour {
 
 	private IEnumerator InitialAttack() {
 		yield return new WaitForSecondsRealtime(5);
-		StartCoroutine(Attacks(5));
-		// StartCoroutine(InterPhase());
+		//StartCoroutine(Attacks(3));
+		StartCoroutine(InterPhase());
 		//Canvas_Renderer.script.infoRenderer("Be careful and good luck.");
 	}
 
@@ -144,7 +144,7 @@ public class BossBehaviour : MonoBehaviour {
 		int previous = attackNo;
 
 		while (previous == attackNo) {
-			attackNo = UnityEngine.Random.Range(1, 5);
+			attackNo = UnityEngine.Random.Range(1, 6);
 		}
 		return attackNo;
 	}
@@ -348,7 +348,7 @@ public class BossBehaviour : MonoBehaviour {
 			isAttacking = true;
 			hp.invincible = true;
 			yield return new WaitForSecondsRealtime(2);
-			print(true);
+			Canvas_Renderer.script.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ");
 
 			player.transform.position = (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(20, 20);
 			transform.position = (Vector2)BG.transform.position + BG.sizeDelta / 2 + new Vector2(-10, 0);
