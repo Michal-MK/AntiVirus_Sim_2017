@@ -5,11 +5,6 @@ using UnityEngine;
 public class BossBehaviour : MonoBehaviour {
 
 	#region Outside References
-	public Sprite SDmg1;
-	public Sprite SDmg2;
-	public Sprite SDmg3;
-
-	public SpriteRenderer InnerS;
 
 	public Animator anim;
 
@@ -301,8 +296,9 @@ public class BossBehaviour : MonoBehaviour {
 			anim.Play("Attack" + attack);
 			hp.invincible = true;
 			Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack4StartPos));
-			yield return new WaitForSecondsRealtime(2);
-
+			yield return new WaitForSecondsRealtime(2f);
+			Canvas_Renderer.script.infoRenderer("Careful! It is about to shoot Lasers from its sides!");
+			yield return new WaitForSecondsRealtime(2.5f);
 			//Actual Attack 
 			isAttacking = true;
 			Attack4 = true;
@@ -324,7 +320,7 @@ public class BossBehaviour : MonoBehaviour {
 
 			StartCoroutine(VariedRotation());
 
-			yield return new WaitForSeconds(30);
+			yield return new WaitForSecondsRealtime(25);
 			//--//
 
 			topBrim.SetActive(false);

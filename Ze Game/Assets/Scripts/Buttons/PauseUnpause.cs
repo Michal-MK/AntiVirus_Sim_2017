@@ -9,6 +9,9 @@ public class PauseUnpause : MonoBehaviour {
 	public GameObject continueButton;
 	public Vector3 oldpos;
 
+	CursorLockMode locked = CursorLockMode.Locked;
+	CursorLockMode unlocked = CursorLockMode.None;
+
 	private void Start() {
 		oldpos = continueButton.transform.position;
 		continueButton.transform.position = new Vector3( -1000, -1000, -100);
@@ -23,6 +26,7 @@ public class PauseUnpause : MonoBehaviour {
 
 				M_Player.doNotMove = true;
 				Cursor.visible = true;
+				Cursor.lockState = unlocked;
 				timer.run = false;
 				restartButton.SetActive(true);
 				quitToMenu.SetActive(true);
@@ -30,12 +34,14 @@ public class PauseUnpause : MonoBehaviour {
 				Time.timeScale = 0;
 
 			}
+
 		}
 	}
 
 	public void OnButtonPress(){
 		M_Player.doNotMove = false;
 		Cursor.visible = false;
+		Cursor.lockState = locked;
 		timer.run = true;
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);

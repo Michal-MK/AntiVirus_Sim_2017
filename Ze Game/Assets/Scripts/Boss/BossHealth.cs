@@ -71,7 +71,6 @@ public class BossHealth : MonoBehaviour {
 
 		if(t && r && b && l) {
 			Canvas_Renderer.script.infoRenderer("His shields are up ... but we got a bomb! Switch to it in Attack mode by pressing Right M.B.");
-			atk.canSwitch = true;
 		}
 
 		switch (where) {

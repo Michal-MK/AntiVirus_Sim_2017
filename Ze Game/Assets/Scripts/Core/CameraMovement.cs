@@ -28,11 +28,13 @@ public class CameraMovement : MonoBehaviour {
 	public bool inMaze = false;
 
 	public float camSize = 15;
+	CursorLockMode locked = CursorLockMode.Locked;
 
 	void Start() {
 
 
 		Cursor.visible = false;
+		Cursor.lockState = locked;
 		thisone = GetComponent<Camera>();
 		BackGroundS.Add(bg.gameObject);
 		camWidht = thisone.aspect * thisone.orthographicSize;

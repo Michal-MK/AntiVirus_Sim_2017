@@ -10,6 +10,7 @@ public class displayScore : MonoBehaviour {
 
 	private void Start() {
 		Display();
+		print(PlayerPrefs.GetFloat("1"));
 	}
 
 
@@ -23,23 +24,23 @@ public class displayScore : MonoBehaviour {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) {
 				//print("Score is not 500");
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
 				//print("Score is not 500");
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
@@ -48,22 +49,22 @@ public class displayScore : MonoBehaviour {
 		for (int i = 11; i < 21; i++) {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) { 
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
@@ -72,22 +73,22 @@ public class displayScore : MonoBehaviour {
 		for (int i = 22; i < 32; i++) {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
@@ -96,22 +97,22 @@ public class displayScore : MonoBehaviour {
 		for (int i = 33; i < 43; i++) {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}
@@ -120,23 +121,23 @@ public class displayScore : MonoBehaviour {
 		for (int i = 44; i < 54; i++) {
 
 			if (PlayerPrefs.GetFloat(i.ToString()) != 500 && PlayerPrefs.GetFloat(i.ToString()) != 0f) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(i.ToString()) + " s  ";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 
 			}
 			else if (PlayerPrefs.GetFloat(i.ToString()) == 500) {
-				results[i] = (GameObject)Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
+				results[i] = Instantiate(textWScore, new Vector3(1, 1, 1), Quaternion.identity);
 				results[i].transform.SetParent(sort);
 
 				results[i].GetComponent<Text>().text = "No time found.";
 
 				results[i].transform.localScale = new Vector3(1, 1, 1);
-
+				results[i].name = "Result " + i;
 				//Debug.Log(i + "  " + PlayerPrefs.GetFloat(i.ToString()));
 			}
 		}

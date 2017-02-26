@@ -7,20 +7,24 @@ public class PlayerAttack : MonoBehaviour {
 	public GameObject spikeBullet;
 	public GameObject bomb;
 	public GameObject player;
+	public GameObject InfoAmmo;
 	public Spike spike;
 	public Vector2 mousepos;
 	public ObjectPooler pool;
 
 	public bool fireMode = false;
 	public bool fireBullets = true;
-	public bool canSwitch = false;
 	public bool visibleAlready = false;
+	public bool bulletsActive = true;
 
 	public static int bullets;
 	public static int bombs;
 
+	public Sprite spikeSprite;
+	public Sprite bombSprite;
+
 	private bool once = true;
-	//private bool canDisplay = false;
+
 	Color32 visible = new Color32(255, 255, 255, 255);
 
 	Image bombGUI;
@@ -29,16 +33,26 @@ public class PlayerAttack : MonoBehaviour {
 	Image bulletGUI;
 	public Text bulletCount;
 
+	Image currentAmmo;
+
+	CursorLockMode locked = CursorLockMode.Locked;
+	CursorLockMode unlocked = CursorLockMode.None;
+
 	private void Start() {
 		bombGUI = GameObject.Find("BombGUI").GetComponent<Image>();
 		bulletGUI = GameObject.Find("BulletGUI").GetComponent<Image>();
+		currentAmmo = GameObject.Find("CurrentAmmo").GetComponent<Image>();
 		bullets = 0;
+		bombs = 0;
+
 	}
 
 	void Update() {
-		//float roll = Input.GetAxis("Mouse ScrollWheel");
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
+			Cursor.visible = true;
+			Cursor.lockState = unlocked;
+
 			if (M_Player.gameProgression != 10 && once) {
 				Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok, don't lose the bullets (if you have any)!");
 				
@@ -46,18 +60,25 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			fireMode = true;
 			bulletGUI.color = visible;
+			currentAmmo.color = visible;
 			visibleAlready = true;
 			bulletCount.text = "x " + bullets;
+			InfoAmmo.GetComponent<Text>().text = "Equiped:";
 			M_Player.doNotMove = true;
-			Cursor.visible = true;
+
 		}
+
 		else if (Input.GetKeyUp(KeyCode.Space)) {
 			fireMode = false;
 			M_Player.doNotMove = false;
 			Cursor.visible = false;
+			Cursor.lockState = locked;
 		}
-		if (canSwitch && Input.GetMouseButtonDown(1)) {
+
+		if (Input.GetMouseButtonDown(1)) {
+			print("A");
 			fireBullets = !fireBullets;
+			bulletsActive = !bulletsActive;
 		}
 
 		if (fireMode) {
@@ -80,6 +101,13 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 		}
+		if (bulletsActive) {
+			currentAmmo.sprite = spikeSprite;
+		}
+		else {
+			currentAmmo.sprite = bombSprite;
+
+		}
 	}
 	public void FireSpike() {
 
@@ -97,6 +125,7 @@ public class PlayerAttack : MonoBehaviour {
 
 		bullets--;
 		bulletCount.text = "x " + bullets;
+
 	}
 
 	public void FireBomb() {

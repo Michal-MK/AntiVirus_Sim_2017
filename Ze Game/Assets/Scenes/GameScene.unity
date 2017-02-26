@@ -1451,6 +1451,74 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224000013930399894, guid: 851e871c456ac114c854ab84faf2f58e,
     type: 2}
   m_PrefabInternal: {fileID: 2127069644}
+--- !u!1 &230766120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 230766121}
+  - component: {fileID: 230766123}
+  - component: {fileID: 230766122}
+  m_Layer: 0
+  m_Name: CurrentAmmo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &230766121
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 230766120}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1166063513}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -15}
+  m_SizeDelta: {x: 27.900024, y: 25.82}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &230766122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 230766120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 0814bfcf1689a22479af823dc4dc6e0b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &230766123
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 230766120}
 --- !u!1001 &238156082
 Prefab:
   m_ObjectHideFlags: 0
@@ -2857,7 +2925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &460457958
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5679,6 +5747,81 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1166063512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1166063513}
+  - component: {fileID: 1166063515}
+  - component: {fileID: 1166063514}
+  m_Layer: 0
+  m_Name: InfoAmmo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1166063513
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1166063512}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 230766121}
+  m_Father: {fileID: 1881603012}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -563.1, y: 103.8}
+  m_SizeDelta: {x: 108.5, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1166063514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1166063512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 0
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1166063515
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1166063512}
 --- !u!1001 &1166553054
 Prefab:
   m_ObjectHideFlags: 0
@@ -7660,13 +7803,16 @@ MonoBehaviour:
     type: 2}
   bomb: {fileID: 1519910914403654, guid: 7774c0840d4924b4fa1eaf67830e4c35, type: 2}
   player: {fileID: 1574297770}
+  InfoAmmo: {fileID: 1166063512}
   spike: {fileID: 399954889}
   mousepos: {x: 0, y: 0}
   pool: {fileID: 1384210413}
   fireMode: 0
   fireBullets: 1
-  canSwitch: 0
   visibleAlready: 0
+  bulletsActive: 1
+  spikeSprite: {fileID: 21300000, guid: 0814bfcf1689a22479af823dc4dc6e0b, type: 3}
+  bombSprite: {fileID: 21300000, guid: cabab86e4cf935b49be660be0ef5c1a9, type: 3}
   bombCount: {fileID: 253104295}
   bulletCount: {fileID: 1745229818}
 --- !u!114 &1574297779
@@ -8803,6 +8949,7 @@ RectTransform:
   - {fileID: 146237082}
   - {fileID: 1745229816}
   - {fileID: 1622398548}
+  - {fileID: 1166063513}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9243,6 +9390,7 @@ MonoBehaviour:
   anim: {fileID: 1622398551}
   player: {fileID: 1574297770}
   BG: {fileID: 926600150}
+  spike: {fileID: 399954889}
 --- !u!212 &1933509653
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9449,7 +9597,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1961390455}
-        m_MethodName: quitToMM
+        m_MethodName: SwitchTo
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

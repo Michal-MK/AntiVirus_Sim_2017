@@ -5,6 +5,7 @@ public class MazeEscape : MonoBehaviour {
 	public Animator anim;
 	public GameObject player;
 	public RectTransform BG;
+	public Spike spike;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if(collision.tag == "Player") {
@@ -19,6 +20,7 @@ public class MazeEscape : MonoBehaviour {
 		Camera.main.orthographicSize = 25;
 		Camera.main.transform.position = player.transform.position;
 		player.transform.localScale = Vector3.one;
+		spike.SetPosition();
 		yield return new WaitForSeconds(0.2f);
 		
 	}

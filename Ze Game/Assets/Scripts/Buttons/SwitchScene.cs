@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class quitTM : MonoBehaviour {
+public class SwitchScene : MonoBehaviour {
 
-	public void quitToMM(int menuIndex){
+	public void SwitchTo(int Index){
 		
-		SceneManager.LoadScene (0);
+		SceneManager.LoadScene (Index);
 		Spike.spikesCollected = 0;
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;

@@ -132,8 +132,8 @@ public class Spike : MonoBehaviour {
 		}
 		if (stage == 4) {
 			print(stage);
-			float x = Random.Range(-BG3.sizeDelta.x / 2 + Xscale, BG3.sizeDelta.x / 2 - Xscale);
-			float y = Random.Range(-BG3.sizeDelta.y / 2 + Yscale, BG3.sizeDelta.y / 2 - Yscale);
+			float x = BG3.transform.position.x + 20;
+			float y = BG3.transform.position.y;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
