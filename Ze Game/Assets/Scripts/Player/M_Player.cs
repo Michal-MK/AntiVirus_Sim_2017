@@ -27,9 +27,12 @@ public class M_Player : MonoBehaviour {
 	public float gravity;
 	public float UpVelocity;
 	public float linearDrag;
+	private bool doFlappy = false;
+
 
 	void Start() {
-		
+		RGspeed = 300f;
+		Cursor.lockState = CursorLockMode.Confined;
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 
@@ -54,27 +57,31 @@ public class M_Player : MonoBehaviour {
 
 		rg.freezeRotation = true;
 	}
-
-	public void Update() {
-		RGspeed = 100 * (Time.deltaTime + 3f);
-		ARRspeed = 10 * (Time.deltaTime + 1);
+	private void FixedUpdate() {
 
 		if (cam.inBossRoom || cam.inMaze) {
-			RGspeed = RGspeed * 4;
-			ARRspeed = ARRspeed * 2;
+
+			//ARRspeed = ARRspeed * 2;
 		}
 
 		switch (mode) {
-			case 1:
-			Flappy();
-			break;
 
 			case 0:
-			Move();
+			//Move();
 			ArrowMove();
+			doFlappy = false;
+			break;
+
+			case 1:
+			doFlappy = true;
 			break;
 		}
 
+	}
+	private void Update() {
+		if (doFlappy) {
+			Flappy();
+		}
 	}
 	//Moving the Character using a Rigidbody 2D
 	public void Move() {
@@ -100,9 +107,90 @@ public class M_Player : MonoBehaviour {
 	}
 
 	//Moving the Character using a Keyboard
-	public void ArrowMove() {
-		move = new Vector3(0, 0, 0);
+	private bool right = false;
+	private bool down = false;
+	private bool left = false;
+	private bool up = false;
 
+
+
+	public void ArrowMove() {
+		//move = new Vector3(0, 0, 0);
+
+		if (doNotMove == false) {
+
+
+			if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
+				up = true;
+				if (!cam.inBossRoom && !cam.inMaze) {
+					rg.AddForce(new Vector2(0, 1 * RGspeed));
+				}
+				else if (cam.inBossRoom) {
+					rg.AddForce(new Vector2(0, 1 * RGspeed) * 5);
+				}
+				else if (cam.inMaze) {
+					rg.AddForce(new Vector2(0, 1 * RGspeed) * 4);
+				}
+			}
+			else {
+				up = false;
+			}
+
+			if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
+				right = true;
+				if (!cam.inBossRoom && !cam.inMaze) {
+					rg.AddForce(new Vector2(1 * RGspeed, 0));
+				}
+				else if (cam.inBossRoom) {
+					rg.AddForce(new Vector2(1 * RGspeed, 0) * 5);
+				}
+				else if (cam.inMaze) {
+					rg.AddForce(new Vector2(1 * RGspeed, 0) * 4);
+				}
+			}
+			else {
+				right = false;
+			}
+
+			if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
+				down = true;
+				if (!cam.inBossRoom && !cam.inMaze) {
+					rg.AddForce(new Vector2(0, -1 * RGspeed));
+				}
+				else if (cam.inBossRoom) {
+					rg.AddForce(new Vector2(0, -1 * RGspeed) * 5);
+				}
+				else if (cam.inMaze) {
+					rg.AddForce(new Vector2(0, -1 * RGspeed) * 4);
+				}
+			}
+			else {
+				down = false;
+			}
+
+			if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
+				left = true;
+				if (!cam.inBossRoom && !cam.inMaze) {
+					rg.AddForce(new Vector2(-1 * RGspeed, 0));
+				}
+				else if (cam.inBossRoom) {
+					rg.AddForce(new Vector2(-1 * RGspeed, 0) * 5);
+				}
+				else if (cam.inMaze) {
+					rg.AddForce(new Vector2(-1 * RGspeed,0) * 4);
+				}
+			}
+			else {
+				left = false;
+			}
+			if (!up && !right && !down && !left) {
+				rg.velocity = Vector2.zero;
+			}
+
+		}
+		//Old movement script
+		//
+		/*
 		if (Input.GetKey(KeyCode.UpArrow)) {
 
 			distanceToWall = Mathf.Infinity;
@@ -190,6 +278,7 @@ public class M_Player : MonoBehaviour {
 		if (doNotMove == false) {
 			gameObject.transform.position += move * Time.deltaTime * ARRspeed;
 		}
+		*/
 	}
 
 	//Moving the character FlappyBird style
@@ -210,7 +299,8 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 	public void Flappy() {
-		if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+			print("Jump");
 			rg.velocity = new Vector2(0, UpVelocity);
 		}
 
@@ -349,9 +439,10 @@ public class M_Player : MonoBehaviour {
 
 		}
 		if (col.transform.tag == "Spike") {
+
 			roomPregression.script.Progress();
 			PlayerAttack.bullets++;
-			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) { 
+			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
 				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
 			}
 
@@ -359,9 +450,13 @@ public class M_Player : MonoBehaviour {
 				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
 			}
 		}
-		if(col.name == "BombPickup") {
+		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
+		}
+		if (col.name == "Test") {
+			save.saveScore();
+			print("Saved");
 		}
 	}
 
@@ -372,11 +467,9 @@ public class M_Player : MonoBehaviour {
 		Cursor.visible = true;
 		timer.run = false;
 		save.saveScore();
-		//Time.timeScale = 0;
 
 	}
 	public void GameOver() {
-		//StartCoroutine(FadeToBlack());
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		doNotMove = true;
@@ -386,25 +479,4 @@ public class M_Player : MonoBehaviour {
 		Destroy(GameObject.Find("Enemies").gameObject);
 	}
 
-	//public IEnumerator FadeToBlack() {
-	//	Image transition = GameObject.Find("TransitionCam").GetComponent<Image>();
-	//	byte a = 0;
-
-
-	//	for (float f = 0; f < 255; f += Time.deltaTime * 10){
-	//		a = (byte)Mathf.Lerp(0, 255, f);
-	//		Color32 newColor = new Color32(255, 255, 255, a);
-	//		transition.color = newColor;
-
-
-	//		if (f < 255) {
-	//			print(f);
-	//			yield return null;
-	//		}
-	//		else {
-	//			StopCoroutine(FadeToBlack());
-	//			Time.timeScale = 0;
-	//		}
-	//	}
-	//}
 }

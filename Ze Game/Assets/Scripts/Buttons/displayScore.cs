@@ -10,7 +10,6 @@ public class displayScore : MonoBehaviour {
 
 	private void Start() {
 		Display();
-		print(PlayerPrefs.GetFloat("1"));
 	}
 
 

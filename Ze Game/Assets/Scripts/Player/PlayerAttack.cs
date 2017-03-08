@@ -11,11 +11,11 @@ public class PlayerAttack : MonoBehaviour {
 	public Spike spike;
 	public Vector2 mousepos;
 	public ObjectPooler pool;
+	public timer timer;
 
 	public bool fireMode = false;
 	public bool fireBullets = true;
 	public bool visibleAlready = false;
-	public bool bulletsActive = true;
 
 	public static int bullets;
 	public static int bombs;
@@ -35,8 +35,6 @@ public class PlayerAttack : MonoBehaviour {
 
 	Image currentAmmo;
 
-	CursorLockMode locked = CursorLockMode.Locked;
-	CursorLockMode unlocked = CursorLockMode.None;
 
 	private void Start() {
 		bombGUI = GameObject.Find("BombGUI").GetComponent<Image>();
@@ -50,35 +48,24 @@ public class PlayerAttack : MonoBehaviour {
 	void Update() {
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			Cursor.visible = true;
-			Cursor.lockState = unlocked;
+			Cursor.visible = !Cursor.visible;
+			fireMode = !fireMode;
+			timer.attacking = !timer.attacking;
 
 			if (M_Player.gameProgression != 10 && once) {
 				Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok, don't lose the bullets (if you have any)!");
-				
+				bulletGUI.color = visible;
+				currentAmmo.color = visible;
+				visibleAlready = true;
+				InfoAmmo.GetComponent<Text>().text = "Equiped:";
+
 				once = false;
 			}
-			fireMode = true;
-			bulletGUI.color = visible;
-			currentAmmo.color = visible;
-			visibleAlready = true;
 			bulletCount.text = "x " + bullets;
-			InfoAmmo.GetComponent<Text>().text = "Equiped:";
-			M_Player.doNotMove = true;
-
-		}
-
-		else if (Input.GetKeyUp(KeyCode.Space)) {
-			fireMode = false;
-			M_Player.doNotMove = false;
-			Cursor.visible = false;
-			Cursor.lockState = locked;
 		}
 
 		if (Input.GetMouseButtonDown(1)) {
-			print("A");
 			fireBullets = !fireBullets;
-			bulletsActive = !bulletsActive;
 		}
 
 		if (fireMode) {
@@ -101,7 +88,7 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 		}
-		if (bulletsActive) {
+		if (fireBullets) {
 			currentAmmo.sprite = spikeSprite;
 		}
 		else {

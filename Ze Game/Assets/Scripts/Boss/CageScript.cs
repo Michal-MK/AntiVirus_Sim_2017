@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CageScript : MonoBehaviour { 
@@ -10,7 +9,6 @@ public class CageScript : MonoBehaviour {
 
 
 	public void MoveUp() {
-		print("Triggered");
 		StartCoroutine(Selfdestruct());
 		rg.velocity = new Vector2(0, 20);
 	}

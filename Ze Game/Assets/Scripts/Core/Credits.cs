@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class Credits : MonoBehaviour {
 	private void Start() {
 		Text t = gameObject.GetComponent<Text>();
-		t.text = "The ________!";
+		t.text = "The Game!";
 		t.text += "\n\n\n";
 		t.text += "Created by:\n";
 		t.text += "Michal Hazdra\n";

@@ -12,8 +12,14 @@ public class Projectile : MonoBehaviour {
 
 	void OnEnable() {
 		if (!byBoss) {
-			ready = true;
-			self.velocity = transform.rotation * Vector3.down * projectileSpeed;
+			if (spawnedByAvoidance) {
+				ready = true;
+				self.velocity = transform.rotation * Vector3.down * projectileSpeed * 1.4f;
+			}
+			else {
+				ready = true;
+				self.velocity = transform.rotation * Vector3.down * projectileSpeed;
+			}
 		}
 		if (byBoss) {
 			StartCoroutine(BossAttack());
@@ -38,7 +44,6 @@ public class Projectile : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D col){
 		if (DisableCollisions == false) {
 			if (col.tag == "Wall" || col.tag == "Wall/Door") {
-				//print('A');
 				gameObject.SetActive(false);
 
 			}
@@ -49,7 +54,6 @@ public class Projectile : MonoBehaviour {
 		if (DisableCollisions == false) {
 			if (col.tag == "BG") {
 				gameObject.SetActive(false);
-				print('B');
 
 			}
 		}

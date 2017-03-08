@@ -4,21 +4,22 @@ public class Coins : MonoBehaviour {
 	public Transform collec;
 	public GameObject amount;
 	public RectTransform BG;
-	public Transform coin;
+	public RectTransform coin;
 	public Guide guide;
 	public EnemySpawner spawner;
 	public Spike spike;
 	
 	Vector3 oldpos;
+	float scale;
 
 	public static float coinsCollected = 0;
 
 	void Start() {
 		oldpos = coin.transform.position;
+		scale = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		float scale = coin.GetComponent<CircleCollider2D>().radius;
 
 
 		if (col.name == "Player" && coinsCollected <=5) {

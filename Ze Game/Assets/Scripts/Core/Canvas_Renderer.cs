@@ -101,7 +101,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 		if (name == "Coin") {
 			CoinC.text = "x " + (Coins.coinsCollected + 1);
-			Coinc.Play("Highlight Coin Count");
+			//Coinc.Play("Highlight Coin Count");
 
 			if (Coins.coinsCollected == 4) {
 				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);
@@ -112,11 +112,6 @@ public class Canvas_Renderer : MonoBehaviour {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
 	}
-
-	//public void Disable(){
-	//	info_F.gameObject.SetActive (false);
-	//	info_S.gameObject.SetActive(false);
-	//}
 }
 
 

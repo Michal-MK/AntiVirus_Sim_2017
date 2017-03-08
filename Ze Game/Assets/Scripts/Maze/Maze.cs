@@ -28,7 +28,6 @@ public class Maze : MonoBehaviour {
 
 
 	void Start() {
-		//print(BG.transform.position);
 
 		MazeLevel();
 
@@ -87,7 +86,7 @@ public class Maze : MonoBehaviour {
 			}
 		}
 		BG.transform.position = new Vector3(grid[rowcollCount / 2, rowcollCount / 2].transform.position.x, grid[rowcollCount / 2, rowcollCount / 2].transform.position.y, 0);
-		//print(BG.transform.position + "  " + grid[rowcollCount / 2, rowcollCount / 2].name);
+
 		StartCoroutine(CreatePath());
 	}
 
@@ -116,24 +115,26 @@ public class Maze : MonoBehaviour {
 	}
 
 	public Vector3 CalculateScale() {
-		if (rowcollCount == 15) {
-			return new Vector3(2.7f, 2.7f, 1);
-		}
-		else if (rowcollCount == 21) {
-			return new Vector3(2.1f, 2.1f, 1);
-		}
-		else if (rowcollCount == 23) {
-			return new Vector3(1.9f, 1.9f, 1);
-		}
-		else if (rowcollCount == 25) {
-			return new Vector3(1.7f, 1.7f, 1);
-		}
-		else if (rowcollCount == 29) {
-			return new Vector3(1.45f, 1.45f, 1);
-		}
-		else {
-			//impossible to happen
-			return Vector3.one;
+
+		switch (rowcollCount) {
+			case 15: {
+				return new Vector3(2.7f, 2.7f, 1);
+			}
+			case 21: {
+				return new Vector3(2.1f, 2.1f, 1);
+			}
+			case 23: {
+				return new Vector3(1.9f, 1.9f, 1);
+			}
+			case 25: {
+				return new Vector3(1.7f, 1.7f, 1);
+			}
+			case 29: {
+				return new Vector3(1.45f, 1.45f, 1);
+			}
+			default: {
+				return Vector3.zero;
+			}
 		}
 	}
 

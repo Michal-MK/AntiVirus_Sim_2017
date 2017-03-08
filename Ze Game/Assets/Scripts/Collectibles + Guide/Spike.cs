@@ -147,5 +147,9 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(false);
 		}
 	}
+	public void Hide() {
+		gameObject.SetActive(false);
+		guide.disableGuide();
+	}
 }
 

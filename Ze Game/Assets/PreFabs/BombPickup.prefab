@@ -69,6 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   col: {fileID: 58284222563253928}
   anim: {fileID: 0}
+  exp: {fileID: 0}
   primed: 1
 --- !u!212 &212642480274769528
 SpriteRenderer:
@@ -101,7 +102,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cabab86e4cf935b49be660be0ef5c1a9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1ae5987076bc36440b180933af372c4a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

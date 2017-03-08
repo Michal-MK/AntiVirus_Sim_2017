@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour {
 	public GameObject spike;
 	public Vector3 cam_pos;
 	public Animator anim;
-	Camera thisone;
+	Camera cam;
 	public List<GameObject> BackGroundS = new List<GameObject>();
 	public float camWidht;
 	public float camHeight;
@@ -28,17 +28,15 @@ public class CameraMovement : MonoBehaviour {
 	public bool inMaze = false;
 
 	public float camSize = 15;
-	CursorLockMode locked = CursorLockMode.Locked;
 
 	void Start() {
 
 
 		Cursor.visible = false;
-		Cursor.lockState = locked;
-		thisone = GetComponent<Camera>();
+		cam = GetComponent<Camera>();
 		BackGroundS.Add(bg.gameObject);
-		camWidht = thisone.aspect * thisone.orthographicSize;
-		camHeight = thisone.orthographicSize;
+		camWidht = cam.aspect * cam.orthographicSize;
+		camHeight = cam.orthographicSize;
 
 
 	}
@@ -268,12 +266,9 @@ public class CameraMovement : MonoBehaviour {
 		}
 	}
 
-	private void Update() {
-		camWidht = thisone.aspect * thisone.orthographicSize;
-		camHeight = thisone.orthographicSize;
-	}
-
 	void LateUpdate() {
+		camWidht = cam.aspect * cam.orthographicSize;
+		camHeight = cam.orthographicSize;
 
 		if (inBossRoom == false && inMaze == false) {
 			cam_pos = new Vector3(camX(), camY(), player.position.z - 10);

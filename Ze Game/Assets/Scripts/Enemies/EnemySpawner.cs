@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour {
 	public bool forTheFirstTime = true;
 	public GameObject warningObj;
 	public GameObject EPPooler;
-	
+
 
 	void Start() {
 		killerblockBG = GameObject.Find("Background_Start").GetComponent<RectTransform>();
@@ -28,7 +28,6 @@ public class EnemySpawner : MonoBehaviour {
 
 	public void spawnArrowTrap() {
 		if (forTheFirstTime == false) {
-		//	print(forTheFirstTime + " Normal");
 
 			foreach (GameObject zone in CameraMovement.loadedZones) {
 
@@ -43,10 +42,10 @@ public class EnemySpawner : MonoBehaviour {
 					float bgy = arrowtrapBG.sizeDelta.y / 2;
 					arrowtrap = new GameObject[4];
 
-					arrowtrap[0] = (GameObject)Instantiate(foundation, pos + new Vector3(bgx / 2, bgy / 2, 0), Quaternion.identity);
-					arrowtrap[1] = (GameObject)Instantiate(foundation, pos + new Vector3(-bgx / 2, bgy / 2, 0), Quaternion.identity);
-					arrowtrap[2] = (GameObject)Instantiate(foundation, pos + new Vector3(bgx / 2, -bgy / 2, 0), Quaternion.identity);
-					arrowtrap[3] = (GameObject)Instantiate(foundation, pos + new Vector3(-bgx / 2, -bgy / 2, 0), Quaternion.identity);
+					arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity);
+					arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity);
+					arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity);
+					arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity);
 					amIHere = true;
 
 					foreach (GameObject trap in arrowtrap) {
@@ -72,10 +71,10 @@ public class EnemySpawner : MonoBehaviour {
 		float bgy = arrowtrapBG.sizeDelta.y / 2;
 		arrowtrap = new GameObject[4];
 
-		arrowtrap[0] = (GameObject)Instantiate(foundation, pos + new Vector3(bgx / 2, bgy / 2, 0), Quaternion.identity);
-		arrowtrap[1] = (GameObject)Instantiate(foundation, pos + new Vector3(-bgx / 2, bgy / 2, 0), Quaternion.identity);
-		arrowtrap[2] = (GameObject)Instantiate(foundation, pos + new Vector3(bgx / 2, -bgy / 2, 0), Quaternion.identity);
-		arrowtrap[3] = (GameObject)Instantiate(foundation, pos + new Vector3(-bgx / 2, -bgy / 2, 0), Quaternion.identity);
+		arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity);
+		arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity);
+		arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity);
+		arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity);
 
 		foreach (GameObject trap in arrowtrap) {
 			trap.name = "arrowtrap";
@@ -96,16 +95,18 @@ public class EnemySpawner : MonoBehaviour {
 
 	public List<GameObject> Blocks = new List<GameObject>();
 	public List<GameObject> Warnings = new List<GameObject>();
+	private List<BoxCollider2D> col = new List<BoxCollider2D>();
 
 	float scale;
 	Vector2 killerblockpos;
 	bool CRunning = false;
 
 	public void spawnKillerBlock() {
+		int totalBlocks = (int)(Spike.spikesCollected + 5 * difficultySlider.difficulty);
 
-		for (int count = 0; count < (int)(Spike.spikesCollected + 5 * difficultySlider.difficulty); count++) {
+		for (int count = 0; count < totalBlocks; count++) {
 
-			scale = Random.Range(0.8f, 5);
+			scale = Random.Range(0.5f, 1f);
 
 			GameObject warn = Instantiate(warningObj);
 			GameObject block = Instantiate(deathBlock);
@@ -124,6 +125,7 @@ public class EnemySpawner : MonoBehaviour {
 			block.transform.SetParent(enemy);
 			warn.transform.SetParent(enemy);
 
+			col.Add(block.GetComponent<BoxCollider2D>());
 			Blocks.Add(block);
 			Warnings.Add(warn);
 
@@ -134,42 +136,47 @@ public class EnemySpawner : MonoBehaviour {
 
 	}
 
+
 	public IEnumerator KBCycle() {
+
 		CRunning = true;
 
 		while (true) {
 
-			
+
 			for (int i = 0; i < Blocks.Count; i++) {
+				col[i].enabled = false;
 				Warnings[i].SetActive(false);
 				Blocks[i].SetActive(true);
 			}
-			yield return new WaitForSeconds(2);
+			yield return new WaitForSeconds(0.2f);
+			for (int i = 0; i < col.Count; i++) {
+				col[i].enabled = true;
+			}
+			yield return new WaitForSeconds(1.8f);
 
 			for (int i = 0; i < Blocks.Count; i++) {
+
 				Blocks[i].GetComponent<Animator>().SetTrigger("Despawn");
+				col[i].enabled = false;
 			}
 
 			yield return new WaitForSeconds(0.2f);
-			//print(Blocks.Count + " " + Warnings.Count);
 
 			for (int i = 0; i < Warnings.Count; i++) {
-				Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
+
 				Blocks[i].SetActive(false);
 				Vector3 pos = KBPositions();
 				Blocks[i].transform.position = pos;
 				Warnings[i].transform.position = pos;
 				Warnings[i].SetActive(true);
-				Warnings[i].GetComponent<Animator>().SetTrigger("DespawnWarn");
-
-
 			}
-			yield return new WaitForSeconds(0.5f);
+
+			yield return new WaitForSeconds(1.5f);
 
 
 			if (M_Player.currentBG_name != killerblockBG.name) {
 				for (int i = 0; i < Blocks.Count; i++) {
-					//Blocks[i].GetComponent<Animator>().SetTrigger("Reset");
 					Blocks[i].SetActive(false);
 					CRunning = false;
 					StopCoroutine("KBCycle");
@@ -246,7 +253,7 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		return killerblockpos;
 	}
-	
+
 	public Vector3 KWProjectilePositions() {
 		return new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
 	}

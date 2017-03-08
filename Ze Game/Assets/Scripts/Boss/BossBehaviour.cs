@@ -112,8 +112,8 @@ public class BossBehaviour : MonoBehaviour {
 		attack2StartPos = new Vector3(-530, -70, 1);
 		attack3StartPos = new Vector3(-368, -70, 1);
 		attack4StartPos = BG.position;
-		//attack5StartPos = insert position
-		fullCircle = 1;
+		attack5StartPos = (Vector2)BG.transform.position + BG.sizeDelta / 2 + new Vector2(-10, 0);
+		fullCircle = 2;
 
 		StartCoroutine(InitialAttack());
 
@@ -121,8 +121,8 @@ public class BossBehaviour : MonoBehaviour {
 
 	private IEnumerator InitialAttack() {
 		yield return new WaitForSecondsRealtime(5);
-		//StartCoroutine(Attacks(3));
-		StartCoroutine(InterPhase());
+		StartCoroutine(Attacks(3));
+		//StartCoroutine(InterPhase());
 		//Canvas_Renderer.script.infoRenderer("Be careful and good luck.");
 	}
 
@@ -343,12 +343,19 @@ public class BossBehaviour : MonoBehaviour {
 			case 5:
 			isAttacking = true;
 			hp.invincible = true;
+
+			positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
+			positioningCage.name = "PositioningCage";
+
+			Atk = StartCoroutine(LerpPos(gameObject, gameObject.transform.position,attack5StartPos));
+
 			yield return new WaitForSecondsRealtime(2);
 			Canvas_Renderer.script.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ");
 
-			player.transform.position = (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(20, 20);
-			transform.position = (Vector2)BG.transform.position + BG.sizeDelta / 2 + new Vector2(-10, 0);
+			Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
 
+			yield return new WaitForSecondsRealtime(2);
+			Destroy(positioningCage.gameObject);
 			player.GetComponent<M_Player>().ChangeFlappy(true);
 			StartCoroutine(PipeGeneration());
 
@@ -491,10 +498,8 @@ public class BossBehaviour : MonoBehaviour {
 
 		print(true);
 		for (int i = 0; i < 5; i++) {
-			// generate new pipe
 
 			int shots = (int)(spawningPhaseTime / shotdelay);
-			//
 			yield return new WaitForSecondsRealtime(PipePeriod);
 			float holeMid = Random.Range(-BG.sizeDelta.y / 2 + 20, BG.sizeDelta.y / 2 - 20);
 			if (GoingDown == true) {
@@ -507,7 +512,7 @@ public class BossBehaviour : MonoBehaviour {
 			}
 			float timeOnStart = Time.timeSinceLevelLoad;
 			while (shots > 0) {
-				if (transform.position.y > holeMid + 15 || transform.position.y < holeMid - 15) {
+				if (transform.position.y > holeMid + 12 || transform.position.y < holeMid - 12) {
 					GameObject shot = poolOfEnemyProjectiles.GetPool();
 					shot.GetComponent<Projectile>().timeTillDestruct = arriveTime + 0.5f;
 					shot.GetComponent<Projectile>().DisableCollisions = true;

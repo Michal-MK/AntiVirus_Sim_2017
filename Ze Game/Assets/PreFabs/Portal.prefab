@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212626516180589054}
   - component: {fileID: 114275276103833932}
   - component: {fileID: 58847790525568196}
+  - component: {fileID: 95921204045466256}
   m_Layer: 0
   m_Name: Portal
   m_TagString: Untagged
@@ -56,6 +57,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 6.55
+--- !u!95 &95921204045466256
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1223931837914776}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114275276103833932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,6 +88,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   player: {fileID: 0}
   BG: {fileID: 0}
+  spike: {fileID: 0}
 --- !u!212 &212626516180589054
 SpriteRenderer:
   m_ObjectHideFlags: 1
