@@ -411,10 +411,79 @@ public class Maze : MonoBehaviour {
 		}
 
 	}
-	public MazeEntrance enter;
+	int reference = 0;
+
+
+
+	public int GetRandomGridPos(bool xAxis) {
+
+		int side = Random.Range(0, 4);
+
+		if (xAxis) {
+			if (side == 0) {
+				reference = side;
+				int x = Random.Range(0, rowcollCount - 1);
+				return x;
+			}
+			else if (side == 1) {
+				reference = side;
+				int x = Random.Range(0, 2);
+				if (x == 0) {
+					return 0;
+				}
+				else {
+					return rowcollCount - 1;
+				}
+			}
+			else if (side == 2) {
+				reference = side;
+				int x = Random.Range(0, rowcollCount - 1);
+				return x;
+			}
+			else {
+				reference = side;
+				int x = Random.Range(0, 2);
+				if (x == 0) {
+					return 0;
+				}
+				else {
+					return rowcollCount - 1;
+				}
+			}
+		}
+
+		else {
+			if (reference == 0) {
+				int y = Random.Range(0, 2);
+				if (y == 0) {
+					return 0;
+				}
+				else {
+					return rowcollCount - 1;
+				}
+			}
+			else if (reference == 1) {
+				int y = Random.Range(0, rowcollCount - 1);
+				return y;
+			}
+			else if (reference == 2) {
+				int y = Random.Range(0, 2);
+				if (y == 0) {
+					return 0;
+				}
+				else {
+					return rowcollCount - 1;
+				}
+			}
+			else {
+				int y = Random.Range(0, rowcollCount - 1);
+				return y;
+			}
+		}
+	}
 
 	public void MazeEscape() {
-		teleport.transform.position = grid[enter.GetRandomGridPos(true), enter.GetRandomGridPos(false)].transform.position;
+		teleport.transform.position = grid[GetRandomGridPos(true), GetRandomGridPos(false)].transform.position;
 	}
 
 

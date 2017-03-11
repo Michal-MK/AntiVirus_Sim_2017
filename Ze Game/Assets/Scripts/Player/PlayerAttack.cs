@@ -109,6 +109,7 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.name = "Bullet";
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
+		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
 		bullets--;
 		bulletCount.text = "x " + bullets;

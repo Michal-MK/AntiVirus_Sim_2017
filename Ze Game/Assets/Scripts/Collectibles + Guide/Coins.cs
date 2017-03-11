@@ -24,6 +24,7 @@ public class Coins : MonoBehaviour {
 
 		if (col.name == "Player" && coinsCollected <=5) {
 
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 			Vector3 newpos = gameObject.transform.position;
 			oldpos = newpos;
 			timer.run = true;
@@ -45,6 +46,7 @@ public class Coins : MonoBehaviour {
 
 		}
 		if (coinsCollected == 5) {
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 			guide.disableGuide();
 			coin.gameObject.SetActive(false);
 			spike.SetPosition();

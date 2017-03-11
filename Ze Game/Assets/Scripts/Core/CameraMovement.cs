@@ -27,7 +27,7 @@ public class CameraMovement : MonoBehaviour {
 	public bool inBossRoom = false;
 	public bool inMaze = false;
 
-	public float camSize = 15;
+	public float defaultCamSize = 15;
 
 	void Start() {
 
@@ -286,7 +286,7 @@ public class CameraMovement : MonoBehaviour {
 
 			float newSize = Mathf.SmoothStep(startSize, finalSize, t);
 			Camera.main.orthographicSize = newSize;
-
+			print(t);
 			if (t < 1) {
 				yield return null;
 			}

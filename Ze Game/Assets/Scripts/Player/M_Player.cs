@@ -5,25 +5,26 @@ using System.Collections;
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
-	public float RGspeed;
-	public float ARRspeed;
+	public float Speed;
 	public static bool doNotMove;
 	public Vector3 move;
 	public GameObject quitButton;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
 	public GameObject continueButton;
-	public Spike nr;
-	public CameraMovement cam;
-	public EnemySpawner spawner;
+
 	public static float distanceToWall;
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
+
+	public CameraMovement cam;
+	public EnemySpawner spawner;
 	public BossBehaviour boss;
 	public SaveGame save;
+	public Guide guide;
 
-	int mode = 0;
+	private int mode = 0;
 	public float gravity;
 	public float UpVelocity;
 	public float linearDrag;
@@ -31,7 +32,6 @@ public class M_Player : MonoBehaviour {
 
 
 	void Start() {
-		RGspeed = 300f;
 		Cursor.lockState = CursorLockMode.Confined;
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
@@ -59,11 +59,6 @@ public class M_Player : MonoBehaviour {
 	}
 	private void FixedUpdate() {
 
-		if (cam.inBossRoom || cam.inMaze) {
-
-			//ARRspeed = ARRspeed * 2;
-		}
-
 		switch (mode) {
 
 			case 0:
@@ -79,6 +74,7 @@ public class M_Player : MonoBehaviour {
 
 	}
 	private void Update() {
+
 		if (doFlappy) {
 			Flappy();
 		}
@@ -89,19 +85,19 @@ public class M_Player : MonoBehaviour {
 
 		if (doNotMove == false) {
 			if (Input.GetAxis("Mouse X") > 0) {
-				rg.AddForce(new Vector2(RGspeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+				rg.AddForce(new Vector2(Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
 			}
 
 			else if (Input.GetAxis("Mouse X") < 0) {
-				rg.AddForce(new Vector2(-RGspeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+				rg.AddForce(new Vector2(-Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
 			}
 
 			if (Input.GetAxis("Mouse Y") > 0) {
-				rg.AddForce(new Vector2(0, RGspeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+				rg.AddForce(new Vector2(0, Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
 			}
 
 			else if (Input.GetAxis("Mouse Y") < 0) {
-				rg.AddForce(new Vector2(0, -RGspeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+				rg.AddForce(new Vector2(0, -Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
 			}
 		}
 	}
@@ -123,13 +119,13 @@ public class M_Player : MonoBehaviour {
 			if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
 				up = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, 1 * RGspeed));
+					rg.AddForce(new Vector2(0, 1 * Speed));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, 1 * RGspeed) * 5);
+					rg.AddForce(new Vector2(0, 1 * Speed) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, 1 * RGspeed) * 4);
+					rg.AddForce(new Vector2(0, 1 * Speed) * 4);
 				}
 			}
 			else {
@@ -139,13 +135,13 @@ public class M_Player : MonoBehaviour {
 			if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
 				right = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(1 * RGspeed, 0));
+					rg.AddForce(new Vector2(1 * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(1 * RGspeed, 0) * 5);
+					rg.AddForce(new Vector2(1 * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(1 * RGspeed, 0) * 4);
+					rg.AddForce(new Vector2(1 * Speed, 0) * 4);
 				}
 			}
 			else {
@@ -155,13 +151,13 @@ public class M_Player : MonoBehaviour {
 			if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
 				down = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, -1 * RGspeed));
+					rg.AddForce(new Vector2(0, -1 * Speed));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, -1 * RGspeed) * 5);
+					rg.AddForce(new Vector2(0, -1 * Speed) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, -1 * RGspeed) * 4);
+					rg.AddForce(new Vector2(0, -1 * Speed) * 4);
 				}
 			}
 			else {
@@ -171,13 +167,13 @@ public class M_Player : MonoBehaviour {
 			if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
 				left = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(-1 * RGspeed, 0));
+					rg.AddForce(new Vector2(-1 * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(-1 * RGspeed, 0) * 5);
+					rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(-1 * RGspeed,0) * 4);
+					rg.AddForce(new Vector2(-1 * Speed,0) * 4);
 				}
 			}
 			else {
@@ -409,7 +405,15 @@ public class M_Player : MonoBehaviour {
 	}
 	*/
 
-
+	private void OnCollisionEnter2D(Collision2D collision) {
+		if(collision.transform.name == "killerblock") {
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
+		}
+		if (collision.transform.name == "Block") {
+			guide.enableGuide();
+			guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
+		}
+	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
 

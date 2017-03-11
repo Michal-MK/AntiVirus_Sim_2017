@@ -15,6 +15,9 @@ public class Canvas_Renderer : MonoBehaviour {
 	Animator Slide;
 	string infotext;
 
+	bool st = true;
+	bool isRunning = false;
+
 	void Awake(){
 		script = this;
 	}
@@ -23,27 +26,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		Front = info_F.gameObject.GetComponent<Animator>();
 		Slide = info_S.gameObject.GetComponent<Animator>();
 	}
-	bool st = true;
-	bool isRunning = false;
-
-	public IEnumerator MoveWithText() {
-		isRunning = true;
-		yield return new WaitForSeconds(0.2f);
-		if (st != true) {
-			Slide.SetTrigger("Slideout");
-		}
-		yield return new WaitForSeconds(1.1f);
-		Front.Play("Appear");
-		yield return new WaitForSeconds(2.1f);
-		info_S.text = infotext;
-		Slide.Play("SlideIN");
-		yield return new WaitForSeconds(0.75f);
-		st = false;
-		isRunning = false;
-		StopCoroutine("MoveWithText");
-	}
-
-
+	
 	public void infoRenderer(string text) {
 		info_F.text = text;
 		infotext = text;
@@ -54,6 +37,26 @@ public class Canvas_Renderer : MonoBehaviour {
 			return;
 		}
 	}
+	
+	public IEnumerator MoveWithText() {
+		isRunning = true;
+		yield return new WaitForSecondsRealtime(0.2f);
+		if (st != true) {
+			Slide.SetTrigger("Slideout");
+		}
+		yield return new WaitForSecondsRealtime(1.1f);
+		Front.Play("Appear");
+		yield return new WaitForSecondsRealtime(2.1f);
+		info_S.text = infotext;
+		Slide.Play("SlideIN");
+		yield return new WaitForSecondsRealtime(0.75f);
+		st = false;
+		isRunning = false;
+		StopCoroutine("MoveWithText");
+	}
+
+
+
 
 
 
@@ -101,7 +104,6 @@ public class Canvas_Renderer : MonoBehaviour {
 
 		if (name == "Coin") {
 			CoinC.text = "x " + (Coins.coinsCollected + 1);
-			//Coinc.Play("Highlight Coin Count");
 
 			if (Coins.coinsCollected == 4) {
 				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);

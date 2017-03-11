@@ -78,18 +78,19 @@ public class TurretAttack : MonoBehaviour {
 			spawnRate = currSpawnRate;
 
 			if (PlayerPrefs.GetInt("difficulty") <= 2) {
+				for (int i = 0; i < 2; i++) {
 
-				GameObject bullet = pooler.GetPool();
-				Vector3 rnd = RandomVec();
-				bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
-				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
-				bullet.transform.SetParent(enemy);
-				bullet.SetActive(true);
-
+					GameObject bullet = pooler.GetPool();
+					Vector3 rnd = RandomVec();
+					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
+					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
+					bullet.transform.SetParent(enemy);
+					bullet.SetActive(true);
+				}
 			}
 
 			if (PlayerPrefs.GetInt("difficulty") >= 3) {
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 3; i++) {
 
 					GameObject bullet = pooler.GetPool();
 					Vector3 rnd = RandomVec();

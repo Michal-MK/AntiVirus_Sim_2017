@@ -8,7 +8,6 @@ public class FPS : MonoBehaviour {
 
 	void OnEnable() {
 		quality = QualitySettings.GetQualityLevel();
-		print(quality);
 	}
 
 

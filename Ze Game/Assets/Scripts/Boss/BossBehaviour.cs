@@ -104,7 +104,7 @@ public class BossBehaviour : MonoBehaviour {
 	void Start() {
 		BG = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
-		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
+		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
 		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 
@@ -121,7 +121,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	private IEnumerator InitialAttack() {
 		yield return new WaitForSecondsRealtime(5);
-		StartCoroutine(Attacks(3));
+		StartCoroutine(Attacks(5));
 		//StartCoroutine(InterPhase());
 		//Canvas_Renderer.script.infoRenderer("Be careful and good luck.");
 	}

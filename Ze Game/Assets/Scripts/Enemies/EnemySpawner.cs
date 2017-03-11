@@ -102,7 +102,7 @@ public class EnemySpawner : MonoBehaviour {
 	bool CRunning = false;
 
 	public void spawnKillerBlock() {
-		int totalBlocks = (int)(Spike.spikesCollected + 5 * difficultySlider.difficulty);
+		int totalBlocks = (int)(Coins.coinsCollected + 5 * difficultySlider.difficulty);
 
 		for (int count = 0; count < totalBlocks; count++) {
 
@@ -119,7 +119,7 @@ public class EnemySpawner : MonoBehaviour {
 			block.transform.localScale = new Vector3(scale, scale, 0);
 			warn.transform.localScale = new Vector3(scale / 2, scale / 2, 0);
 
-			block.name = "killerblock " + count;
+			block.name = "killerblock";
 			warn.name = "Warning " + count;
 
 			block.transform.SetParent(enemy);

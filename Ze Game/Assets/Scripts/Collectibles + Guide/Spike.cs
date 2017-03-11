@@ -89,8 +89,8 @@ public class Spike : MonoBehaviour {
 		if (stage == 1) {
 
 
-			float x = Random.Range(BG1.position.x + (-BG1.sizeDelta.x / 2) + Xscale*4, BG1.position.x + (BG1.sizeDelta.x / 2) - Xscale*4);
-			float y = Random.Range(BG1.position.y + (-BG1.sizeDelta.y / 2) + Yscale*4, BG1.position.y + (BG1.sizeDelta.y / 3) - Yscale*4);
+			float x = Random.Range(BG1.position.x - BG1.sizeDelta.x / 2 + Xscale*4, BG1.position.x);
+			float y = Random.Range(BG1.position.y - BG1.sizeDelta.y / 2 + Yscale*4, BG1.position.y);
 			float z = 0f;
 
 
