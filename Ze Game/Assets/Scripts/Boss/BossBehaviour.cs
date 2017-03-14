@@ -140,8 +140,8 @@ public class BossBehaviour : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 		Canvas_Renderer.script.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
-		StartCoroutine(Attacks(5));
-		//StartCoroutine(InterPhase());
+		//StartCoroutine(Attacks(5));
+		StartCoroutine(InterPhase());
 	}
 
 	private IEnumerator InterPhase() {

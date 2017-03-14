@@ -86,7 +86,7 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private IEnumerator hold() {
-		yield return new WaitForSeconds(30);
+		yield return new WaitForSeconds(55);
 		forTheFirstTime = false;
 		foreach (GameObject deltrap in arrowtrap) {
 			Destroy(deltrap.gameObject);
