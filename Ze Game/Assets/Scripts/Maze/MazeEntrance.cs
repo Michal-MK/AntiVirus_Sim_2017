@@ -6,7 +6,7 @@ public class MazeEntrance : MonoBehaviour {
 	public GameObject player;
 	public Spike spike;
 	public CameraMovement cam;
-	public Animator mazeEntrance;
+	public Animator transitionBlack;
 	public RectTransform MazeBG;
 	public Zoom zoom;
 
@@ -21,7 +21,7 @@ public class MazeEntrance : MonoBehaviour {
 	}
 	public IEnumerator TransToPos() {
 
-		mazeEntrance.Play("CamTransition");
+		transitionBlack.Play("CamTransition");
 		yield return new WaitForSeconds(2);
 		StartCoroutine(cam.LerpSize(cam.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
 		spike.SetPosition();
@@ -30,9 +30,9 @@ public class MazeEntrance : MonoBehaviour {
 		zoom.canZoom = false;
 		player.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
 		player.transform.localScale = new Vector3(2, 2, 0);
-		yield return new WaitForSeconds(3);
-		Canvas_Renderer.script.infoRenderer("What do we have here..?");
-		yield return new WaitForSecondsRealtime(3);
+		yield return new WaitForSeconds(5);
+		Canvas_Renderer.script.infoRenderer("What do we have here...? \n"+
+											"Grab the spike and let's get out of this place.", "A maze ... duh?!",new Color32(255,255,255,200));
 		gameObject.SetActive(false);
 		StopCoroutine(TransToPos());
 	}

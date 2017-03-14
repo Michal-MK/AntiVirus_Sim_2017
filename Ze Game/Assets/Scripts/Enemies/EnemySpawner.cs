@@ -16,7 +16,9 @@ public class EnemySpawner : MonoBehaviour {
 	public bool amIHere = false;
 	public bool forTheFirstTime = true;
 	public GameObject warningObj;
+
 	public GameObject EPPooler;
+	public GameObject ICEPooler;
 
 
 	void Start() {
@@ -199,15 +201,17 @@ public class EnemySpawner : MonoBehaviour {
 
 
 
-	List<GameObject> KWProjectiles = new List<GameObject>();
+	public List<GameObject> KWProjectiles = new List<GameObject>();
 
 	public void spawnKillerWall() {
+		ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
+		Projectile.spawnedByKillerWall = true;
 
 		if (PlayerPrefs.GetInt("difficulty") <= 1) {
+			
 
-
-			for (int i = 0; i < 1; i++) {
-				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+			for (int i = 0; i < 2; i++) {
+				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(enemy);
@@ -216,8 +220,8 @@ public class EnemySpawner : MonoBehaviour {
 			}
 		}
 		if (PlayerPrefs.GetInt("difficulty") == 2) {
-			for (int i = 0; i < 2; i++) {
-				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+			for (int i = 0; i < 3; i++) {
+				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(enemy);
@@ -226,8 +230,8 @@ public class EnemySpawner : MonoBehaviour {
 			}
 		}
 		if (PlayerPrefs.GetInt("difficulty") >= 3) {
-			for (int i = 0; i < 3; i++) {
-				GameObject wallShot = EPPooler.GetComponent<ObjectPooler>().GetPool();
+			for (int i = 0; i < 4; i++) {
+				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(enemy);
@@ -255,10 +259,7 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public Vector3 KWProjectilePositions() {
-		return new Vector3(killerWallBG.position.x - 2 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
+		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
 	}
 
-	public void InvokeRepeatingScript(string name) {
-		InvokeRepeating(name, 0.5f, 0.5f);
-	}
 }

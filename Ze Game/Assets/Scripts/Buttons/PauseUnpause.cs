@@ -8,29 +8,28 @@ public class PauseUnpause : MonoBehaviour {
 
 
 	private void Update() {
+		if (!Canvas_Renderer.script.isRunning) {
+			if (Input.GetKeyDown(KeyCode.Escape) && !isPaused) {
 
-		if (Input.GetKeyDown(KeyCode.Escape) && !isPaused) {
-			print("A");
-			Cursor.visible = true;
-			timer.run = false;
-			restartButton.SetActive(true);
-			quitToMenu.SetActive(true);
-			Time.timeScale = 0;
+				Cursor.visible = true;
+				timer.run = false;
+				restartButton.SetActive(true);
+				quitToMenu.SetActive(true);
+				Time.timeScale = 0;
 
-			isPaused = true;
-		}
-		else if (Input.GetKeyDown(KeyCode.Escape) && isPaused){
-			print("B");
+				isPaused = true;
+			}
+			else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) {
 
-			restartButton.SetActive(false);
-			quitToMenu.SetActive(false);
-			Cursor.visible = false;
-			Time.timeScale = 1;
-			timer.run = true;
+				restartButton.SetActive(false);
+				quitToMenu.SetActive(false);
+				Cursor.visible = false;
+				Time.timeScale = 1;
+				timer.run = true;
 
-			isPaused = false;
+				isPaused = false;
+			}
 		}
 	}
-
 }
 

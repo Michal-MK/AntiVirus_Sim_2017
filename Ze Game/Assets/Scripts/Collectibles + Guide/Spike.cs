@@ -6,7 +6,7 @@ public class Spike : MonoBehaviour {
 	public RectTransform BG1;
 	public RectTransform BG2a;
 	public Maze Maze;
-	public RectTransform BG3;
+	public RectTransform BG2b;
 
 	public GameObject player;
 	public Guide guide;
@@ -31,6 +31,7 @@ public class Spike : MonoBehaviour {
 	}
 
 	bool st = true;
+
 	void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Player") {
@@ -41,28 +42,19 @@ public class Spike : MonoBehaviour {
 			guide.disableGuide();
 			if (st == true) {
 				st = false;
-				Canvas_Renderer.script.infoRenderer("Follow the blinking arrows.");
+				Canvas_Renderer.script.infoRenderer("Follow the blinking arrows.", "Be aware of every detail on the screen.");
 			}
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
 				Canvas_Renderer.script.Counters("Spike");
-				anim.Play("Highlight Spike Count");
 
 			}
 			if (spikesCollected == 4) {
 				Maze.MazeEscape();
 			}
-		}
-
-
-		if (spikesCollected == 5) {
-			anim.Play("TransformPos");
-			RectTransform lastBG = GameObject.Find("Background_room_3").GetComponent<RectTransform>();
-			M_Player.gameProgression = spikesCollected;
-			GameObject bossTeleporter = Instantiate(teleporter, new Vector3(lastBG.position.x, lastBG.position.y, 0), Quaternion.identity);
-			bossTeleporter.transform.SetParent(gameObject.transform.parent);
-			bossTeleporter.name = "Boss1_teleporter";
-			guide.disableGuide();
+			if(spikesCollected == 5) {
+				Canvas_Renderer.script.infoRenderer(null, "You found all the bullets.");
+			}
 		}
 	}
 
@@ -125,15 +117,14 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(true);
 			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
-			Canvas_Renderer.script.infoRenderer("Grab the spike and let's get out.");
 
 
 
 		}
 		if (stage == 4) {
 			print(stage);
-			float x = BG3.transform.position.x + 20;
-			float y = BG3.transform.position.y;
+			float x = BG2b.transform.position.x - BG2b.sizeDelta.x / 2 + 20;
+			float y = BG2b.transform.position.y + BG2b.sizeDelta.y / 2 - 20;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);

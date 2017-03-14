@@ -12,15 +12,17 @@ public class SoundFXHandler : MonoBehaviour {
 	public AudioClip CoinCollected;
 	public AudioClip ELShock;
 
+	private bool lastClip = false;
+
 	private void Awake() {
 		script = this;
 	}
 
 	public void PlayFX(AudioClip clip) {
-		print(clip.name);
+
 		switch (clip.name) {
 			case "FX - CollectCoin": {
-				sound.volume = 0.1f;
+				sound.volume = 0.5f;
 				break;
 			}
 			default: {
@@ -32,6 +34,11 @@ public class SoundFXHandler : MonoBehaviour {
 		if(sound.clip != clip) {
 			sound.clip = clip;
 		}
-		sound.Play();
+		if (!lastClip) {
+			sound.Play();
+			if (clip == ELShock) {
+				lastClip = true;
+			}
+		}
 	}
 }

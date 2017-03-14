@@ -11,17 +11,24 @@ public class BossEntrance : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
-			AudioHandler.script.sound.Stop();
-			PlayerAttack p = player.GetComponent<PlayerAttack>();
-			p.enabled = true;
-			GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
-			spawnedBoss.name = "Boss";
-			player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
-			cam.inBossRoom = true;
-			StartCoroutine(cam.LerpSize(cam.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
-			bossHP.SetActive(true);
-			Canvas_Renderer.script.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\").");
-
+			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
+				AudioHandler.script.MusicTransition(AudioHandler.script.boss);
+				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
+				spawnedBoss.name = "Boss";
+				player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
+				StartCoroutine(cam.LerpSize(cam.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
+				cam.bossFightCam(1);
+				bossHP.SetActive(true);
+			}
+			if(PlayerAttack.bombs <= 0) {
+				Canvas_Renderer.script.infoRenderer("You are not a worthy opponent!\n"+
+													"Bullets: " + PlayerAttack.bullets +"/5\n"+
+													"Bombs: "+ PlayerAttack.bombs + "/1", "Explore this location further");
+				//Spike.spikesCollected = 5;
+				//PlayerAttack.bullets = 5;
+				//PlayerAttack.bombs = 1;
+				Coins.coinsCollected = 5;
+			}
 		}
 	}
 }

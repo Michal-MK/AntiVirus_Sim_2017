@@ -23,7 +23,7 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite spikeSprite;
 	public Sprite bombSprite;
 
-	private bool once = true;
+	private bool first = true;
 
 	Color32 visible = new Color32(255, 255, 255, 255);
 
@@ -52,17 +52,31 @@ public class PlayerAttack : MonoBehaviour {
 			fireMode = !fireMode;
 			timer.attacking = !timer.attacking;
 
-			if (M_Player.gameProgression != 10 && once) {
-				Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok, don't lose the bullets (if you have any)!");
-				bulletGUI.color = visible;
-				currentAmmo.color = visible;
-				visibleAlready = true;
-				InfoAmmo.GetComponent<Text>().text = "Equiped:";
-
-				once = false;
+			if (M_Player.gameProgression != 10 && first) {
+				if (bullets != 0) {
+					Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
+														"Use your mouse to aim.\n "+
+														"The bullets are reusable so pick them up after you fire!\n" +
+														"Currently you have: " + bullets + " bullets.\n "+
+														"Don't lose them", null);
+					first = false;
+				}else {
+					Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
+														"Use your mouse to aim.\n "+
+														"The bullets are reusable so pick them up after you fire!\n " +
+														"Currently you have: " + bullets + " bullets.", null);
+					first = false;
+				}
 			}
+			visibleAlready = true;
+			InfoAmmo.GetComponent<Text>().text = "Equiped:";
+			bulletGUI.color = visible;
+			currentAmmo.color = visible;
 			bulletCount.text = "x " + bullets;
+			bombGUI.color = visible;
+			bombCount.text = "x " + bombs;
 		}
+
 
 		if (Input.GetMouseButtonDown(1)) {
 			fireBullets = !fireBullets;
@@ -79,7 +93,7 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 			if(Input.GetMouseButtonDown(0) && !fireBullets) {
-				if(bombs == 1) {
+				if(bombs > 0) {
 					FireBomb();
 					StartCoroutine(RefreshBombs());
 				}
@@ -131,7 +145,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public IEnumerator RefreshBombs() {
-		Canvas_Renderer.script.infoRenderer("Wait for the bomb to regenerate");
+		Canvas_Renderer.script.infoRenderer(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSecondsRealtime(8);
 		bombs++;
 		bombCount.text = "x " + bombs;
@@ -146,7 +160,6 @@ public class PlayerAttack : MonoBehaviour {
 		}
 		if (col.name == "BombPickup") {
 			bombGUI.color = visible;
-			//canDisplay = true;
 			bombCount.text = "x " + bombs;
 		}
 	}

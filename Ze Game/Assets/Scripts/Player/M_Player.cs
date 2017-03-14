@@ -11,7 +11,7 @@ public class M_Player : MonoBehaviour {
 	public GameObject quitButton;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
-	public GameObject continueButton;
+	public GameObject TransitionCam;
 
 	public static float distanceToWall;
 	public static int gameProgression;
@@ -29,13 +29,17 @@ public class M_Player : MonoBehaviour {
 	public float UpVelocity;
 	public float linearDrag;
 	private bool doFlappy = false;
-
+	private int attempts;
 
 	void Start() {
 		Cursor.lockState = CursorLockMode.Confined;
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 
+
+
+
+		attempts = PlayerPrefs.GetInt("Attempts");
 
 		if (PlayerPrefs.GetInt("difficulty") == 0) {
 			attemptNr = 10;
@@ -52,11 +56,20 @@ public class M_Player : MonoBehaviour {
 		if (PlayerPrefs.GetInt("difficulty") == 4) {
 			attemptNr = 54;
 		}
-
-		Canvas_Renderer.script.infoRenderer("Collect the coins and find your first Spike.");
-
+		StartCoroutine(DelayIntro());
 		rg.freezeRotation = true;
 	}
+
+	private IEnumerator DelayIntro() {
+		yield return new WaitForSeconds(1);
+		attempts++;
+		Canvas_Renderer.script.infoRenderer("Welcome! \n" +
+											"This is your " + attempts + ". attempt. \n\n" +
+											"This box will appear only when I have something important to say, otherwise look for information in the upper left corner, so it is less disruptive. \n",
+											"Good luck & Have fun!");
+		PlayerPrefs.SetInt("Attempts", attempts);
+	}
+
 	private void FixedUpdate() {
 
 		switch (mode) {
@@ -107,8 +120,6 @@ public class M_Player : MonoBehaviour {
 	private bool down = false;
 	private bool left = false;
 	private bool up = false;
-
-
 
 	public void ArrowMove() {
 		//move = new Vector3(0, 0, 0);
@@ -173,7 +184,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(-1 * Speed,0) * 4);
+					rg.AddForce(new Vector2(-1 * Speed, 0) * 4);
 				}
 			}
 			else {
@@ -276,6 +287,7 @@ public class M_Player : MonoBehaviour {
 		}
 		*/
 	}
+	//
 
 	//Moving the character FlappyBird style
 	public void ChangeFlappy(bool start = false) {
@@ -296,13 +308,13 @@ public class M_Player : MonoBehaviour {
 	}
 	public void Flappy() {
 		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
-			print("Jump");
 			rg.velocity = new Vector2(0, UpVelocity);
 		}
 
 	}
+	//
 
-	/* Dprecated move Function
+	/* Deprecated move Function
 	public void Movement() {
 		move = new Vector3(0, 0, 0);
 
@@ -405,21 +417,37 @@ public class M_Player : MonoBehaviour {
 	}
 	*/
 
+	private bool once = true;
 	private void OnCollisionEnter2D(Collision2D collision) {
-		if(collision.transform.name == "killerblock") {
+		if (collision.transform.name == "killerblock") {
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 		}
-		if (collision.transform.name == "Block") {
+		if (once && collision.transform.name == "Block") {
 			guide.enableGuide();
 			guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
+			once = false;
+		}
+		if (collision.transform.tag == "Enemy") {
+			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
+				gameObject.GetComponent<CircleCollider2D>().enabled = false;
+				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
+			}
+			collision.transform.parent = GameObject.Find("Collectibles").transform;
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
+			GameOver();
 		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
+			if(col.gameObject.GetComponent<Rigidbody2D>() != null) {
+				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
+			}
 			col.transform.parent = GameObject.Find("Collectibles").transform;
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
+
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
@@ -427,40 +455,43 @@ public class M_Player : MonoBehaviour {
 			spawner.spawnArrowTrap();
 
 			if (col.name == "Background_room_1") {
-				spawner.InvokeRepeatingScript("spawnKillerWall");
+				AudioHandler.script.MusicTransition(AudioHandler.script.room2);
+				spawner.InvokeRepeating("spawnKillerWall", 0, 0.7f);
 				if (gameProgression == 3) {
-					Canvas_Renderer.script.infoRenderer("Go down even further");
-				}
-				else {
-					Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.");
+					Canvas_Renderer.script.infoRenderer(null, "Go down even further.");
 				}
 			}
 
 		}
-		if (col.name == "Boss1_teleporter" || col.name == "Background_room_Boss_1") {
+		if (col.name == "Background_room_Boss_1") {
 			gameProgression = 10;
 			roomPregression.script.Progress();
 
 		}
 		if (col.transform.tag == "Spike") {
-
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			roomPregression.script.Progress();
 			PlayerAttack.bullets++;
 			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
 				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
 			}
 
-			if (Spike.spikesCollected == 5) {
-				Canvas_Renderer.script.infoRenderer("The Spike is gone! " + "Find the teleporter.");
-			}
 		}
 		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
+			Canvas_Renderer.script.infoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 		if (col.name == "Test") {
 			save.saveScore();
 			print("Saved");
+		}
+	}
+	private void OnTriggerExit2D(Collider2D col) {
+		if (col.name == "Background_room_1") {
+			foreach (GameObject Projectile in spawner.KWProjectiles) {
+				Projectile.SetActive(false);
+			}
 		}
 	}
 
@@ -473,14 +504,27 @@ public class M_Player : MonoBehaviour {
 		save.saveScore();
 
 	}
+
+	bool delEnemies = true;
 	public void GameOver() {
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
+		TransitionCam.GetComponent<Animator>().Play("DimCamera");
+		AudioHandler.script.MusicTransition(null);
+		if (delEnemies) {
+			Destroy(GameObject.Find("Enemies").gameObject);
+			delEnemies = false;
+		}
+		StartCoroutine(PauseAfterAudioFade());
+
+
+	}
+	private IEnumerator PauseAfterAudioFade() {
+		yield return new WaitUntil(() => AudioHandler.script.sound.volume == 0);
 		Time.timeScale = 0;
-		Destroy(GameObject.Find("Enemies").gameObject);
 	}
 
 }

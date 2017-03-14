@@ -13,14 +13,17 @@ public class Projectile : MonoBehaviour {
 
 	public Sprite Solid;
 	public Sprite Trigger;
-
-	
-
+	public Sprite Icicle;
+	public Sprite Cracked;
 
 	public bool DisableCollisions = false;
+
 	public static bool spawnedByAvoidance = false;
+	public static bool spawnedByKillerWall = false;
+
 	public bool byBoss = false;
 	public bool byKillerWall;
+
 
 
 	void OnEnable() {
@@ -37,41 +40,55 @@ public class Projectile : MonoBehaviour {
 		if (byBoss) {
 			StartCoroutine(BossAttack());
 		}
-		if (timeTillDestruct != -1337) {
-			StartCoroutine(SelfDestruct());
-
-		}
 	}
 
 	private IEnumerator BossAttack() {
+
 		yield return new WaitForSeconds(1);
 		selfRigid.velocity = transform.rotation * Vector3.down * projectileSpeed;
 		StopCoroutine(BossAttack());
+
 	}
-	private IEnumerator SelfDestruct() {
-		yield return new WaitForSeconds(timeTillDestruct);
+
+	public IEnumerator SelfDestruct(float timeTillDestruction) { 
+		yield return new WaitForSeconds(timeTillDestruction);
+		if(spawnedByKillerWall == true) {
+			selfRender.sprite = Icicle;
+			gameObject.tag = "Enemy";
+
+		}
 		gameObject.SetActive(false);
 	}
 
 
 	private void OnTriggerEnter2D(Collider2D col){
-		if (DisableCollisions == false) {
+		if (!DisableCollisions) {
 			if (col.tag == "Wall" || col.tag == "Wall/Door") {
+				selfRender.sprite = Trigger;
+				if (spawnedByKillerWall) {
+					selfRender.sprite = Icicle;
+				}
+
 				gameObject.SetActive(false);
 
 			}
-			if(col.name == "Block") {
-				selfRender.sprite = Solid;
-				selfCol.isTrigger = false;
+			if (col.name == "Blocker") {
+				gameObject.SetActive(false);
 			}
 		}
 	}
 
 	private void OnTriggerExit2D(Collider2D col){
-		if (DisableCollisions == false) {
+		if (!DisableCollisions) {
 			if (col.tag == "BG") {
-				selfCol.isTrigger = true;
-				selfRender.sprite = Trigger;
+				if (!spawnedByKillerWall) {
+					selfCol.isTrigger = true;
+					selfRender.sprite = Trigger;
+				}
+				
+				if (spawnedByKillerWall) {
+					selfRender.sprite = Icicle;
+				}
 				gameObject.SetActive(false);
 
 			}
@@ -80,14 +97,20 @@ public class Projectile : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D col) {
-		if (DisableCollisions == false) {
+		if (!DisableCollisions) {
 			if(col.transform.tag == "Wall" || col.transform.tag == "Wall/Door") {
-				selfCol.isTrigger = true;
-				selfRender.sprite = Trigger;
 				gameObject.SetActive(false);
-				print('C');
-
 			}
+			if(col.transform.name == "Block") {
+				print("AHA");
+				selfRender.sprite = Cracked;
+				gameObject.tag = "EnemyInactive";
+				StartCoroutine(SelfDestruct(2));
+			}
+			if(col.transform.name == "Blocker") {
+				gameObject.SetActive(false);
+			}
+
 		}
 		
 	}

@@ -63,12 +63,12 @@ public class Zoom : MonoBehaviour {
 		if (camScript.inBossRoom && canZoom && cam.orthographicSize > BossMin && cam.orthographicSize < BossMax + 1) {
 			float roll = Input.GetAxis("Mouse ScrollWheel");
 			if (roll < 0) {
-				if (cam.orthographicSize < NormMax) {
+				if (cam.orthographicSize < BossMax) {
 					cam.orthographicSize += 0.8f;
 				}
 			}
 			else if (roll > 0) {
-				if (cam.orthographicSize > NormMin) {
+				if (cam.orthographicSize > BossMin) {
 					cam.orthographicSize -= 0.8f;
 				}
 			}

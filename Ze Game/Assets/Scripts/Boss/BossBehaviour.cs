@@ -8,6 +8,9 @@ public class BossBehaviour : MonoBehaviour {
 
 	public Animator anim;
 
+	public Sprite Invincible;
+	public Sprite Damageable;
+
 	public GameObject heart;
 	public GameObject spikeHit;
 	public GameObject spikeS;
@@ -50,8 +53,6 @@ public class BossBehaviour : MonoBehaviour {
 	#endregion
 
 	#region Inside References
-	float initX = 1;
-	float initY = 1;
 
 	public float speed = 0;
 
@@ -66,9 +67,9 @@ public class BossBehaviour : MonoBehaviour {
 	private RectTransform bottomRect;
 	private RectTransform leftRect;
 	private Coroutine mycor;
-	int changes = 0;
 
-	//private List<GameObject> Blocks = new List<GameObject>();
+	int changes = 0;
+	int bounces = 0;
 
 	private List<GameObject> bullets = new List<GameObject>();
 
@@ -82,8 +83,8 @@ public class BossBehaviour : MonoBehaviour {
 	private Quaternion q;
 	private float rotationDelta = 0.1f;
 
-	private bool doOnceR = true;
-	private bool doOnceL = true;
+
+
 	private bool initialDealy = true;
 	private bool doneBouncing = false;
 
@@ -96,19 +97,34 @@ public class BossBehaviour : MonoBehaviour {
 	Coroutine Atk;
 	Coroutine Positioning;
 
-	public float changeDirComparison;
+	private bool headingRight = true;
+	private bool preformChange = false;
+	private bool dontChangeR = false;
+	private bool dontChangeL = false;
+	private float distR = 0;
+	private float distL = 0;
+	private float changeThreshold = 45;
+
+	private bool informOnce = true;
+
+	public BoxCollider2D[] spikeHitboxes = new BoxCollider2D[4];
+	public SpriteRenderer selfRender;
 
 	#endregion
 
 
 	void Start() {
+		Projectile.spawnedByAvoidance = false;
+		Projectile.spawnedByKillerWall = false;
+
 		BG = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
 		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
 		rigid = gameObject.GetComponent<Rigidbody2D>();
+		rigid.freezeRotation = true;
 
-		attack1StartPos = BG.position;
+		attack1StartPos = BG.position + new Vector3(-BG.sizeDelta.x /2 + 40, - BG.sizeDelta.y / 2 + 40 );
 		attack2StartPos = new Vector3(-530, -70, 1);
 		attack3StartPos = new Vector3(-368, -70, 1);
 		attack4StartPos = BG.position;
@@ -120,278 +136,337 @@ public class BossBehaviour : MonoBehaviour {
 	}
 
 	private IEnumerator InitialAttack() {
-		yield return new WaitForSecondsRealtime(5);
+
+		yield return new WaitUntil(() => CameraMovement.doneMoving);
+		Canvas_Renderer.script.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
+		yield return new WaitForSeconds(1);
 		StartCoroutine(Attacks(5));
 		//StartCoroutine(InterPhase());
-		//Canvas_Renderer.script.infoRenderer("Be careful and good luck.");
 	}
 
 	private IEnumerator InterPhase() {
-		hp.invincible = false;
+		for (int i = 0; i < spikeHitboxes.Length; i++) {
+			spikeHitboxes[i].enabled = true;
+		}
+		selfRender.sprite = Damageable;
+		hp.CheckShields();
 		int choice = ChooseAttack();
-		yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(5);
 		StartCoroutine(Attacks(choice));
-		
 
+		for (int i = 0; i < spikeHitboxes.Length; i++) {
+			spikeHitboxes[i].enabled = false;
+		}
 	}
 
+	//Attack Selector
 	public int ChooseAttack() {
 		int previous = attackNo;
 
 		while (previous == attackNo) {
-			attackNo = UnityEngine.Random.Range(1, 6);
+			attackNo = UnityEngine.Random.Range(2, 6);
 		}
 		return attackNo;
 	}
+	//
 
+	//Attack handler
 	public IEnumerator Attacks(int attack) {
+		selfRender.sprite = Invincible;
 		switch (attack) {
 
 			//Bouncing Attack
-			#region case 1:
-
-			case 1:
-			hp.invincible = true;
-			Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack1StartPos));
-			yield return new WaitForSecondsRealtime(2);
-			body.GetComponent<CircleCollider2D>().isTrigger = true;
-			anim.Play("Attack" + attack);
+			case 1: {
+				anim.enabled = false;
+				rigid.isKinematic = false;
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack1StartPos));
+				yield return new WaitForSeconds(3);
+				body.GetComponent<CircleCollider2D>().isTrigger = true;
 
 
-			//Actual Attack --
-			isAttacking = true;
-			Attack1 = true;
-			calculatedVec = new Vector2(initX, initY);
-			oldvec = calculatedVec;
-			yield return new WaitUntil(() => animFrame == 1800);
-			//--//
+				//Actual Attack --
+				isAttacking = true;
+				Attack1 = true;
+				for (int i = 0; i < 200; i += 2) {
+					//print(i);
+					rigid.velocity = new Vector2(1, 1) * i;
+					yield return null;
+				}
+				rigid.velocity = new Vector2(200, 200);
 
-			anim.SetTrigger("Attack" + attack);
-			isAttacking = false;
-			Attack1 = false;
-			body.GetComponent<CircleCollider2D>().isTrigger = false;
-			StartCoroutine(InterPhase());
-			StopCoroutine(Attacks(attack));
-
-			break;
-
-			#endregion
-
-			//Caged Attack
-			#region case 2:
-			case 2:
-
-			isAttacking = true;
-			Attack2 = true;
-			hp.invincible = true;
-			Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack2StartPos));
-			positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
-			positioningCage.name = "PositioningCage";
-
-			yield return new WaitForSecondsRealtime(2);
-
-			//Actual Attack
-
-
-			Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
-			yield return new WaitForSecondsRealtime(3);
-
-			float waitTime = 1.1f;
-
-			for (int i = 0; i <= fullCircle; i++) {
-
-				float newWait = waitTime - 0.1f;
-				waitTime = newWait;
-
-				anim.Play("Attack" + attack);
-				mycor = StartCoroutine(Caged(newWait));
-
-				yield return new WaitUntil(() => animFrame == 871);
+				yield return new WaitUntil(() => bounces >= 20);
+				rigid.drag = 1;
+				yield return new WaitForSeconds(2);
+				rigid.drag = 3;
+				yield return new WaitUntil(() => rigid.velocity == Vector2.zero);
+				rigid.drag = 0;
+				bounces = 0;
+				//--//
 
 				anim.SetTrigger("Attack" + attack);
+				isAttacking = false;
+				Attack1 = false;
+				anim.enabled = true;
+				rigid.isKinematic = true;
+				body.GetComponent<CircleCollider2D>().isTrigger = false;
+				StartCoroutine(InterPhase());
+				StopCoroutine(Attacks(attack));
 
-				yield return new WaitForSeconds(Time.deltaTime);
-
-				StopCoroutine(mycor);
+				break;
 			}
-			//--//
 
-			isAttacking = false;
-			Attack2 = false;
-			StopCoroutine(mycor);
+			//Caged Attack
+			case 2: {
 
-			yield return new WaitForSeconds(2f);
-			Destroy(positioningCage.gameObject);
-			ClearBullets();
-			StartCoroutine(InterPhase());
-			StopCoroutine(Attacks(attack));
+				isAttacking = true;
+				Attack2 = true;
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack2StartPos));
+				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
+				positioningCage.name = "PositioningCage";
 
-			break;
-			#endregion
+				yield return new WaitForSeconds(2);
+
+				//Actual Attack
+				Projectile.projectileSpeed = 15;
+
+				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
+				yield return new WaitForSeconds(3);
+				Canvas_Renderer.script.infoRenderer(null, "Don't forget aout the zooming feature :]");
+
+				float waitTime = 1.1f;
+
+				for (int i = 0; i <= fullCircle; i++) {
+					Debug.Log("Preforming " + (i + 1) + ". circle.");
+					float newWait = waitTime - 0.1f;
+					waitTime = newWait;
+
+					anim.Play("Attack" + attack);
+					mycor = StartCoroutine(Caged(newWait));
+
+					yield return new WaitUntil(() => animFrame == 871);
+
+					anim.SetTrigger("Attack" + attack);
+
+					yield return new WaitForSeconds(Time.deltaTime);
+
+					StopCoroutine(mycor);
+				}
+				//--//
+
+				isAttacking = false;
+				Attack2 = false;
+				StopCoroutine(mycor);
+
+				yield return new WaitForSeconds(2f);
+				Destroy(positioningCage.gameObject);
+				ClearBullets();
+				StartCoroutine(InterPhase());
+				StopCoroutine(Attacks(attack));
+
+				break;
+			}
 
 			//Avoid KillerBlocks
-			#region case 3:
-			case 3:
+			case 3: {
 
-			hp.invincible = true;
 
-			Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack3StartPos));
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack3StartPos));
 
-			positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
-			positioningCage.name = "PositioningCage";
+				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
+				positioningCage.name = "PositioningCage";
 
-			yield return new WaitForSecondsRealtime(3);
+				yield return new WaitForSeconds(3);
 
-			Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, gameObject.transform.position + new Vector3(0, 50, 0)));
-			moveCage = true;
-			yield return new WaitForSeconds(2);
+				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, gameObject.transform.position + new Vector3(0, 50, 0)));
+				moveCage = true;
+				yield return new WaitForSeconds(2);
 
-			isAttacking = true;
-			anim.Play("SpeedUp");
+				isAttacking = true;
+				anim.Play("SpeedUp");
 
-			//Actual Attack
-			StartCoroutine(ChangeDir());
-			while (isAttacking) {
+				//Actual Attack
+				StartCoroutine(ChangeDir());
+				while (isAttacking) {
 
-				GameObject BlockL = poolOfKillerBlocks.GetPool();
-				BlockL.SetActive(true);
-				GameObject BlockR = poolOfKillerBlocks.GetPool();
-				BlockR.SetActive(true);
+					GameObject BlockL = poolOfKillerBlocks.GetPool();
+					BlockL.SetActive(true);
+					GameObject BlockR = poolOfKillerBlocks.GetPool();
+					BlockR.SetActive(true);
 
-				BlockL.transform.position = new Vector3(transform.position.x - self.sizeDelta.x / 2, transform.position.y, 1);
-				BlockR.transform.position = new Vector3(transform.position.x + self.sizeDelta.x / 2, transform.position.y, 1);
+					BlockL.transform.position = new Vector3(transform.position.x - self.sizeDelta.x / 2, transform.position.y, 1);
+					BlockR.transform.position = new Vector3(transform.position.x + self.sizeDelta.x / 2, transform.position.y, 1);
 
-				BlockL.transform.localScale = new Vector3(3, 3, 1);
-				BlockR.transform.localScale = new Vector3(3, 3, 1);
+					BlockL.transform.localScale = new Vector3(3, 3, 1);
+					BlockR.transform.localScale = new Vector3(3, 3, 1);
 
-				BlockL.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
-				BlockR.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
+					BlockL.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
+					BlockR.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
 
-				yield return new WaitForSeconds(0.2f);
-				if (changes >= 3) {
-					anim.SetTrigger("Attack" + attack);
-					anim.SetTrigger("Reset");
-					changes = 0;
+					yield return new WaitForSeconds(0.2f);
+					//print(changes);
+					if (changes >= 10) {
+						anim.SetTrigger("Attack" + attack);
+						anim.SetTrigger("Reset");
+						changes = 0;
 
-					break;
+						break;
+					}
 				}
-			}
-			yield return new WaitForSeconds(1);
-			//--//
+				yield return new WaitForSeconds(1);
+				//--//
 
-			isAttacking = false;
-			Attack3 = false;
-			moveCage = false;
-			initialDealy = true;
-			rigid.velocity = Vector3.zero;
-			StartCoroutine(InterPhase());
-			StopCoroutine(Attacks(attack));
-			break;
-			#endregion
+				isAttacking = false;
+				Attack3 = false;
+				moveCage = false;
+				initialDealy = true;
+				dontChangeL = false;
+				dontChangeR = false;
+				distL = 0;
+				distR = 0;
+				rigid.velocity = Vector3.zero;
+				StartCoroutine(InterPhase());
+				StopCoroutine(Attacks(attack));
+				break;
+			}
 
 			//Brimstone like Attack
-			#region case 4:
-			case 4:
+			case 4: {
 
-			anim.Play("Attack" + attack);
-			hp.invincible = true;
-			Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack4StartPos));
-			yield return new WaitForSecondsRealtime(2f);
-			Canvas_Renderer.script.infoRenderer("Careful! It is about to shoot Lasers from its sides!");
-			yield return new WaitForSecondsRealtime(2.5f);
-			//Actual Attack 
-			isAttacking = true;
-			Attack4 = true;
-			topBrim = Instantiate(Brimstone);
-			topBrim.name = "Top";
-			topRect = topBrim.GetComponent<RectTransform>();
+				anim.Play("Attack" + attack);
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack4StartPos));
+				yield return new WaitForSeconds(2f);
+				gameObject.GetComponent<ParticleSystem>().Emit(100);
+				yield return new WaitForSeconds(2f);
+				isAttacking = true;
+				Attack4 = true;
+				topBrim = Instantiate(Brimstone);
+				topBrim.name = "Top";
+				topRect = topBrim.GetComponent<RectTransform>();
 
-			rightBrim = Instantiate(Brimstone);
-			rightBrim.name = "Right";
-			rightRect = rightBrim.GetComponent<RectTransform>();
+				rightBrim = Instantiate(Brimstone);
+				rightBrim.name = "Right";
+				rightRect = rightBrim.GetComponent<RectTransform>();
 
-			bottomBrim = Instantiate(Brimstone);
-			bottomBrim.name = "Bottom";
-			bottomRect = bottomBrim.GetComponent<RectTransform>();
+				bottomBrim = Instantiate(Brimstone);
+				bottomBrim.name = "Bottom";
+				bottomRect = bottomBrim.GetComponent<RectTransform>();
 
-			leftBrim = Instantiate(Brimstone);
-			leftBrim.name = "Left";
-			leftRect = leftBrim.GetComponent<RectTransform>();
+				leftBrim = Instantiate(Brimstone);
+				leftBrim.name = "Left";
+				leftRect = leftBrim.GetComponent<RectTransform>();
 
-			StartCoroutine(VariedRotation());
+				StartCoroutine(VariedRotation());
 
-			yield return new WaitForSecondsRealtime(25);
-			//--//
+				yield return new WaitForSeconds(35);
+				//--//
 
-			topBrim.SetActive(false);
-			rightBrim.SetActive(false);
-			bottomBrim.SetActive(false);
-			leftBrim.SetActive(false);
-			transform.rotation = Quaternion.identity;
-			Attack4 = false;
-			isAttacking = false;
+				topBrim.SetActive(false);
+				rightBrim.SetActive(false);
+				bottomBrim.SetActive(false);
+				leftBrim.SetActive(false);
+				transform.rotation = Quaternion.identity;
+				Attack4 = false;
+				isAttacking = false;
 
 
-			StopCoroutine(VariedRotation());
-			StartCoroutine(InterPhase());
-			StopCoroutine(Attacks(attack));
-			break;
-			#endregion
+				StopCoroutine(VariedRotation());
+				StartCoroutine(InterPhase());
+				StopCoroutine(Attacks(attack));
+				break;
+			}
 
 			//Flappybird like Attack
-			#region case 5:
-			case 5:
-			isAttacking = true;
-			hp.invincible = true;
+			case 5: {
+				isAttacking = true;
 
-			positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
-			positioningCage.name = "PositioningCage";
+				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
+				positioningCage.name = "PositioningCage";
 
-			Atk = StartCoroutine(LerpPos(gameObject, gameObject.transform.position,attack5StartPos));
+				Atk = StartCoroutine(LerpPos(gameObject, gameObject.transform.position, attack5StartPos));
 
-			yield return new WaitForSecondsRealtime(2);
-			Canvas_Renderer.script.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ");
+				yield return new WaitForSeconds(2);
+				if (informOnce) {
+					informOnce = false;
+					Canvas_Renderer.script.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+				}
+				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
 
-			Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
+				yield return new WaitForSeconds(2);
+				Destroy(positioningCage.gameObject);
+				player.GetComponent<M_Player>().ChangeFlappy(true);
+				StartCoroutine(PipeGeneration());
 
-			yield return new WaitForSecondsRealtime(2);
-			Destroy(positioningCage.gameObject);
-			player.GetComponent<M_Player>().ChangeFlappy(true);
-			StartCoroutine(PipeGeneration());
+				yield return new WaitUntil(() => doneBouncing);
 
-			yield return new WaitUntil(() => doneBouncing);
+				player.GetComponent<M_Player>().ChangeFlappy(false);
+				isAttacking = false;
+				doneBouncing = false;
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 40, 0, 0)));
+				StartCoroutine(InterPhase());
+				StopCoroutine(Attacks(attack));
 
-			player.GetComponent<M_Player>().ChangeFlappy(false);
-			isAttacking = false;
-			doneBouncing = false;
-			StartCoroutine(InterPhase());
-			StopCoroutine(Attacks(attack));
-
-			break;
-			#endregion
+				break;
+			}
 		}
 	}
-
+	//
 
 	//Bouncing Attack Code
-	public Vector2 AddABitOfRandomness(Vector2 current, bool horisontal) {
-		float randPositive = UnityEngine.Random.value;
-		float randNegative = -UnityEngine.Random.value;
+	public Vector2 AddABitOfRandomness(Vector2 current, string wallName) {
+		bounces++;
+		print(bounces);
+		switch (wallName) {
+			case "TopWall": {
+				Vector2 newVec = new Vector2(current.x, -current.y);
+				float mag = newVec.magnitude;
 
-		if (horisontal) {
+				newVec = newVec.normalized;
 
-			Vector2 directed = new Vector2(current.x, current.y * -1);
-			Vector2 changed = new Vector2(directed.x + randPositive, directed.y + randNegative);
-			oldvec = changed;
-			return changed.normalized;
-		}
-		else {
-			Vector2 directed = new Vector2(current.x * -1, current.y);
+				newVec = newVec + new Vector2(newVec.x, -Random.value);
+				newVec = newVec.normalized;
 
+				newVec = newVec * mag;
+				return newVec;
+			}
+			case "RightWall": {
+				Vector2 newVec = new Vector2(-current.x, current.y);
+				float mag = newVec.magnitude;
 
-			Vector2 changed = new Vector2(directed.x + randNegative, directed.y + randPositive);
-			oldvec = changed;
-			return changed.normalized;
+				newVec = newVec.normalized;
+
+				newVec = newVec + new Vector2(-Random.value, newVec.y);
+				newVec = newVec.normalized;
+
+				newVec = newVec * mag;
+				return newVec;
+			}
+			case "BottomWall": {
+				Vector2 newVec = new Vector2(current.x, -current.y);
+				float mag = newVec.magnitude;
+
+				newVec = newVec.normalized;
+
+				newVec = newVec + new Vector2(newVec.x, Random.value);
+				newVec = newVec.normalized;
+
+				newVec = newVec * mag;
+				return newVec;
+			}
+			case "LeftWall": {
+				Vector2 newVec = new Vector2(-current.x, current.y);
+				float mag = newVec.magnitude;
+
+				newVec = newVec.normalized;
+
+				newVec = newVec + new Vector2(Random.value, newVec.y);
+				newVec = newVec.normalized;
+
+				newVec = newVec * mag;
+				return newVec;
+			}
+			default: {
+				return Vector2.zero;
+			}
 		}
 	}
 	//
@@ -431,38 +506,16 @@ public class BossBehaviour : MonoBehaviour {
 
 	//Dodge KillerBlocks Attack Code
 	public IEnumerator ChangeDir() {
-		while (isAttacking) {
-			if (initialDealy) {
-				yield return new WaitForSeconds(3);
-				Attack3 = true;
-				initialDealy = false;
-			}
-			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(2, 5));
-			bool headingRight;
-			if (anim.GetFloat("Speed") > 0) {
-				headingRight = true;
-			}
-			else {
-				headingRight = false;
-			}
 
-			if (doOnceL || doOnceR) {
-				int r = Random.Range(0, 2);
-				if (r == 0) {
-					if (headingRight) {
-						anim.SetTrigger("RDist");
-						changes++;
-					}
-				}
-				else {
-					if (!headingRight) {
-						anim.SetTrigger("LDist");
-						changes++;
-					}
-				}
-			}
-
-
+		if (initialDealy) {
+			yield return new WaitForSeconds(3);
+			Attack3 = true;
+			initialDealy = false;
+			anim.Play("SpeedUp");
+		}
+		while (Attack3) {
+			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 5));
+			preformChange = true;
 		}
 	}
 	//
@@ -470,15 +523,16 @@ public class BossBehaviour : MonoBehaviour {
 
 	//Brimstone like Attack
 	public IEnumerator VariedRotation() {
+		rotationDelta = 0.1f;
 		while (true) {
-			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(2, 4));
+			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 4));
 			int choice = UnityEngine.Random.Range(0, 2);
 
 			if (choice == 0) {
-				rotationDelta = UnityEngine.Random.Range(0.02f, 0.5f);
+				rotationDelta = UnityEngine.Random.Range(0.1f, 0.4f);
 			}
 			else {
-				rotationDelta = UnityEngine.Random.Range(-0.5f, -0.02f);
+				rotationDelta = UnityEngine.Random.Range(-0.4f, -0.1f);
 			}
 		}
 	}
@@ -494,57 +548,64 @@ public class BossBehaviour : MonoBehaviour {
 		float spawningPhaseTime = 2f;
 		bool GoingDown = true;
 		float shotdelay = 0.05f;
-		
+
 
 		print(true);
 		for (int i = 0; i < 5; i++) {
 
 			int shots = (int)(spawningPhaseTime / shotdelay);
-			yield return new WaitForSecondsRealtime(PipePeriod);
 			float holeMid = Random.Range(-BG.sizeDelta.y / 2 + 20, BG.sizeDelta.y / 2 - 20);
+
+			yield return new WaitForSeconds(PipePeriod);
+
+			
 			if (GoingDown == true) {
-				Atk = StartCoroutine(LerpPos(gameObject, new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2)-10, BG.transform.position.y + (BG.sizeDelta.y / 2), 0), new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y - (BG.sizeDelta.y / 2), 0), false));
+				Atk = StartCoroutine(LerpPos(gameObject, new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y + (BG.sizeDelta.y / 2), 0), new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y - (BG.sizeDelta.y / 2), 0), false));
 				GoingDown = false;
 			}
 			else {
 				Atk = StartCoroutine(LerpPos(gameObject, new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y - (BG.sizeDelta.y / 2), 0), new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y + (BG.sizeDelta.y / 2), 0), false));
 				GoingDown = true;
 			}
+
 			float timeOnStart = Time.timeSinceLevelLoad;
 			while (shots > 0) {
+
+				float change = arriveTime - (Time.timeSinceLevelLoad - timeOnStart);
+
 				if (transform.position.y > holeMid + 12 || transform.position.y < holeMid - 12) {
 					GameObject shot = poolOfEnemyProjectiles.GetPool();
-					shot.GetComponent<Projectile>().timeTillDestruct = arriveTime + 0.5f;
-					shot.GetComponent<Projectile>().DisableCollisions = true;
+					Projectile script = shot.GetComponent<Projectile>();
+					Projectile.projectileSpeed = distToPly / change;
+
+					script.DisableCollisions = true;
 					shot.transform.position = transform.position;
 					shot.transform.rotation = Quaternion.Euler(0, 0, 270);
-					Projectile.projectileSpeed = distToPly / (arriveTime - (Time.timeSinceLevelLoad - timeOnStart));
 					shot.SetActive(true);
+					script.StartCoroutine(script.SelfDestruct(change + 1.5f));
 				}
 				shots -= 1;
-				yield return new WaitForSecondsRealtime(shotdelay);
+				yield return new WaitForSeconds(shotdelay);
 
 			}
 
 		}
-		yield return new WaitForSecondsRealtime(arriveTime);
+		yield return new WaitForSeconds(arriveTime);
 		doneBouncing = true;
 	}
 	//
 
 	//Bouce off walls
-	private void OnTriggerEnter2D(Collider2D col) {
+	private void OnCollisionEnter2D(Collision2D col) {
 		if (isAttacking == true && Attack1) {
 
-			if (col.name == "Wall_Horizontal" || col.name == "TopWall") {
-				calculatedVec = AddABitOfRandomness(oldvec, true);
-				rigid.velocity = calculatedVec * speed;
-
+			if (col.transform.name == "BottomWall" || col.transform.name == "TopWall") {
+				calculatedVec = AddABitOfRandomness(col.relativeVelocity, col.transform.name);
+				rigid.velocity = calculatedVec;
 			}
-			if (col.name == "Wall_Vertical") {
-				calculatedVec = AddABitOfRandomness(oldvec, false);
-				rigid.velocity = calculatedVec * speed;
-
+			if (col.transform.name == "LeftWall" || col.transform.name == "RightWall") {
+				calculatedVec = AddABitOfRandomness(col.relativeVelocity, col.transform.name);
+				rigid.velocity = calculatedVec;
 			}
 		}
 	}
@@ -563,93 +624,119 @@ public class BossBehaviour : MonoBehaviour {
 
 		print(obj.name);
 		for (float t = 0; t < 2; t += Time.deltaTime * 0.5f) {
-			float newX;
-			float newY;
-			float newPX;
-			float newPY;
-
-			if (smooth) {
-				newX = Mathf.SmoothStep(sX, eX, t);
-				newY = Mathf.SmoothStep(sY, eY, t);
-				newPX = Mathf.SmoothStep(pX, eX, t);
-				newPY = Mathf.SmoothStep(pY, eY, t);
+			if (Time.timeScale == 0) {
+				yield return new WaitForSeconds(0.1f);
 			}
 			else {
-				newX = Mathf.Lerp(sX, eX, t);
-				newY = Mathf.Lerp(sY, eY, t);
-				newPX = Mathf.Lerp(pX, eX, t);
-				newPY = Mathf.Lerp(pY, eY, t);
-			}
-			obj.transform.position = new Vector3(newX, newY, start.z);
-			if (obj.name == "PositioningCage") {
-				player.transform.position = new Vector3(newPX, newPY, end.z);
-			}
-			if (hp.stopEverything) {
-				yield break;
-			}
-			if (t < 1) {
-				yield return null;
-			}
-			if (t > 1) {
-				if (moveCage) {
-					positioningCage.GetComponent<CageScript>().MoveUp();
-					StopCoroutine(Positioning);
-					break;
+				float newX;
+				float newY;
+				float newPX;
+				float newPY;
+
+				if (smooth) {
+					newX = Mathf.SmoothStep(sX, eX, t);
+					newY = Mathf.SmoothStep(sY, eY, t);
+					newPX = Mathf.SmoothStep(pX, eX, t);
+					newPY = Mathf.SmoothStep(pY, eY, t);
 				}
 				else {
-					StopCoroutine(Atk);
-					break;
+					newX = Mathf.Lerp(sX, eX, t);
+					newY = Mathf.Lerp(sY, eY, t);
+					newPX = Mathf.Lerp(pX, eX, t);
+					newPY = Mathf.Lerp(pY, eY, t);
+				}
+				if (obj != null) {
+					obj.transform.position = new Vector3(newX, newY, start.z);
+
+					if (obj.name == "PositioningCage") {
+						player.transform.position = new Vector3(newPX, newPY, end.z);
+					}
+					if (hp.stopEverything) {
+						yield break;
+					}
+					if (t < 1) {
+						yield return null;
+					}
+					if (t > 1) {
+						if (moveCage) {
+							positioningCage.GetComponent<CageScript>().MoveUp();
+							StopCoroutine(Positioning);
+							break;
+						}
+						else {
+							StopCoroutine(Atk);
+							break;
+						}
+					}
 				}
 			}
 		}
 
 	}
+	//
 
+	//Loop
 	private void Update() {
 
-		if (Attack1 == true) {
-			rigid.velocity = calculatedVec * speed;
-		}
-
 		if (Attack3 == true) {
-			rigid.velocity = Vector2.right * anim.GetFloat("Speed");
+			rigid.velocity = new Vector2(1, 0) * anim.GetFloat("Speed");
 			RaycastHit2D[] right = Physics2D.RaycastAll(transform.position, transform.rotation * Vector3.right, BG.sizeDelta.x * 2);
 			RaycastHit2D[] left = Physics2D.RaycastAll(transform.position, transform.rotation * Vector3.left, BG.sizeDelta.x * 2);
 
 			foreach (RaycastHit2D hit in right) {
 				if (hit.transform.tag == "BossWall") {
-					float dist = Vector3.Distance(transform.position, hit.point);
+					distR = Vector3.Distance(transform.position, hit.point);
+					if (distR < changeThreshold && dontChangeR == false) {
+						dontChangeR = true;
+						anim.SetTrigger("Right");
+						changes++;
 
-					if (dist > changeDirComparison + 10) {
-						doOnceR = true;
 					}
-					if (dist < changeDirComparison) {
-						if (doOnceR) {
-							anim.SetTrigger("RDist");
-							changes++;
-							doOnceR = false;
-						}
+					else if (distR > changeThreshold + 10) {
+						dontChangeR = false;
 					}
 				}
 			}
 			foreach (RaycastHit2D hit in left) {
 				if (hit.transform.tag == "BossWall") {
-					float dist = Vector3.Distance(transform.position, hit.point);
-
-					if (dist > changeDirComparison + 10) {
-						doOnceL = true;
+					distL = Vector3.Distance(transform.position, hit.point);
+					if (distL < changeThreshold && dontChangeL == false) {
+						dontChangeL = true;
+						anim.SetTrigger("Left");
+						changes++;
 					}
-					if (dist < changeDirComparison) {
-						if (doOnceL) {
-							anim.SetTrigger("LDist");
-							changes++;
-							doOnceL = false;
-						}
+					else if (distL > changeThreshold + 10) {
+						dontChangeL = false;
+					}
+				}
+			}
+			if (!dontChangeR && !dontChangeL && preformChange == true) {
+				preformChange = false;
+
+				if (anim.GetFloat("Speed") > 0) {
+					headingRight = true;
+				}
+				else {
+					headingRight = false;
+				}
+
+				int r = Random.Range(0, 2);
+				if (r == 0) {
+					if (headingRight) {
+						print("Would Change TOLEFT");
+						anim.SetTrigger("Right");
+						changes++;
+					}
+				}
+				else {
+					if (!headingRight) {
+						print("Would Change TORIGHT");
+						anim.SetTrigger("Left");
+						changes++;
 					}
 				}
 			}
 		}
-
 
 		if (Attack4 == true) {
 			z += rotationDelta;
@@ -720,4 +807,5 @@ public class BossBehaviour : MonoBehaviour {
 			}
 		}
 	}
+	//
 }

@@ -9,10 +9,7 @@ public class BossHealth : MonoBehaviour {
 	public Slider theSlider;
 	public PlayerAttack atk;
 
-	public bool invincible = false;
-	bool stop = false;
-
-	private Color32 inv;
+	
 
 	public GameObject ShieldT;
 	public GameObject ShieldR;
@@ -24,38 +21,25 @@ public class BossHealth : MonoBehaviour {
 	private bool r = false;
 	private bool b = false;
 	private bool l = false;
+	private bool once = true;
 
+	bool stop = false;
 
 
 	void Start() {
-		inv = new Color32(255, 255, 255, 100);
 		theSlider = GameObject.Find("BossHealth").GetComponent<Slider>();
 		atk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack>();
 		theSlider.gameObject.SetActive(true);
 		theSlider.value = 5;
 	}
 
-
-
-	void Update() {
-		if (invincible) {
-			sprite.color = inv;
-
-		}
-		else {
-			sprite.color = new Color32(255, 255, 255, 255);
-
-		}
-	}
-
 	public void Collided(Collision2D it, GameObject with) {
 
-		if (it.transform.name == "Bullet" && !invincible) {
+		if (it.transform.name == "Bullet") {
 			print("With " + with.name);
 			it.gameObject.SetActive(false);
 			theSlider.value--;
-			invincible = true;
-			StartCoroutine(RaiseShields(with.name));
+			RaiseShields(with.name);
 			}
 		if (theSlider.value == 0 && !stop) {
 			StartCoroutine(Death());
@@ -63,37 +47,39 @@ public class BossHealth : MonoBehaviour {
 		}
 
 	}
-
-	public IEnumerator RaiseShields(string where) {
-
-
-		yield return new WaitUntil(() => invincible == false);
-
-		if(t && r && b && l) {
-			Canvas_Renderer.script.infoRenderer("His shields are up ... but we got a bomb! Switch to it in Attack mode by pressing Right M.B.");
+	public void CheckShields() {
+		print(t + " " + r + " " + b + " " + l);
+		if (t && r && b && l && once) {
+			Canvas_Renderer.script.infoRenderer("His shields are up ... but we got a bomb!\n " +
+												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
+												"Pressing it again will switch your ammo back to bullets");
+			once = false;
 		}
+	}
+
+	public void RaiseShields(string where) {
 
 		switch (where) {
-			case "Top":
+			case "TopHitbox":
 			ShieldT.SetActive(true);
 			t = true;
-			yield break;
+			break;
 
-			case "Right":
+			case "RightHitbox":
 			ShieldR.SetActive(true);
 			r = true;
-			yield break;
+			break;
 
 
-			case "Bottom":
+			case "BottomHitbox":
 			ShieldB.SetActive(true);
 			b = true;
-			yield break;
+			break;
 
-			case "Left":
+			case "LeftHitbox":
 			ShieldL.SetActive(true);
 			l = true;
-			yield break;
+			break;
 		}
 	}
 
@@ -110,24 +96,15 @@ public class BossHealth : MonoBehaviour {
 		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		boss.transform.position = new Vector3(0, 0, 10);
 		
-		Canvas_Renderer.script.infoRenderer("You did it!");
-		yield return new WaitForSecondsRealtime(5);
-		print("Test2");
-		Canvas_Renderer.script.infoRenderer("Your time has been saved to the leadreboard.");
+		Canvas_Renderer.script.infoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
-		yield return new WaitForSecondsRealtime(5);
-		print("Test3");
-		Canvas_Renderer.script.infoRenderer("Thank you for playing the game.");
-		yield return new WaitForSecondsRealtime(5);
-		GameObject.Find("TransitionCam").GetComponent<Animator>().Play("CamTransition");
+		timer.run = false;
+		AudioHandler.script.MusicTransition(null);
+		yield return new WaitForSeconds(5);
+		GameObject.Find("TransitionBlack").GetComponent<Animator>().Play("CamTransition");
 
-		print("Test5");
-		yield return new WaitForSecondsRealtime(2);
+		yield return new WaitForSeconds(2);
 		SceneManager.LoadScene(3);
-		
 	}
-
-
-
 }

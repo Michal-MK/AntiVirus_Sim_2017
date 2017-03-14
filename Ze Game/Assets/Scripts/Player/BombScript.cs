@@ -28,7 +28,7 @@ public class BombScript : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator After() {
+	private IEnumerator After() {
 		yield return new WaitForSeconds(1.5f);
 		exp.GetComponent<CircleCollider2D>().enabled = true;
 		yield return new WaitForSeconds(1);

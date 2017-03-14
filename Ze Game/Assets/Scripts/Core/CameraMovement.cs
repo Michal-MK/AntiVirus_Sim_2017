@@ -27,6 +27,8 @@ public class CameraMovement : MonoBehaviour {
 	public bool inBossRoom = false;
 	public bool inMaze = false;
 
+	public static bool doneMoving = true;
+
 	public float defaultCamSize = 15;
 
 	void Start() {
@@ -277,6 +279,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	public IEnumerator LerpSize(float startSize, float finalSize, float smoothness, Vector3 pos = default(Vector3)) {
+		doneMoving = false;
 		if (pos != default(Vector3)) {
 			print(pos);
 			gameObject.transform.position = pos;
@@ -286,11 +289,11 @@ public class CameraMovement : MonoBehaviour {
 
 			float newSize = Mathf.SmoothStep(startSize, finalSize, t);
 			Camera.main.orthographicSize = newSize;
-			print(t);
 			if (t < 1) {
 				yield return null;
 			}
 			else {
+				doneMoving = true;
 				break;
 			}
 		}

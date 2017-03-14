@@ -3,99 +3,94 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Canvas_Renderer : MonoBehaviour {
-	
-	public Text info_F;
+
 	public Text info_S;
-	public Text SpikeC;
-	public Animator Spikec;
-	public Text CoinC;
-	public Animator Coinc;
-	public static Canvas_Renderer script;
-	Animator Front;
 	Animator Slide;
-	string infotext;
 
-	bool st = true;
-	bool isRunning = false;
 
-	void Awake(){
+	public Animator InfoPanel;
+	public Image InfoPanelImg;
+	public Text InfoPanelText;
+
+	public Animator Spikec;
+	public Animator Coinc;
+
+	public Text CoinC;
+	public Text SpikeC;
+
+	public GameObject[] directions = new GameObject[4];
+
+	public static Canvas_Renderer script;
+
+
+	private bool first = true;
+	public bool isRunning = false;
+	private string tempDisplayedText;
+	private Color32 defaultColor;
+	void Awake() {
 		script = this;
 	}
 
 	private void Start() {
-		Front = info_F.gameObject.GetComponent<Animator>();
 		Slide = info_S.gameObject.GetComponent<Animator>();
+		defaultColor = InfoPanelImg.color;
 	}
-	
-	public void infoRenderer(string text) {
-		info_F.text = text;
-		infotext = text;
-		if (isRunning == false) {
-			StartCoroutine("MoveWithText");
+
+	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? textColor = null) {
+		print(displayedTextSide);
+		if (textColor != null) {
+			InfoPanelImg.color = (Color32)textColor;
 		}
 		else {
-			return;
+			InfoPanelImg.color = defaultColor;
+		}
+
+		tempDisplayedText = displayedTextSide;
+		if (displayedTextPanel != null) {
+			InfoPanelText.text = displayedTextPanel;
+			InfoPanel.SetTrigger("Down");
+			isRunning = true;
+			Time.timeScale = 0;
+		}
+		else if (displayedTextPanel == null && displayedTextSide != null) {
+			StartCoroutine(SlideInfo());
 		}
 	}
-	
-	public IEnumerator MoveWithText() {
-		isRunning = true;
-		yield return new WaitForSecondsRealtime(0.2f);
-		if (st != true) {
-			Slide.SetTrigger("Slideout");
+
+	private void Update() {
+		if (isRunning && Input.GetKeyDown(KeyCode.Return)) {
+			if (first) {
+				AudioHandler.script.MusicTransition(AudioHandler.script.room1);
+				first = false;
+			}
+			InfoPanel.SetTrigger("Up");
+			isRunning = false;
+			Time.timeScale = 1;
+			StartCoroutine(SlideInfo());
 		}
-		yield return new WaitForSecondsRealtime(1.1f);
-		Front.Play("Appear");
-		yield return new WaitForSecondsRealtime(2.1f);
-		info_S.text = infotext;
-		Slide.Play("SlideIN");
-		yield return new WaitForSecondsRealtime(0.75f);
-		st = false;
-		isRunning = false;
-		StopCoroutine("MoveWithText");
 	}
-
-
-
-
-
-
-	public GameObject up;
-	public GameObject down;
-	public GameObject left;
-	public GameObject right;
+	private IEnumerator SlideInfo() {
+		if (!info_S.text.StartsWith("DEFAULT")) {
+			Slide.SetTrigger("SlideOut");
+		}
+		yield return new WaitForSeconds(1);
+		info_S.text = tempDisplayedText;
+		Slide.SetTrigger("SlideIn");
+	}
 
 
 	public void DisplayDirection(int i) {
-		if(i == 1) {
-			StartCoroutine("Pulse", right);
-		}
-		if (i == 2) {
-			StartCoroutine("Pulse", up);
-		}
-		if (i == 3) {
-			StartCoroutine("Pulse", down);
-		}
-		if (i == 4) {
-			StartCoroutine("Pulse", right);
-		}
-
+		StartCoroutine("Pulse", directions[i]);
 	}
 
 
 	public IEnumerator Pulse(GameObject info) {
-		info.SetActive(true);
-		yield return new WaitForSecondsRealtime(1);
-		info.SetActive(false);
-		yield return new WaitForSecondsRealtime(1);
-		info.SetActive(true);
-		yield return new WaitForSecondsRealtime(1);
-		info.SetActive(false);
-		yield return new WaitForSecondsRealtime(1);
-		info.SetActive(true);
-		yield return new WaitForSecondsRealtime(1);
-		info.SetActive(false);
-
+		for (int i = 0; i < 3; i++) {
+			info.SetActive(true);
+			yield return new WaitForSecondsRealtime(1);
+			info.SetActive(false);
+			yield return new WaitForSecondsRealtime(1);
+		}
 		StopCoroutine("Pulse");
 	}
 
@@ -110,7 +105,7 @@ public class Canvas_Renderer : MonoBehaviour {
 				CoinC.text = CoinC.text + " Completed!";
 			}
 		}
-		if(name == "Spike") {
+		if (name == "Spike") {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
 	}

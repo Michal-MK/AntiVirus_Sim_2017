@@ -9,7 +9,7 @@ public class Avoidance : MonoBehaviour {
 	public GameObject door1;
 	public EnemySpawner spawner;
 	public Spike spike;
-	float avoidDuration = 35;
+	float avoidDuration = 60;
 	public TurretAttack turr;
 
 	private void Update() {
@@ -24,7 +24,11 @@ public class Avoidance : MonoBehaviour {
 		spawner.spawnAvoidance();
 		StartCoroutine("hold");
 		Projectile.spawnedByAvoidance = true;
-		Canvas_Renderer.script.infoRenderer("Survive! (I recommend zooming out by scrolling the mouse.)");
+		Projectile.spawnedByKillerWall = false;
+		AudioHandler.script.MusicTransition(AudioHandler.script.avoidance);
+		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
+		Canvas_Renderer.script.infoRenderer("Survive!\n" +
+											"(I recommend zooming out using the mouse wheel.)" , "Highly experimental! Caution advised.");
 
 	}
 
@@ -34,7 +38,8 @@ public class Avoidance : MonoBehaviour {
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
-		Canvas_Renderer.script.infoRenderer("Uff... it's over. Get the Spike and go to the next room.");
+		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
+		Canvas_Renderer.script.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Hint - This may be unexpected.");
 		StopAllCoroutines();
 
 

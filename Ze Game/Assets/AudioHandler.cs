@@ -6,52 +6,63 @@ public class AudioHandler : MonoBehaviour {
 
 	public AudioSource sound;
 
-	public AudioClip menu;
 	public AudioClip room1;
 	public AudioClip room2;
+	public AudioClip avoidance;
 	public AudioClip maze;
 	public AudioClip boss;
-	
+	public AudioClip gameOver;
+
 	public static AudioHandler script;
+
+	private bool lastClip = false;
 
 	private void Awake() {
 		script = this;
 	}
 
-	// Use this for initialization
-	void Start() {
-		sound.clip = room1;
-		sound.Play();
-	}
-
 	public void MusicTransition(AudioClip newClip) {
-		StartCoroutine(StopMusic(newClip));
+		if (newClip != null) {
+			StartCoroutine(Transition(newClip));
+		}
+		else {
+			print("A");
+			if (!lastClip) {
+				StartCoroutine(StopMusic());
+				lastClip = true;
+			}
+		}
 	}
-
 	#region MusicTransition Code
-	private IEnumerator StopMusic(AudioClip clip) {
+	private IEnumerator Transition(AudioClip clip) {
+		print(clip);
 		if (sound.clip == null) {
 			sound.clip = clip;
 			StartCoroutine(StartMusic());
-			StopCoroutine(StopMusic(clip));
+			StopCoroutine(Transition(clip));
 		}
+
 		else {
 			for (float f = 1; f >= -1; f -= Time.deltaTime * 0.5f) {
 
 				if (f >= 0) {
 					sound.volume = f;
+					print(f);
 					yield return null;
 				}
 				else {
 					sound.volume = 0;
 					sound.Stop();
-					sound.clip = clip;
-					StartCoroutine(StartMusic());
+					if (clip != null) {
+						sound.clip = clip;
+						StartCoroutine(StartMusic());
+					}
 					break;
 				}
 			}
 		}
 	}
+
 	private IEnumerator StartMusic() {
 		sound.volume = 0;
 		sound.Play();
@@ -68,5 +79,18 @@ public class AudioHandler : MonoBehaviour {
 			}
 		}
 	}
-	#endregion
+
+	private IEnumerator StopMusic() {
+		for (float f = 1; f >= -1; f -= Time.deltaTime * 0.5f) {
+			if (f > 0) {
+				sound.volume = f;
+				yield return null;
+			}
+			else {
+				sound.volume = 0;
+				break;
+			}
+			#endregion
+		}
+	}
 }

@@ -180,6 +180,8 @@ MonoBehaviour:
   selfRender: {fileID: 212000011963600568}
   Solid: {fileID: 21300000, guid: 08da859c6cd1d0f48a81c2a3de6e7f6f, type: 3}
   Trigger: {fileID: 21300000, guid: cbeed01d3d2f6dc4f82d5ed24542963c, type: 3}
+  Icicle: {fileID: 21300000, guid: f618a4f06eb18fc42a72b1f29e1acdf1, type: 3}
+  Cracked: {fileID: 21300000, guid: ff70d301f26e1ea43b7372c5fcbe4761, type: 3}
   DisableCollisions: 0
   byBoss: 0
   byKillerWall: 0

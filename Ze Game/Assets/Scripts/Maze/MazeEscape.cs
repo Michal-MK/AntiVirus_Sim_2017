@@ -3,23 +3,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MazeEscape : MonoBehaviour {
-	public Animator anim;
+	public Animator transitionBlack;
 	public GameObject player;
 	public RectTransform BG;
 	public Spike spike;
 	public Zoom zoom;
 	public MazeEntrance entrance;
 
-	public GameObject[] walls = new GameObject[3];
+	public GameObject wall;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if(collision.tag == "Player") {
+		if (collision.tag == "Player") {
 			StartCoroutine(FromMazeTrans());
 			AudioHandler.script.MusicTransition(AudioHandler.script.room1);
 		}
 	}
 	public IEnumerator FromMazeTrans() {
-		anim.Play("CamTransition");
+		transitionBlack.Play("CamTransition");
 		yield return new WaitForSeconds(2.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		zoom.canZoom = true;
@@ -35,27 +35,27 @@ public class MazeEscape : MonoBehaviour {
 
 	private IEnumerator FadeWalls() {
 
-		Image one = walls[0].GetComponent<Image>();
-		Image two = walls[1].GetComponent<Image>();
-		Image three = walls[2].GetComponent<Image>();
+		Image one = wall.GetComponent<Image>();
+
 		Color32 newColor;
 
 		for (float f = 255; f >= -1; f -= Time.deltaTime * 40) {
-			newColor = new Color32(255, 255, 255, (byte)f);
-
-			one.color = newColor;
-			two.color = newColor;
-			three.color = newColor;
-
-			if(f > 0) {
+			if(Time.timeScale != 1) {
+				yield return new WaitForSeconds(0.1f);
 				yield return null;
 			}
-			else if(f <= 0) {
-				foreach(GameObject obj in walls) {
-					obj.SetActive(false);
-				}
+			newColor = new Color32(255, 255, 255, (byte)f);
+			one.color = newColor;
+
+			if (f > 0) {
+				//print(f);
+				yield return null;
+			}
+			else if (f <= 0) {
+				wall.SetActive(false);
 				break;
 			}
+			
 		}
 	}
 }

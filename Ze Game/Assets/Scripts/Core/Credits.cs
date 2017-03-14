@@ -27,7 +27,7 @@ public class Credits : MonoBehaviour {
 	void Update() {
 		float x = gameObject.transform.position.x;
 		float y = gameObject.transform.position.y;
-		y += 0.5f;
+		y += 0.8f;
 		gameObject.transform.position = new Vector3(x, y, 0);
 		if (y > 0) {
 			SceneManager.LoadScene(0);

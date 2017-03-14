@@ -78,7 +78,7 @@ public class TurretAttack : MonoBehaviour {
 			spawnRate = currSpawnRate;
 
 			if (PlayerPrefs.GetInt("difficulty") <= 2) {
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 1; i++) {
 
 					GameObject bullet = pooler.GetPool();
 					Vector3 rnd = RandomVec();
@@ -90,7 +90,7 @@ public class TurretAttack : MonoBehaviour {
 			}
 
 			if (PlayerPrefs.GetInt("difficulty") >= 3) {
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < 2; i++) {
 
 					GameObject bullet = pooler.GetPool();
 					Vector3 rnd = RandomVec();
