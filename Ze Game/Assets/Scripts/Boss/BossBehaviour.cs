@@ -140,8 +140,16 @@ public class BossBehaviour : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 		Canvas_Renderer.script.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
+
+		for (int i = 0; i < spikeHitboxes.Length; i++) {
+			spikeHitboxes[i].enabled = false;
+		}
+		selfRender.sprite = Invincible;
+
+		StartCoroutine(Attacks(ChooseAttack()));
+
 		//StartCoroutine(Attacks(5));
-		StartCoroutine(InterPhase());
+
 	}
 
 	private IEnumerator InterPhase() {
@@ -401,7 +409,7 @@ public class BossBehaviour : MonoBehaviour {
 				player.GetComponent<M_Player>().ChangeFlappy(false);
 				isAttacking = false;
 				doneBouncing = false;
-				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 40, 0, 0)));
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 80, 0, 0)));
 				StartCoroutine(InterPhase());
 				StopCoroutine(Attacks(attack));
 

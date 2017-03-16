@@ -86,6 +86,7 @@ public class BossHealth : MonoBehaviour {
 
 
 	public IEnumerator Death() {
+
 		stopEverything = true;
 		GameObject boss = GameObject.Find("Boss");
 

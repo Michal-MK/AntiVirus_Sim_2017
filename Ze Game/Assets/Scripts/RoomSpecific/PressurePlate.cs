@@ -22,7 +22,7 @@ public class PressurePlate : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		if (col.tag == "Player" || col.name == "Block") {
+		if (/*col.tag == "Player" || */col.name == "Block") {
 			selfSprite.sprite = Active;
 			sound.clip = On;
 			sound.Play();
@@ -30,7 +30,7 @@ public class PressurePlate : MonoBehaviour {
 		}
 	}
 	void OnTriggerExit2D(Collider2D col){
-		if (col.tag == "Player" || col.name == "Block") {
+		if (/*col.tag == "Player" || */col.name == "Block") {
 			attempts++;
 			if(attempts == 1) {
 				Canvas_Renderer.script.infoRenderer("A projectile pushed the block off of the pressure plate...", "These projectiles sure are a nuisance");

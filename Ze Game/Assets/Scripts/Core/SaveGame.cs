@@ -2,150 +2,144 @@ using UnityEngine;
 
 public class SaveGame : MonoBehaviour {
 
-    public void saveScore() {
-        int difficulty = PlayerPrefs.GetInt("difficulty");
+	public void saveScore() {
+
+
+		int difficulty = PlayerPrefs.GetInt("difficulty");
+		float currentTime = Mathf.Round(timer.time * 100) * 0.01f;
+
+		print(difficulty + " " + currentTime);
+
 
 		if (difficulty == 0) {
 
+			int Min = 0;
+			int toMax = 9;
 
-			int q = 0;
-			int count = 10;
+			for (int i = toMax; i >= Min; i--) {
+				string current = i.ToString();
+				string oneInFrontOfCurrent = (i - 1).ToString();
 
+				if (PlayerPrefs.HasKey(current)) {
+					if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+						PlayerPrefs.SetFloat(current, currentTime);
+					}
+					if (i != Min) {
+						if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
 
-			PlayerPrefs.SetFloat(count.ToString(), Mathf.Round(timer.time * 1000) / 1000);
-            Debug.Log(PlayerPrefs.GetFloat("10"));
-            while (q < count) {
+							float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+							PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+							PlayerPrefs.SetFloat(current, previousTime);
+						}
+					}
+				}
+			}
+		}
 
-                if (PlayerPrefs.HasKey((count - 1).ToString()) == true) {
+		if (difficulty == 1) {
 
-                    if (PlayerPrefs.GetFloat((count - 1).ToString()) > PlayerPrefs.GetFloat(count.ToString())) {
-
-                        float temp = PlayerPrefs.GetFloat((count - 1).ToString());
-                        PlayerPrefs.SetFloat((count - 1).ToString(), PlayerPrefs.GetFloat(count.ToString()));
-                        PlayerPrefs.SetFloat(count.ToString(), temp);
-                    }
-                    count -= 1;
-                    PlayerPrefs.SetFloat("10", 500f);
-                }
-                else {
-                    count = -1;
-                }
-            }
-        }
-
-        if (difficulty == 1) {
-
-            int q = 11;
-            int count = 21;
+			int Min = 10;
+			int toMax = 19;
 
 
-            PlayerPrefs.SetFloat(count.ToString(), Mathf.Round(timer.time * 1000) / 1000);
+			for (int i = toMax; i >= Min; i--) {
+				string current = i.ToString();
+				string oneInFrontOfCurrent = (i - 1).ToString();
 
-            while (q < count) {
+				if (PlayerPrefs.HasKey(current)) {
+					if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+						PlayerPrefs.SetFloat(current, currentTime);
+					}
+					if (i != Min) {
+						if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
 
-                if (PlayerPrefs.HasKey((count - 1).ToString()) == true) {
+							float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+							PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+							PlayerPrefs.SetFloat(current, previousTime);
+						}
+					}
+				}
+			}
+		}
+	
+		if (difficulty == 2) {
 
-                    if (PlayerPrefs.GetFloat((count - 1).ToString()) > PlayerPrefs.GetFloat(count.ToString())) {
-
-                        float temp = PlayerPrefs.GetFloat((count - 1).ToString());
-                        PlayerPrefs.SetFloat((count - 1).ToString(), PlayerPrefs.GetFloat(count.ToString()));
-                        PlayerPrefs.SetFloat(count.ToString(), temp);
-                    }
-                    count -= 1;
-                    PlayerPrefs.SetFloat("21", 500f);
-                }
-                else {
-                    count = -1;
-                }
-            }
-
-        }
-
-        if (difficulty == 2) {
-
-            int q = 22;
-            int count = 32;
+			int Min = 20;
+			int toMax = 29;
 
 
-            PlayerPrefs.SetFloat(count.ToString(), Mathf.Round(timer.time * 1000) / 1000);
+			for (int i = toMax; i >= Min; i--) {
+				string current = i.ToString();
+				string oneInFrontOfCurrent = (i - 1).ToString();
 
-            while (q < count) {
+				if (PlayerPrefs.HasKey(current)) {
+					if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+						PlayerPrefs.SetFloat(current, currentTime);
+					}
+					if (i != Min) {
+						if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
 
-                if (PlayerPrefs.HasKey((count - 1).ToString()) == true) {
+							float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+							PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+							PlayerPrefs.SetFloat(current, previousTime);
+						}
+					}
+				}
+			}
+		}
+		
+		if (difficulty == 3) {
 
-                    if (PlayerPrefs.GetFloat((count - 1).ToString()) > PlayerPrefs.GetFloat(count.ToString())) {
-
-                        float temp = PlayerPrefs.GetFloat((count - 1).ToString());
-                        PlayerPrefs.SetFloat((count - 1).ToString(), PlayerPrefs.GetFloat(count.ToString()));
-                        PlayerPrefs.SetFloat(count.ToString(), temp);
-                    }
-                    count -= 1;
-                    PlayerPrefs.SetFloat("32", 500f);
-                }
-                else {
-                    count = -1;
-                }
-            }
-
-        }
-
-        if (difficulty == 3) {
-
-            int q = 33;
-            int count = 43;
+			int Min = 30;
+			int toMax = 39;
 
 
-            PlayerPrefs.SetFloat(count.ToString(), Mathf.Round(timer.time * 1000) / 1000);
+			for (int i = toMax; i >= Min; i--) {
+				string current = i.ToString();
+				string oneInFrontOfCurrent = (i - 1).ToString();
 
-            while (q < count) {
+				if (PlayerPrefs.HasKey(current)) {
+					if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+						PlayerPrefs.SetFloat(current, currentTime);
+					}
+					if (i != Min) {
+						if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
 
-                if (PlayerPrefs.HasKey((count - 1).ToString()) == true) {
+							float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+							PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+							PlayerPrefs.SetFloat(current, previousTime);
+						}
+					}
+				}
+			}
+		}
 
-                    if (PlayerPrefs.GetFloat((count - 1).ToString()) > PlayerPrefs.GetFloat(count.ToString())) {
+		if (difficulty == 4) {
 
-                        float temp = PlayerPrefs.GetFloat((count - 1).ToString());
-                        PlayerPrefs.SetFloat((count - 1).ToString(), PlayerPrefs.GetFloat(count.ToString()));
-                        PlayerPrefs.SetFloat(count.ToString(), temp);
-                    }
-                    count -= 1;
-                    PlayerPrefs.SetFloat("43", 500f);
-                }
-                else {
-                    count = -1;
-                }
-            }
-
-
-        }
-
-        if (difficulty == 4) {
-
-            int q = 44;
-            int count = 54;
+			int Min = 40;
+			int toMax = 49;
 
 
-            PlayerPrefs.SetFloat(count.ToString(), Mathf.Round(timer.time * 1000) / 1000);
+			for (int i = toMax; i >= Min; i--) {
+				string current = i.ToString();
+				string oneInFrontOfCurrent = (i - 1).ToString();
 
-            while (q < count) {
+				if (PlayerPrefs.HasKey(current)) {
+					if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+						PlayerPrefs.SetFloat(current, currentTime);
+					}
+					if (i != Min) {
+						if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
 
-                if (PlayerPrefs.HasKey((count - 1).ToString()) == true) {
-
-                    if (PlayerPrefs.GetFloat((count - 1).ToString()) > PlayerPrefs.GetFloat(count.ToString())) {
-
-                        float temp = PlayerPrefs.GetFloat((count - 1).ToString());
-                        PlayerPrefs.SetFloat((count - 1).ToString(), PlayerPrefs.GetFloat(count.ToString()));
-                        PlayerPrefs.SetFloat(count.ToString(), temp);
-                    }
-                    count -= 1;
-                    PlayerPrefs.SetFloat("54", 500f);
-                }
-                else {
-                    count = -1;
-                }
-            }
-        }
-    }
-
-
+							float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+							PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+							PlayerPrefs.SetFloat(current, previousTime);
+						}
+					}
+				}
+			}
+		}
+	}
 }
+
 

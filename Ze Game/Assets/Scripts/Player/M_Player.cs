@@ -12,6 +12,7 @@ public class M_Player : MonoBehaviour {
 	public GameObject restartButton;
 	public GameObject quitToMenu;
 	public GameObject TransitionCam;
+	public Animator GameOverImg;
 
 	public static float distanceToWall;
 	public static int gameProgression;
@@ -444,7 +445,8 @@ public class M_Player : MonoBehaviour {
 			if(col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
-			col.transform.parent = GameObject.Find("Collectibles").transform;
+			//col.transform.parent = GameObject.Find("Collectibles").transform;
+			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
 
@@ -506,6 +508,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	bool delEnemies = true;
+
 	public void GameOver() {
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
@@ -513,6 +516,7 @@ public class M_Player : MonoBehaviour {
 		Cursor.visible = true;
 		timer.run = false;
 		TransitionCam.GetComponent<Animator>().Play("DimCamera");
+		GameOverImg.SetTrigger("Appear");
 		AudioHandler.script.MusicTransition(null);
 		if (delEnemies) {
 			Destroy(GameObject.Find("Enemies").gameObject);

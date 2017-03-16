@@ -345,6 +345,7 @@ public class CameraMovement : MonoBehaviour {
 
 		player.position = new Vector3(bossX, bossY, 0);
 		gameObject.transform.position = new Vector3(bossX, bossY, -10);
+		cam.orthographicSize = defaultCamSize;
 
 	}
 }

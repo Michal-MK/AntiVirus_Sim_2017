@@ -44,16 +44,15 @@ public class EnemySpawner : MonoBehaviour {
 					float bgy = arrowtrapBG.sizeDelta.y / 2;
 					arrowtrap = new GameObject[4];
 
-					arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity);
-					arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity);
-					arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity);
-					arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity);
-					amIHere = true;
 
-					foreach (GameObject trap in arrowtrap) {
-						trap.name = "arrowtrap";
-						trap.transform.SetParent(enemy);
-					}
+					arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity, enemy);
+
+					arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity, enemy);
+
+					arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity, enemy);
+
+					arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity, enemy);
+
 					break;
 				}
 				else {
@@ -73,15 +72,14 @@ public class EnemySpawner : MonoBehaviour {
 		float bgy = arrowtrapBG.sizeDelta.y / 2;
 		arrowtrap = new GameObject[4];
 
-		arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity);
-		arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity);
-		arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity);
-		arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity);
+		arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity, enemy);
 
-		foreach (GameObject trap in arrowtrap) {
-			trap.name = "arrowtrap";
-			trap.transform.SetParent(enemy);
-		}
+		arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity, enemy);
+
+		arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity, enemy);
+
+		arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity, enemy);
+
 		StartCoroutine("hold");
 	}
 
@@ -207,9 +205,19 @@ public class EnemySpawner : MonoBehaviour {
 		ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
 		Projectile.spawnedByKillerWall = true;
 
-		if (PlayerPrefs.GetInt("difficulty") <= 1) {
+		if (PlayerPrefs.GetInt("difficulty") == 0) {
 			
 
+			for (int i = 0; i < 1; i++) {
+				GameObject wallShot = Icicle.GetPool();
+				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
+				wallShot.transform.position = KWProjectilePositions();
+				wallShot.transform.SetParent(enemy);
+				wallShot.SetActive(true);
+				KWProjectiles.Add(wallShot);
+			}
+		}
+		if (PlayerPrefs.GetInt("difficulty") == 1 || PlayerPrefs.GetInt("difficulty") == 2) {
 			for (int i = 0; i < 2; i++) {
 				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
@@ -219,7 +227,7 @@ public class EnemySpawner : MonoBehaviour {
 				KWProjectiles.Add(wallShot);
 			}
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 2) {
+		if (PlayerPrefs.GetInt("difficulty") == 3) {
 			for (int i = 0; i < 3; i++) {
 				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
@@ -229,7 +237,7 @@ public class EnemySpawner : MonoBehaviour {
 				KWProjectiles.Add(wallShot);
 			}
 		}
-		if (PlayerPrefs.GetInt("difficulty") >= 3) {
+		if (PlayerPrefs.GetInt("difficulty") == 4) {
 			for (int i = 0; i < 4; i++) {
 				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);

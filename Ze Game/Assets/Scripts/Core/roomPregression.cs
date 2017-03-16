@@ -13,8 +13,7 @@ public class roomPregression : MonoBehaviour {
 	SpriteRenderer ic_S;
 	SpriteRenderer ic_1a;
 	SpriteRenderer ic_1b;
-//	SpriteRenderer ic_2;
-//	SpriteRenderer ic_3;
+
 
 	void Awake(){
 		script = this;
@@ -22,14 +21,9 @@ public class roomPregression : MonoBehaviour {
 
 
 	void Start(){
-
 		ic_S = GameObject.Find ("Door_status_S").GetComponent <SpriteRenderer>();
 		ic_1a = GameObject.Find ("Door_status_1a").GetComponent <SpriteRenderer>();
 		ic_1b = GameObject.Find ("Door_status_1b").GetComponent <SpriteRenderer>();
-//		ic_2 = GameObject.Find ("Door_status_2").GetComponent <SpriteRenderer>();
-//		ic_3 = GameObject.Find ("Door_status_3").GetComponent <SpriteRenderer>();
-
-
 	}
 
 	public void Progress () {
@@ -75,11 +69,11 @@ public class roomPregression : MonoBehaviour {
 		Camera.main.GetComponent <CameraMovement>().raycastForRooms ();
 	}
 
-	public static void resetGame() {
-		M_Player.gameProgression = 0;
-		Spike.spikesCollected = 0;
-		Coins.coinsCollected = 0;
-		Projectile.projectileSpeed = 15;
+	//public static void resetGame() {
+	//	M_Player.gameProgression = 0;
+	//	Spike.spikesCollected = 0;
+	//	Coins.coinsCollected = 0;
+	//	Projectile.projectileSpeed = 15;
 
-	}
+	//}
 }

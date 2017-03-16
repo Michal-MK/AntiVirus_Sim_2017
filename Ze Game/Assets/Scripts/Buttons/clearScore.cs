@@ -5,15 +5,16 @@ public class clearScore : MonoBehaviour {
 
 	public void OnPress() {
 
-		foreach (GameObject delResults in dsp.results) {
-			if (delResults) {
-				delResults.SetActive(false);
+		foreach (Transform result in GameObject.Find("Results").GetComponentsInChildren<Transform>()) {
+			if (result.name != "Results") {
+				Destroy(result.gameObject);
 			}
 		}
 
-		for (int i = 0; i < 54; i++) {
-			PlayerPrefs.SetFloat(i.ToString(), 500f);
+		for (int i = 0; i < 50; i++) {
+			PlayerPrefs.SetFloat(i.ToString(), Mathf.Infinity);
 		}
+		dsp.CreateBoard();
 		dsp.Display();
 
 	}

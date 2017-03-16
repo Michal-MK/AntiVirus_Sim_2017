@@ -9,6 +9,8 @@ public class Maze : MonoBehaviour {
 	public GameObject Cell;
 	public GameObject WallI;
 	public GameObject WallT;
+	public GameObject WallIDmg;
+	public GameObject WallTDmg;
 	public GameObject player;
 	public CameraMovement cam;
 
@@ -53,11 +55,23 @@ public class Maze : MonoBehaviour {
 				cell.GetComponent<Cell>().selfX = i;
 				cell.GetComponent<Cell>().selfY = j;
 
-				GameObject wallR = Instantiate(WallI, cell.transform);
-				GameObject wallT = Instantiate(WallT, cell.transform);
-				GameObject wallL = Instantiate(WallI, cell.transform);
-				GameObject wallB = Instantiate(WallT, cell.transform);
+				GameObject wallR;
+				GameObject wallT;
+				GameObject wallL;
+				GameObject wallB;
 
+				if (PlayerPrefs.GetInt("difficulty") < 3) {
+					wallR = Instantiate(WallI, cell.transform);
+					wallT = Instantiate(WallT, cell.transform);
+					wallL = Instantiate(WallI, cell.transform);
+					wallB = Instantiate(WallT, cell.transform);
+				}
+				else {
+					wallR = Instantiate(WallIDmg, cell.transform);
+					wallT = Instantiate(WallTDmg, cell.transform);
+					wallL = Instantiate(WallIDmg, cell.transform);
+					wallB = Instantiate(WallTDmg, cell.transform);
+				}
 
 
 				wallT.name = "WallTop";
