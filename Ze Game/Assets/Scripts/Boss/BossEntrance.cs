@@ -12,10 +12,10 @@ public class BossEntrance : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 
-			Spike.spikesCollected = 5;
-			PlayerAttack.bullets = 5;
-			PlayerAttack.bombs = 1;
-			Coins.coinsCollected = 5;
+			//Spike.spikesCollected = 5;
+			//PlayerAttack.bullets = 5;
+			//PlayerAttack.bombs = 1;
+			//Coins.coinsCollected = 5;
 
 			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
 				AudioHandler.script.MusicTransition(AudioHandler.script.boss);
