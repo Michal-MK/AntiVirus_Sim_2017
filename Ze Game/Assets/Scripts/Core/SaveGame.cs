@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class SaveGame : MonoBehaviour {
 
+	private void Awake() {
+		Statics.saveGame = this;
+	}
+
 	public void saveScore() {
 
 
@@ -139,6 +143,9 @@ public class SaveGame : MonoBehaviour {
 				}
 			}
 		}
+	}
+	private void OnDestroy() {
+		Statics.saveGame = null;
 	}
 }
 

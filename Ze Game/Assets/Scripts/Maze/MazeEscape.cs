@@ -12,14 +12,18 @@ public class MazeEscape : MonoBehaviour {
 
 	public GameObject wall;
 
+	private void Awake() {
+		Statics.mazeEscape = this;
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 			StartCoroutine(FromMazeTrans());
-			AudioHandler.script.MusicTransition(AudioHandler.script.room1);
+			Statics.music.MusicTransition(Statics.music.room1);
 		}
 	}
 	public IEnumerator FromMazeTrans() {
-		transitionBlack.Play("CamTransition");
+		Statics.camFade.PlayTransition("Trans");
 		yield return new WaitForSeconds(2.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		zoom.canZoom = true;
@@ -57,5 +61,8 @@ public class MazeEscape : MonoBehaviour {
 			}
 			
 		}
+	}
+	private void OnDestroy() {
+		Statics.mazeEscape = null;
 	}
 }

@@ -18,6 +18,10 @@ public class TurretAttack : MonoBehaviour {
 	Transform enemy;
 	Coroutine ChangeFireRate;
 
+	private void Awake() {
+		Statics.turretAttack = this;
+	}
+
 	private void Start() {
 		pooler = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
 		enemy = GameObject.Find("Enemies").transform;
@@ -129,5 +133,6 @@ public class TurretAttack : MonoBehaviour {
 		StopAllCoroutines();
 		Projectile.spawnedByAvoidance = false;
 		turretSpawnRateStart = OriginSpawnRate;
+		Statics.turretAttack = null;
 	}
 }

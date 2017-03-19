@@ -31,6 +31,10 @@ public class CameraMovement : MonoBehaviour {
 
 	public float defaultCamSize = 15;
 
+	private void Awake() {
+		Statics.cameraMovement = this;
+	}
+
 	void Start() {
 
 
@@ -348,4 +352,8 @@ public class CameraMovement : MonoBehaviour {
 		cam.orthographicSize = defaultCamSize;
 
 	}
+	private void OnDestroy() {
+		Statics.cameraMovement = null;
+	}
 }
+

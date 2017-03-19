@@ -1,7 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class SwitchScene : MonoBehaviour {
+	private void Awake() {
+		Statics.switchScene = this;
+	}
 
 	public void SwitchTo(int Index){
 		
@@ -14,6 +18,10 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
+		Statics.camFade.anim.SetTrigger("UnDim");
 
+	}
+	private void OnDestroy() {
+		Statics.switchScene = null;
 	}
 }

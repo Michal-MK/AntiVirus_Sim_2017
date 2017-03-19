@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class difficultySlider : MonoBehaviour {
 
 	public Spike score;
-	public static float diff;
+	public float diff;
 	public static float difficulty = 1f;
 
 	void Update(){

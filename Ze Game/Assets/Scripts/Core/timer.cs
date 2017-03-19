@@ -8,21 +8,26 @@ public class timer : MonoBehaviour {
 	public CameraMovement cam;
 	Text Timer_text;
 
+	private void Awake() {
+		Statics.timerScript = this;
+	}
 	void Start() {
 
 		Timer_text = GameObject.Find("Timer_text").GetComponent<Text>();
 		Timer_text.gameObject.SetActive(false);
-		time = 0f;
+		if (!run) {
+			time = 0f;
+		}
 	}
 
 
 	void FixedUpdate() {
 
-		if (run == true) {
+		if (run == true && Coins.coinsCollected != 0) {
 
 			Timer_text.gameObject.SetActive(true);
 
-			if (attacking == false) {
+			if (!attacking) {
 				time = time + Time.fixedDeltaTime;
 			}
 			else {
@@ -31,5 +36,8 @@ public class timer : MonoBehaviour {
 
 			Timer_text.text = "Time:\t" + (Mathf.Round(time * 100) / 100).ToString("0.00") + " s";
 		}
+	}
+	private void OnDestroy() {
+		Statics.timerScript = null;
 	}
 }

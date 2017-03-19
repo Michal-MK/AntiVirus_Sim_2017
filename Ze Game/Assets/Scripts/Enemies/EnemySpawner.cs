@@ -20,8 +20,12 @@ public class EnemySpawner : MonoBehaviour {
 	public GameObject EPPooler;
 	public GameObject ICEPooler;
 
+	private void Awake() {
+		Statics.enemySpawner = this;
+	}
 
-	void Start() {
+
+	private void OnEnable() {
 		killerblockBG = GameObject.Find("Background_Start").GetComponent<RectTransform>();
 		arrowtrapBG = GameObject.Find("Background_room_2a").GetComponent<RectTransform>();
 		killerWallBG = GameObject.Find("Background_room_1").GetComponent<RectTransform>();
@@ -268,6 +272,10 @@ public class EnemySpawner : MonoBehaviour {
 
 	public Vector3 KWProjectilePositions() {
 		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
+	}
+
+	private void OnDestroy() {
+		Statics.enemySpawner = null;
 	}
 
 }

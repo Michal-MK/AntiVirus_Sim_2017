@@ -23,7 +23,7 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite spikeSprite;
 	public Sprite bombSprite;
 
-	private bool first = true;
+	public bool displayShootingInfo = true;
 
 	Color32 visible = new Color32(255, 255, 255, 255);
 
@@ -35,7 +35,9 @@ public class PlayerAttack : MonoBehaviour {
 
 	Image currentAmmo;
 
-
+	private void Awake() {
+		Statics.playerAttack = this;
+	}
 	private void Start() {
 		bombGUI = GameObject.Find("BombGUI").GetComponent<Image>();
 		bulletGUI = GameObject.Find("BulletGUI").GetComponent<Image>();
@@ -52,20 +54,20 @@ public class PlayerAttack : MonoBehaviour {
 			fireMode = !fireMode;
 			timer.attacking = !timer.attacking;
 
-			if (M_Player.gameProgression != 10 && first) {
+			if (M_Player.gameProgression != 10 && displayShootingInfo) {
 				if (bullets != 0) {
-					Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
+					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n "+
 														"The bullets are reusable so pick them up after you fire!\n" +
 														"Currently you have: " + bullets + " bullets.\n "+
 														"Don't lose them", null);
-					first = false;
+					displayShootingInfo = false;
 				}else {
-					Canvas_Renderer.script.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
+					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n "+
 														"The bullets are reusable so pick them up after you fire!\n " +
 														"Currently you have: " + bullets + " bullets.", null);
-					first = false;
+					displayShootingInfo = false;
 				}
 			}
 			visibleAlready = true;
@@ -81,24 +83,25 @@ public class PlayerAttack : MonoBehaviour {
 		if (Input.GetMouseButtonDown(1)) {
 			fireBullets = !fireBullets;
 		}
-
-		if (fireMode) {
-			if (Input.GetMouseButtonDown(0) && fireBullets) {
-				if (bullets >= 1) {
-					print("Bullets remaining: " + (bullets - 1));
-					FireSpike();
+		if (!Statics.pauseUnpause.isPaused) {
+			if (fireMode) {
+				if (Input.GetMouseButtonDown(0) && fireBullets) {
+					if (bullets >= 1) {
+						print("Bullets remaining: " + (bullets - 1));
+						FireSpike();
+					}
+					else {
+						print("Out of bullets!");
+					}
 				}
-				else {
-					print("Out of bullets!");
-				}
-			}
-			if(Input.GetMouseButtonDown(0) && !fireBullets) {
-				if(bombs > 0) {
-					FireBomb();
-					StartCoroutine(RefreshBombs());
-				}
-				else {
-					print("Out of bombs!");
+				if (Input.GetMouseButtonDown(0) && !fireBullets) {
+					if (bombs > 0) {
+						FireBomb();
+						StartCoroutine(RefreshBombs());
+					}
+					else {
+						print("Out of bombs!");
+					}
 				}
 			}
 		}
@@ -110,6 +113,18 @@ public class PlayerAttack : MonoBehaviour {
 
 		}
 	}
+
+	public void UpdateStats() {
+		currentAmmo.sprite = spikeSprite;
+		visibleAlready = true;
+		InfoAmmo.GetComponent<Text>().text = "Equiped:";
+		bulletGUI.color = visible;
+		currentAmmo.color = visible;
+		bulletCount.text = "x " + bullets;
+		bombGUI.color = visible;
+		bombCount.text = "x " + bombs;
+	}
+
 	public void FireSpike() {
 
 		Vector3 playpos = player.transform.position;
@@ -123,7 +138,7 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.name = "Bullet";
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
-		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
+		Statics.sound.PlayFX(Statics.sound.ArrowSound);
 
 		bullets--;
 		bulletCount.text = "x " + bullets;
@@ -145,7 +160,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public IEnumerator RefreshBombs() {
-		Canvas_Renderer.script.infoRenderer(null, "Wait for the bomb to regenerate!");
+		Statics.canvasRenderer.infoRenderer(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSecondsRealtime(8);
 		bombs++;
 		bombCount.text = "x " + bombs;
@@ -162,6 +177,9 @@ public class PlayerAttack : MonoBehaviour {
 			bombGUI.color = visible;
 			bombCount.text = "x " + bombs;
 		}
+	}
+	private void OnDestroy() {
+		Statics.playerAttack = null;
 	}
 }
 

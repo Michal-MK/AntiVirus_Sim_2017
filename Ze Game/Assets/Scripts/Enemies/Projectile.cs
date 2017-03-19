@@ -27,6 +27,7 @@ public class Projectile : MonoBehaviour {
 
 
 	void OnEnable() {
+		Statics.projectile = this;
 		if (!byBoss) {
 			if (spawnedByAvoidance) {
 				ready = true;
@@ -102,7 +103,6 @@ public class Projectile : MonoBehaviour {
 				gameObject.SetActive(false);
 			}
 			if(col.transform.name == "Block") {
-				print("AHA");
 				selfRender.sprite = Cracked;
 				gameObject.tag = "EnemyInactive";
 				StartCoroutine(SelfDestruct(2));
@@ -117,6 +117,7 @@ public class Projectile : MonoBehaviour {
 
 
 	void OnDisable(){
+		Statics.projectile = null;
 		ready = false;
 		byBoss = false;
 	}

@@ -14,7 +14,7 @@ public class restartOnClick : MonoBehaviour {
 		Projectile.projectileSpeed = 15;
 		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+		Statics.camFade.anim.SetTrigger("UnDim");
 	}
 
 }

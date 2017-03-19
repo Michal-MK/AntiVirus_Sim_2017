@@ -28,6 +28,9 @@ public class Maze : MonoBehaviour {
 	public GameObject[,] wallsB;
 	public GameObject[,] wallsL;
 
+	private void Awake() {
+		Statics.mazeScript = this;
+	}
 
 	void Start() {
 
@@ -506,5 +509,9 @@ public class Maze : MonoBehaviour {
 			run = false;
 			StopAllCoroutines();
 		}
+	}
+
+	private void OnDestroy() {
+		Statics.mazeScript = null;
 	}
 }

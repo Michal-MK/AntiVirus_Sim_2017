@@ -6,6 +6,7 @@ public class SpikeBullet : MonoBehaviour {
 	public Rigidbody2D rg;
 
 	private void OnEnable() {
+		Statics.spikeBullet = this;
 		rg.velocity = transform.rotation * Vector3.up * 30f;
 		StartCoroutine(StopBullet());
 	}
@@ -36,8 +37,7 @@ public class SpikeBullet : MonoBehaviour {
 		gameObject.SetActive(false);
 		StopAllCoroutines();
 	}
-	// Update is called once per frame
-	void Update () {
-		
+	private void OnDestroy() {
+		Statics.spikeBullet = null;
 	}
 }

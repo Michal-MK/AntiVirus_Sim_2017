@@ -25,6 +25,9 @@ public class BossHealth : MonoBehaviour {
 
 	bool stop = false;
 
+	private void Awake() {
+		Statics.bossHealth = this;
+	}
 
 	void Start() {
 		theSlider = GameObject.Find("BossHealth").GetComponent<Slider>();
@@ -50,7 +53,7 @@ public class BossHealth : MonoBehaviour {
 	public void CheckShields() {
 		print(t + " " + r + " " + b + " " + l);
 		if (t && r && b && l && once) {
-			Canvas_Renderer.script.infoRenderer("His shields are up ... but we got a bomb!\n " +
+			Statics.canvasRenderer.infoRenderer("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
@@ -97,15 +100,19 @@ public class BossHealth : MonoBehaviour {
 		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		boss.transform.position = new Vector3(0, 0, 10);
 		
-		Canvas_Renderer.script.infoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
+		Statics.canvasRenderer.infoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
 		timer.run = false;
-		AudioHandler.script.MusicTransition(null);
+		Statics.music.MusicTransition(null);
 		yield return new WaitForSeconds(5);
 		GameObject.Find("TransitionBlack").GetComponent<Animator>().Play("CamTransition");
 
 		yield return new WaitForSeconds(2);
 		SceneManager.LoadScene(3);
+	}
+
+	private void OnDestroy() {
+		Statics.bossHealth = null;
 	}
 }

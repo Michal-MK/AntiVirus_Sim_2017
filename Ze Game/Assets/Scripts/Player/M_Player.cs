@@ -8,10 +8,9 @@ public class M_Player : MonoBehaviour {
 	public float Speed;
 	public static bool doNotMove;
 	public Vector3 move;
-	public GameObject quitButton;
+	public GameObject saveButton;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
-	public GameObject TransitionCam;
 	public Animator GameOverImg;
 
 	public static float distanceToWall;
@@ -25,36 +24,44 @@ public class M_Player : MonoBehaviour {
 	public SaveGame save;
 	public Guide guide;
 
+	public bool disableSavesByBoss = false;
 	private int mode = 0;
+	public bool newGame = true;
 	public float gravity;
 	public float UpVelocity;
 	public float linearDrag;
 	private bool doFlappy = false;
 	private int attempts;
 
+	private void Awake() {
+		Statics.mPlayer = this;
+	}
+
 	void Start() {
 		Cursor.lockState = CursorLockMode.Confined;
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
+		saveButton.SetActive(false);
 
-
-
-
+		int difficulty = PlayerPrefs.GetInt("difficulty");
 		attempts = PlayerPrefs.GetInt("Attempts");
 
-		if (PlayerPrefs.GetInt("difficulty") == 0) {
+		Control.script.NewGame(difficulty);
+
+
+		if (difficulty == 0) {
 			attemptNr = 10;
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 1) {
+		if (difficulty == 1) {
 			attemptNr = 21;
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 2) {
+		if (difficulty == 2) {
 			attemptNr = 32;
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 3) {
+		if (difficulty == 3) {
 			attemptNr = 43;
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 4) {
+		if (difficulty == 4) {
 			attemptNr = 54;
 		}
 		StartCoroutine(DelayIntro());
@@ -63,12 +70,16 @@ public class M_Player : MonoBehaviour {
 
 	private IEnumerator DelayIntro() {
 		yield return new WaitForSeconds(1);
-		attempts++;
-		Canvas_Renderer.script.infoRenderer("Welcome! \n" +
-											"This is your " + attempts + ". attempt. \n\n" +
-											"This box will appear only when I have something important to say, otherwise look for information in the upper left corner, so it is less disruptive. \n",
-											"Good luck & Have fun!");
-		PlayerPrefs.SetInt("Attempts", attempts);
+		if (newGame) {
+			Statics.music.PlayMusic(Statics.music.room1);
+			attempts++;
+			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
+												"This is your " + attempts + ". attempt. \n\n" +
+												"This box will appear only when I have something important to say, otherwise look for information in the upper left corner, so it is less disruptive. \n",
+												"Good luck & Have fun!");
+			PlayerPrefs.SetInt("Attempts", attempts);
+			newGame = false;
+		}
 	}
 
 	private void FixedUpdate() {
@@ -87,7 +98,13 @@ public class M_Player : MonoBehaviour {
 		}
 
 	}
+	private bool onceDisable = true;
 	private void Update() {
+		if (disableSavesByBoss && onceDisable) {
+			saveButton.GetComponent<Button>().interactable = false;
+			onceDisable = false;
+			print("Disabled");
+		}
 
 		if (doFlappy) {
 			Flappy();
@@ -421,7 +438,7 @@ public class M_Player : MonoBehaviour {
 	private bool once = true;
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.transform.name == "killerblock") {
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
+			Statics.sound.PlayFX(Statics.sound.ELShock);
 		}
 		if (once && collision.transform.name == "Block") {
 			guide.enableGuide();
@@ -434,7 +451,7 @@ public class M_Player : MonoBehaviour {
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			collision.transform.parent = GameObject.Find("Collectibles").transform;
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
+			Statics.sound.PlayFX(Statics.sound.ELShock);
 			GameOver();
 		}
 	}
@@ -445,9 +462,8 @@ public class M_Player : MonoBehaviour {
 			if(col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
-			//col.transform.parent = GameObject.Find("Collectibles").transform;
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
+			Statics.sound.PlayFX(Statics.sound.ELShock);
 			GameOver();
 
 		}
@@ -457,22 +473,21 @@ public class M_Player : MonoBehaviour {
 			spawner.spawnArrowTrap();
 
 			if (col.name == "Background_room_1") {
-				AudioHandler.script.MusicTransition(AudioHandler.script.room2);
+				Statics.music.MusicTransition(Statics.music.room2);
 				spawner.InvokeRepeating("spawnKillerWall", 0, 0.7f);
 				if (gameProgression == 3) {
-					Canvas_Renderer.script.infoRenderer(null, "Go down even further.");
+					Statics.canvasRenderer.infoRenderer(null, "Go down even further.");
 				}
 			}
 
 		}
 		if (col.name == "Background_room_Boss_1") {
 			gameProgression = 10;
-			roomPregression.script.Progress();
 
 		}
-		if (col.transform.tag == "Spike") {
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
-			roomPregression.script.Progress();
+		if (col.tag == "Spike") {
+			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
+			Statics.gameProgression.Progress();
 			PlayerAttack.bullets++;
 			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
 				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
@@ -482,7 +497,7 @@ public class M_Player : MonoBehaviour {
 		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
-			Canvas_Renderer.script.infoRenderer("You found a bomb, it will be useful later on.", null);
+			Statics.canvasRenderer.infoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 		if (col.name == "Test") {
 			save.saveScore();
@@ -515,9 +530,10 @@ public class M_Player : MonoBehaviour {
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;
-		TransitionCam.GetComponent<Animator>().Play("DimCamera");
+		Statics.camFade.PlayTransition("Dim");
 		GameOverImg.SetTrigger("Appear");
-		AudioHandler.script.MusicTransition(null);
+		Statics.music.MusicTransition(null);
+		Statics.zoom.canZoom = false;
 		if (delEnemies) {
 			Destroy(GameObject.Find("Enemies").gameObject);
 			delEnemies = false;
@@ -527,8 +543,11 @@ public class M_Player : MonoBehaviour {
 
 	}
 	private IEnumerator PauseAfterAudioFade() {
-		yield return new WaitUntil(() => AudioHandler.script.sound.volume == 0);
+		yield return new WaitUntil(() => Statics.music.sound.volume == 0);
 		Time.timeScale = 0;
 	}
 
+	private void OnDestroy() {
+		Statics.mPlayer = null;
+	}
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioHandler : MonoBehaviour {
+public class MusicHandler : MonoBehaviour {
 
 	public AudioSource sound;
 
@@ -13,12 +13,17 @@ public class AudioHandler : MonoBehaviour {
 	public AudioClip boss;
 	public AudioClip gameOver;
 
-	public static AudioHandler script;
 
 	private bool lastClip = false;
 
 	private void Awake() {
-		script = this;
+		Statics.music = this;
+	}
+
+	public void PlayMusic(AudioClip clip) {
+		sound.volume = 1;
+		sound.clip = clip;
+		sound.Play();
 	}
 
 	public void MusicTransition(AudioClip newClip) {
@@ -26,7 +31,6 @@ public class AudioHandler : MonoBehaviour {
 			StartCoroutine(Transition(newClip));
 		}
 		else {
-			print("A");
 			if (!lastClip) {
 				StartCoroutine(StopMusic());
 				lastClip = true;
@@ -47,7 +51,6 @@ public class AudioHandler : MonoBehaviour {
 
 				if (f >= 0) {
 					sound.volume = f;
-					print(f);
 					yield return null;
 				}
 				else {
@@ -92,5 +95,8 @@ public class AudioHandler : MonoBehaviour {
 			}
 			#endregion
 		}
+	}
+	private void OnDestroy() {
+		Statics.music = null;
 	}
 }

@@ -20,15 +20,13 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	public GameObject[] directions = new GameObject[4];
 
-	public static Canvas_Renderer script;
-
-
-	private bool first = true;
 	public bool isRunning = false;
 	private string tempDisplayedText;
 	private Color32 defaultColor;
-	void Awake() {
-		script = this;
+
+	private void Awake() {
+		Statics.canvasRenderer = this;
+		defaultColor = new Color32(255, 255, 255, 100);
 	}
 
 	private void Start() {
@@ -36,10 +34,10 @@ public class Canvas_Renderer : MonoBehaviour {
 		defaultColor = InfoPanelImg.color;
 	}
 
-	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? textColor = null) {
+	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? color = null) {
 		print(displayedTextSide);
-		if (textColor != null) {
-			InfoPanelImg.color = (Color32)textColor;
+		if (color != null) {
+			InfoPanelImg.color = (Color32)color;
 		}
 		else {
 			InfoPanelImg.color = defaultColor;
@@ -59,10 +57,6 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	private void Update() {
 		if (isRunning && Input.GetKeyDown(KeyCode.Return)) {
-			if (first) {
-				AudioHandler.script.MusicTransition(AudioHandler.script.room1);
-				first = false;
-			}
 			InfoPanel.SetTrigger("Up");
 			isRunning = false;
 			Time.timeScale = 1;
@@ -98,9 +92,9 @@ public class Canvas_Renderer : MonoBehaviour {
 	public void Counters(string name) {
 
 		if (name == "Coin") {
-			CoinC.text = "x " + (Coins.coinsCollected + 1);
+			CoinC.text = "x " + Coins.coinsCollected;
 
-			if (Coins.coinsCollected == 4) {
+			if (Coins.coinsCollected == 5) {
 				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);
 				CoinC.text = CoinC.text + " Completed!";
 			}
@@ -108,6 +102,13 @@ public class Canvas_Renderer : MonoBehaviour {
 		if (name == "Spike") {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
+		if(name == "Update") {
+			CoinC.text = "x " + Coins.coinsCollected;
+			SpikeC.text = "x " + Spike.spikesCollected;
+		}
+	}
+	private void OnDestroy() {
+		Statics.canvasRenderer = null;
 	}
 }
 

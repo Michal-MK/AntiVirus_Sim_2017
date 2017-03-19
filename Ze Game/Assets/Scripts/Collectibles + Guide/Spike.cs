@@ -15,11 +15,19 @@ public class Spike : MonoBehaviour {
 	public Animator anim;
 
 	public static int spikesCollected;
-	public int spikescollected;
 
+
+	public bool firstSpike = false;
+	public bool secondSpike = false;
+	public bool thirdSpkie = false;
+	public bool fourthSpike = false;
+	public bool fifthSpike = false;
+
+	private void Awake() {
+		Statics.spike = this;
+	}
 
 	void Start() {
-		spikesCollected = spikescollected;
 		if (PlayerPrefs.HasKey("difficulty") == false) {
 			PlayerPrefs.SetInt("difficluty", 0);
 		}
@@ -30,31 +38,57 @@ public class Spike : MonoBehaviour {
 		guide.Recalculate(gameObject, true);
 	}
 
-	bool st = true;
+	public bool displayArrowGuideInfo = true;
 
 	void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Player") {
 
-			spikesCollected = spikesCollected + 1;
-			M_Player.gameProgression = spikesCollected;
+			spikesCollected++;
+
 			gameObject.SetActive(false);
 			guide.disableGuide();
-			if (st == true) {
-				st = false;
-				Canvas_Renderer.script.infoRenderer("Follow the blinking arrows.", "Be aware of every detail on the screen.");
+
+			if (displayArrowGuideInfo == true) {
+				displayArrowGuideInfo = false;
+				Statics.canvasRenderer.infoRenderer("Follow the blinking arrows.", "Be aware of every detail on the screen.");
 			}
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
-				Canvas_Renderer.script.Counters("Spike");
+				Statics.canvasRenderer.Counters("Spike");
 
 			}
 			if (spikesCollected == 4) {
 				Maze.MazeEscape();
 			}
 			if(spikesCollected == 5) {
-				Canvas_Renderer.script.infoRenderer(null, "You found all the bullets.");
+				Statics.canvasRenderer.infoRenderer(null, "You found all the bullets.");
 			}
+			int p = M_Player.gameProgression;
+			switch (p) {
+				case 0: {
+					firstSpike = true;
+					break;
+				}
+				case 1: {
+					secondSpike = true;
+					break;
+				}
+				case 2: {
+					thirdSpkie = true;
+					break;
+				}
+				case 3: {
+					fourthSpike = true;
+					break;
+				}
+				case 4: {
+					fifthSpike = true;
+					break;
+				}
+			}
+
+			M_Player.gameProgression++;
 		}
 	}
 
@@ -74,7 +108,6 @@ public class Spike : MonoBehaviour {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
 
 		}
@@ -88,7 +121,6 @@ public class Spike : MonoBehaviour {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
 
 		}
@@ -100,7 +132,6 @@ public class Spike : MonoBehaviour {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
 
 		}
@@ -115,7 +146,6 @@ public class Spike : MonoBehaviour {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
 
 
@@ -129,7 +159,6 @@ public class Spike : MonoBehaviour {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.enableGuide();
 			guide.Recalculate(gameObject, true);
 
 		}
@@ -141,6 +170,10 @@ public class Spike : MonoBehaviour {
 	public void Hide() {
 		gameObject.SetActive(false);
 		guide.disableGuide();
+	}
+
+	private void OnDestroy() {
+		Statics.spike = null;
 	}
 }
 

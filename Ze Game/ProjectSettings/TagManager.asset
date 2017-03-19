@@ -18,6 +18,7 @@ TagManager:
   - SpikeDetectBoss
   - Bombs
   - EnemyInactive
+  - SaveButton
   layers:
   - Default
   - TransparentFX

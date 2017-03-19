@@ -9,7 +9,11 @@ public class BlockScript : MonoBehaviour {
 	Quaternion startingrotation;
 	float dist;
 
-	private bool once = true;
+	public bool showInfo = true;
+
+	private void Awake() {
+		Statics.blockScript = this;
+	}
 
 	private void Start() {
 		startingpos = gameObject.transform.position;
@@ -38,10 +42,13 @@ public class BlockScript : MonoBehaviour {
 			gameObject.transform.rotation = startingrotation;
 		}
 
-		if(once && dist < 10) {
-			Canvas_Renderer.script.infoRenderer("Find a pressure plate and put that block on it.", null);
-			once = false;
+		if(showInfo && dist < 10) {
+			Statics.canvasRenderer.infoRenderer("Find a pressure plate and put that block on it.", null);
+			showInfo = false;
 		}
 
+	}
+	private void OnDestroy() {
+		Statics.blockScript = null;
 	}
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossBehaviour : MonoBehaviour {
 
@@ -50,6 +51,9 @@ public class BossBehaviour : MonoBehaviour {
 
 	public Vector2 oldvec;
 	public Vector2 calculatedVec;
+
+	public GameObject Buttons;
+
 	#endregion
 
 	#region Inside References
@@ -84,7 +88,7 @@ public class BossBehaviour : MonoBehaviour {
 	private float rotationDelta = 0.1f;
 
 
-
+	public bool bossSpawned = false;
 	private bool initialDealy = true;
 	private bool doneBouncing = false;
 
@@ -110,8 +114,12 @@ public class BossBehaviour : MonoBehaviour {
 	public BoxCollider2D[] spikeHitboxes = new BoxCollider2D[4];
 	public SpriteRenderer selfRender;
 
+	Button saveButton;
 	#endregion
 
+	private void Awake() {
+		Statics.bossBehaviour = this;
+	}
 
 	void Start() {
 		Projectile.spawnedByAvoidance = false;
@@ -121,6 +129,8 @@ public class BossBehaviour : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag("Player");
 		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
 		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
+		Buttons = GameObject.Find("Buttons");
+		Statics.mPlayer.disableSavesByBoss = true;
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 		rigid.freezeRotation = true;
 
@@ -138,7 +148,9 @@ public class BossBehaviour : MonoBehaviour {
 	private IEnumerator InitialAttack() {
 
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
-		Canvas_Renderer.script.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
+		Control.script.Save(false);
+		bossSpawned = true;
+		Statics.canvasRenderer.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
 
 		for (int i = 0; i < spikeHitboxes.Length; i++) {
@@ -152,7 +164,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	}
 
-	private IEnumerator InterPhase() {
+	public IEnumerator InterPhase() {
 		for (int i = 0; i < spikeHitboxes.Length; i++) {
 			spikeHitboxes[i].enabled = true;
 		}
@@ -239,7 +251,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
 				yield return new WaitForSeconds(3);
-				Canvas_Renderer.script.infoRenderer(null, "Don't forget aout the zooming feature :]");
+				Statics.canvasRenderer.infoRenderer(null, "Don't forget aout the zooming feature :]");
 
 				float waitTime = 1.1f;
 
@@ -395,7 +407,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2);
 				if (informOnce) {
 					informOnce = false;
-					Canvas_Renderer.script.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+					Statics.canvasRenderer.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 				}
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
 
@@ -816,4 +828,11 @@ public class BossBehaviour : MonoBehaviour {
 		}
 	}
 	//
+
+	private void OnDestroy() {
+		Statics.bossBehaviour = null;
+	}
 }
+
+
+
