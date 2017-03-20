@@ -61,21 +61,19 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-	public void NewGame(int difficulty) {
-		chosenDifficulty = difficulty;
-	}
 
 
 	public void Save(bool newsaveFile) {
 		print("Saving");
 
-		GameObject Buttons = GameObject.Find("Buttons");
+		if (newsaveFile) {
+			attempt++;
+			PlayerPrefs.SetInt("A", attempt);
+		}
 
 		chosenDifficulty = PlayerPrefs.GetInt("difficulty");
 		attempt = PlayerPrefs.GetInt("A");
 
-		Buttons.SetActive(false);
-		Application.CaptureScreenshot(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Resources/Save-D" + chosenDifficulty + "_" + attempt.ToString("000") + ".png");
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream file = File.Create(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + "_" + attempt.ToString("000") + ".Kappa");
 		SaveData data = new SaveData();
@@ -95,7 +93,7 @@ public class Control : MonoBehaviour {
 		data.difficulty = chosenDifficulty;
 		data.currentBGName = M_Player.currentBG_name;
 		data.currentlyDisplayedSideInfo = Statics.canvasRenderer.info_S.text;
-		data.time = Mathf.Round(timer.time * 100) / 100;
+		data.time = Mathf.Round(timer.time * 1000) / 1000;
 		data.shownAttempt = Statics.mPlayer.newGame;
 		data.shownShotInfo = Statics.playerAttack.displayShootingInfo;
 		data.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
@@ -108,12 +106,21 @@ public class Control : MonoBehaviour {
 
 		formatter.Serialize(file, data);
 		file.Close();
+		StartCoroutine(ScreenShot(attempt));
 
-		if (newsaveFile) {
-			attempt++;
+
+		
+
+	}
+
+
+	private IEnumerator ScreenShot(int currAttempt) {
+		GameObject saveButton = GameObject.Find("saveGame");
+		if (saveButton != null) {
+			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
 		}
-		PlayerPrefs.SetInt("A", attempt);
-		Buttons.SetActive(true);
+		print("Captured");
+		Application.CaptureScreenshot(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Resources/Save-D" + chosenDifficulty + "_" + currAttempt.ToString("000") + ".png");
 	}
 
 	public void Load(string fileToLoad) {
@@ -157,7 +164,7 @@ public class Control : MonoBehaviour {
 			Statics.blockScript.showInfo = loadedData.shownBlockInfo;
 			block.transform.position = new Vector3(loadedData.blockPosX, loadedData.blockPosY, loadedData.blockPosZ);
 			block.transform.rotation = Quaternion.AngleAxis(loadedData.blockZRotation, Vector3.back);
-			if(loadedData.blockPushAttempt == 3) {
+			if (loadedData.blockPushAttempt == 3) {
 				Statics.pressurePlate.CreateBarrier();
 			}
 			else {
@@ -167,7 +174,7 @@ public class Control : MonoBehaviour {
 			if (!loadedData.shownShotInfo) {
 				Statics.playerAttack.UpdateStats();
 			}
-			if(loadedData.coinsCollected == 5) {
+			if (loadedData.coinsCollected == 5) {
 				Statics.coins.ChatchUpToAttempt(loadedData.coinsCollected - 2);
 				GameObject.Find("Coin").SetActive(false);
 				Statics.coins.CoinBehavior();
@@ -231,7 +238,7 @@ public class Control : MonoBehaviour {
 	}
 }
 
-
+//Data to be saved
 [Serializable]
 public class SaveData {
 	public int coinsCollected;
@@ -249,7 +256,7 @@ public class SaveData {
 
 	public string currentBGName;
 	public string currentlyDisplayedSideInfo;
-	
+
 	public bool shownShotInfo;
 	public bool shownAttempt;
 	public bool shownBlockInfo;
@@ -264,7 +271,7 @@ public class SaveData {
 	public bool bossSpawned;
 
 }
-
+//Static reference to other classes
 public class Statics : MonoBehaviour {
 
 	public static BossBehaviour bossBehaviour;
@@ -313,6 +320,8 @@ public class Statics : MonoBehaviour {
 	public static CamFadeOut camFade;
 	public static MusicHandler music;
 	public static SoundFXHandler sound;
+
+	public static DisplaySaveFiles displaySaves;
 
 }
 

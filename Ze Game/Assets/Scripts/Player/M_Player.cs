@@ -46,9 +46,6 @@ public class M_Player : MonoBehaviour {
 		int difficulty = PlayerPrefs.GetInt("difficulty");
 		attempts = PlayerPrefs.GetInt("Attempts");
 
-		Control.script.NewGame(difficulty);
-
-
 		if (difficulty == 0) {
 			attemptNr = 10;
 		}
@@ -70,6 +67,7 @@ public class M_Player : MonoBehaviour {
 
 	private IEnumerator DelayIntro() {
 		yield return new WaitForSeconds(1);
+		Control.script.Save(true);
 		if (newGame) {
 			Statics.music.PlayMusic(Statics.music.room1);
 			attempts++;
@@ -83,6 +81,8 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
+		//transform.position = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
 
 		switch (mode) {
 
@@ -210,6 +210,7 @@ public class M_Player : MonoBehaviour {
 			}
 			if (!up && !right && !down && !left) {
 				rg.velocity = Vector2.zero;
+				//rg.velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * 60;
 			}
 
 		}
@@ -459,7 +460,7 @@ public class M_Player : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
-			if(col.gameObject.GetComponent<Rigidbody2D>() != null) {
+			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
@@ -532,19 +533,12 @@ public class M_Player : MonoBehaviour {
 		timer.run = false;
 		Statics.camFade.PlayTransition("Dim");
 		GameOverImg.SetTrigger("Appear");
-		Statics.music.MusicTransition(null);
+		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;
 		if (delEnemies) {
 			Destroy(GameObject.Find("Enemies").gameObject);
 			delEnemies = false;
 		}
-		StartCoroutine(PauseAfterAudioFade());
-
-
-	}
-	private IEnumerator PauseAfterAudioFade() {
-		yield return new WaitUntil(() => Statics.music.sound.volume == 0);
-		Time.timeScale = 0;
 	}
 
 	private void OnDestroy() {

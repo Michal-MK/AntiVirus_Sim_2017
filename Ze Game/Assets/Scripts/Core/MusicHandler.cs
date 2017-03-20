@@ -47,7 +47,7 @@ public class MusicHandler : MonoBehaviour {
 		}
 
 		else {
-			for (float f = 1; f >= -1; f -= Time.deltaTime * 0.5f) {
+			for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
 
 				if (f >= 0) {
 					sound.volume = f;
@@ -70,7 +70,7 @@ public class MusicHandler : MonoBehaviour {
 		sound.volume = 0;
 		sound.Play();
 
-		for (float f = 0; f <= 2; f += Time.deltaTime * 0.5f) {
+		for (float f = 0; f <= 2; f += Time.unscaledDeltaTime * 0.5f) {
 			if (f <= 1) {
 				sound.volume = f;
 				yield return null;
@@ -83,10 +83,11 @@ public class MusicHandler : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator StopMusic() {
-		for (float f = 1; f >= -1; f -= Time.deltaTime * 0.5f) {
+	public IEnumerator StopMusic() {
+		for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
 			if (f > 0) {
 				sound.volume = f;
+				print(f);
 				yield return null;
 			}
 			else {

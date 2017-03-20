@@ -50,10 +50,9 @@ public class BossEntrance : MonoBehaviour {
 		GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 		spawnedBoss.name = "Boss";
 		player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
-		HPHolder = HPHolder = GameObject.Find("BossHealthPlaceHolder");
+		HPHolder = GameObject.Find("BossHealthPlaceHolder");
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
 		health.name = "BossHealth";
-		//StartCoroutine(Statics.bossBehaviour.InterPhase());
 	}
 
 	private void OnDestroy() {

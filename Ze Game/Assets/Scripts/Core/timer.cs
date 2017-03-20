@@ -21,17 +21,17 @@ public class timer : MonoBehaviour {
 	}
 
 
-	void FixedUpdate() {
+	void Update() {
 
 		if (run == true && Coins.coinsCollected != 0) {
 
 			Timer_text.gameObject.SetActive(true);
 
 			if (!attacking) {
-				time = time + Time.fixedDeltaTime;
+				time = time + Time.deltaTime;
 			}
 			else {
-				time = time + (Time.fixedDeltaTime * 2);
+				time = time + (Time.deltaTime * 2);
 			}
 
 			Timer_text.text = "Time:\t" + (Mathf.Round(time * 100) / 100).ToString("0.00") + " s";
