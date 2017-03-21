@@ -29,6 +29,7 @@ public class PauseUnpause : MonoBehaviour {
 			}
 			else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) {
 				saveButton.GetComponentInChildren<Text>().text = "Save?";
+				saveButton.GetComponent<Toggle>().interactable = true;
 				saveButton.GetComponent<Toggle>().isOn = false;
 				saveButton.SetActive(false);
 				restartButton.SetActive(false);

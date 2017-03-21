@@ -13,7 +13,7 @@ public class Avoidance : MonoBehaviour {
 	float avoidDuration = 60;
 	public bool displayAvoidInfo = true;
 	public TurretAttack turr;
-	public Button SaveButton;
+	public Toggle SaveButton;
 
 	private void Awake() {
 		Statics.avoidance = this;
