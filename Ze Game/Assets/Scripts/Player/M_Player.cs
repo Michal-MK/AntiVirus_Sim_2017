@@ -81,8 +81,6 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		//transform.position = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
 
 		switch (mode) {
 
@@ -99,9 +97,10 @@ public class M_Player : MonoBehaviour {
 
 	}
 	private bool onceDisable = true;
+
 	private void Update() {
 		if (disableSavesByBoss && onceDisable) {
-			saveButton.GetComponent<Button>().interactable = false;
+			saveButton.GetComponent<Toggle>().interactable = false;
 			onceDisable = false;
 			print("Disabled");
 		}
@@ -310,6 +309,7 @@ public class M_Player : MonoBehaviour {
 
 	//Moving the character FlappyBird style
 	public void ChangeFlappy(bool start = false) {
+		print("ChnagedToFlappy");
 		switch (start) {
 			case true:
 			rg.gravityScale = gravity;
@@ -327,6 +327,7 @@ public class M_Player : MonoBehaviour {
 	}
 	public void Flappy() {
 		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+			print("Flapped");
 			rg.velocity = new Vector2(0, UpVelocity);
 		}
 

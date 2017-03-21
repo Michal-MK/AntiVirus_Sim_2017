@@ -160,7 +160,7 @@ public class BossBehaviour : MonoBehaviour {
 
 		StartCoroutine(Attacks(ChooseAttack()));
 
-		//StartCoroutine(Attacks(5));
+		//StartCoroutine(Attacks());
 
 	}
 
