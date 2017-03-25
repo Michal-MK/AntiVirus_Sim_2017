@@ -15,7 +15,7 @@ public class Spike : MonoBehaviour {
 	public Animator anim;
 
 	public static int spikesCollected;
-
+	public int stage;
 
 	public bool firstSpike = false;
 	public bool secondSpike = false;
@@ -48,6 +48,11 @@ public class Spike : MonoBehaviour {
 
 			gameObject.SetActive(false);
 			guide.disableGuide();
+
+
+			if(stage == 1) {
+				Statics.pressurePlate.alreadyTriggered = true;
+			}
 
 			if (displayArrowGuideInfo == true) {
 				displayArrowGuideInfo = false;
@@ -89,12 +94,13 @@ public class Spike : MonoBehaviour {
 			}
 
 			M_Player.gameProgression++;
+			Statics.gameProgression.Progress();
 		}
 	}
 
 
 	public void SetPosition() {
-		int stage = M_Player.gameProgression;
+		stage = M_Player.gameProgression;
 		
 
 		float Xscale = gameObject.transform.lossyScale.x / 2;

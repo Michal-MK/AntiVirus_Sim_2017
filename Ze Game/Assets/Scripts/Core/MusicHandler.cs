@@ -15,6 +15,7 @@ public class MusicHandler : MonoBehaviour {
 
 
 	private bool lastClip = false;
+	public bool stopOnce = true;
 
 	private void Awake() {
 		Statics.music = this;
@@ -82,21 +83,26 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 	}
+	#endregion
 
 	public IEnumerator StopMusic() {
-		for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
-			if (f > 0) {
-				sound.volume = f;
-				print(f);
-				yield return null;
-			}
-			else {
-				sound.volume = 0;
-				break;
-			}
-			#endregion
+		if (stopOnce) {
+			for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
+				if (f > 0) {
+					sound.volume = f;
+					yield return null;
+				}
+				else {
+					sound.volume = 0;
+					stopOnce = false;
+					break;
+				}
+			}	
 		}
 	}
+
+
+
 	private void OnDestroy() {
 		Statics.music = null;
 	}

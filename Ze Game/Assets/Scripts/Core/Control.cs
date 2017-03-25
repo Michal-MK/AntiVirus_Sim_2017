@@ -11,7 +11,9 @@ public class Control : MonoBehaviour {
 	public static Control script;
 	private int chosenDifficulty;
 	private int attempt;
+
 	public bool isNewGame = true;
+	public bool isRestarting = false;
 
 	private SaveData loadedData;
 
@@ -61,9 +63,7 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-
-
-	public void Save(bool newsaveFile) {
+	public void Save(bool newsaveFile, bool saveOnceInBoss = true) {
 		print("Saving");
 
 		if (newsaveFile) {
@@ -71,6 +71,14 @@ public class Control : MonoBehaviour {
 			PlayerPrefs.SetInt("A", attempt);
 		}
 
+		if (saveOnceInBoss == false && loadedData != null) {
+			if (loadedData.bossSpawned) {
+				print("Exists");
+				return;
+			}
+		}
+
+		print("Condition met");
 		chosenDifficulty = PlayerPrefs.GetInt("difficulty");
 		attempt = PlayerPrefs.GetInt("A");
 
@@ -83,6 +91,7 @@ public class Control : MonoBehaviour {
 		data.spikesCollected = Spike.spikesCollected;
 		data.bombs = PlayerAttack.bombs;
 		data.bullets = PlayerAttack.bullets;
+		print(data.bombs + " " + data.bullets);
 		data.playerPositionX = Statics.gameProgression.currentPositionPlayerX;
 		data.playerPositionY = Statics.gameProgression.currentPositionPlayerY;
 		data.playerPositionZ = Statics.gameProgression.currentPositionPlayerZ;
@@ -103,13 +112,12 @@ public class Control : MonoBehaviour {
 		data.camSize = Camera.main.orthographicSize;
 		data.canZoom = Statics.zoom.canZoom;
 		data.bossSpawned = Statics.cameraMovement.inBossRoom;
+		data.pressurePlateTriggered = Statics.pressurePlate.alreadyTriggered;
 
 		formatter.Serialize(file, data);
 		file.Close();
 		StartCoroutine(ScreenShot(attempt));
 
-
-		
 
 	}
 
@@ -132,23 +140,68 @@ public class Control : MonoBehaviour {
 		SaveData data = (SaveData)bf.Deserialize(file);
 		file.Close();
 
+		print(data.bombs + " " + data.bullets);
 		loadedData = data;
 		StartCoroutine(FilesLoaded());
 	}
 
+	public IEnumerator StartNewGame(int difficulty) {
+		PlayerPrefs.SetInt("difficulty", difficulty);
+		Statics.camFade.PlayTransition("Trans");
+		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
+		loading.allowSceneActivation = true;
+		yield return new WaitForSeconds(1.5f);
+		Statics.camFade.anim.speed = 0;
+		yield return new WaitUntil(() => loading.isDone);
+		print("DoneLoading");
+		Statics.camFade.anim.speed = 1;
+	}
+
+
+	
+	public void Restart() {
+		print("ControllRestart");
+		M_Player.doNotMove = false;
+		Spike.spikesCollected = 0;
+		Coins.coinsCollected = 0;
+		PlayerAttack.bombs = 0;
+		PlayerAttack.bullets = 0;
+		M_Player.gameProgression = 0;
+		Projectile.projectileSpeed = 15;
+		Time.timeScale = 1;
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		isRestarting = true;
+		Statics.camFade.anim.SetTrigger("UnDim");
+	}
+
 	private IEnumerator FilesLoaded() {
 		Statics.camFade.PlayTransition("Trans");
-		yield return new WaitForSeconds(2f);
-		SceneManager.LoadScene(1);
+		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		isNewGame = false;
+		loading.allowSceneActivation = true;
+		yield return new WaitForSeconds(1.5f);
+		Statics.camFade.anim.speed = 0;
+		yield return new WaitUntil(() => loading.isDone);
+		Statics.camFade.anim.speed = 1;
+		Statics.mPlayer.newGame = false;
+
 	}
 
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		if (scene.buildIndex == 1 && !isNewGame) {
+		if(scene.buildIndex == 1 && isNewGame) {
+			Statics.mPlayer.newGame = true;
+		}
+		else if (isRestarting) {
+			isNewGame = false;
+			isRestarting = false;
+		}
+
+		else if (scene.buildIndex == 1 && !isNewGame) {
 			GameObject player = GameObject.FindGameObjectWithTag("Player");
 			GameObject block = GameObject.Find("Block");
 
+			M_Player.gameProgression = loadedData.spikesCollected;
 
 			Vector3 playerPos = new Vector3(loadedData.playerPositionX, loadedData.playerPositionY, loadedData.playerPositionZ);
 			player.transform.position = playerPos;
@@ -157,8 +210,13 @@ public class Control : MonoBehaviour {
 			Spike.spikesCollected = loadedData.spikesCollected;
 			Statics.canvasRenderer.Counters("Update");
 
+
 			PlayerAttack.bullets = loadedData.bullets;
 			PlayerAttack.bombs = loadedData.bombs;
+
+			print(loadedData.bombs + " " + loadedData.bullets);
+			print(PlayerAttack.bombs + " " + PlayerAttack.bullets);
+
 			Statics.playerAttack.displayShootingInfo = loadedData.shownShotInfo;
 
 			Statics.blockScript.showInfo = loadedData.shownBlockInfo;
@@ -187,9 +245,8 @@ public class Control : MonoBehaviour {
 
 
 			PlayerPrefs.SetInt("difficulty", loadedData.difficulty);
-			M_Player.gameProgression = loadedData.spikesCollected;
+
 			Statics.gameProgression.Progress();
-			Statics.mPlayer.newGame = false;
 
 			Statics.avoidance.displayAvoidInfo = loadedData.shownAvoidanceInfo;
 			Statics.avoidance.preformed = loadedData.doneAvoidance;
@@ -208,6 +265,7 @@ public class Control : MonoBehaviour {
 			}
 
 			Statics.canvasRenderer.infoRenderer(null, loadedData.currentlyDisplayedSideInfo);
+			Statics.pressurePlate.alreadyTriggered = loadedData.pressurePlateTriggered;
 
 			switch (loadedData.currentBGName) {
 				case "Background_Start": {
@@ -261,6 +319,7 @@ public class SaveData {
 	public bool shownAttempt;
 	public bool shownBlockInfo;
 	public int blockPushAttempt;
+	public bool pressurePlateTriggered;
 
 	public float camSize;
 
@@ -310,6 +369,7 @@ public class Statics : MonoBehaviour {
 	public static M_Player mPlayer;
 	public static PlayerAttack playerAttack;
 	public static SpikeBullet spikeBullet;
+	public static PlayerParticles playerParticles;
 
 
 	public static Avoidance avoidance;

@@ -28,7 +28,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 		DirectoryInfo[] info = dir.GetDirectories();
 
 		foreach (DirectoryInfo saveDirectory in info) {
-			print(saveDirectory.FullName);
+			//print(saveDirectory.FullName);
 
 			FileInfo[] saveFiles = saveDirectory.GetFiles("*.Kappa");
 			for (int i = 0; i < saveFiles.Length; i++) {
@@ -85,7 +85,9 @@ public class DisplaySaveFiles : MonoBehaviour {
 				if (saveInfo.time != 0) {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
 																"Loaction: " + BGName + "\n" +
-																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.time / 60, saveInfo.time % 60, saveInfo.time.ToString().Remove(0, saveInfo.time.ToString().Length - 2)) + "\n";
+																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.time / 60, saveInfo.time % 60, saveInfo.time.ToString().Remove(0, saveInfo.time.ToString().Length - 2)) + "\n" +
+																"Bullets: " + saveInfo.bullets + " Bombs: " + saveInfo.bombs + "\n" +
+																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.spikesCollected; 
 				}
 				else {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
@@ -102,6 +104,13 @@ public class DisplaySaveFiles : MonoBehaviour {
 			noSave.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 		}
 	}
+
+	public void DisableButtons() {
+		foreach (Button item in gameObject.GetComponentsInChildren<Button>()) {
+			item.interactable = false;
+		}
+	} 
+
 
 	private void OnDestroy() {
 		Statics.displaySaves = null;

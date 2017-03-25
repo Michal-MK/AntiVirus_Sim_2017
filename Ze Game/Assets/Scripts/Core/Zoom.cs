@@ -19,8 +19,8 @@ public class Zoom : MonoBehaviour {
 	}
 
 	private void LateUpdate() {
-		if (camScript.inBossRoom && canZoom && cam.orthographicSize > BossMin && cam.orthographicSize < BossMax + 1) {
-			float roll = Input.GetAxis("Mouse ScrollWheel");
+		if (camScript.inBossRoom && canZoom) {
+			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			if (roll < 0) {
 				if (cam.orthographicSize < BossMax) {
 					cam.orthographicSize += 0.8f;
@@ -34,8 +34,8 @@ public class Zoom : MonoBehaviour {
 			Vector3 cam_pos = new Vector3(camScript.camX(), camScript.camY(), -10);
 			cam.transform.position = cam_pos;
 		}
-		else if (!camScript.inBossRoom && canZoom && cam.orthographicSize >= NormMin && cam.orthographicSize <= NormMax + 1) {
-			float roll = Input.GetAxis("Mouse ScrollWheel");
+		else if (!camScript.inBossRoom && canZoom) {
+			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			if (roll < 0) {
 				if (cam.orthographicSize < NormMax) {
 					cam.orthographicSize += 0.8f;

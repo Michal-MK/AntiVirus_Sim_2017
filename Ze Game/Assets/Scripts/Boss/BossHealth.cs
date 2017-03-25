@@ -43,7 +43,11 @@ public class BossHealth : MonoBehaviour {
 			it.gameObject.SetActive(false);
 			theSlider.value--;
 			RaiseShields(with.name);
+			for (int i = 0; i < Statics.bossBehaviour.spikeHitboxes.Length; i++) {
+				Statics.bossBehaviour.spikeHitboxes[i].enabled = false;
 			}
+			Statics.bossBehaviour.selfRender.sprite = Statics.bossBehaviour.Invincible;
+		}
 		if (theSlider.value == 0 && !stop) {
 			StartCoroutine(Death());
 			stop = true;

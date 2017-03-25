@@ -19,8 +19,9 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		Statics.camFade.anim.SetTrigger("UnDim");
-
+		if (Statics.camFade != null) {
+			Statics.camFade.anim.SetTrigger("UnDim");
+		}
 	}
 
 	public void DelayMenuWrapper() {

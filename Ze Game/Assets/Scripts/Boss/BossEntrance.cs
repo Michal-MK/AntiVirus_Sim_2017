@@ -21,11 +21,6 @@ public class BossEntrance : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 
-			//Spike.spikesCollected = 5;
-			//PlayerAttack.bullets = 5;
-			//PlayerAttack.bombs = 1;
-			//Coins.coinsCollected = 5;
-
 			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
 				Statics.music.MusicTransition(Statics.music.boss);
 				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
@@ -41,9 +36,15 @@ public class BossEntrance : MonoBehaviour {
 			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
 				Statics.canvasRenderer.infoRenderer("You are not a worthy opponent!\n"+
 													"Bullets: " + PlayerAttack.bullets +"/5\n"+
-													"Bombs: "+ PlayerAttack.bombs + "/1", "Explore this location further");
+													"Bombs: "+ PlayerAttack.bombs + "/1\n"+
+													"Return to me once you have everyting... to meet your demise!\n" +
+													"MuHAHaHaa!!!", "Explore this location further");
 
 			}
+			//Spike.spikesCollected = 5;
+			//PlayerAttack.bullets = 5;
+			//PlayerAttack.bombs = 1;
+			//Coins.coinsCollected = 5;
 		}
 	}
 	public void SpawnBossOnLoad() {

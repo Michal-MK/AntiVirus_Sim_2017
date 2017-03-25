@@ -25,14 +25,20 @@ public class displayScore : MonoBehaviour {
 
 	public void Display() {
 
+		
+
 		for (int i = 0; i < 10; i++) {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "No time found.";
+				results[i].GetComponent<Text>().text = "";
 			}
 			else {
-				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(current) + " s";
+				float time = PlayerPrefs.GetFloat(current);
+				if (time != 0) {
+					string formatedTime = string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+					results[i].GetComponent<Text>().text = formatedTime;
+				}
 			}
 		}
 
@@ -40,10 +46,14 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "No time found.";
+				results[i].GetComponent<Text>().text = "";
 			}
 			else {
-				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(current) + " s";
+				float time = PlayerPrefs.GetFloat(current);
+				if (time != 0) {
+					string formatedTime = string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+					results[i].GetComponent<Text>().text = formatedTime;
+				}
 			}
 		}
 
@@ -51,10 +61,14 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "No time found.";
+				results[i].GetComponent<Text>().text = "";
 			}
 			else {
-				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(current) + " s";
+				float time = PlayerPrefs.GetFloat(current);
+				if (time != 0) {
+					string formatedTime = string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+					results[i].GetComponent<Text>().text = formatedTime;
+				}
 			}
 		}
 
@@ -62,10 +76,14 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "No time found.";
+				results[i].GetComponent<Text>().text = "";
 			}
 			else {
-				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(current) + " s";
+				float time = PlayerPrefs.GetFloat(current);
+				if (time != 0) {
+					string formatedTime = string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+					results[i].GetComponent<Text>().text = formatedTime;
+				}
 			}
 		}
 
@@ -73,10 +91,14 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "No time found.";
+				results[i].GetComponent<Text>().text = "";
 			}
 			else {
-				results[i].GetComponent<Text>().text = PlayerPrefs.GetFloat(current) + " s";
+				float time = PlayerPrefs.GetFloat(current);
+				if (time != 0) {
+					string formatedTime = string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
+					results[i].GetComponent<Text>().text = formatedTime;
+				}
 			}
 		}
 	}

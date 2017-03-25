@@ -33,6 +33,7 @@ public class MazeEntrance : MonoBehaviour {
 		zoom.canZoom = false;
 		player.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
 		player.transform.localScale = new Vector3(2, 2, 0);
+		Statics.wrapper.EnagleSaving(false);
 		yield return new WaitForSeconds(5);
 		Statics.canvasRenderer.infoRenderer("What do we have here...? \n"+
 											"Grab the spike and let's get out of this place.", "A maze ... duh?!",new Color32(255,255,255,200));

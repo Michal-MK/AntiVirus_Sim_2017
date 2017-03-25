@@ -14,17 +14,12 @@ public class Avoidance : MonoBehaviour {
 	public bool displayAvoidInfo = true;
 	public TurretAttack turr;
 	public Toggle SaveButton;
+	public GameObject sign;
 
 	private void Awake() {
 		Statics.avoidance = this;
 	}
 
-	private void Update() {
-		if (!preformed && Mathf.Abs(Vector3.Distance(player.position, BG.position)) <= Mathf.Abs(BG.sizeDelta.y / 2 - 10)) {
-			StartAvoidance();
-			preformed = true;
-		}
-	}
 
 	public void StartAvoidance() {
 		door1.SetActive(true);
@@ -35,11 +30,7 @@ public class Avoidance : MonoBehaviour {
 		Projectile.spawnedByKillerWall = false;
 		Statics.music.MusicTransition(Statics.music.avoidance);
 		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
-		if (displayAvoidInfo) {
-			Statics.canvasRenderer.infoRenderer("Survive!\n" +
-												"(I recommend zooming out using the mouse wheel.)", "Highly experimental! Caution advised.");
-			displayAvoidInfo = false;
-		}
+
 	}
 
 

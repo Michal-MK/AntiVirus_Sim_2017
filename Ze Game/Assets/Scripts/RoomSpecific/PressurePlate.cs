@@ -16,6 +16,7 @@ public class PressurePlate : MonoBehaviour {
 	public GameObject wall;
 
 	public int attempts = 0;
+	public bool alreadyTriggered = false;
 
 	private void Awake() {
 		Statics.pressurePlate = this;
@@ -26,11 +27,13 @@ public class PressurePlate : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		if (col.name == "Block") {
-			selfSprite.sprite = Active;
-			sound.clip = On;
-			sound.Play();
-			spike.SetPosition();
+		if (!alreadyTriggered) {
+			if (col.name == "Block") {
+				selfSprite.sprite = Active;
+				sound.clip = On;
+				sound.Play();
+				spike.SetPosition();
+			}
 		}
 	}
 	void OnTriggerExit2D(Collider2D col){

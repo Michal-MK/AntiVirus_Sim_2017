@@ -19,10 +19,12 @@ public class CamFadeOut : MonoBehaviour {
 		switch (name) {
 			case "Dim": {
 				anim.Play("DimCamera");
+				print("Dimming");
 				break;
 			}
 			case "Trans": {
 				anim.Play("CamTransition");
+				print("Transitioning");
 				break;
 			}
 		}

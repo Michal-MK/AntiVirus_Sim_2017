@@ -42,14 +42,15 @@ public class PlayerAttack : MonoBehaviour {
 		bombGUI = GameObject.Find("BombGUI").GetComponent<Image>();
 		bulletGUI = GameObject.Find("BulletGUI").GetComponent<Image>();
 		currentAmmo = GameObject.Find("CurrentAmmo").GetComponent<Image>();
-		bullets = 0;
-		bombs = 0;
-
+		if (Statics.mPlayer.newGame) {
+			bullets = 0;
+			bombs = 0;
+		}
 	}
 
 	void Update() {
 
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetButtonDown("Attack")) {
 			Cursor.visible = !Cursor.visible;
 			fireMode = !fireMode;
 			timer.attacking = !timer.attacking;
@@ -58,14 +59,14 @@ public class PlayerAttack : MonoBehaviour {
 				if (bullets != 0) {
 					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n "+
-														"The bullets are reusable so pick them up after you fire!\n" +
+														"The bullets are reusable and you have to pick them up after you fire!\n" +
 														"Currently you have: " + bullets + " bullets.\n "+
 														"Don't lose them", null);
 					displayShootingInfo = false;
 				}else {
 					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n "+
-														"The bullets are reusable so pick them up after you fire!\n " +
+														"The bullets are reusable and you have to pick them up after you fire!\n " +
 														"Currently you have: " + bullets + " bullets.", null);
 					displayShootingInfo = false;
 				}
@@ -80,12 +81,12 @@ public class PlayerAttack : MonoBehaviour {
 		}
 
 
-		if (Input.GetMouseButtonDown(1)) {
+		if (Input.GetButtonDown("Right Mouse Button")) {
 			fireBullets = !fireBullets;
 		}
 		if (!Statics.pauseUnpause.isPaused) {
 			if (fireMode) {
-				if (Input.GetMouseButtonDown(0) && fireBullets) {
+				if (Input.GetButtonDown("Left Mouse Button") && fireBullets) {
 					if (bullets >= 1) {
 						print("Bullets remaining: " + (bullets - 1));
 						FireSpike();
@@ -94,7 +95,7 @@ public class PlayerAttack : MonoBehaviour {
 						print("Out of bullets!");
 					}
 				}
-				if (Input.GetMouseButtonDown(0) && !fireBullets) {
+				if (Input.GetButtonDown("Left Mouse Button") && !fireBullets) {
 					if (bombs > 0) {
 						FireBomb();
 						StartCoroutine(RefreshBombs());

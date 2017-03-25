@@ -16,7 +16,7 @@ public class SaveGame : MonoBehaviour {
 
 
 		if (difficulty == 0) {
-
+			
 			int Min = 0;
 			int toMax = 9;
 

@@ -27,7 +27,6 @@ public class Coins : MonoBehaviour {
 			CoinBehavior();
 			Statics.sound.PlayFX(Statics.sound.CoinCollected);
 			Statics.canvasRenderer.Counters("Coin");
-
 		}
 	}
 	public void CoinBehavior() {
@@ -48,7 +47,9 @@ public class Coins : MonoBehaviour {
 			print(coinsCollected);
 			Statics.guide.disableGuide();
 			coin.gameObject.SetActive(false);
-			if (Spike.spikesCollected != 1) {
+			if (Spike.spikesCollected == 0) {
+				print("This");
+				print(Spike.spikesCollected);
 				spike.SetPosition();
 			}
 		}

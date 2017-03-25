@@ -56,7 +56,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (isRunning && Input.GetKeyDown(KeyCode.Return)) {
+		if (isRunning && Input.GetButtonDown("Return")) {
 			InfoPanel.SetTrigger("Up");
 			isRunning = false;
 			Time.timeScale = 1;

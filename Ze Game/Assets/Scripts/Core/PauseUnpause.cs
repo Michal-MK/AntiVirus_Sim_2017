@@ -15,7 +15,7 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void Update() {
 		if (!Statics.canvasRenderer.isRunning) {
-			if (Input.GetKeyDown(KeyCode.Escape) && !isPaused) {
+			if (Input.GetButtonDown("Escape") && !isPaused) {
 
 				Cursor.visible = true;
 				timer.run = false;
@@ -27,7 +27,7 @@ public class PauseUnpause : MonoBehaviour {
 
 				isPaused = true;
 			}
-			else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) {
+			else if (Input.GetButtonDown("Escape") && isPaused) {
 				saveButton.GetComponentInChildren<Text>().text = "Save?";
 				saveButton.GetComponent<Toggle>().interactable = true;
 				saveButton.GetComponent<Toggle>().isOn = false;

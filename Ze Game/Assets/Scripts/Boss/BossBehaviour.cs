@@ -114,7 +114,6 @@ public class BossBehaviour : MonoBehaviour {
 	public BoxCollider2D[] spikeHitboxes = new BoxCollider2D[4];
 	public SpriteRenderer selfRender;
 
-	Button saveButton;
 	#endregion
 
 	private void Awake() {
@@ -148,9 +147,9 @@ public class BossBehaviour : MonoBehaviour {
 	private IEnumerator InitialAttack() {
 
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
-		Control.script.Save(false);
+		Control.script.Save(false,false);
 		bossSpawned = true;
-		Statics.canvasRenderer.infoRenderer("Here it is... Kill it! (Attack mode with \"Space\", aim with mouse).", "Red = Invincible, Blue = Damageable");
+		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Attack mode with \"Space\", aim with mouse, Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
 
 		for (int i = 0; i < spikeHitboxes.Length; i++) {
@@ -158,9 +157,9 @@ public class BossBehaviour : MonoBehaviour {
 		}
 		selfRender.sprite = Invincible;
 
-		StartCoroutine(Attacks(ChooseAttack()));
+		//StartCoroutine(Attacks(ChooseAttack()));
 
-		//StartCoroutine(Attacks());
+		StartCoroutine(Attacks(5));
 
 	}
 
@@ -241,6 +240,7 @@ public class BossBehaviour : MonoBehaviour {
 				isAttacking = true;
 				Attack2 = true;
 				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack2StartPos));
+				//Statics.playerParticles.ActivateScript(gameObject.transform, true);
 				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
 				positioningCage.name = "PositioningCage";
 
@@ -251,6 +251,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
 				yield return new WaitForSeconds(3);
+				//Statics.playerParticles.ActivateScript(gameObject.transform, false);
 				Statics.canvasRenderer.infoRenderer(null, "Don't forget aout the zooming feature :]");
 
 				float waitTime = 1.1f;
@@ -291,7 +292,7 @@ public class BossBehaviour : MonoBehaviour {
 
 
 				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack3StartPos));
-
+				//Statics.playerParticles.ActivateScript(gameObject.transform, true);
 				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
 				positioningCage.name = "PositioningCage";
 
@@ -299,6 +300,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, gameObject.transform.position + new Vector3(0, 50, 0)));
 				moveCage = true;
+				//Statics.playerParticles.ActivateScript(gameObject.transform, false);
 				yield return new WaitForSeconds(2);
 
 				isAttacking = true;
@@ -323,7 +325,7 @@ public class BossBehaviour : MonoBehaviour {
 					BlockR.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 30);
 
 					yield return new WaitForSeconds(0.2f);
-					//print(changes);
+					print(changes);
 					if (changes >= 10) {
 						anim.SetTrigger("Attack" + attack);
 						anim.SetTrigger("Reset");
@@ -398,7 +400,6 @@ public class BossBehaviour : MonoBehaviour {
 			//Flappybird like Attack
 			case 5: {
 				isAttacking = true;
-
 				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
 				positioningCage.name = "PositioningCage";
 
@@ -421,7 +422,7 @@ public class BossBehaviour : MonoBehaviour {
 				player.GetComponent<M_Player>().ChangeFlappy(false);
 				isAttacking = false;
 				doneBouncing = false;
-				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 80, 0, 0)));
+				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0)));
 				StartCoroutine(InterPhase());
 				StopCoroutine(Attacks(attack));
 
@@ -544,6 +545,7 @@ public class BossBehaviour : MonoBehaviour {
 	//Brimstone like Attack
 	public IEnumerator VariedRotation() {
 		rotationDelta = 0.1f;
+		z = 0;
 		while (true) {
 			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 4));
 			int choice = UnityEngine.Random.Range(0, 2);
@@ -568,10 +570,11 @@ public class BossBehaviour : MonoBehaviour {
 		float spawningPhaseTime = 2f;
 		bool GoingDown = true;
 		float shotdelay = 0.05f;
+		int noOfWallsGenerated = 11;
 
 
 		print(true);
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < noOfWallsGenerated; i++) {
 
 			int shots = (int)(spawningPhaseTime / shotdelay);
 			float holeMid = Random.Range(-BG.sizeDelta.y / 2 + 20, BG.sizeDelta.y / 2 - 20);
@@ -695,6 +698,7 @@ public class BossBehaviour : MonoBehaviour {
 	}
 	//
 
+
 	//Loop
 	private void Update() {
 
@@ -743,14 +747,12 @@ public class BossBehaviour : MonoBehaviour {
 				int r = Random.Range(0, 2);
 				if (r == 0) {
 					if (headingRight) {
-						print("Would Change TOLEFT");
 						anim.SetTrigger("Right");
 						changes++;
 					}
 				}
 				else {
 					if (!headingRight) {
-						print("Would Change TORIGHT");
 						anim.SetTrigger("Left");
 						changes++;
 					}

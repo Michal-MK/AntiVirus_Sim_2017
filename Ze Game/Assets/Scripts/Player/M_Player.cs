@@ -62,13 +62,15 @@ public class M_Player : MonoBehaviour {
 			attemptNr = 54;
 		}
 		StartCoroutine(DelayIntro());
-		rg.freezeRotation = true;
 	}
 
 	private IEnumerator DelayIntro() {
+		newGame = Control.script.isNewGame;
 		yield return new WaitForSeconds(1);
-		Control.script.Save(true);
-		if (newGame) {
+
+		if (newGame && !Control.script.isRestarting) {
+
+			Control.script.Save(true);
 			Statics.music.PlayMusic(Statics.music.room1);
 			attempts++;
 			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
@@ -77,6 +79,10 @@ public class M_Player : MonoBehaviour {
 												"Good luck & Have fun!");
 			PlayerPrefs.SetInt("Attempts", attempts);
 			newGame = false;
+		}
+		else if(Control.script.isRestarting) {
+			Statics.music.PlayMusic(Statics.music.room1);
+			Statics.canvasRenderer.infoRenderer(null,"Good luck & Have fun!");
 		}
 	}
 
@@ -99,6 +105,8 @@ public class M_Player : MonoBehaviour {
 	private bool onceDisable = true;
 
 	private void Update() {
+
+
 		if (disableSavesByBoss && onceDisable) {
 			saveButton.GetComponent<Toggle>().interactable = false;
 			onceDisable = false;
@@ -142,66 +150,64 @@ public class M_Player : MonoBehaviour {
 		//move = new Vector3(0, 0, 0);
 
 		if (doNotMove == false) {
-
-
-			if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
+			if (Input.GetAxis("Vertical") > 0) {
 				up = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, 1 * Speed));
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, 1 * Speed) * 5);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, 1 * Speed) * 4);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 4);
 				}
 			}
 			else {
 				up = false;
 			}
 
-			if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
+			if (Input.GetAxis("Horizontal") > 0) {
 				right = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(1 * Speed, 0));
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(1 * Speed, 0) * 5);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(1 * Speed, 0) * 4);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 4);
 				}
 			}
 			else {
 				right = false;
 			}
 
-			if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
+			if (Input.GetAxis("Vertical") < 0) {
 				down = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, -1 * Speed));
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, -1 * Speed) * 5);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, -1 * Speed) * 4);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 4);
 				}
 			}
 			else {
 				down = false;
 			}
 
-			if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
+			if (Input.GetAxis("Horizontal") < 0) {
 				left = true;
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(-1 * Speed, 0));
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(-1 * Speed, 0) * 4);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 4);
 				}
 			}
 			else {
@@ -209,103 +215,9 @@ public class M_Player : MonoBehaviour {
 			}
 			if (!up && !right && !down && !left) {
 				rg.velocity = Vector2.zero;
-				//rg.velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * 60;
-			}
-
-		}
-		//Old movement script
-		//
-		/*
-		if (Input.GetKey(KeyCode.UpArrow)) {
-
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-				move.y = 1;
-			}
-			else {
-				move.y = distanceToWall - 2 * transform.localScale.y;
 			}
 		}
-
-		if (Input.GetKey(KeyCode.DownArrow)) {
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-				move.y = -1;
-			}
-			else {
-				move.y = -distanceToWall + 2 * transform.localScale.y;
-			}
-		}
-
-		if (Input.GetKey(KeyCode.RightArrow)) {
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-				move.x = 1;
-			}
-			else {
-				move.x = distanceToWall - 2 * transform.localScale.x;
-			}
-		}
-
-		if (Input.GetKey(KeyCode.LeftArrow)) {
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-				move.x = -1;
-			}
-			else {
-				move.x = -distanceToWall + 2 * transform.localScale.x;
-			}
-		}
-		if (doNotMove == false) {
-			gameObject.transform.position += move * Time.deltaTime * ARRspeed;
-		}
-		*/
 	}
-	//
 
 	//Moving the character FlappyBird style
 	public void ChangeFlappy(bool start = false) {
@@ -325,16 +237,173 @@ public class M_Player : MonoBehaviour {
 			break;
 		}
 	}
+
 	public void Flappy() {
 		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
 			print("Flapped");
 			rg.velocity = new Vector2(0, UpVelocity);
 		}
+	}
+	/* Ancient Arrow/Mouse movement
+if (Input.GetKey(KeyCode.UpArrow)) {
+
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
 
 	}
-	//
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.y = 1;
+	}
+	else {
+		move.y = distanceToWall - 2 * transform.localScale.y;
+	}
+}
 
-	/* Deprecated move Function
+if (Input.GetKey(KeyCode.DownArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.y = -1;
+	}
+	else {
+		move.y = -distanceToWall + 2 * transform.localScale.y;
+	}
+}
+
+if (Input.GetKey(KeyCode.RightArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.x = 1;
+	}
+	else {
+		move.x = distanceToWall - 2 * transform.localScale.x;
+	}
+}
+
+if (Input.GetKey(KeyCode.LeftArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.x = -1;
+	}
+	else {
+		move.x = -distanceToWall + 2 * transform.localScale.x;
+	}
+}
+if (doNotMove == false) {
+	gameObject.transform.position += move * Time.deltaTime * ARRspeed;
+}
+*/
+
+	/* Deprecated Arrow move Function
+			//if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
+			//	up = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed) * 4);
+			//	}
+			//}
+			//else {
+			//	up = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
+			//	right = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0) * 4);
+			//	}
+			//}
+			//else {
+			//	right = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
+			//	down = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed) * 4);
+			//	}
+			//}
+			//else {
+			//	down = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
+			//	left = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 4);
+			//	}
+			//}
+			//else {
+			//	left = false;
+			//}
+			//if (!up && !right && !down && !left) {
+			//	rg.velocity = Vector2.zero;
+			//}
+			*/
+
+	/* Deprecated Mouse move Function
 	public void Movement() {
 		move = new Vector3(0, 0, 0);
 
@@ -472,7 +541,12 @@ public class M_Player : MonoBehaviour {
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
 			cam.raycastForRooms();
-			spawner.spawnArrowTrap();
+			//spawner.spawnArrowTrap();
+			if(col.name == "Background_Start") {
+				if(gameProgression != 0) {
+					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle());
+				}
+			}
 
 			if (col.name == "Background_room_1") {
 				Statics.music.MusicTransition(Statics.music.room2);
@@ -536,10 +610,15 @@ public class M_Player : MonoBehaviour {
 		GameOverImg.SetTrigger("Appear");
 		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;
+		StartCoroutine(StopTime());
 		if (delEnemies) {
 			Destroy(GameObject.Find("Enemies").gameObject);
 			delEnemies = false;
 		}
+	}
+	private IEnumerator StopTime() {
+		yield return new WaitForSeconds(1);
+		Time.timeScale = 0;
 	}
 
 	private void OnDestroy() {

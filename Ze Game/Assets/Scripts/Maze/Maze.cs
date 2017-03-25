@@ -109,25 +109,30 @@ public class Maze : MonoBehaviour {
 
 	public void MazeLevel() {
 		switch (PlayerPrefs.GetInt("difficulty")) {
-			case 0:
-			rowcollCount = 15;
-			return;
+			case 0: {
+				rowcollCount = 15;
+				return;
+			}
 
-			case 1:
-			rowcollCount = 21;
-			return;
+			case 1: {
+				rowcollCount = 21;
+				return;
+			}
 
-			case 2:
-			rowcollCount = 23;
-			return;
+			case 2: {
+				rowcollCount = 23;
+				return;
+			}
 
-			case 3:
-			rowcollCount = 25;
-			return;
+			case 3: {
+				rowcollCount = 25;
+				return;
+			}
 
-			case 4:
-			rowcollCount = 29;
-			return;
+			case 4: {
+				rowcollCount = 29;
+				return;
+			}
 		}
 	}
 
