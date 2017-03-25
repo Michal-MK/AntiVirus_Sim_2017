@@ -31,7 +31,7 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "";
+				results[i].GetComponent<Text>().text = "No Record";
 			}
 			else {
 				float time = PlayerPrefs.GetFloat(current);
@@ -46,7 +46,7 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "";
+				results[i].GetComponent<Text>().text = "No Record";
 			}
 			else {
 				float time = PlayerPrefs.GetFloat(current);
@@ -61,7 +61,7 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "";
+				results[i].GetComponent<Text>().text = "No Record";
 			}
 			else {
 				float time = PlayerPrefs.GetFloat(current);
@@ -76,7 +76,7 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "";
+				results[i].GetComponent<Text>().text = "No Record";
 			}
 			else {
 				float time = PlayerPrefs.GetFloat(current);
@@ -91,7 +91,7 @@ public class displayScore : MonoBehaviour {
 			string current = i.ToString();
 
 			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity) {
-				results[i].GetComponent<Text>().text = "";
+				results[i].GetComponent<Text>().text = "No Record";
 			}
 			else {
 				float time = PlayerPrefs.GetFloat(current);

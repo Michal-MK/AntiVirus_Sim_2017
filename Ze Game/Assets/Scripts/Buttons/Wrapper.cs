@@ -56,8 +56,8 @@ public class Wrapper : MonoBehaviour {
 		Control.script.Restart();
 	}
 
-	public void EnagleSaving(bool enable) {
-		save.interactable = enable;
+	public void EnableSaving(bool activeState) {
+		save.interactable = activeState;
 	}
 
 	private void OnDestroy() {

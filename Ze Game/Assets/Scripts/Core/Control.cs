@@ -113,6 +113,8 @@ public class Control : MonoBehaviour {
 		data.canZoom = Statics.zoom.canZoom;
 		data.bossSpawned = Statics.cameraMovement.inBossRoom;
 		data.pressurePlateTriggered = Statics.pressurePlate.alreadyTriggered;
+		data.isNewGame = Control.script.isNewGame;
+		data.isRestarting = Control.script.isRestarting;
 
 		formatter.Serialize(file, data);
 		file.Close();
@@ -267,6 +269,9 @@ public class Control : MonoBehaviour {
 			Statics.canvasRenderer.infoRenderer(null, loadedData.currentlyDisplayedSideInfo);
 			Statics.pressurePlate.alreadyTriggered = loadedData.pressurePlateTriggered;
 
+			Control.script.isNewGame = loadedData.isNewGame;
+			Control.script.isRestarting = loadedData.isRestarting;
+
 			switch (loadedData.currentBGName) {
 				case "Background_Start": {
 					Statics.music.PlayMusic(Statics.music.room1);
@@ -290,6 +295,10 @@ public class Control : MonoBehaviour {
 			}
 		}
 	}
+
+	//private void Update() {
+		
+	//}
 
 	private void OnDestroy() {
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
@@ -323,6 +332,8 @@ public class SaveData {
 
 	public float camSize;
 
+	public bool isNewGame;
+	public bool isRestarting;
 
 
 	public bool shownAvoidanceInfo;

@@ -33,6 +33,7 @@ public class SignPost : MonoBehaviour {
 			else {
 				sign.color = new Color(1, 1, 1, 0);
 				Destroy(gameObject);
+				print("Destroyed");
 				break;
 			}
 		}
@@ -46,6 +47,8 @@ public class SignPost : MonoBehaviour {
 					Statics.avoidance.preformed = true;
 					StartCoroutine(Fade());
 					interact = false;
+					gameObject.GetComponent<BoxCollider2D>().enabled = false;
+					InteractInfo.SetActive(false);
 					if (Statics.avoidance.displayAvoidInfo) {
 						Statics.canvasRenderer.infoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
 															"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");

@@ -129,12 +129,15 @@ public class PlayerAttack : MonoBehaviour {
 	public void FireSpike() {
 
 		Vector3 playpos = player.transform.position;
-		mousepos = Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
-
 		GameObject bullet = pool.GetPool();
+		if (Input.GetAxis("AimControllerX") == 0 && Input.GetAxis("AimControllerY") == 0) {
+			mousepos = Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
+			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, (Vector3)mousepos - player.transform.position);
+		}
+		else {
+			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(Input.GetAxis("AimControllerX"), Input.GetAxis("AimControllerY")));
 
-
-		bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, (Vector3)mousepos - player.transform.position);
+		}
 		bullet.transform.position = player.transform.position - (bullet.transform.rotation * Vector2.down * 2);
 		bullet.name = "Bullet";
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;

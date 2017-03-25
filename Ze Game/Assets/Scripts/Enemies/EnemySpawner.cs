@@ -209,7 +209,7 @@ public class EnemySpawner : MonoBehaviour {
 		ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
 		Projectile.spawnedByKillerWall = true;
 
-		if (PlayerPrefs.GetInt("difficulty") == 0) {
+		if (PlayerPrefs.GetInt("difficulty") == 0 || PlayerPrefs.GetInt("difficulty") == 1) {
 			
 
 			for (int i = 0; i < 1; i++) {
@@ -221,7 +221,7 @@ public class EnemySpawner : MonoBehaviour {
 				KWProjectiles.Add(wallShot);
 			}
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 1 || PlayerPrefs.GetInt("difficulty") == 2) {
+		if (PlayerPrefs.GetInt("difficulty") == 3 || PlayerPrefs.GetInt("difficulty") == 2) {
 			for (int i = 0; i < 2; i++) {
 				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
@@ -231,18 +231,8 @@ public class EnemySpawner : MonoBehaviour {
 				KWProjectiles.Add(wallShot);
 			}
 		}
-		if (PlayerPrefs.GetInt("difficulty") == 3) {
-			for (int i = 0; i < 3; i++) {
-				GameObject wallShot = Icicle.GetPool();
-				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
-				wallShot.transform.position = KWProjectilePositions();
-				wallShot.transform.SetParent(enemy);
-				wallShot.SetActive(true);
-				KWProjectiles.Add(wallShot);
-			}
-		}
 		if (PlayerPrefs.GetInt("difficulty") == 4) {
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 3; i++) {
 				GameObject wallShot = Icicle.GetPool();
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();

@@ -24,7 +24,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 	public IEnumerator FromMazeTrans() {
 		Statics.camFade.PlayTransition("Trans");
-		yield return new WaitForSeconds(2.5f);
+		yield return new WaitForSeconds(1.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		zoom.canZoom = true;
 		player.transform.position = new Vector3(BG.position.x, BG.position.y + BG.sizeDelta.y / 2 - 10, 0);
@@ -32,7 +32,7 @@ public class MazeEscape : MonoBehaviour {
 		Camera.main.transform.position = player.transform.position;
 		player.transform.localScale = Vector3.one;
 		spike.SetPosition();
-		Statics.wrapper.EnagleSaving(true);
+		Statics.wrapper.EnableSaving(true);
 		yield return new WaitForSeconds(0.2f);
 		StartCoroutine(FadeWalls());
 
