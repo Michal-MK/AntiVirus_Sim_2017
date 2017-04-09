@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 816cebb4996bd2e4399d16480a765996
-timeCreated: 1487780344
+timeCreated: 1491145272
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -217,71 +217,6 @@ TextureImporter:
         y: 1989
         width: 24
         height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: spritesheet_1
-      rect:
-        serializedVersion: 2
-        x: 1518
-        y: 1987
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: spritesheet_2
-      rect:
-        serializedVersion: 2
-        x: 1558
-        y: 1988
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: spritesheet_10
-      rect:
-        serializedVersion: 2
-        x: 1480
-        y: 1948
-        width: 20
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: spritesheet_11
-      rect:
-        serializedVersion: 2
-        x: 1518
-        y: 1948
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: spritesheet_12
-      rect:
-        serializedVersion: 2
-        x: 1558
-        y: 1950
-        width: 24
-        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

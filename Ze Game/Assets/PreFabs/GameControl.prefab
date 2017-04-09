@@ -51,4 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f78ccadd1db4441ba52f76a34d863c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spike: {fileID: 0}
+  chosenDifficulty: 0
+  spikeInScene: {fileID: 0}
+  authentication: {fileID: 1341888189173148, guid: bd8ec75889ed5ae41a05a124436f02b0,
+    type: 2}
+  isNewGame: 1
+  isRestarting: 0

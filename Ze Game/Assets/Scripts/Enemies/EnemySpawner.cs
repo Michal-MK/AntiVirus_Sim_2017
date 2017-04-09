@@ -106,7 +106,10 @@ public class EnemySpawner : MonoBehaviour {
 	bool CRunning = false;
 
 	public void spawnKillerBlock() {
-		int totalBlocks = (int)(Coins.coinsCollected + 5 * (PlayerPrefs.GetInt("difficulty") * 1.5f));
+
+		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.script.chosenDifficulty));
+
+		print(Coins.coinsCollected + " + " + 5 + " * " + (1 + Control.script.chosenDifficulty) + " = " + ((Coins.coinsCollected + 5) * (1 + Control.script.chosenDifficulty)));
 
 		for (int count = 0; count < totalBlocks; count++) {
 

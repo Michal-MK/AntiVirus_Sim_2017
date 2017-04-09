@@ -10,12 +10,6 @@ public class GameProgression : MonoBehaviour {
 	public Canvas_Renderer canvas_Renderer;
 	public GameObject Block;
 
-
-	public SpriteRenderer DoorStatus_Start;
-	public SpriteRenderer DoorStatus_Room1;
-	public SpriteRenderer DoorStatus_Room2A;
-
-
 	public float currentPositionPlayerX;
 	public float currentPositionPlayerY;
 	public float currentPositionPlayerZ;
@@ -23,6 +17,10 @@ public class GameProgression : MonoBehaviour {
 	public float currentPositionBoxX;
 	public float currentPositionBoxY;
 	public float currentPositionBoxZ;
+
+	public float currentPositionSpikeX;
+	public float currentPositionSpikeY;
+	public float currentPositionSpikeZ;
 
 	public float ZRotationBlock;
 
@@ -43,7 +41,14 @@ public class GameProgression : MonoBehaviour {
 		currentPositionBoxZ = BlockPos.z;
 		Vector3 rot = Block.transform.rotation.eulerAngles;
 		ZRotationBlock = rot.z;
-		print(rot.z);
+
+		if(GameObject.Find("Spike") != null && GameObject.Find("Spike").activeInHierarchy) {
+			Transform spike = GameObject.Find("Spike").GetComponent<Transform>();
+
+			currentPositionSpikeX = spike.position.x;
+			currentPositionSpikeY = spike.position.y;
+			currentPositionSpikeZ = spike.position.z;
+		}
 	}
 
 	public void Progress() {
@@ -52,10 +57,9 @@ public class GameProgression : MonoBehaviour {
 			foreach (GameObject door in doors) {
 				door.SetActive(true);
 			}
-			DoorStatus_Room1.sprite = sprtOff;
 			doors[0].SetActive(false);
 			doors[1].SetActive(false);
-			DoorStatus_Start.sprite = sprtOn;
+
 			canvas_Renderer.DisplayDirection(1);
 		}
 
@@ -67,7 +71,7 @@ public class GameProgression : MonoBehaviour {
 			doors[1].SetActive(false);
 			doors[2].SetActive(false);
 			doors[3].SetActive(false);
-			DoorStatus_Room1.sprite = sprtOn;
+
 			canvas_Renderer.DisplayDirection(0);
 
 		}
@@ -81,7 +85,7 @@ public class GameProgression : MonoBehaviour {
 			doors[3].SetActive(false);
 			doors[4].SetActive(false);
 			doors[5].SetActive(false);
-			DoorStatus_Room2A.sprite = sprtOn;
+
 			canvas_Renderer.DisplayDirection(2);
 
 

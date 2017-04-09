@@ -35,7 +35,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? color = null) {
-		print(displayedTextSide);
+		//print(displayedTextSide);
 		if (color != null) {
 			InfoPanelImg.color = (Color32)color;
 		}
@@ -56,7 +56,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (isRunning && Input.GetButtonDown("Return")) {
+		if (isRunning && Input.GetButtonDown("Submit")) {
 			InfoPanel.SetTrigger("Up");
 			isRunning = false;
 			Time.timeScale = 1;
@@ -74,11 +74,18 @@ public class Canvas_Renderer : MonoBehaviour {
 
 
 	public void DisplayDirection(int i) {
-		StartCoroutine("Pulse", directions[i]);
+		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
+		if (!wrp.Objects[0].activeInHierarchy) {
+			StartCoroutine("Pulse", directions[i]);
+		}
+		else {
+			Statics.guide.Recalculate(wrp.Objects[0].gameObject, true);
+		}
 	}
 
 
-	public IEnumerator Pulse(GameObject info) {
+
+	private IEnumerator Pulse(GameObject info) {
 		for (int i = 0; i < 3; i++) {
 			info.SetActive(true);
 			yield return new WaitForSecondsRealtime(1);
@@ -102,7 +109,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		if (name == "Spike") {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
-		if(name == "Update") {
+		if (name == "Update") {
 			CoinC.text = "x " + Coins.coinsCollected;
 			SpikeC.text = "x " + Spike.spikesCollected;
 		}

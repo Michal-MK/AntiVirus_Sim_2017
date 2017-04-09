@@ -2,52 +2,68 @@ using UnityEngine;
 
 public class Zoom : MonoBehaviour {
 	public Camera cam;
-	CameraMovement camScript;
-	public bool canZoom = false;
+	public ParticleSystem matrixA;
+	public ParticleSystem matrixB;
+
+	public bool canZoom = true;
+
 	float BossMax = 108f;
 	float BossMin = 10f;
 
 	float NormMax = 25;
 	float NormMin = 15;
 
+
 	private void Awake() {
 		Statics.zoom = this;
 	}
 
-	private void Start() {
-		camScript = cam.gameObject.GetComponent<CameraMovement>();
-	}
-
 	private void LateUpdate() {
-		if (camScript.inBossRoom && canZoom) {
+		//print(Input.GetAxis("Mouse Scroll Wheel"));
+		if (Statics.cameraMovement.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
-			if (roll < 0) {
+			
+			if (roll > 0) {
 				if (cam.orthographicSize < BossMax) {
-					cam.orthographicSize += 0.8f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			else if (roll > 0) {
+			else if (roll < 0) {
 				if (cam.orthographicSize > BossMin) {
-					cam.orthographicSize -= 0.8f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(camScript.camX(), camScript.camY(), -10);
+			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);
 			cam.transform.position = cam_pos;
 		}
-		else if (!camScript.inBossRoom && canZoom) {
+		else if (!Statics.cameraMovement.inBossRoom && canZoom) {
+			//print(Input.GetAxis("Mouse Scroll Wheel"));
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
-			if (roll < 0) {
+			//Debug.Log(roll);
+			if (roll > 0) {
 				if (cam.orthographicSize < NormMax) {
-					cam.orthographicSize += 0.8f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			else if (roll > 0) {
+			else if (roll < 0) {
+				
 				if (cam.orthographicSize > NormMin) {
-					cam.orthographicSize -= 0.8f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(camScript.camX(), camScript.camY(), -10);
+			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);
 			cam.transform.position = cam_pos;
+		}
+		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !Statics.cameraMovement.inBossRoom) {
+
+			matrixA.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + Camera.main.orthographicSize,0);
+			matrixB.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y - Camera.main.orthographicSize, 0);
+
+			ParticleSystem.ShapeModule shapeA = matrixA.shape;
+			ParticleSystem.ShapeModule shapeB = matrixB.shape;
+
+			shapeA.radius = Camera.main.orthographicSize * 2 + 10;
+			shapeB.radius = Camera.main.orthographicSize * 2 + 10;			
 		}
 	}
 	private void OnDestroy() {

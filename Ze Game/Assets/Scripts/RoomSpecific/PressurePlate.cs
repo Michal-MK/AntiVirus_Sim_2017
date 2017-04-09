@@ -18,15 +18,41 @@ public class PressurePlate : MonoBehaviour {
 	public int attempts = 0;
 	public bool alreadyTriggered = false;
 
+	public RectTransform BG;
+
+
 	private void Awake() {
 		Statics.pressurePlate = this;
 	}
 
-	void Start(){
+	void Start() {
 		selfSprite = gameObject.GetComponent<SpriteRenderer>();
+		gameObject.transform.position = GeneratePos();
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
+	public Vector3 GeneratePos() {
+		Vector3 pos = gameObject.transform.position;
+		Vector3 newPos = pos;
+
+		float f = Random.value;
+		print(f);
+
+		if (f < 0.5) {
+			while (Vector3.Distance(pos, newPos) < 10) {
+				newPos = new Vector3(pos.x, Random.Range(BG.sizeDelta.y / 2 - 10,pos.y + 10),0);
+			}
+			return newPos;
+		}
+		else {
+			while (Vector3.Distance(pos, newPos) < 10) {
+				newPos = new Vector3(pos.x, Random.Range(-BG.sizeDelta.y / 2 + 10,pos.y - 10),0);
+			}
+			return newPos;
+		}
+
+	}
+
+	void OnTriggerEnter2D(Collider2D col) {
 		if (!alreadyTriggered) {
 			if (col.name == "Block") {
 				selfSprite.sprite = Active;
@@ -36,10 +62,10 @@ public class PressurePlate : MonoBehaviour {
 			}
 		}
 	}
-	void OnTriggerExit2D(Collider2D col){
+	void OnTriggerExit2D(Collider2D col) {
 		if (col.name == "Block") {
 			attempts++;
-			if(attempts == 1) {
+			if (attempts == 1) {
 				Statics.canvasRenderer.infoRenderer("A projectile pushed the block off of the pressure plate...", "These projectiles sure are a nuisance");
 			}
 			if (attempts == 3) {

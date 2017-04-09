@@ -312,7 +312,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1882420910250402}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.4869995, y: 3.2113266, z: 0}
+  m_LocalPosition: {x: -384.16492, y: 1.5659542, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4602362913242916}
@@ -904,6 +904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heart: {fileID: 1868394451653198}
   sprite: {fileID: 212464462278276900}
+  bossHealth: {fileID: 1407855708280686, guid: 6360b455712ca3044a54edc8ffbeaf2f, type: 2}
   theSlider: {fileID: 0}
   atk: {fileID: 0}
   ShieldT: {fileID: 1818503989346040}

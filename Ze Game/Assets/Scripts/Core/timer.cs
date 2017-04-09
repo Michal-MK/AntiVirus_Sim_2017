@@ -34,7 +34,8 @@ public class timer : MonoBehaviour {
 				time = time + (Time.deltaTime * 2);
 			}
 
-			Timer_text.text = "Time:\t" + (Mathf.Round(time * 100) / 100).ToString("0.00") + " s";
+			//Timer_text.text = "Time:\t" + (Mathf.Round(time * 100) / 100).ToString("0.00") + " s";
+			Timer_text.text = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		}
 	}
 	private void OnDestroy() {

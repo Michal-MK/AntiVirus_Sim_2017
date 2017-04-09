@@ -23,7 +23,6 @@ public class Guide : MonoBehaviour {
 	void Start(){
 		
 		GuideObj = GameObject.Find ("Guide").transform;
-		//Destroy(pointArrow);
 	}
 
 
@@ -57,7 +56,6 @@ public class Guide : MonoBehaviour {
 			float n = player.transform.position.y;
 			float c = -a * m - b * n;
 			if (Vector3.Distance(playerpos, destinationpos) > 10) {
-
 				r = Mathf.Clamp(Vector3.Distance(playerpos, destinationpos), 5, 10);
 				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
 				sprt.sprite = guide;

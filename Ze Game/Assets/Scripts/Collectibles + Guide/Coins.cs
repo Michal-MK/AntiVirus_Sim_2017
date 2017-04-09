@@ -23,6 +23,8 @@ public class Coins : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.name == "Player") {
+			Statics.mPlayer.face.GetComponent<SpriteRenderer>().sprite = Statics.mPlayer.happy;
+
 			coinsCollected = coinsCollected + 1;
 			CoinBehavior();
 			Statics.sound.PlayFX(Statics.sound.CoinCollected);
@@ -30,8 +32,8 @@ public class Coins : MonoBehaviour {
 		}
 	}
 	public void CoinBehavior() {
+		print(coinsCollected);
 		if (coinsCollected <= 4) {
-			print(coinsCollected);
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
 			timer.run = true;
@@ -62,7 +64,7 @@ public class Coins : MonoBehaviour {
 
 
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
-		print(oldpos);
+		//print(oldpos);
 		Vector3 newpos = oldpos;
 		while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
 
@@ -72,7 +74,7 @@ public class Coins : MonoBehaviour {
 
 			newpos = new Vector3(x, y, z);
 		}
-		print(newpos);
+		//print(newpos);
 		return newpos;
 	}
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PauseUnpause : MonoBehaviour {
 
@@ -14,7 +15,7 @@ public class PauseUnpause : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (!Statics.canvasRenderer.isRunning) {
+		if (!Statics.canvasRenderer.isRunning && !Statics.mPlayer.gameOver) {
 			if (Input.GetButtonDown("Escape") && !isPaused) {
 
 				Cursor.visible = true;
@@ -22,9 +23,10 @@ public class PauseUnpause : MonoBehaviour {
 				restartButton.SetActive(true);
 				quitToMenu.SetActive(true);
 				saveButton.SetActive(true);
-
+				
 				Time.timeScale = 0;
-
+				EventSystem e = EventSystem.current;
+				e.SetSelectedGameObject(saveButton);
 				isPaused = true;
 			}
 			else if (Input.GetButtonDown("Escape") && isPaused) {

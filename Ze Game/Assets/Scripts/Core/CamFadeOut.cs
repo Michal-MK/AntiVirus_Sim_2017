@@ -19,12 +19,14 @@ public class CamFadeOut : MonoBehaviour {
 		switch (name) {
 			case "Dim": {
 				anim.Play("DimCamera");
-				print("Dimming");
+				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
+				//print("Dimming");
 				break;
 			}
 			case "Trans": {
 				anim.Play("CamTransition");
-				print("Transitioning");
+				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
+				//print("Transitioning");
 				break;
 			}
 		}

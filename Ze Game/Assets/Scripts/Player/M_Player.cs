@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 
 public class M_Player : MonoBehaviour {
@@ -27,11 +28,20 @@ public class M_Player : MonoBehaviour {
 	public bool disableSavesByBoss = false;
 	private int mode = 0;
 	public bool newGame = true;
+	public bool gameOver = false;
+
 	public float gravity;
 	public float UpVelocity;
 	public float linearDrag;
 	private bool doFlappy = false;
 	private int attempts;
+
+	public GameObject face;
+
+	public Sprite smile;
+	public Sprite happy;
+	public Sprite sad;
+
 
 	private void Awake() {
 		Statics.mPlayer = this;
@@ -44,6 +54,10 @@ public class M_Player : MonoBehaviour {
 		saveButton.SetActive(false);
 
 		int difficulty = PlayerPrefs.GetInt("difficulty");
+		string name = PlayerPrefs.GetString("player_name");
+		if(name == null || name == "") {
+			PlayerPrefs.SetInt("Attempts", 0);
+		}
 		attempts = PlayerPrefs.GetInt("Attempts");
 
 		if (difficulty == 0) {
@@ -67,7 +81,7 @@ public class M_Player : MonoBehaviour {
 	private IEnumerator DelayIntro() {
 		newGame = Control.script.isNewGame;
 		yield return new WaitForSeconds(1);
-
+		Statics.gameProgression.Progress();
 		if (newGame && !Control.script.isRestarting) {
 
 			Control.script.Save(true);
@@ -75,15 +89,19 @@ public class M_Player : MonoBehaviour {
 			attempts++;
 			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
 												"This is your " + attempts + ". attempt. \n\n" +
-												"This box will appear only when I have something important to say, otherwise look for information in the upper left corner, so it is less disruptive. \n",
+												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
 			PlayerPrefs.SetInt("Attempts", attempts);
 			newGame = false;
 		}
-		else if(Control.script.isRestarting) {
+		else if (Control.script.isRestarting) {
+			print("ISRESTARTING");
 			Statics.music.PlayMusic(Statics.music.room1);
-			Statics.canvasRenderer.infoRenderer(null,"Good luck & Have fun!");
+			Statics.canvasRenderer.infoRenderer(null, "Good luck & Have fun!");
+			Control.script.isRestarting = false;
 		}
+		Control.script.isNewGame = false;
+		Control.script.isRestarting = false;
 	}
 
 	private void FixedUpdate() {
@@ -147,7 +165,6 @@ public class M_Player : MonoBehaviour {
 	private bool up = false;
 
 	public void ArrowMove() {
-		//move = new Vector3(0, 0, 0);
 
 		if (doNotMove == false) {
 			if (Input.GetAxis("Vertical") > 0) {
@@ -238,12 +255,26 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
+	private bool onceOnAxis = true;
+
 	public void Flappy() {
+		if (Input.GetAxis("Vertical") > 0.5f) {
+			if (onceOnAxis) {
+				rg.velocity = new Vector2(0, UpVelocity);
+				onceOnAxis = false;
+				StartCoroutine(FlapAgain());
+			}
+		}
 		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
-			print("Flapped");
 			rg.velocity = new Vector2(0, UpVelocity);
 		}
 	}
+
+	private IEnumerator FlapAgain() {
+		yield return new WaitUntil(() => Input.GetAxis("Vertical") <= 0.5f);
+		onceOnAxis = true;
+	}
+
 	/* Ancient Arrow/Mouse movement
 if (Input.GetKey(KeyCode.UpArrow)) {
 
@@ -507,6 +538,7 @@ if (doNotMove == false) {
 	*/
 
 	private bool once = true;
+
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.transform.name == "killerblock") {
 			Statics.sound.PlayFX(Statics.sound.ELShock);
@@ -527,6 +559,8 @@ if (doNotMove == false) {
 		}
 	}
 
+	private Sprite previous;
+	int i = 0;
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
@@ -534,6 +568,7 @@ if (doNotMove == false) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
+			face.GetComponent<SpriteRenderer>().sprite = sad;
 			Statics.sound.PlayFX(Statics.sound.ELShock);
 			GameOver();
 
@@ -542,8 +577,8 @@ if (doNotMove == false) {
 			currentBG_name = col.name;
 			cam.raycastForRooms();
 			//spawner.spawnArrowTrap();
-			if(col.name == "Background_Start") {
-				if(gameProgression != 0) {
+			if (col.name == "Background_Start") {
+				if (gameProgression != 0) {
 					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle());
 				}
 			}
@@ -555,6 +590,9 @@ if (doNotMove == false) {
 					Statics.canvasRenderer.infoRenderer(null, "Go down even further.");
 				}
 			}
+			if (col.name == "Background_room_2a") {
+				Statics.music.MusicTransition(Statics.music.room1);
+			}
 
 		}
 		if (col.name == "Background_room_Boss_1") {
@@ -564,6 +602,7 @@ if (doNotMove == false) {
 		if (col.tag == "Spike") {
 			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
 			Statics.gameProgression.Progress();
+			face.GetComponent<SpriteRenderer>().sprite = happy;
 			PlayerAttack.bullets++;
 			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
 				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
@@ -576,15 +615,38 @@ if (doNotMove == false) {
 			Statics.canvasRenderer.infoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 		if (col.name == "Test") {
-			save.saveScore();
-			print("Saved");
+
+
+			if (i % 2 == 0) {
+				print(i%2 + " " + i);
+				ChangeFlappy(true);
+				i++;
+			}
+			else {
+				print(i % 2 + " " + i);
+				ChangeFlappy(false);
+				i++;
+			}
+			//save.saveScore();
+			//print("Saved");
+		}
+		if (col.tag == "ArrowTrap") {
+			previous = face.GetComponent<SpriteRenderer>().sprite;
+			face.GetComponent<SpriteRenderer>().sprite = sad;
 		}
 	}
 	private void OnTriggerExit2D(Collider2D col) {
+		if (col.transform.tag == "BG") {
+			cam.raycastForRooms();
+		}
+
 		if (col.name == "Background_room_1") {
 			foreach (GameObject Projectile in spawner.KWProjectiles) {
 				Projectile.SetActive(false);
 			}
+		}
+		if (col.tag == "ArrowTrap") {
+			face.GetComponent<SpriteRenderer>().sprite = previous;
 		}
 	}
 
@@ -611,6 +673,9 @@ if (doNotMove == false) {
 		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;
 		StartCoroutine(StopTime());
+		gameOver = true;
+		EventSystem e = EventSystem.current;
+		e.SetSelectedGameObject(quitToMenu);
 		if (delEnemies) {
 			Destroy(GameObject.Find("Enemies").gameObject);
 			delEnemies = false;

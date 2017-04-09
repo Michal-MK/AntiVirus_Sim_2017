@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class BossHealth : MonoBehaviour {
 	public GameObject heart;
 	public SpriteRenderer sprite;
+	public GameObject bossHealth;
 	public Slider theSlider;
 	public PlayerAttack atk;
 
@@ -30,7 +31,14 @@ public class BossHealth : MonoBehaviour {
 	}
 
 	void Start() {
-		theSlider = GameObject.Find("BossHealth").GetComponent<Slider>();
+		if (GameObject.Find("BossHealth") != null) {
+			theSlider = GameObject.Find("BossHealth").GetComponent<Slider>();
+		}
+		else {
+			GameObject HealthObj = Instantiate(bossHealth, GameObject.Find("BossHealthPlaceHolder").transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
+
+			theSlider = HealthObj.GetComponent<Slider>();
+		}
 		atk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack>();
 		theSlider.gameObject.SetActive(true);
 		theSlider.value = 5;

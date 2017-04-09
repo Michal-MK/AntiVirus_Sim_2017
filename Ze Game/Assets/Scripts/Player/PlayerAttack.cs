@@ -35,6 +35,15 @@ public class PlayerAttack : MonoBehaviour {
 
 	Image currentAmmo;
 
+	public GameObject face;
+	public GameObject hands;
+
+	public Sprite wHands;
+	public Sprite noHands;
+	public Sprite attack;
+	public Sprite happy;
+
+
 	private void Awake() {
 		Statics.playerAttack = this;
 	}
@@ -51,10 +60,20 @@ public class PlayerAttack : MonoBehaviour {
 	void Update() {
 
 		if (Input.GetButtonDown("Attack")) {
-			Cursor.visible = !Cursor.visible;
 			fireMode = !fireMode;
-			timer.attacking = !timer.attacking;
 
+			if (fireMode) {
+				face.GetComponent<SpriteRenderer>().sprite = attack;
+				hands.GetComponent<SpriteRenderer>().sprite = wHands;
+				Cursor.visible = true;
+				timer.attacking = true;
+			}
+			else {
+				face.GetComponent<SpriteRenderer>().sprite = happy;
+				hands.GetComponent<SpriteRenderer>().sprite = noHands;
+				Cursor.visible = false;
+				timer.attacking = false;
+			}
 			if (M_Player.gameProgression != 10 && displayShootingInfo) {
 				if (bullets != 0) {
 					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
@@ -81,11 +100,11 @@ public class PlayerAttack : MonoBehaviour {
 		}
 
 
-		if (Input.GetButtonDown("Right Mouse Button")) {
+		if (fireMode && Input.GetButtonDown("Right Mouse Button")) {
 			fireBullets = !fireBullets;
 		}
 		if (!Statics.pauseUnpause.isPaused) {
-			if (fireMode) {
+			if (fireMode/* && M_Player.gameProgression == 10*/) {
 				if (Input.GetButtonDown("Left Mouse Button") && fireBullets) {
 					if (bullets >= 1) {
 						print("Bullets remaining: " + (bullets - 1));
@@ -115,7 +134,8 @@ public class PlayerAttack : MonoBehaviour {
 		}
 	}
 
-	public void UpdateStats() {
+	public IEnumerator UpdateStats() {
+		yield return new WaitForEndOfFrame();
 		currentAmmo.sprite = spikeSprite;
 		visibleAlready = true;
 		InfoAmmo.GetComponent<Text>().text = "Equiped:";
@@ -127,7 +147,8 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public void FireSpike() {
-
+		print(Input.GetAxis("AimControllerX"));
+		print(Input.GetAxis("AimControllerY"));
 		Vector3 playpos = player.transform.position;
 		GameObject bullet = pool.GetPool();
 		if (Input.GetAxis("AimControllerX") == 0 && Input.GetAxis("AimControllerY") == 0) {
@@ -176,6 +197,7 @@ public class PlayerAttack : MonoBehaviour {
 			Destroy(col.gameObject);
 			bullets++;
 			bulletCount.text = "x " + bullets;
+			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
 		}
 		if (col.name == "BombPickup") {
 			bombGUI.color = visible;

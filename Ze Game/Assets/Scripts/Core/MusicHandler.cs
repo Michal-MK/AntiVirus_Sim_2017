@@ -17,6 +17,8 @@ public class MusicHandler : MonoBehaviour {
 	private bool lastClip = false;
 	public bool stopOnce = true;
 
+	Coroutine currentMusic;
+
 	private void Awake() {
 		Statics.music = this;
 	}
@@ -29,7 +31,10 @@ public class MusicHandler : MonoBehaviour {
 
 	public void MusicTransition(AudioClip newClip) {
 		if (newClip != null) {
-			StartCoroutine(Transition(newClip));
+			if (currentMusic != null) {
+				StopCoroutine(currentMusic);
+			}
+			currentMusic = StartCoroutine(Transition(newClip));
 		}
 		else {
 			if (!lastClip) {
@@ -39,29 +44,32 @@ public class MusicHandler : MonoBehaviour {
 		}
 	}
 	#region MusicTransition Code
-	private IEnumerator Transition(AudioClip clip) {
-		print(clip);
+	private IEnumerator Transition(AudioClip newClip) {
+
+		print(newClip);
 		if (sound.clip == null) {
-			sound.clip = clip;
+			sound.clip = newClip;
 			StartCoroutine(StartMusic());
-			StopCoroutine(Transition(clip));
+			StopCoroutine(Transition(newClip));
 		}
 
 		else {
-			for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
+			if (sound.clip != newClip) {
+				for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
 
-				if (f >= 0) {
-					sound.volume = f;
-					yield return null;
-				}
-				else {
-					sound.volume = 0;
-					sound.Stop();
-					if (clip != null) {
-						sound.clip = clip;
-						StartCoroutine(StartMusic());
+					if (f >= 0) {
+						sound.volume = f;
+						yield return null;
 					}
-					break;
+					else {
+						sound.volume = 0;
+						sound.Stop();
+						if (newClip != null) {
+							sound.clip = newClip;
+							StartCoroutine(StartMusic());
+						}
+						break;
+					}
 				}
 			}
 		}

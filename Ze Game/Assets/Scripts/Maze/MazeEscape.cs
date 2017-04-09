@@ -9,6 +9,9 @@ public class MazeEscape : MonoBehaviour {
 	public Spike spike;
 	public Zoom zoom;
 	public MazeEntrance entrance;
+	public Wrapper wrp;
+
+	public bool pathOpen = false;
 
 	public GameObject wall;
 
@@ -32,35 +35,50 @@ public class MazeEscape : MonoBehaviour {
 		Camera.main.transform.position = player.transform.position;
 		player.transform.localScale = Vector3.one;
 		spike.SetPosition();
-		Statics.wrapper.EnableSaving(true);
-		yield return new WaitForSeconds(0.2f);
 		StartCoroutine(FadeWalls());
+		pathOpen = true;
 
+		ParticleSystem.ShapeModule shapeA = Statics.cameraMovement.psA.shape;
+		ParticleSystem.ShapeModule shapeB = Statics.cameraMovement.psB.shape;
+
+		ParticleSystem psA = Statics.cameraMovement.psA;
+		ParticleSystem psB = Statics.cameraMovement.psB;
+
+		psA.gameObject.SetActive(true);
+		psB.gameObject.SetActive(true);
+
+		shapeA.radius = Camera.main.orthographicSize * 2;
+		shapeB.radius = Camera.main.orthographicSize * 2;
+
+
+
+		wrp.EnableSaving(true);
 	}
 
 	private IEnumerator FadeWalls() {
-
+		print("Fading");
 		Image one = wall.GetComponent<Image>();
 
 		Color32 newColor;
 
-		for (float f = 255; f >= -1; f -= Time.deltaTime * 40) {
-			if(Time.timeScale != 1) {
-				yield return new WaitForSeconds(0.1f);
+		for (float f = 255; f >= -1; f -= 0.5f) {
+			if (Time.timeScale != 1) {
+				f = f + 0.5f;
 				yield return null;
 			}
-			newColor = new Color32(255, 255, 255, (byte)f);
-			one.color = newColor;
+			else {
+				newColor = new Color32(255, 255, 255, (byte)f);
+				one.color = newColor;
 
-			if (f > 0) {
-				//print(f);
-				yield return null;
+				if (f > 0) {
+					//print(f);
+					yield return null;
+				}
+				else if (f <= 0) {
+					wall.SetActive(false);
+					break;
+				}
 			}
-			else if (f <= 0) {
-				wall.SetActive(false);
-				break;
-			}
-			
 		}
 	}
 	private void OnDestroy() {

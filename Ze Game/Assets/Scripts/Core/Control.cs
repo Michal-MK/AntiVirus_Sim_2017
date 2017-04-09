@@ -4,14 +4,17 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Control : MonoBehaviour {
 
 	public static Control script;
-	private int chosenDifficulty;
+	public int chosenDifficulty;
 	private int attempt;
 
+	public GameObject spikeInScene;
+	public GameObject authentication;
 	public bool isNewGame = true;
 	public bool isRestarting = false;
 
@@ -19,6 +22,7 @@ public class Control : MonoBehaviour {
 
 
 	void Awake() {
+		//PlayerPrefs.DeleteKey("player_name");
 		if (script == null) {
 			script = this;
 			DontDestroyOnLoad(gameObject);
@@ -63,6 +67,26 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
+	private void Start() {
+		//StartCoroutine(SetName());
+	}
+
+	public IEnumerator SetName() {
+		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
+			yield return new WaitForSeconds(1f);
+			GameObject auth = Instantiate(authentication);
+			auth.transform.SetParent(GameObject.Find("Canvas").transform);
+			auth.transform.localPosition = Vector3.zero;
+			print(auth.transform.position);
+		}
+		//else {
+		//	yield return new WaitForEndOfFrame();
+		//	if (Statics.profile != null) {
+		//		Statics.profile.DisplayProfile();
+		//	}
+		//}
+
+	}
 	public void Save(bool newsaveFile, bool saveOnceInBoss = true) {
 		print("Saving");
 
@@ -98,6 +122,9 @@ public class Control : MonoBehaviour {
 		data.blockPosX = Statics.gameProgression.currentPositionBoxX;
 		data.blockPosY = Statics.gameProgression.currentPositionBoxY;
 		data.blockPosZ = Statics.gameProgression.currentPositionBoxZ;
+		data.spikePosX = Statics.gameProgression.currentPositionSpikeX;
+		data.spikePosY = Statics.gameProgression.currentPositionSpikeY;
+		data.spikePosZ = Statics.gameProgression.currentPositionSpikeZ;
 		data.blockZRotation = Statics.gameProgression.ZRotationBlock;
 		data.difficulty = chosenDifficulty;
 		data.currentBGName = M_Player.currentBG_name;
@@ -113,8 +140,11 @@ public class Control : MonoBehaviour {
 		data.canZoom = Statics.zoom.canZoom;
 		data.bossSpawned = Statics.cameraMovement.inBossRoom;
 		data.pressurePlateTriggered = Statics.pressurePlate.alreadyTriggered;
-		data.isNewGame = Control.script.isNewGame;
-		data.isRestarting = Control.script.isRestarting;
+		data.isNewGame = isNewGame;
+		data.isRestarting = isRestarting;
+		data.spikeActive = GameObject.Find("Collectibles").GetComponent<Wrapper>().Objects[0].activeSelf;
+		data.postMazeDoorOpen = !Statics.mazeEscape.pathOpen;
+
 
 		formatter.Serialize(file, data);
 		file.Close();
@@ -142,7 +172,7 @@ public class Control : MonoBehaviour {
 		SaveData data = (SaveData)bf.Deserialize(file);
 		file.Close();
 
-		print(data.bombs + " " + data.bullets);
+		script.chosenDifficulty = data.difficulty;
 		loadedData = data;
 		StartCoroutine(FilesLoaded());
 	}
@@ -160,9 +190,8 @@ public class Control : MonoBehaviour {
 	}
 
 
-	
+
 	public void Restart() {
-		print("ControllRestart");
 		M_Player.doNotMove = false;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
@@ -171,8 +200,9 @@ public class Control : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		Projectile.projectileSpeed = 15;
 		Time.timeScale = 1;
+		script.isRestarting = true;
+		print(script.isRestarting);
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		isRestarting = true;
 		Statics.camFade.anim.SetTrigger("UnDim");
 	}
 
@@ -185,28 +215,38 @@ public class Control : MonoBehaviour {
 		Statics.camFade.anim.speed = 0;
 		yield return new WaitUntil(() => loading.isDone);
 		Statics.camFade.anim.speed = 1;
-		Statics.mPlayer.newGame = false;
 
 	}
 
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		if(scene.buildIndex == 1 && isNewGame) {
+		if(scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
+			SetName();
+		}
+
+		if (scene.buildIndex == 1 && isNewGame) {
 			Statics.mPlayer.newGame = true;
 		}
 		else if (isRestarting) {
 			isNewGame = false;
-			isRestarting = false;
 		}
 
 		else if (scene.buildIndex == 1 && !isNewGame) {
 			GameObject player = GameObject.FindGameObjectWithTag("Player");
 			GameObject block = GameObject.Find("Block");
+			Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
 
 			M_Player.gameProgression = loadedData.spikesCollected;
 
 			Vector3 playerPos = new Vector3(loadedData.playerPositionX, loadedData.playerPositionY, loadedData.playerPositionZ);
 			player.transform.position = playerPos;
+
+			Vector3 spikePos = new Vector3(loadedData.spikePosX, loadedData.spikePosY, loadedData.spikePosZ);
+
+			wrp.Objects[0].gameObject.SetActive(loadedData.spikeActive);
+			if (wrp.Objects[0].activeInHierarchy == true) {
+				wrp.Objects[0].transform.position = spikePos;
+			}
 
 			Coins.coinsCollected = loadedData.coinsCollected;
 			Spike.spikesCollected = loadedData.spikesCollected;
@@ -216,8 +256,6 @@ public class Control : MonoBehaviour {
 			PlayerAttack.bullets = loadedData.bullets;
 			PlayerAttack.bombs = loadedData.bombs;
 
-			print(loadedData.bombs + " " + loadedData.bullets);
-			print(PlayerAttack.bombs + " " + PlayerAttack.bullets);
 
 			Statics.playerAttack.displayShootingInfo = loadedData.shownShotInfo;
 
@@ -232,7 +270,7 @@ public class Control : MonoBehaviour {
 			}
 
 			if (!loadedData.shownShotInfo) {
-				Statics.playerAttack.UpdateStats();
+				Statics.playerAttack.StartCoroutine(Statics.playerAttack.UpdateStats());
 			}
 			if (loadedData.coinsCollected == 5) {
 				Statics.coins.ChatchUpToAttempt(loadedData.coinsCollected - 2);
@@ -248,10 +286,14 @@ public class Control : MonoBehaviour {
 
 			PlayerPrefs.SetInt("difficulty", loadedData.difficulty);
 
-			Statics.gameProgression.Progress();
+
 
 			Statics.avoidance.displayAvoidInfo = loadedData.shownAvoidanceInfo;
 			Statics.avoidance.preformed = loadedData.doneAvoidance;
+			if (loadedData.doneAvoidance) {
+				GameObject.Find("SignPost Avoidance").SetActive(false);
+				Statics.music.PlayMusic(Statics.music.room1);
+			}
 
 
 			timer.time = loadedData.time;
@@ -262,6 +304,13 @@ public class Control : MonoBehaviour {
 
 			Statics.cameraMovement.inBossRoom = loadedData.bossSpawned;
 			if (loadedData.bossSpawned) {
+				RectTransform bg = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
+				Camera.main.transform.position = bg.position;
+				Statics.cameraMovement.psA.transform.position = bg.position + new Vector3(0, bg.sizeDelta.y / 2, 0);
+				ParticleSystem.ShapeModule shape = Statics.cameraMovement.psA.shape;
+				shape.radius = 108 * 2;
+				Statics.cameraMovement.psB.gameObject.SetActive(false);
+				M_Player.gameProgression = 10;
 				Statics.bossEntrance.SpawnBossOnLoad();
 
 			}
@@ -269,9 +318,14 @@ public class Control : MonoBehaviour {
 			Statics.canvasRenderer.infoRenderer(null, loadedData.currentlyDisplayedSideInfo);
 			Statics.pressurePlate.alreadyTriggered = loadedData.pressurePlateTriggered;
 
-			Control.script.isNewGame = loadedData.isNewGame;
-			Control.script.isRestarting = loadedData.isRestarting;
+			GameObject.Find("Blocker3").SetActive(loadedData.postMazeDoorOpen);
 
+			isNewGame = loadedData.isNewGame;
+			isRestarting = loadedData.isRestarting;
+
+
+
+			Statics.mPlayer.newGame = false;
 			switch (loadedData.currentBGName) {
 				case "Background_Start": {
 					Statics.music.PlayMusic(Statics.music.room1);
@@ -296,10 +350,6 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	//private void Update() {
-		
-	//}
-
 	private void OnDestroy() {
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
 	}
@@ -308,6 +358,8 @@ public class Control : MonoBehaviour {
 //Data to be saved
 [Serializable]
 public class SaveData {
+
+
 	public int coinsCollected;
 	public int spikesCollected;
 	public int bullets;
@@ -315,7 +367,9 @@ public class SaveData {
 
 	public float playerPositionX, playerPositionY, playerPositionZ;
 	public float blockPosX, blockPosY, blockPosZ;
+	public float spikePosX, spikePosY, spikePosZ;
 	public float blockZRotation;
+	public bool spikeActive;
 
 	public int difficulty;
 	public float time;
@@ -329,6 +383,7 @@ public class SaveData {
 	public bool shownBlockInfo;
 	public int blockPushAttempt;
 	public bool pressurePlateTriggered;
+	public bool postMazeDoorOpen;
 
 	public float camSize;
 
@@ -341,6 +396,7 @@ public class SaveData {
 	public bool bossSpawned;
 
 }
+
 //Static reference to other classes
 public class Statics : MonoBehaviour {
 
@@ -393,6 +449,7 @@ public class Statics : MonoBehaviour {
 	public static SoundFXHandler sound;
 
 	public static DisplaySaveFiles displaySaves;
+	public static ProfileName profile;
 
 }
 

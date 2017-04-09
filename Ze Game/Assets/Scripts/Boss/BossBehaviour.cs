@@ -157,9 +157,9 @@ public class BossBehaviour : MonoBehaviour {
 		}
 		selfRender.sprite = Invincible;
 
-		//StartCoroutine(Attacks(ChooseAttack()));
+		StartCoroutine(Attacks(ChooseAttack()));
 
-		StartCoroutine(Attacks(5));
+		//StartCoroutine(Attacks(4));
 
 	}
 
@@ -551,10 +551,10 @@ public class BossBehaviour : MonoBehaviour {
 			int choice = UnityEngine.Random.Range(0, 2);
 
 			if (choice == 0) {
-				rotationDelta = UnityEngine.Random.Range(0.1f, 0.4f);
+				rotationDelta = UnityEngine.Random.Range(0.4f, 1f);
 			}
 			else {
-				rotationDelta = UnityEngine.Random.Range(-0.4f, -0.1f);
+				rotationDelta = UnityEngine.Random.Range(-1f, -0.4f);
 			}
 		}
 	}
@@ -759,6 +759,9 @@ public class BossBehaviour : MonoBehaviour {
 				}
 			}
 		}
+	}
+	
+	private void FixedUpdate() {
 
 		if (Attack4 == true) {
 			z += rotationDelta;

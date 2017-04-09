@@ -1,16 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class DisplaySaveFiles : MonoBehaviour {
 	string dataPath;
 	string BGName;
 	public GameObject SaveObj;
 	public GameObject NoSaves;
+
+	public GameObject lastSave;
 
 	public RectTransform content;
 
@@ -37,7 +37,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 
 				GameObject save = Instantiate(SaveObj, content.transform);
 				save.name = saveFiles[i].FullName;
-
+				lastSave = save;
 				byte[] img = File.ReadAllBytes(saveDirectory + "/Resources/" + saveFiles[i].Name.Remove(saveFiles[i].Name.Length - 6, 6) + ".png");
 				Texture2D tex = new Texture2D(800, 600);
 				tex.LoadImage(img);
@@ -86,8 +86,8 @@ public class DisplaySaveFiles : MonoBehaviour {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
 																"Loaction: " + BGName + "\n" +
 																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.time / 60, saveInfo.time % 60, saveInfo.time.ToString().Remove(0, saveInfo.time.ToString().Length - 2)) + "\n" +
-																"Bullets: " + saveInfo.bullets + " Bombs: " + saveInfo.bombs + "\n" +
-																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.spikesCollected; 
+																"Spikes: " + saveInfo.spikesCollected + " Bullets: " + saveInfo.bullets + "\n" +
+																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.bombs; 
 				}
 				else {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
@@ -109,7 +109,14 @@ public class DisplaySaveFiles : MonoBehaviour {
 		foreach (Button item in gameObject.GetComponentsInChildren<Button>()) {
 			item.interactable = false;
 		}
-	} 
+	}
+	private void Update() {
+		EventSystem e = EventSystem.current;
+
+		if (lastSave != null && e.currentSelectedGameObject == null) {
+			e.SetSelectedGameObject(lastSave);
+		}
+	}
 
 
 	private void OnDestroy() {

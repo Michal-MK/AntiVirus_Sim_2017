@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
+
 	public float zero = 0;
 	public RectTransform bg;
 	public Transform player;
@@ -10,6 +11,11 @@ public class CameraMovement : MonoBehaviour {
 	public GameObject spike;
 	public Vector3 cam_pos;
 	public Animator anim;
+
+	public ParticleSystem psA;
+	public ParticleSystem psB;
+
+
 	Camera cam;
 	public List<GameObject> BackGroundS = new List<GameObject>();
 	public float camWidht;
@@ -36,15 +42,11 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	void Start() {
-
-
 		Cursor.visible = false;
 		cam = GetComponent<Camera>();
 		BackGroundS.Add(bg.gameObject);
 		camWidht = cam.aspect * cam.orthographicSize;
 		camHeight = cam.orthographicSize;
-
-
 	}
 
 
@@ -67,15 +69,13 @@ public class CameraMovement : MonoBehaviour {
 		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.left * 100, Color.red, 5);
 		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.right * 100, Color.yellow, 5);
 
-
-
 		bool continueInLoop = true;
 
 		foreach (RaycastHit2D hits in up) {
 			if (continueInLoop == false) {
 				break;
 			}
-			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
+			if (hits.transform.gameObject.activeInHierarchy == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
 				continueInLoop = false;
 				break;
 			}
@@ -156,8 +156,6 @@ public class CameraMovement : MonoBehaviour {
 		bool Vertical = true;
 		bool Horisontal = true;
 		GameObject[] BGarray = new GameObject[BackGroundS.Count];
-
-		bg = GameObject.Find(M_Player.currentBG_name).GetComponent<RectTransform>();
 
 		BGarray = BackGroundS.ToArray();
 		loadedZones = new GameObject[BGarray.Length];
@@ -350,8 +348,14 @@ public class CameraMovement : MonoBehaviour {
 		player.position = new Vector3(bossX, bossY, 0);
 		gameObject.transform.position = new Vector3(bossX, bossY, -10);
 		cam.orthographicSize = defaultCamSize;
+		ParticleSystem.ShapeModule shapeA = psA.shape;
+		psB.gameObject.SetActive(false);
 
-	}
+		shapeA.radius = 108 * 2;
+		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
+		ParticleSystem.MainModule main = psA.main;
+		main.startLifetime = 25;
+			}
 	private void OnDestroy() {
 		Statics.cameraMovement = null;
 	}

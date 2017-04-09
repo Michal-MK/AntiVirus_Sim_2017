@@ -14,7 +14,7 @@ public class ShowDifficultyInfo : MonoBehaviour {
 	}
 
 	private IEnumerator Appear() {
-		for (float f = 0; f < 255; f += 3) {
+		for (float f = 0; f < 255; f += 5) {
 			text.color = new Color32(255, 255, 255, (byte)f);
 			if (f >= 255) {
 				break;

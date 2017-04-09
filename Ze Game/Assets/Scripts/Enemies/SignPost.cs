@@ -6,28 +6,34 @@ using UnityEngine;
 public class SignPost : MonoBehaviour {
 	public SpriteRenderer sign;
 	public GameObject InteractInfo;
+	public GameObject E;
 
 	private bool awaitingInput = false;
 	private bool interact = true;
 
+
 	private void OnTriggerEnter2D(Collider2D col) {
-		if(col.tag == "Player") {
+		if (col.tag == "Player") {
 			awaitingInput = true;
-			InteractInfo.SetActive(true);
-			
+
+			if (!InteractInfo.activeSelf) {
+				InteractInfo.SetActive(true);
+			}
+
 		}
 	}
 	private void OnTriggerExit2D(Collider2D col) {
 		if (col.tag == "Player") {
 			awaitingInput = false;
-			InteractInfo.SetActive(false);
-
+			if (InteractInfo.activeSelf) {
+				InteractInfo.SetActive(false);
+			}
 		}
 	}
 	private IEnumerator Fade() {
 		for (float f = 255; f > 0; f -= 1) {
 			sign.color = new Color32(255, 255, 255, (byte)f);
-			if(f > 0) {
+			if (f > 0) {
 				yield return null;
 			}
 			else {
@@ -43,16 +49,62 @@ public class SignPost : MonoBehaviour {
 		if (awaitingInput) {
 			if (Input.GetButtonDown("Interact")) {
 				if (interact) {
-					Statics.avoidance.StartAvoidance();
-					Statics.avoidance.preformed = true;
-					StartCoroutine(Fade());
-					interact = false;
-					gameObject.GetComponent<BoxCollider2D>().enabled = false;
-					InteractInfo.SetActive(false);
-					if (Statics.avoidance.displayAvoidInfo) {
-						Statics.canvasRenderer.infoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
-															"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
-						Statics.avoidance.displayAvoidInfo = false;
+					switch (gameObject.name) {
+						case "SignPost Avoidance": {
+
+							Statics.avoidance.StartAvoidance();
+							Statics.avoidance.preformed = true;
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							if (Statics.avoidance.displayAvoidInfo) {
+								Statics.canvasRenderer.infoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+																	"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
+								Statics.avoidance.displayAvoidInfo = false;
+							}
+							break;
+						}
+						case "SignPost Start": {
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							Statics.canvasRenderer.infoRenderer("The one who lurks in the shadow can not be damaged while attacking.",null);
+							break;
+						}
+						case "SignPost Room 1": {
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							Statics.canvasRenderer.infoRenderer("All the spikes you are collecting have a purpouse, hold on to them.",null);
+							break;
+						}
+						case "SignPost PostAvoidance": {
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							Statics.canvasRenderer.infoRenderer("The minions of the Shadowed One are deadly, head south to get to his hideout.", null);
+							break;
+						}
+						case "SignPost Maze": {
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							Statics.canvasRenderer.infoRenderer("The coins are up to no use.", null);
+							break;
+						}
+						case "SignPost PreBoss": {
+							StartCoroutine(Fade());
+							interact = false;
+							gameObject.GetComponent<BoxCollider2D>().enabled = false;
+							InteractInfo.SetActive(false);
+							Statics.canvasRenderer.infoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget.", null);
+							break;
+						}
 					}
 				}
 			}
