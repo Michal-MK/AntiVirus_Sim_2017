@@ -116,7 +116,7 @@ public class Wrapper : MonoBehaviour {
 		Control.script.Restart();
 	}
 
-	public void EnableSaving(bool state) {
+	public void SetSaving(bool state) {
 		save.interactable = state;
 	}
 

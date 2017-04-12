@@ -129,7 +129,7 @@ public class Control : MonoBehaviour {
 		data.difficulty = chosenDifficulty;
 		data.currentBGName = M_Player.currentBG_name;
 		data.currentlyDisplayedSideInfo = Statics.canvasRenderer.info_S.text;
-		data.time = Mathf.Round(timer.time * 1000) / 1000;
+		data.time = Mathf.Round((timer.time + 60) * 1000) / 1000;
 		data.shownAttempt = Statics.mPlayer.newGame;
 		data.shownShotInfo = Statics.playerAttack.displayShootingInfo;
 		data.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
@@ -177,16 +177,22 @@ public class Control : MonoBehaviour {
 		StartCoroutine(FilesLoaded());
 	}
 
+	private bool load = false;
+
 	public IEnumerator StartNewGame(int difficulty) {
+
 		PlayerPrefs.SetInt("difficulty", difficulty);
 		Statics.camFade.PlayTransition("Trans");
+		yield return new WaitForFixedUpdate();
+
+		load = false;
 		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
-		loading.allowSceneActivation = true;
-		yield return new WaitForSeconds(1.5f);
+		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
 		Statics.camFade.anim.speed = 0;
-		yield return new WaitUntil(() => loading.isDone);
-		print("DoneLoading");
-		Statics.camFade.anim.speed = 1;
+
+		yield return new WaitUntil(() => load = true);
+		loading.allowSceneActivation = true;
+		load = false;
 	}
 
 
@@ -220,12 +226,14 @@ public class Control : MonoBehaviour {
 
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		if(scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
+		load = true;
+		if (scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
 			SetName();
 		}
 
 		if (scene.buildIndex == 1 && isNewGame) {
 			Statics.mPlayer.newGame = true;
+			Statics.camFade.anim.speed = 1;
 		}
 		else if (isRestarting) {
 			isNewGame = false;
@@ -297,7 +305,7 @@ public class Control : MonoBehaviour {
 
 
 			timer.time = loadedData.time;
-			timer.run = true;
+			
 
 			Camera.main.orthographicSize = loadedData.camSize;
 			Statics.zoom.canZoom = loadedData.canZoom;
@@ -348,6 +356,9 @@ public class Control : MonoBehaviour {
 				}
 			}
 		}
+		M_Player.doNotMove = false;
+		load = true;
+		timer.run = true;
 	}
 
 	private void OnDestroy() {
@@ -436,7 +447,6 @@ public class Statics : MonoBehaviour {
 	public static M_Player mPlayer;
 	public static PlayerAttack playerAttack;
 	public static SpikeBullet spikeBullet;
-	public static PlayerParticles playerParticles;
 
 
 	public static Avoidance avoidance;

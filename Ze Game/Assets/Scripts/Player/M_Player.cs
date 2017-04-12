@@ -12,6 +12,7 @@ public class M_Player : MonoBehaviour {
 	public GameObject saveButton;
 	public GameObject restartButton;
 	public GameObject quitToMenu;
+	public GameObject loadButton;
 	public Animator GameOverImg;
 
 	public static float distanceToWall;
@@ -52,6 +53,7 @@ public class M_Player : MonoBehaviour {
 		restartButton.SetActive(false);
 		quitToMenu.SetActive(false);
 		saveButton.SetActive(false);
+		loadButton.SetActive(false);
 
 		int difficulty = PlayerPrefs.GetInt("difficulty");
 		string name = PlayerPrefs.GetString("player_name");
@@ -176,7 +178,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 4);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
 				}
 			}
 			else {
@@ -192,7 +194,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 4);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
 				}
 			}
 			else {
@@ -208,7 +210,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 4);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
 				}
 			}
 			else {
@@ -224,7 +226,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 4);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
 				}
 			}
 			else {
@@ -665,6 +667,7 @@ if (doNotMove == false) {
 	public void GameOver() {
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
+		loadButton.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
 		timer.run = false;

@@ -146,16 +146,16 @@ public class BossBehaviour : MonoBehaviour {
 
 	private IEnumerator InitialAttack() {
 
+		for (int i = 0; i < spikeHitboxes.Length; i++) {
+			spikeHitboxes[i].enabled = false;
+		}
+		selfRender.sprite = Invincible;
+
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 		Control.script.Save(false,false);
 		bossSpawned = true;
 		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Attack mode with \"Space\", aim with mouse, Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
-
-		for (int i = 0; i < spikeHitboxes.Length; i++) {
-			spikeHitboxes[i].enabled = false;
-		}
-		selfRender.sprite = Invincible;
 
 		StartCoroutine(Attacks(ChooseAttack()));
 

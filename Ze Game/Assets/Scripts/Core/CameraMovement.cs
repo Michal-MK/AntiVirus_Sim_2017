@@ -274,8 +274,12 @@ public class CameraMovement : MonoBehaviour {
 		camWidht = cam.aspect * cam.orthographicSize;
 		camHeight = cam.orthographicSize;
 
-		if (inBossRoom == false && inMaze == false) {
-			cam_pos = new Vector3(camX(), camY(), player.position.z - 10);
+		if (!inBossRoom && !inMaze) {
+			//print(inBossRoom + " " + inMaze);
+			cam_pos = new Vector3(camX(), camY(), - 10);
+			gameObject.transform.position = cam_pos;
+		}else if (Statics.mazeEntrance.inMazePropoerly) {
+			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
 		}
 	}

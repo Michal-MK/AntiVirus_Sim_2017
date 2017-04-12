@@ -42,7 +42,8 @@ public class DisplaySaveFiles : MonoBehaviour {
 				Texture2D tex = new Texture2D(800, 600);
 				tex.LoadImage(img);
 				Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-				save.GetComponentInChildren<Image>().sprite = sp;
+				save.transform.Find("SaveImage").GetComponent<Image>().sprite = sp;
+				//save.GetComponentInChildren<Image>().sprite = sp;
 
 
 				FileStream file = new FileStream(savePath, FileMode.Open);

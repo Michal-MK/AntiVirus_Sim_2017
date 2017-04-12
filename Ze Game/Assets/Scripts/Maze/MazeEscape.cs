@@ -26,6 +26,7 @@ public class MazeEscape : MonoBehaviour {
 		}
 	}
 	public IEnumerator FromMazeTrans() {
+		entrance.gameObject.SetActive(false);
 		Statics.camFade.PlayTransition("Trans");
 		yield return new WaitForSeconds(1.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
@@ -49,10 +50,12 @@ public class MazeEscape : MonoBehaviour {
 
 		shapeA.radius = Camera.main.orthographicSize * 2;
 		shapeB.radius = Camera.main.orthographicSize * 2;
+		
 
 
+		wrp.SetSaving(true);
 
-		wrp.EnableSaving(true);
+
 	}
 
 	private IEnumerator FadeWalls() {

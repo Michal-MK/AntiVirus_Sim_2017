@@ -35,6 +35,10 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? color = null) {
+		if (isRunning) {
+			StartCoroutine(ReturnLater(displayedTextPanel,displayedTextSide,color));
+			return;
+		}
 		//print(displayedTextSide);
 		if (color != null) {
 			InfoPanelImg.color = (Color32)color;
@@ -53,6 +57,11 @@ public class Canvas_Renderer : MonoBehaviour {
 		else if (displayedTextPanel == null && displayedTextSide != null) {
 			StartCoroutine(SlideInfo());
 		}
+	}
+	
+	private IEnumerator ReturnLater(string s,string ss, Color32? color = null) {
+		yield return new WaitWhile(() => isRunning == true);
+		infoRenderer(s, ss, color);
 	}
 
 	private void Update() {

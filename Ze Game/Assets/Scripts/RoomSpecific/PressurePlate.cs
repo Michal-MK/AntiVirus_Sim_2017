@@ -35,7 +35,6 @@ public class PressurePlate : MonoBehaviour {
 		Vector3 newPos = pos;
 
 		float f = Random.value;
-		print(f);
 
 		if (f < 0.5) {
 			while (Vector3.Distance(pos, newPos) < 10) {

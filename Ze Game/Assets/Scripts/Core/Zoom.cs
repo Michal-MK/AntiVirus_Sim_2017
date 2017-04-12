@@ -25,12 +25,12 @@ public class Zoom : MonoBehaviour {
 			
 			if (roll > 0) {
 				if (cam.orthographicSize < BossMax) {
-					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.2f;
 				}
 			}
 			else if (roll < 0) {
 				if (cam.orthographicSize > BossMin) {
-					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
+					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.2f;
 				}
 			}
 			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);

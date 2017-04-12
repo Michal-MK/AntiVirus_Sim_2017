@@ -71,7 +71,7 @@ public class TurretAttack : MonoBehaviour {
 			}
 		}
 	}
-	
+
 
 	private IEnumerator waitForAttack(float spawnRate) {
 		while (true) {
@@ -99,7 +99,7 @@ public class TurretAttack : MonoBehaviour {
 					GameObject bullet = pooler.GetPool();
 					Vector3 rnd = RandomVec();
 
-					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - (gameObject.transform.position - rnd)));
+					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - (gameObject.transform.position)));
 
 					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
 					bullet.transform.SetParent(enemy);
@@ -112,14 +112,11 @@ public class TurretAttack : MonoBehaviour {
 	public Vector3 RandomVec() {
 		int r = 0;
 		if (PlayerPrefs.GetInt("difficulty") <= 2) {
-			r = Random.Range(-20, 20);
+			r = Random.Range(-10, 10);
 			return Vector2.one * r;
 		}
 		else if (PlayerPrefs.GetInt("difficulty") >= 3) {
-			while (r >= -8 && r <= 8) {
-				r = Random.Range(-20, 20);
-			}
-			print(r);
+			r = Random.Range(-20, 20);
 			return Vector2.one * r;
 		}
 		else

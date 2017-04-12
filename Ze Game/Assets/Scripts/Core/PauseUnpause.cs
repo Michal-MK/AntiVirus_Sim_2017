@@ -8,6 +8,7 @@ public class PauseUnpause : MonoBehaviour {
 	public GameObject restartButton;
 	public GameObject quitToMenu;
 	public GameObject saveButton;
+	public GameObject loadButton;
 
 
 	private void Awake() {

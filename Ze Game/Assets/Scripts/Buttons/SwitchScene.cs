@@ -19,23 +19,28 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
+		timer.time = 0;
 		if (Statics.camFade != null) {
 			Statics.camFade.anim.SetTrigger("UnDim");
 		}
 	}
 
-	public void DelayMenuWrapper() {
-		StartCoroutine(DelayManu());
+	public void DelayMenuWrapper(int i) {
+		StartCoroutine(DelayMenu(i));
 	}
 
-	private IEnumerator DelayManu() {
+	private IEnumerator DelayMenu(int i) {
 		GameObject save = GameObject.Find("saveGame");
 		GameObject quit = GameObject.Find("quitToMenu");
 		GameObject rest = GameObject.Find("restartButton");
+		GameObject load = GameObject.Find("loadGame");
 
 		rest.SetActive(false);
 		if (save != null) {
 			save.SetActive(false);
+		}
+		if(load != null) {
+			load.SetActive(false);
 		}
 		quit.transform.position = new Vector3(0,-200,10);
 
@@ -53,7 +58,8 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		SceneManager.LoadScene(0);
+		timer.time = 0;
+		SceneManager.LoadScene(i);
 	}
 
 	private void OnDestroy() {
