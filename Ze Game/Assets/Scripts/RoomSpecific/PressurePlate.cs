@@ -65,7 +65,7 @@ public class PressurePlate : MonoBehaviour {
 		if (col.name == "Block") {
 			attempts++;
 			if (attempts == 1) {
-				Statics.canvasRenderer.infoRenderer("A projectile pushed the block off of the pressure plate...", "These projectiles sure are a nuisance");
+				Statics.canvasRenderer.infoRenderer("A projectile pushed the block off of the activator...", "These projectiles sure are a nuisance.");
 			}
 			if (attempts == 3) {
 				CreateBarrier();
@@ -78,8 +78,7 @@ public class PressurePlate : MonoBehaviour {
 	}
 	public void CreateBarrier() {
 		Statics.canvasRenderer.infoRenderer(null, "Ok, let me help you a little.");
-		GameObject protection = Instantiate(wall, gameObject.transform.position + new Vector3(10, 0, 0), Quaternion.identity);
-		protection.transform.parent = gameObject.transform.parent;
+		GameObject protection = Instantiate(wall, gameObject.transform.position + new Vector3(10, 0, 0), Quaternion.identity,gameObject.transform.parent);
 		protection.name = "Blocker";
 		protection.GetComponent<BoxCollider2D>().isTrigger = true;
 		protection.transform.localScale = new Vector3(0.2f, 0.1f, 1);

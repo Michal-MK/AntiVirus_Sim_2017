@@ -78,14 +78,14 @@ public class PlayerAttack : MonoBehaviour {
 				if (bullets != 0) {
 					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n "+
-														"The bullets are reusable and you have to pick them up after you fire!\n" +
+														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
 														"Currently you have: " + bullets + " bullets.\n "+
 														"Don't lose them", null);
 					displayShootingInfo = false;
 				}else {
 					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n "+
-														"The bullets are reusable and you have to pick them up after you fire!\n " +
+														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
 														"Currently you have: " + bullets + " bullets.", null);
 					displayShootingInfo = false;
 				}

@@ -48,7 +48,7 @@ public class SignPost : MonoBehaviour {
 	private void Update() {
 		if (awaitingInput) {
 			if (Input.GetButtonDown("Interact")) {
-				if (interact) {
+				if (interact && Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
 					switch (gameObject.name) {
 						case "SignPost Avoidance": {
 
@@ -63,6 +63,7 @@ public class SignPost : MonoBehaviour {
 																	"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
 								Statics.avoidance.displayAvoidInfo = false;
 							}
+							interact = false;
 							break;
 						}
 						case "SignPost Start": {
@@ -70,7 +71,7 @@ public class SignPost : MonoBehaviour {
 							interact = false;
 							gameObject.GetComponent<BoxCollider2D>().enabled = false;
 							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("The one who lurks in the shadow can not be damaged while attacking.",null);
+							Statics.canvasRenderer.infoRenderer("The virus can not be damaged while attacking.",null);
 							break;
 						}
 						case "SignPost Room 1": {
@@ -86,7 +87,7 @@ public class SignPost : MonoBehaviour {
 							interact = false;
 							gameObject.GetComponent<BoxCollider2D>().enabled = false;
 							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("The minions of the Shadowed One are deadly, head south to get to his hideout.", null);
+							Statics.canvasRenderer.infoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
 							break;
 						}
 						case "SignPost Maze": {

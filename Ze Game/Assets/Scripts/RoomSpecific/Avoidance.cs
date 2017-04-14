@@ -24,13 +24,13 @@ public class Avoidance : MonoBehaviour {
 	public void StartAvoidance() {
 		door1.SetActive(true);
 		spawner.spawnAvoidance();
-		StartCoroutine("hold");
+		StartCoroutine(hold());
 		SaveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
 		Statics.music.MusicTransition(Statics.music.avoidance);
 		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
-
+		StartCoroutine(TimeLeft());
 	}
 
 
@@ -41,11 +41,33 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(false);
 		spike.SetPosition();
 		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
-		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Hint - This may be unexpected.");
+		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		StopAllCoroutines();
 
 
 	}
+
+	private IEnumerator TimeLeft() {
+		Text SideText = Statics.canvasRenderer.info_S;
+		int i = (int)avoidDuration - 1;
+		bool show = false;
+
+		while (true) {
+			yield return new WaitForSeconds(1);
+			i--;
+			if (i <= 50) {
+				show = true;
+			}
+			if (show) {
+				SideText.text = string.Format("{0:00} seconds left!", i);
+			}
+			if (i <= 0) {
+				StopCoroutine(TimeLeft());
+				break;
+			}
+		}
+	}
+
 	private void OnDestroy() {
 		Statics.avoidance = null;
 	}

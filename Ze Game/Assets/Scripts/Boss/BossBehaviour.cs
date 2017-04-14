@@ -114,6 +114,8 @@ public class BossBehaviour : MonoBehaviour {
 	public BoxCollider2D[] spikeHitboxes = new BoxCollider2D[4];
 	public SpriteRenderer selfRender;
 
+	public bool donePositioning = true;
+
 	#endregion
 
 	private void Awake() {
@@ -154,7 +156,7 @@ public class BossBehaviour : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 		Control.script.Save(false,false);
 		bossSpawned = true;
-		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Attack mode with \"Space\", aim with mouse, Red = Invincible, Blue = Damageable");
+		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
 
 		StartCoroutine(Attacks(ChooseAttack()));
@@ -251,9 +253,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
 				yield return new WaitForSeconds(3);
-				//Statics.playerParticles.ActivateScript(gameObject.transform, false);
-				Statics.canvasRenderer.infoRenderer(null, "Don't forget aout the zooming feature :]");
-
+				Statics.canvasRenderer.infoRenderer(null, "Don't forget about the zooming feature :]");
 				float waitTime = 1.1f;
 
 				for (int i = 0; i <= fullCircle; i++) {
@@ -564,7 +564,7 @@ public class BossBehaviour : MonoBehaviour {
 	//Flappy bird like Attack Code
 	public IEnumerator PipeGeneration() {
 
-		float PipePeriod = 1f;
+		float NextPipeDelay = 1f;
 		float distToPly = Mathf.Abs(Mathf.Abs(player.transform.position.x) - Mathf.Abs(gameObject.transform.position.x));
 		float arriveTime = 10f;
 		float spawningPhaseTime = 2f;
@@ -579,7 +579,7 @@ public class BossBehaviour : MonoBehaviour {
 			int shots = (int)(spawningPhaseTime / shotdelay);
 			float holeMid = Random.Range(-BG.sizeDelta.y / 2 + 20, BG.sizeDelta.y / 2 - 20);
 
-			yield return new WaitForSeconds(PipePeriod);
+			yield return new WaitForSeconds(NextPipeDelay);
 
 			
 			if (GoingDown == true) {
@@ -596,7 +596,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				float change = arriveTime - (Time.timeSinceLevelLoad - timeOnStart);
 
-				if (transform.position.y > holeMid + 12 || transform.position.y < holeMid - 12) {
+				if ((transform.position.y > holeMid + 15 || transform.position.y < holeMid - 15) && Atk != null) {
 					GameObject shot = poolOfEnemyProjectiles.GetPool();
 					Projectile script = shot.GetComponent<Projectile>();
 					Projectile.projectileSpeed = distToPly / change;
@@ -607,11 +607,9 @@ public class BossBehaviour : MonoBehaviour {
 					shot.SetActive(true);
 					script.StartCoroutine(script.SelfDestruct(change + 1.5f));
 				}
-				shots -= 1;
+				shots--;
 				yield return new WaitForSeconds(shotdelay);
-
 			}
-
 		}
 		yield return new WaitForSeconds(arriveTime);
 		doneBouncing = true;
@@ -636,7 +634,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	//Generic functions
 	public IEnumerator LerpPos(GameObject obj, Vector3 start, Vector3 end, bool smooth = true) {
-
+		donePositioning = false;
 
 		float sX = start.x;
 		float sY = start.y;
@@ -684,9 +682,11 @@ public class BossBehaviour : MonoBehaviour {
 						if (moveCage) {
 							positioningCage.GetComponent<CageScript>().MoveUp();
 							StopCoroutine(Positioning);
+							donePositioning = true;
 							break;
 						}
 						else {
+							donePositioning = true;
 							StopCoroutine(Atk);
 							break;
 						}

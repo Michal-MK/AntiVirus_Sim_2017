@@ -86,11 +86,11 @@ public class M_Player : MonoBehaviour {
 		Statics.gameProgression.Progress();
 		if (newGame && !Control.script.isRestarting) {
 
-			Control.script.Save(true);
+			//Control.script.Save(true);
 			Statics.music.PlayMusic(Statics.music.room1);
 			attempts++;
 			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
-												"This is your " + attempts + ". attempt. \n\n" +
+												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
 			PlayerPrefs.SetInt("Attempts", attempts);

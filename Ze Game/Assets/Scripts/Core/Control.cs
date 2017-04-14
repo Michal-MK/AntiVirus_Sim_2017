@@ -79,13 +79,6 @@ public class Control : MonoBehaviour {
 			auth.transform.localPosition = Vector3.zero;
 			print(auth.transform.position);
 		}
-		//else {
-		//	yield return new WaitForEndOfFrame();
-		//	if (Statics.profile != null) {
-		//		Statics.profile.DisplayProfile();
-		//	}
-		//}
-
 	}
 	public void Save(bool newsaveFile, bool saveOnceInBoss = true) {
 		print("Saving");
