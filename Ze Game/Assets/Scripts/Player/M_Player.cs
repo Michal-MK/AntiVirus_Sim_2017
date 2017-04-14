@@ -86,19 +86,18 @@ public class M_Player : MonoBehaviour {
 		Statics.gameProgression.Progress();
 		if (newGame && !Control.script.isRestarting) {
 
-			Control.script.Save(true);
-			Statics.music.PlayMusic(Statics.music.room1);
+			//Control.script.Save(true);
+			MusicHandler.music.PlayMusic(MusicHandler.music.room1);
 			attempts++;
 			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
-												"This is your " + attempts + ". attempt. \n\n" +
+												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
 			PlayerPrefs.SetInt("Attempts", attempts);
 			newGame = false;
 		}
 		else if (Control.script.isRestarting) {
-			print("ISRESTARTING");
-			Statics.music.PlayMusic(Statics.music.room1);
+			MusicHandler.music.PlayMusic(MusicHandler.music.room1);
 			Statics.canvasRenderer.infoRenderer(null, "Good luck & Have fun!");
 			Control.script.isRestarting = false;
 		}
@@ -543,7 +542,7 @@ if (doNotMove == false) {
 
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.transform.name == "killerblock") {
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.sound.PlayFX(SoundFXHandler.sound.ELShock);
 		}
 		if (once && collision.transform.name == "Block") {
 			guide.enableGuide();
@@ -556,7 +555,7 @@ if (doNotMove == false) {
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			collision.transform.parent = GameObject.Find("Collectibles").transform;
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.sound.PlayFX(SoundFXHandler.sound.ELShock);
 			GameOver();
 		}
 	}
@@ -571,7 +570,7 @@ if (doNotMove == false) {
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
 			face.GetComponent<SpriteRenderer>().sprite = sad;
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.sound.PlayFX(SoundFXHandler.sound.ELShock);
 			GameOver();
 
 		}
@@ -586,14 +585,15 @@ if (doNotMove == false) {
 			}
 
 			if (col.name == "Background_room_1") {
-				Statics.music.MusicTransition(Statics.music.room2);
+				MusicHandler.music.MusicTransition(MusicHandler.music.room2);
 				spawner.InvokeRepeating("spawnKillerWall", 0, 0.7f);
 				if (gameProgression == 3) {
 					Statics.canvasRenderer.infoRenderer(null, "Go down even further.");
 				}
 			}
 			if (col.name == "Background_room_2a") {
-				Statics.music.MusicTransition(Statics.music.room1);
+				MusicHandler.music.MusicTransition(MusicHandler.music.room1);
+				Statics.canvasRenderer.DisplayDirection(0);
 			}
 
 		}
@@ -602,7 +602,7 @@ if (doNotMove == false) {
 
 		}
 		if (col.tag == "Spike") {
-			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
+			SoundFXHandler.sound.PlayFX(SoundFXHandler.sound.ArrowCollected);
 			Statics.gameProgression.Progress();
 			face.GetComponent<SpriteRenderer>().sprite = happy;
 			PlayerAttack.bullets++;
@@ -673,7 +673,7 @@ if (doNotMove == false) {
 		timer.run = false;
 		Statics.camFade.PlayTransition("Dim");
 		GameOverImg.SetTrigger("Appear");
-		Statics.music.StartCoroutine(Statics.music.StopMusic());
+		MusicHandler.music.StartCoroutine(MusicHandler.music.StopMusic());
 		Statics.zoom.canZoom = false;
 		StartCoroutine(StopTime());
 		gameOver = true;

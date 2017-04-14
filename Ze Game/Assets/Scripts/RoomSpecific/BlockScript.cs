@@ -43,7 +43,7 @@ public class BlockScript : MonoBehaviour {
 		}
 
 		if(showInfo && dist < 10) {
-			Statics.canvasRenderer.infoRenderer("Find a pressure plate and put that block on it.", null);
+			Statics.canvasRenderer.infoRenderer("Find the activator and put the block in front of you on it.", null);
 			showInfo = false;
 		}
 

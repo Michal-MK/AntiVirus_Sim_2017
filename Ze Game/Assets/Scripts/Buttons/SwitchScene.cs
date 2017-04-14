@@ -45,8 +45,8 @@ public class SwitchScene : MonoBehaviour {
 		quit.transform.position = new Vector3(0,-200,10);
 
 		Statics.camFade.PlayTransition("Trans");
-		if (Statics.music.sound.volume != 0) {
-			Statics.music.StartCoroutine(Statics.music.StopMusic());
+		if (MusicHandler.music.source.volume != 0) {
+			MusicHandler.music.StartCoroutine(MusicHandler.music.StopMusic());
 		}
 		yield return new WaitForSecondsRealtime(2);
 

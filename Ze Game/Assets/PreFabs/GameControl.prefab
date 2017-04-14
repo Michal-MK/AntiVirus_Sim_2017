@@ -57,3 +57,5 @@ MonoBehaviour:
     type: 2}
   isNewGame: 1
   isRestarting: 0
+  music: {fileID: 1117573155869226, guid: 9f080f73046825548b7c0606befd6a98, type: 2}
+  sound: {fileID: 1507013248295302, guid: 74f15c75c6c4e43498cf4084823e1d86, type: 2}

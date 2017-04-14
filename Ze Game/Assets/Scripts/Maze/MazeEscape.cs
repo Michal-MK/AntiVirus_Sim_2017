@@ -22,7 +22,7 @@ public class MazeEscape : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 			StartCoroutine(FromMazeTrans());
-			Statics.music.MusicTransition(Statics.music.room1);
+			MusicHandler.music.MusicTransition(MusicHandler.music.room1);
 		}
 	}
 	public IEnumerator FromMazeTrans() {
