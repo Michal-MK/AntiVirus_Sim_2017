@@ -27,7 +27,7 @@ public class Coins : MonoBehaviour {
 
 			coinsCollected = coinsCollected + 1;
 			CoinBehavior();
-			Statics.sound.PlayFX(Statics.sound.CoinCollected);
+			SoundFXHandler.sound.PlayFX(SoundFXHandler.sound.CoinCollected);
 			Statics.canvasRenderer.Counters("Coin");
 		}
 	}

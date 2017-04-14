@@ -32,7 +32,7 @@ public class MazeEntrance : MonoBehaviour {
 				entered = true;
 				M_Player.gameProgression = 3;
 				StartCoroutine(TransToPos());
-				Statics.music.MusicTransition(Statics.music.maze);
+				MusicHandler.music.MusicTransition(MusicHandler.music.maze);
 			}
 		}
 	}

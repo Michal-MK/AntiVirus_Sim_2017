@@ -22,7 +22,7 @@ public class BossEntrance : MonoBehaviour {
 		if (collision.tag == "Player") {
 
 			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
-				Statics.music.MusicTransition(Statics.music.boss);
+				MusicHandler.music.MusicTransition(MusicHandler.music.boss);
 				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 				spawnedBoss.name = "Boss";
 				player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();

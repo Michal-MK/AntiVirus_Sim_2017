@@ -65,7 +65,7 @@ public class BossHealth : MonoBehaviour {
 	public void CheckShields() {
 		print(t + " " + r + " " + b + " " + l);
 		if (t && r && b && l && once) {
-			Statics.canvasRenderer.infoRenderer("His shields are up ... but we got a bomb!\n " +
+			Statics.canvasRenderer.infoRenderer("Its shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
@@ -116,8 +116,8 @@ public class BossHealth : MonoBehaviour {
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
 		timer.run = false;
-		Statics.music.MusicTransition(null);
-		yield return new WaitForSeconds(5);
+		MusicHandler.music.MusicTransition(null);
+		yield return new WaitForSeconds(2);
 		GameObject.Find("TransitionBlack").GetComponent<Animator>().Play("CamTransition");
 
 		yield return new WaitForSeconds(2);

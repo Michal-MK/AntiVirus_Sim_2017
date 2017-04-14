@@ -56,7 +56,7 @@ public class Spike : MonoBehaviour {
 
 			if (displayArrowGuideInfo == true) {
 				displayArrowGuideInfo = false;
-				Statics.canvasRenderer.infoRenderer("Follow the blinking arrows.", "Be aware of every detail on the screen.");
+				Statics.canvasRenderer.infoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 			}
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
@@ -67,7 +67,15 @@ public class Spike : MonoBehaviour {
 				Maze.MazeEscape();
 			}
 			if(spikesCollected == 5) {
-				Statics.canvasRenderer.infoRenderer(null, "You found all the bullets.");
+				string text;
+				if (Statics.playerAttack.displayShootingInfo) {
+					text = "You found all the bullets.\n You can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\n The bullets are limited, don't lose them!";
+					Statics.playerAttack.displayShootingInfo = false;
+				}
+				else {
+					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
+				}
+				Statics.canvasRenderer.infoRenderer(text, "Don't give up now.");
 			}
 			int p = M_Player.gameProgression;
 			switch (p) {

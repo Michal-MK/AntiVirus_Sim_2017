@@ -18,6 +18,9 @@ public class Control : MonoBehaviour {
 	public bool isNewGame = true;
 	public bool isRestarting = false;
 
+	public GameObject music;
+	public GameObject sound;
+
 	private SaveData loadedData;
 
 
@@ -26,6 +29,8 @@ public class Control : MonoBehaviour {
 		if (script == null) {
 			script = this;
 			DontDestroyOnLoad(gameObject);
+			print("Subscribe");
+			SceneManager.sceneLoaded += OnSceneFinishedLoading;
 		}
 		else if (script != this) {
 			Destroy(gameObject);
@@ -64,7 +69,6 @@ public class Control : MonoBehaviour {
 		if (!Directory.Exists(Application.dataPath + "/Saves/D4/Resources")) {
 			Directory.CreateDirectory(Application.dataPath + "/Saves/D4/Resources");
 		}
-		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
 	private void Start() {
@@ -192,6 +196,7 @@ public class Control : MonoBehaviour {
 
 		yield return new WaitUntil(() => load = true);
 		loading.allowSceneActivation = true;
+		Statics.camFade.anim.speed = 1;
 		load = false;
 	}
 
@@ -214,11 +219,13 @@ public class Control : MonoBehaviour {
 
 	private IEnumerator FilesLoaded() {
 		Statics.camFade.PlayTransition("Trans");
+		yield return new WaitForEndOfFrame();
 		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		isNewGame = false;
-		loading.allowSceneActivation = true;
-		yield return new WaitForSeconds(1.5f);
+		Time.timeScale = 0;
+		yield return new WaitUntil(()=>Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
 		Statics.camFade.anim.speed = 0;
+		loading.allowSceneActivation = true;
 		yield return new WaitUntil(() => loading.isDone);
 		Statics.camFade.anim.speed = 1;
 
@@ -227,10 +234,12 @@ public class Control : MonoBehaviour {
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
 		load = true;
-		if (scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
-			SetName();
-		}
 
+		if (scene.buildIndex == 0) {
+			if (PlayerPrefs.GetString("player_name") == null) {
+				SetName();
+			}
+		}
 		if (scene.buildIndex == 1 && isNewGame) {
 			Statics.mPlayer.newGame = true;
 			Statics.camFade.anim.speed = 1;
@@ -300,7 +309,7 @@ public class Control : MonoBehaviour {
 			Statics.avoidance.preformed = loadedData.doneAvoidance;
 			if (loadedData.doneAvoidance) {
 				GameObject.Find("SignPost Avoidance").SetActive(false);
-				Statics.music.PlayMusic(Statics.music.room1);
+				MusicHandler.music.PlayMusic(MusicHandler.music.room1);
 			}
 
 
@@ -336,19 +345,19 @@ public class Control : MonoBehaviour {
 			Statics.mPlayer.newGame = false;
 			switch (loadedData.currentBGName) {
 				case "Background_Start": {
-					Statics.music.PlayMusic(Statics.music.room1);
+					MusicHandler.music.PlayMusic(MusicHandler.music.room1);
 					break;
 				}
 				case "Background_room_2b": {
-					Statics.music.PlayMusic(Statics.music.room1);
+					MusicHandler.music.PlayMusic(MusicHandler.music.room1);
 					break;
 				}
 				case "Background_room_Boss_1": {
-					Statics.music.PlayMusic(Statics.music.boss);
+					MusicHandler.music.PlayMusic(MusicHandler.music.boss);
 					break;
 				}
 				case "MazeBG": {
-					Statics.music.PlayMusic(Statics.music.maze);
+					MusicHandler.music.PlayMusic(MusicHandler.music.maze);
 					break;
 				}
 				default: {
@@ -359,6 +368,7 @@ public class Control : MonoBehaviour {
 		M_Player.doNotMove = false;
 		load = true;
 		timer.run = true;
+		Time.timeScale = 1;
 	}
 
 	private void OnDestroy() {
@@ -455,8 +465,6 @@ public class Statics : MonoBehaviour {
 
 
 	public static CamFadeOut camFade;
-	public static MusicHandler music;
-	public static SoundFXHandler sound;
 
 	public static DisplaySaveFiles displaySaves;
 	public static ProfileName profile;
