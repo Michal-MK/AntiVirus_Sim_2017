@@ -130,7 +130,6 @@ public class M_Player : MonoBehaviour {
 		if (disableSavesByBoss && onceDisable) {
 			saveButton.GetComponent<Toggle>().interactable = false;
 			onceDisable = false;
-			print("Disabled");
 		}
 
 		if (doFlappy) {
@@ -175,7 +174,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.bossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
@@ -191,7 +190,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.bossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
@@ -207,7 +206,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * 5);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.bossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
@@ -223,7 +222,7 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * 5);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.bossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
@@ -551,8 +550,9 @@ if (doNotMove == false) {
 			once = false;
 		}
 		if (collision.transform.tag == "Enemy") {
+			print("Collided");
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
-				gameObject.GetComponent<CircleCollider2D>().enabled = false;
+				gameObject.GetComponent<BoxCollider2D>().enabled = false;
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			collision.transform.parent = GameObject.Find("Collectibles").transform;

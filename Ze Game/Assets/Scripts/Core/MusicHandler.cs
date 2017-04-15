@@ -108,7 +108,14 @@ public class MusicHandler : MonoBehaviour {
 			}	
 		}
 	}
-
+	private void OnApplicationFocus(bool focus) {
+		if(focus == false) {
+			sound.Pause();
+		}
+		else {
+			sound.UnPause();
+		}
+	}
 
 
 	private void OnDestroy() {

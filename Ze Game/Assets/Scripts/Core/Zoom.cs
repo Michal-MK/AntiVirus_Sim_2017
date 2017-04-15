@@ -34,7 +34,9 @@ public class Zoom : MonoBehaviour {
 				}
 			}
 			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);
+			//
 			cam.transform.position = cam_pos;
+			//
 		}
 		else if (!Statics.cameraMovement.inBossRoom && canZoom) {
 			//print(Input.GetAxis("Mouse Scroll Wheel"));

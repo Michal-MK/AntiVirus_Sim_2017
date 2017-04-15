@@ -141,15 +141,19 @@ public class CameraMovement : MonoBehaviour {
 
 			}
 		}
-		calculateArea();
+		foreach (var item in BackGroundS) {
+			print("BGS " + item.name);
+		}
 
-
+		if (BackGroundS.Count != 0) {
+			calculateArea();
+		}
 	}
 
 
 
 	public void calculateArea() {
-
+		print("Calculated");
 		currentBGX = 0;
 		currentBGY = 0;
 		int i = 0;
@@ -268,6 +272,10 @@ public class CameraMovement : MonoBehaviour {
 			middle.x = (LeftBorder + RightBorder) / 2;
 			currentBGX = (-LeftBorder + RightBorder) / 2;
 		}
+		Statics.zoom.canZoom = true;
+	}
+	private void Update() {
+		//print("Cam Position ==" + gameObject.transform.position);
 	}
 
 	void LateUpdate() {
@@ -276,9 +284,10 @@ public class CameraMovement : MonoBehaviour {
 
 		if (!inBossRoom && !inMaze) {
 			//print(inBossRoom + " " + inMaze);
-			cam_pos = new Vector3(camX(), camY(), - 10);
+			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
-		}else if (Statics.mazeEntrance.inMazePropoerly) {
+		}
+		else if (Statics.mazeEntrance.inMazePropoerly) {
 			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
 		}
@@ -299,6 +308,7 @@ public class CameraMovement : MonoBehaviour {
 				yield return null;
 			}
 			else {
+				Camera.main.orthographicSize = finalSize;
 				doneMoving = true;
 				break;
 			}
@@ -349,6 +359,7 @@ public class CameraMovement : MonoBehaviour {
 		float bossX = bossRoom.position.x;
 		float bossY = bossRoom.position.y;
 
+
 		player.position = new Vector3(bossX, bossY, 0);
 		gameObject.transform.position = new Vector3(bossX, bossY, -10);
 		cam.orthographicSize = defaultCamSize;
@@ -362,6 +373,15 @@ public class CameraMovement : MonoBehaviour {
 			}
 	private void OnDestroy() {
 		Statics.cameraMovement = null;
+	}
+	public void SetParticleLifetime() {
+		ParticleSystem.ShapeModule shapeA = psA.shape;
+		psB.gameObject.SetActive(false);
+
+		shapeA.radius = 108 * 2;
+		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
+		ParticleSystem.MainModule main = psA.main;
+		main.startLifetime = 25;
 	}
 }
 

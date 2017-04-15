@@ -21,7 +21,7 @@ public class SoundFXHandler : MonoBehaviour {
 
 		switch (clip.name) {
 			case "FX - CollectCoin": {
-				sound.volume = 0.5f;
+				sound.volume = 1f;
 				break;
 			}
 			default: {

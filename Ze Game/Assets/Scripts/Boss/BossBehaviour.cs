@@ -116,6 +116,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	public bool donePositioning = true;
 
+	public float playerSpeedMultiplier = 5;
 	#endregion
 
 	private void Awake() {
@@ -123,6 +124,8 @@ public class BossBehaviour : MonoBehaviour {
 	}
 
 	void Start() {
+		Statics.cameraMovement.SetParticleLifetime();
+		playerSpeedMultiplier = 5;
 		Projectile.spawnedByAvoidance = false;
 		Projectile.spawnedByKillerWall = false;
 
@@ -131,7 +134,9 @@ public class BossBehaviour : MonoBehaviour {
 		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
 		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
 		Buttons = GameObject.Find("Buttons");
+
 		Statics.mPlayer.disableSavesByBoss = true;
+
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 		rigid.freezeRotation = true;
 
@@ -141,7 +146,7 @@ public class BossBehaviour : MonoBehaviour {
 		attack4StartPos = BG.position;
 		attack5StartPos = (Vector2)BG.transform.position + BG.sizeDelta / 2 + new Vector2(-10, 0);
 		fullCircle = 2;
-
+			
 		StartCoroutine(InitialAttack());
 
 	}
@@ -153,15 +158,21 @@ public class BossBehaviour : MonoBehaviour {
 		}
 		selfRender.sprite = Invincible;
 
+
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
+
 		Control.script.Save(false,false);
 		bossSpawned = true;
+
+		Camera.main.transform.position = BG.transform.position + new Vector3(0,0,-10);
+
+		print(Camera.main.transform.position);
+
 		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Red = Invincible, Blue = Damageable");
 		yield return new WaitForSeconds(1);
-
 		StartCoroutine(Attacks(ChooseAttack()));
 
-		//StartCoroutine(Attacks(4));
+		//StartCoroutine(Attacks(1));
 
 	}
 
@@ -241,6 +252,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				isAttacking = true;
 				Attack2 = true;
+				playerSpeedMultiplier = 1;
 				Atk = StartCoroutine(LerpPos(gameObject, transform.position, attack2StartPos));
 				//Statics.playerParticles.ActivateScript(gameObject.transform, true);
 				positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity);
@@ -255,6 +267,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(3);
 				Statics.canvasRenderer.infoRenderer(null, "Don't forget about the zooming feature :]");
 				float waitTime = 1.1f;
+				
 
 				for (int i = 0; i <= fullCircle; i++) {
 					Debug.Log("Preforming " + (i + 1) + ". circle.");
@@ -274,11 +287,14 @@ public class BossBehaviour : MonoBehaviour {
 				}
 				//--//
 
+				
+
 				isAttacking = false;
 				Attack2 = false;
 				StopCoroutine(mycor);
 
 				yield return new WaitForSeconds(2f);
+				playerSpeedMultiplier = 5;
 				Destroy(positioningCage.gameObject);
 				ClearBullets();
 				StartCoroutine(InterPhase());
@@ -643,7 +659,6 @@ public class BossBehaviour : MonoBehaviour {
 		float pX = player.transform.position.x;
 		float pY = player.transform.position.y;
 
-		print(obj.name);
 		for (float t = 0; t < 2; t += Time.deltaTime * 0.5f) {
 			if (Time.timeScale == 0) {
 				yield return new WaitForSeconds(0.1f);

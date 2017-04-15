@@ -5298,11 +5298,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sound: {fileID: 323271130}
-  room1: {fileID: 8300000, guid: 678a4486239d5144389ee9a2a97f9217, type: 3}
-  room2: {fileID: 8300000, guid: ee1570735912f8a48aa88b406099abb1, type: 3}
-  avoidance: {fileID: 8300000, guid: 46e6e72cdcd30b448b01a15604e2ac1d, type: 3}
-  maze: {fileID: 8300000, guid: 58ad3a1e1f73b384b93d8b7211a4258a, type: 3}
-  boss: {fileID: 8300000, guid: 47d2ee5fefd192c46bd0545f2c313664, type: 3}
+  room1: {fileID: 8300000, guid: 2eecc632efa77a747b1d705ed973d140, type: 3}
+  room2: {fileID: 8300000, guid: f79c32d590e0faa4ca0275251e37ec4d, type: 3}
+  avoidance: {fileID: 8300000, guid: 580504e21262c054ba5129152544d9f5, type: 3}
+  maze: {fileID: 8300000, guid: 1a99042e6834ee34e895bf9e05001c8d, type: 3}
+  boss: {fileID: 8300000, guid: 96e9e58733a19b942aed31ff5f910219, type: 3}
   gameOver: {fileID: 8300000, guid: 645c25025200b6e4f90862540489ae25, type: 3}
   stopOnce: 1
 --- !u!82 &323271130

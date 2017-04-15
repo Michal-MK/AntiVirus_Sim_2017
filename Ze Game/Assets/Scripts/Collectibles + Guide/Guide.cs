@@ -39,7 +39,6 @@ public class Guide : MonoBehaviour {
 		pointArrow = Instantiate (Arrow, Vector3.down, Quaternion.FromToRotation (Vector3.up, (destinationpos-playerpos)));
 		pointArrow.transform.SetParent(GuideObj);
 
-		print(pointArrow);
 
 		enableGuide();
 		}

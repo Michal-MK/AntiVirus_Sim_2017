@@ -24,7 +24,13 @@ public class CamFadeOut : MonoBehaviour {
 				break;
 			}
 			case "Trans": {
-				anim.Play("CamTransition");
+				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
+					anim.Play("TransitionFromDim");
+				}
+				else
+				{
+					anim.Play("CamTransition");
+				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
 				//print("Transitioning");
 				break;

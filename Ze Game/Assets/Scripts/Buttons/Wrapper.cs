@@ -44,6 +44,15 @@ public class Wrapper : MonoBehaviour {
 		return ch;
 	}
 
+	public void StopMusic() {
+		try{
+			MenuMusic.script.StopMusicWrapper();
+		}
+		catch(System.Exception) {
+
+		}
+	}
+
 	public void UpdateName() {
 		Statics.profile.DisplayProfile();
 		if (dim != null) {

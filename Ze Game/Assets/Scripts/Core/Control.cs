@@ -81,8 +81,6 @@ public class Control : MonoBehaviour {
 		}
 	}
 	public void Save(bool newsaveFile, bool saveOnceInBoss = true) {
-		print("Saving");
-
 		if (newsaveFile) {
 			attempt++;
 			PlayerPrefs.SetInt("A", attempt);
@@ -90,7 +88,6 @@ public class Control : MonoBehaviour {
 
 		if (saveOnceInBoss == false && loadedData != null) {
 			if (loadedData.bossSpawned) {
-				print("Exists");
 				return;
 			}
 		}
@@ -177,14 +174,14 @@ public class Control : MonoBehaviour {
 		PlayerPrefs.SetInt("difficulty", difficulty);
 		Statics.camFade.PlayTransition("Trans");
 		yield return new WaitForFixedUpdate();
-
 		load = false;
-		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
+		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		Statics.camFade.anim.speed = 0;
 
 		yield return new WaitUntil(() => load = true);
 		loading.allowSceneActivation = true;
+		Statics.camFade.anim.speed = 1;
 		load = false;
 	}
 
@@ -207,11 +204,13 @@ public class Control : MonoBehaviour {
 
 	private IEnumerator FilesLoaded() {
 		Statics.camFade.PlayTransition("Trans");
-		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
+		yield return new WaitForEndOfFrame();
 		isNewGame = false;
-		loading.allowSceneActivation = true;
-		yield return new WaitForSeconds(1.5f);
+		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
+		Time.timeScale = 0;
+		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		Statics.camFade.anim.speed = 0;
+		loading.allowSceneActivation = true;
 		yield return new WaitUntil(() => loading.isDone);
 		Statics.camFade.anim.speed = 1;
 
@@ -306,13 +305,15 @@ public class Control : MonoBehaviour {
 			Statics.cameraMovement.inBossRoom = loadedData.bossSpawned;
 			if (loadedData.bossSpawned) {
 				RectTransform bg = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
-				Camera.main.transform.position = bg.position;
+				Camera.main.transform.position = bg.position + new Vector3(0,0,-10);
 				Statics.cameraMovement.psA.transform.position = bg.position + new Vector3(0, bg.sizeDelta.y / 2, 0);
 				ParticleSystem.ShapeModule shape = Statics.cameraMovement.psA.shape;
 				shape.radius = 108 * 2;
 				Statics.cameraMovement.psB.gameObject.SetActive(false);
 				M_Player.gameProgression = 10;
 				Statics.bossEntrance.SpawnBossOnLoad();
+				print(Camera.main.transform.position);
+				Statics.zoom.canZoom = false;
 
 			}
 
@@ -352,6 +353,7 @@ public class Control : MonoBehaviour {
 		M_Player.doNotMove = false;
 		load = true;
 		timer.run = true;
+		Time.timeScale = 1;
 	}
 
 	private void OnDestroy() {

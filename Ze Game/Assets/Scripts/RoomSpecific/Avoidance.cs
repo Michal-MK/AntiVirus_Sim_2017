@@ -28,7 +28,7 @@ public class Avoidance : MonoBehaviour {
 		SaveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
-		Statics.music.MusicTransition(Statics.music.avoidance);
+		Statics.music.PlayMusic(Statics.music.avoidance);
 		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
