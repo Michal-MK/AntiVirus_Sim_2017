@@ -168,7 +168,7 @@ public class BossBehaviour : MonoBehaviour {
 
 		print(Camera.main.transform.position);
 
-		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape me!", "Red = Invincible, Blue = Damageable");
+		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
 		StartCoroutine(Attacks(ChooseAttack()));
 

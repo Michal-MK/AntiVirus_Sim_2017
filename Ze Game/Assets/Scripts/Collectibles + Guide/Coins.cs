@@ -46,7 +46,6 @@ public class Coins : MonoBehaviour {
 
 		}
 		if (coinsCollected == 5) {
-			print(coinsCollected);
 			Statics.guide.disableGuide();
 			coin.gameObject.SetActive(false);
 			if (Spike.spikesCollected == 0) {

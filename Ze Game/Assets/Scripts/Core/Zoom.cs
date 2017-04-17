@@ -39,9 +39,8 @@ public class Zoom : MonoBehaviour {
 			//
 		}
 		else if (!Statics.cameraMovement.inBossRoom && canZoom) {
-			//print(Input.GetAxis("Mouse Scroll Wheel"));
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
-			//Debug.Log(roll);
+			//print("Heeeeere");
 			if (roll > 0) {
 				if (cam.orthographicSize < NormMax) {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;

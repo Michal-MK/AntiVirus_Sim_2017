@@ -31,6 +31,7 @@ public class MazeEscape : MonoBehaviour {
 		yield return new WaitForSeconds(1.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		zoom.canZoom = true;
+		print("happening");
 		player.transform.position = new Vector3(BG.position.x, BG.position.y + BG.sizeDelta.y / 2 - 10, 0);
 		Camera.main.orthographicSize = 25;
 		Camera.main.transform.position = player.transform.position;

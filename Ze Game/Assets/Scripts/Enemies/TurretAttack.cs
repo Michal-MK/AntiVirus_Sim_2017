@@ -45,15 +45,16 @@ public class TurretAttack : MonoBehaviour {
 			}
 			case 3: {
 				turretSpawnRateStart = 1.4f;
-				turretSpawnRateEnd = 1f;
+				turretSpawnRateEnd = 1.2f;
 				break;
 			}
 			case 4: {
 				turretSpawnRateStart = 1.3f;
-				turretSpawnRateEnd = 0.9f;
+				turretSpawnRateEnd = 1.1f;
 				break;
 			}
 		}
+		print("THIS");
 		OriginSpawnRate = turretSpawnRateStart;
 		ChangeFireRate = StartCoroutine(CurrentSpawnRate(turretSpawnRateStart, turretSpawnRateEnd));
 		StartCoroutine(waitForAttack(turretSpawnRateStart));

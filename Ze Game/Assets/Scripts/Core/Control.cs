@@ -12,6 +12,7 @@ public class Control : MonoBehaviour {
 	public static Control script;
 	public int chosenDifficulty;
 	private int attempt;
+	private int localAttempt;
 
 	public GameObject spikeInScene;
 	public GameObject authentication;
@@ -74,16 +75,26 @@ public class Control : MonoBehaviour {
 	public IEnumerator SetName() {
 		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
 			yield return new WaitForSeconds(1f);
+			Wrapper wrp = GameObject.Find("Canvas").GetComponent<Wrapper>();
+			wrp.makeButtonsNotInteractable();
 			GameObject auth = Instantiate(authentication);
 			auth.transform.SetParent(GameObject.Find("Canvas").transform);
 			auth.transform.localPosition = Vector3.zero;
-			print(auth.transform.position);
+			yield return new WaitUntil(() => Input.GetButtonDown("Submit"));
+			wrp.makeButtonsNotInteractable();
+
 		}
 	}
 	public void Save(bool newsaveFile, bool saveOnceInBoss = true) {
+		attempt = PlayerPrefs.GetInt("A");
+	
 		if (newsaveFile) {
 			attempt++;
 			PlayerPrefs.SetInt("A", attempt);
+			attempt = PlayerPrefs.GetInt("A");
+			localAttempt = attempt;
+		}else {
+			attempt = localAttempt;
 		}
 
 		if (saveOnceInBoss == false && loadedData != null) {
@@ -94,7 +105,6 @@ public class Control : MonoBehaviour {
 
 		print("Condition met");
 		chosenDifficulty = PlayerPrefs.GetInt("difficulty");
-		attempt = PlayerPrefs.GetInt("A");
 
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream file = File.Create(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + "_" + attempt.ToString("000") + ".Kappa");
@@ -134,7 +144,7 @@ public class Control : MonoBehaviour {
 		data.isRestarting = isRestarting;
 		data.spikeActive = GameObject.Find("Collectibles").GetComponent<Wrapper>().Objects[0].activeSelf;
 		data.postMazeDoorOpen = !Statics.mazeEscape.pathOpen;
-
+		data.localAttempt = attempt;
 
 		formatter.Serialize(file, data);
 		file.Close();
@@ -164,6 +174,9 @@ public class Control : MonoBehaviour {
 
 		script.chosenDifficulty = data.difficulty;
 		loadedData = data;
+		localAttempt = loadedData.localAttempt;
+
+		print("ATTEMPT IS NOW EQUAL LOCAL ATTEMPT " + loadedData.localAttempt  + "  " + attempt);
 		StartCoroutine(FilesLoaded());
 	}
 
@@ -172,6 +185,7 @@ public class Control : MonoBehaviour {
 	public IEnumerator StartNewGame(int difficulty) {
 
 		PlayerPrefs.SetInt("difficulty", difficulty);
+		chosenDifficulty = difficulty;
 		Statics.camFade.PlayTransition("Trans");
 		yield return new WaitForFixedUpdate();
 		load = false;
@@ -365,6 +379,7 @@ public class Control : MonoBehaviour {
 [Serializable]
 public class SaveData {
 
+	public int localAttempt;
 
 	public int coinsCollected;
 	public int spikesCollected;

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FPS : MonoBehaviour {
 
@@ -18,7 +17,7 @@ public class FPS : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if (quality == 6) {
+		if (quality == 6 || quality == 4) {
 			int w = Screen.width, h = Screen.height;
 
 			GUIStyle style = new GUIStyle();

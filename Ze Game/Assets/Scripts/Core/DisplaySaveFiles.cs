@@ -14,6 +14,8 @@ public class DisplaySaveFiles : MonoBehaviour {
 
 	public RectTransform content;
 
+	public static int selectedAttempt;
+
 	private void Awake() {
 		Statics.displaySaves = this;
 		dataPath = Application.dataPath + "/Saves/";
@@ -43,7 +45,6 @@ public class DisplaySaveFiles : MonoBehaviour {
 				tex.LoadImage(img);
 				Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
 				save.transform.Find("SaveImage").GetComponent<Image>().sprite = sp;
-				//save.GetComponentInChildren<Image>().sprite = sp;
 
 
 				FileStream file = new FileStream(savePath, FileMode.Open);
@@ -85,10 +86,10 @@ public class DisplaySaveFiles : MonoBehaviour {
 				}
 				if (saveInfo.time != 0) {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
-																"Loaction: " + BGName + "\n" +
+																"Loaction: " + BGName + "\n" + "Attempt " + /*saveInfo.localAttempt + */
 																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.time / 60, saveInfo.time % 60, saveInfo.time.ToString().Remove(0, saveInfo.time.ToString().Length - 2)) + "\n" +
 																"Spikes: " + saveInfo.spikesCollected + " Bullets: " + saveInfo.bullets + "\n" +
-																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.bombs; 
+																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.bombs;
 				}
 				else {
 					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +

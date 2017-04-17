@@ -101,6 +101,16 @@ public class Wrapper : MonoBehaviour {
 		}
 	}
 
+	public void makeButtonsNotInteractable() {
+
+		foreach (var item in buttons) {
+			item.interactable = !item.interactable;
+		}
+		start.interactable = !start.interactable;
+	}
+
+
+
 	public void DeactivateButtons() {
 		print("READY");
 		DeactivateButtonsCoroutine();

@@ -26,7 +26,7 @@ public class MenuMusic : MonoBehaviour {
 	}
 
 	public IEnumerator StopMusic() {
-		for (float f = 0.2f; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
+		for (float f = 0.2f; f >= -1; f -= Time.unscaledDeltaTime * 0.1f) {
 			if (f > 0) {
 				source.volume = f;
 				yield return null;

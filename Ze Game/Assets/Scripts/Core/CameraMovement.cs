@@ -272,7 +272,11 @@ public class CameraMovement : MonoBehaviour {
 			middle.x = (LeftBorder + RightBorder) / 2;
 			currentBGX = (-LeftBorder + RightBorder) / 2;
 		}
-		Statics.zoom.canZoom = true;
+		if (!inMaze) {
+			Statics.zoom.canZoom = true;
+			print("heppenin");
+		}
+		
 	}
 	private void Update() {
 		//print("Cam Position ==" + gameObject.transform.position);
@@ -290,6 +294,7 @@ public class CameraMovement : MonoBehaviour {
 		else if (Statics.mazeEntrance.inMazePropoerly) {
 			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
+			//print("there");
 		}
 	}
 

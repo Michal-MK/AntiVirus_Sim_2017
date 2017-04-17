@@ -51,7 +51,7 @@ public class SignPost : MonoBehaviour {
 				if (interact && Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
 					switch (gameObject.name) {
 						case "SignPost Avoidance": {
-
+							Statics.music.PlayMusic(Statics.music.avoidance);
 							Statics.avoidance.StartAvoidance();
 							Statics.avoidance.preformed = true;
 							StartCoroutine(Fade());

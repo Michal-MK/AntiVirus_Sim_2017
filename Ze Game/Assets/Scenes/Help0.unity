@@ -1305,7 +1305,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\"Bit Shift\", \"Crossing the Chasm\", \"Killers\", \"Mystic Force\", \"Rhinoceros\"\r\nKevin
-    MacLeod (incompetech.com)\r\nLicensed under Creative Commons: By Attribution 3.0\r\nhttp://creativecommons.org/licenses/by/3.0/"
+    MacLeod (incompetech.com)\r*\nLicensed under Creative Commons: By Attribution
+    3.0\r\nhttp://creativecommons.org/licenses/by/3.0/"
 --- !u!222 &1293596842
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1444,7 +1445,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\"Prologue\"\nEric Skiff (https://soundcloud.com)\r\nLicensed under Creative
+  m_Text: "\"Prologue\"\nEric Skiff (https://soundcloud.com)\r*\nLicensed under Creative
     Commons: By Attribution 3.0 Unported\nhttp://creativecommons.org/licenses/by/3.0/"
 --- !u!222 &1306977096
 CanvasRenderer:
@@ -1671,7 +1672,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\"Memory\"\r\nCreo (http://freemusicarchive.org)\r\nLicensed under Creative
+  m_Text: "\"Memory\"\r\nCreo (http://freemusicarchive.org)\r*\nLicensed under Creative
     Commons: By Attribution-NonCommercial 4.0 International\nhttp://creativecommons.org/licenses/by/3.0/"
 --- !u!222 &1524720952
 CanvasRenderer:

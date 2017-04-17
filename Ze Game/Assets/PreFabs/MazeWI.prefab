@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61338736078601414}
   m_Layer: 0
   m_Name: MazeWI
-  m_TagString: BG
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -55,28 +55,12 @@ public class M_Player : MonoBehaviour {
 		saveButton.SetActive(false);
 		loadButton.SetActive(false);
 
-		int difficulty = PlayerPrefs.GetInt("difficulty");
 		string name = PlayerPrefs.GetString("player_name");
-		if(name == null || name == "") {
+		if (name == null || name == "") {
 			PlayerPrefs.SetInt("Attempts", 0);
 		}
 		attempts = PlayerPrefs.GetInt("Attempts");
 
-		if (difficulty == 0) {
-			attemptNr = 10;
-		}
-		if (difficulty == 1) {
-			attemptNr = 21;
-		}
-		if (difficulty == 2) {
-			attemptNr = 32;
-		}
-		if (difficulty == 3) {
-			attemptNr = 43;
-		}
-		if (difficulty == 4) {
-			attemptNr = 54;
-		}
 		StartCoroutine(DelayIntro());
 	}
 
@@ -93,6 +77,7 @@ public class M_Player : MonoBehaviour {
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
+
 			PlayerPrefs.SetInt("Attempts", attempts);
 			newGame = false;
 		}
@@ -578,6 +563,7 @@ if (doNotMove == false) {
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
 			cam.raycastForRooms();
+
 			//spawner.spawnArrowTrap();
 			if (col.name == "Background_Start") {
 				if (gameProgression != 0) {
@@ -620,7 +606,7 @@ if (doNotMove == false) {
 
 
 			if (i % 2 == 0) {
-				print(i%2 + " " + i);
+				print(i % 2 + " " + i);
 				ChangeFlappy(true);
 				i++;
 			}

@@ -13,7 +13,7 @@ public class MusicHandler : MonoBehaviour {
 	public AudioClip boss;
 	public AudioClip gameOver;
 
-
+	private bool avoid = false;
 	private bool lastClip = false;
 	public bool stopOnce = true;
 
@@ -24,9 +24,41 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public void PlayMusic(AudioClip clip) {
-		sound.volume = 1;
+		//sound.volume = 1;
+		StartCoroutine(Avoidance(clip));
+	}
+
+	private IEnumerator Avoidance(AudioClip clip) {
+		print("Avoidaing NOW");
+		avoid = true;
+		yield return new WaitForSecondsRealtime(0.1f);
+		print("Muted");
+		float volume = sound.volume;
+		for (float f = volume; f > -1; f -= Time.unscaledDeltaTime) {
+			if (f > 0) {
+				sound.volume = f;
+				yield return null;
+			}
+			else {
+				sound.volume = 0;
+				sound.Stop();
+				continue;
+			}
+		}
 		sound.clip = clip;
+		print("Switchin + Playing");
 		sound.Play();
+		for (float f = 0; f < 2; f += Time.unscaledDeltaTime * 0.5f) {
+			if (f < 1) {
+				sound.volume = f;
+				yield return null;
+			}
+			else {
+				sound.volume = 1;
+				avoid = false;
+				break;
+			}
+		}
 	}
 
 	public void MusicTransition(AudioClip newClip) {
@@ -56,9 +88,18 @@ public class MusicHandler : MonoBehaviour {
 		else {
 			if (sound.clip != newClip) {
 				for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
-
+					if (avoid) {
+						print("New sound playing: Avoidance" + sound.clip + " insted of the selected " + newClip);
+						avoid = false;
+						break;
+					}
 					if (f >= 0) {
 						sound.volume = f;
+						if(sound.clip == Statics.pressurePlate.On) {
+							sound.clip = newClip;
+							StartCoroutine(StartMusic());
+							break;
+						}
 						yield return null;
 					}
 					else {
@@ -95,7 +136,9 @@ public class MusicHandler : MonoBehaviour {
 
 	public IEnumerator StopMusic() {
 		if (stopOnce) {
-			for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
+			float soundVolume = sound.volume;
+			for (float f = soundVolume; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
+
 				if (f > 0) {
 					sound.volume = f;
 					yield return null;
@@ -105,11 +148,11 @@ public class MusicHandler : MonoBehaviour {
 					stopOnce = false;
 					break;
 				}
-			}	
+			}
 		}
 	}
 	private void OnApplicationFocus(bool focus) {
-		if(focus == false) {
+		if (focus == false) {
 			sound.Pause();
 		}
 		else {
