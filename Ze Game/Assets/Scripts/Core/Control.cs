@@ -1,10 +1,8 @@
 using UnityEngine;
-using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class Control : MonoBehaviour {
@@ -68,10 +66,6 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-	private void Start() {
-		//StartCoroutine(SetName());
-	}
-
 	public IEnumerator SetName() {
 		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
 			yield return new WaitForSeconds(1f);
@@ -129,7 +123,7 @@ public class Control : MonoBehaviour {
 		data.difficulty = chosenDifficulty;
 		data.currentBGName = M_Player.currentBG_name;
 		data.currentlyDisplayedSideInfo = Statics.canvasRenderer.info_S.text;
-		data.time = Mathf.Round((timer.time + 60) * 1000) / 1000;
+		data.time = Mathf.Round((Timer.time + 60) * 1000) / 1000;
 		data.shownAttempt = Statics.mPlayer.newGame;
 		data.shownShotInfo = Statics.playerAttack.displayShootingInfo;
 		data.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
@@ -160,7 +154,7 @@ public class Control : MonoBehaviour {
 			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
 		}
 		print("Captured");
-		Application.CaptureScreenshot(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Resources/Save-D" + chosenDifficulty + "_" + currAttempt.ToString("000") + ".png");
+		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Resources/Save-D" + chosenDifficulty + "_" + currAttempt.ToString("000") + ".png");
 	}
 
 	public void Load(string fileToLoad) {
@@ -186,14 +180,14 @@ public class Control : MonoBehaviour {
 
 		PlayerPrefs.SetInt("difficulty", difficulty);
 		chosenDifficulty = difficulty;
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CamTransitionModes.TRANSITION_SCENES);
 		yield return new WaitForFixedUpdate();
 		load = false;
 		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
 		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		Statics.camFade.anim.speed = 0;
 
-		yield return new WaitUntil(() => load = true);
+		yield return new WaitUntil(() => load == true);
 		loading.allowSceneActivation = true;
 		Statics.camFade.anim.speed = 1;
 		load = false;
@@ -217,7 +211,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private IEnumerator FilesLoaded() {
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CamTransitionModes.TRANSITION_SCENES);
 		yield return new WaitForEndOfFrame();
 		isNewGame = false;
 		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
@@ -310,7 +304,7 @@ public class Control : MonoBehaviour {
 			}
 
 
-			timer.time = loadedData.time;
+			Timer.time = loadedData.time;
 			
 
 			Camera.main.orthographicSize = loadedData.camSize;
@@ -366,7 +360,7 @@ public class Control : MonoBehaviour {
 		}
 		M_Player.doNotMove = false;
 		load = true;
-		timer.run = true;
+		Timer.run = true;
 		Time.timeScale = 1;
 	}
 
@@ -374,102 +368,3 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
 	}
 }
-
-//Data to be saved
-[Serializable]
-public class SaveData {
-
-	public int localAttempt;
-
-	public int coinsCollected;
-	public int spikesCollected;
-	public int bullets;
-	public int bombs;
-
-	public float playerPositionX, playerPositionY, playerPositionZ;
-	public float blockPosX, blockPosY, blockPosZ;
-	public float spikePosX, spikePosY, spikePosZ;
-	public float blockZRotation;
-	public bool spikeActive;
-
-	public int difficulty;
-	public float time;
-	public bool canZoom;
-
-	public string currentBGName;
-	public string currentlyDisplayedSideInfo;
-
-	public bool shownShotInfo;
-	public bool shownAttempt;
-	public bool shownBlockInfo;
-	public int blockPushAttempt;
-	public bool pressurePlateTriggered;
-	public bool postMazeDoorOpen;
-
-	public float camSize;
-
-	public bool isNewGame;
-	public bool isRestarting;
-
-
-	public bool shownAvoidanceInfo;
-	public bool doneAvoidance;
-	public bool bossSpawned;
-
-}
-
-//Static reference to other classes
-public class Statics : MonoBehaviour {
-
-	public static BossBehaviour bossBehaviour;
-	public static BossEntrance bossEntrance;
-	public static BossHealth bossHealth;
-
-
-	public static SwitchScene switchScene;
-
-
-	public static Coins coins;
-	public static Guide guide;
-	public static Spike spike;
-
-
-	public static CameraMovement cameraMovement;
-	public static Canvas_Renderer canvasRenderer;
-	public static GameProgression gameProgression;
-	public static PauseUnpause pauseUnpause;
-	public static SaveGame saveGame;
-	public static timer timerScript;
-	public static Wrapper wrapper;
-	public static Zoom zoom;
-
-
-	public static EnemySpawner enemySpawner;
-	public static Projectile projectile;
-	public static TurretAttack turretAttack;
-
-
-	public static Maze mazeScript;
-	public static MazeEntrance mazeEntrance;
-	public static MazeEscape mazeEscape;
-
-
-	public static M_Player mPlayer;
-	public static PlayerAttack playerAttack;
-	public static SpikeBullet spikeBullet;
-
-
-	public static Avoidance avoidance;
-	public static BlockScript blockScript;
-	public static PressurePlate pressurePlate;
-
-
-	public static CamFadeOut camFade;
-	public static MusicHandler music;
-	public static SoundFXHandler sound;
-
-	public static DisplaySaveFiles displaySaves;
-	public static ProfileName profile;
-
-}
-

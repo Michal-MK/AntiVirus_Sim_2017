@@ -45,7 +45,7 @@ public class Guide : MonoBehaviour {
 
 	void Update() {
 
-		if (pointArrow != null && timer.run == true) {
+		if (pointArrow != null && Timer.run == true) {
 			Vector2 PlayToDestination =  (Vector2) destinationGlobal.transform.position - (Vector2)player.transform.position;
 			Vector2 normVec = new Vector2 (PlayToDestination.y, -PlayToDestination.x);
 

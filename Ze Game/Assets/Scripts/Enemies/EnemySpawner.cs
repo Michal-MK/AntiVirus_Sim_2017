@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour {
 
-
 	RectTransform killerblockBG;
 	RectTransform arrowtrapBG;
 	RectTransform killerWallBG;
@@ -31,43 +30,6 @@ public class EnemySpawner : MonoBehaviour {
 		killerWallBG = GameObject.Find("Background_room_1").GetComponent<RectTransform>();
 		enemy = GameObject.Find("Enemies").transform;
 	}
-
-	//public void spawnArrowTrap() {
-	//	if (forTheFirstTime == false) {
-
-	//		foreach (GameObject zone in CameraMovement.loadedZones) {
-
-	//			if (zone.Equals(arrowtrapBG.gameObject) && amIHere == true) {
-	//				break;
-	//			}
-
-	//			else if (zone.Equals(arrowtrapBG.gameObject) && amIHere == false) {
-
-	//				Vector3 pos = new Vector3(arrowtrapBG.position.x, arrowtrapBG.position.y, 0);
-	//				float bgx = arrowtrapBG.sizeDelta.x / 2;
-	//				float bgy = arrowtrapBG.sizeDelta.y / 2;
-	//				arrowtrap = new GameObject[4];
-
-
-	//				arrowtrap[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity, enemy);
-
-	//				arrowtrap[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity, enemy);
-
-	//				arrowtrap[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity, enemy);
-
-	//				arrowtrap[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity, enemy);
-
-	//				break;
-	//			}
-	//			else {
-	//				foreach (GameObject deltrap in arrowtrap) {
-	//					Destroy(deltrap.gameObject);
-	//				}
-	//				amIHere = false;
-	//			}
-	//		}
-	//	}
-	//}
 
 	public void spawnAvoidance() {
 		print("Avoidance");

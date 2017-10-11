@@ -54,7 +54,6 @@ public class TurretAttack : MonoBehaviour {
 				break;
 			}
 		}
-		print("THIS");
 		OriginSpawnRate = turretSpawnRateStart;
 		ChangeFireRate = StartCoroutine(CurrentSpawnRate(turretSpawnRateStart, turretSpawnRateEnd));
 		StartCoroutine(waitForAttack(turretSpawnRateStart));

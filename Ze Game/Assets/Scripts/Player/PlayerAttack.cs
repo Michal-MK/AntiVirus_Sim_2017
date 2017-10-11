@@ -11,7 +11,7 @@ public class PlayerAttack : MonoBehaviour {
 	public Spike spike;
 	public Vector2 mousepos;
 	public ObjectPooler pool;
-	public timer timer;
+	public Timer timer;
 
 	public bool fireMode = false;
 	public bool fireBullets = true;

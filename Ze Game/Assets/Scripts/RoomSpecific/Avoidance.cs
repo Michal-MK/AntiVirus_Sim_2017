@@ -29,7 +29,7 @@ public class Avoidance : MonoBehaviour {
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
 		//Statics.music.PlayMusic(Statics.music.avoidance);
-		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
+		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
 
@@ -40,7 +40,7 @@ public class Avoidance : MonoBehaviour {
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
-		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
+		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
 		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		StopAllCoroutines();
 

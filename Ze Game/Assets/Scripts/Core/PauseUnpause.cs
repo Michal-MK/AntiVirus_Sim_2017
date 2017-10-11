@@ -20,7 +20,7 @@ public class PauseUnpause : MonoBehaviour {
 			if (Input.GetButtonDown("Escape") && !isPaused) {
 
 				Cursor.visible = true;
-				timer.run = false;
+				Timer.run = false;
 				restartButton.SetActive(true);
 				quitToMenu.SetActive(true);
 				saveButton.SetActive(true);
@@ -39,7 +39,7 @@ public class PauseUnpause : MonoBehaviour {
 				quitToMenu.SetActive(false);
 				Cursor.visible = false;
 				Time.timeScale = 1;
-				timer.run = true;
+				Timer.run = true;
 
 				isPaused = false;
 			}
