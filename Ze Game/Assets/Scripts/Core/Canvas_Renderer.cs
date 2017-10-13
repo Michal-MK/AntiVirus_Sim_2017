@@ -24,6 +24,13 @@ public class Canvas_Renderer : MonoBehaviour {
 	private string tempDisplayedText;
 	private Color32 defaultColor;
 
+	public enum Directions {
+		TOP,
+		RIGHT,
+		BOTTOM,
+		LEFT
+	}
+
 	private void Awake() {
 		Statics.canvasRenderer = this;
 		defaultColor = new Color32(255, 255, 255, 100);
@@ -82,16 +89,25 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 
-	public void DisplayDirection(int i) {
+	//public void DisplayDirection(int i) {
+	//	Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
+	//	if (!wrp.Objects[0].activeInHierarchy) {
+	//		StartCoroutine("Pulse", directions[i]);
+	//	}
+	//	else {
+	//		Statics.guide.Recalculate(wrp.Objects[0].gameObject, true);
+	//	}
+	//}
+
+	public void DisplayDirection(Directions i) {
 		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
 		if (!wrp.Objects[0].activeInHierarchy) {
-			StartCoroutine("Pulse", directions[i]);
+			StartCoroutine("Pulse", directions[(int)i]);
 		}
 		else {
 			Statics.guide.Recalculate(wrp.Objects[0].gameObject, true);
 		}
 	}
-
 
 
 	private IEnumerator Pulse(GameObject info) {

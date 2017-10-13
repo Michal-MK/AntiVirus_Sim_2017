@@ -60,7 +60,7 @@ public class GameProgression : MonoBehaviour {
 			doors[0].SetActive(false);
 			doors[1].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(1);
+			canvas_Renderer.DisplayDirection(Canvas_Renderer.Directions.RIGHT);
 		}
 
 		if (M_Player.gameProgression == 2) {
@@ -72,7 +72,7 @@ public class GameProgression : MonoBehaviour {
 			doors[2].SetActive(false);
 			doors[3].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(0);
+			canvas_Renderer.DisplayDirection(Canvas_Renderer.Directions.TOP);
 
 		}
 		if (M_Player.gameProgression == 3) {
@@ -86,10 +86,10 @@ public class GameProgression : MonoBehaviour {
 			doors[4].SetActive(false);
 			doors[5].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(2);
-
+			canvas_Renderer.DisplayDirection(Canvas_Renderer.Directions.BOTTOM);
 
 		}
+
 		if (Statics.cameraMovement != null) {
 			Statics.cameraMovement.RaycastForRooms();
 		}
