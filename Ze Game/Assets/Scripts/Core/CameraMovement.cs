@@ -107,7 +107,6 @@ public class CameraMovement : MonoBehaviour {
 
 		continueInLoop = true;
 		foreach (RaycastHit2D hits in left) {
-
 			if (continueInLoop == false) {
 				break;
 			}
@@ -140,16 +139,16 @@ public class CameraMovement : MonoBehaviour {
 
 			}
 		}
-		foreach (var item in BackGroundS) {
-			print("BGS " + item.name);
-		}
+
+		print("Backgrounds stored are: ");
 
 		if (BackGroundS.Count != 0) {
+			foreach (var item in BackGroundS) {
+				print(item.name + " ");
+			}
 			CalculateArea();
 		}
 	}
-
-
 
 	public void CalculateArea() {
 		print("Calculated");
@@ -158,11 +157,14 @@ public class CameraMovement : MonoBehaviour {
 		int i = 0;
 		bool Vertical = true;
 		bool Horisontal = true;
-		GameObject[] BGarray = new GameObject[BackGroundS.Count];
 
+		Debug.Log("Hello ? I have an array, then I create a new array with the same items and then I create a third array.");
+
+		GameObject[] BGarray = new GameObject[BackGroundS.Count];
 		BGarray = BackGroundS.ToArray();
 		loadedZones = new GameObject[BGarray.Length];
 		loadedZones = BGarray;
+
 		//foreach (GameObject zones in loadedZones) {
 		//	Debug.Log (i + "  " + zones);
 		//	i++;
@@ -205,9 +207,6 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
-
-
-
 			}
 			middle.x = bg.position.x;
 			middle.y = (BottomBorder + TopBorder) / 2;
@@ -249,10 +248,8 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
-
-
-
 			}
+
 			currentBGY = (-BottomBorder + TopBorder) / 2;
 			middle.y = (BottomBorder + TopBorder) / 2;
 			float LeftBorder = Mathf.Infinity;
@@ -273,9 +270,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 		if (!inMaze) {
 			Statics.zoom.canZoom = true;
-			print("heppenin");
 		}
-		
 	}
 
 	void LateUpdate() {
@@ -283,14 +278,12 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 
 		if (!inBossRoom && !inMaze) {
-			//print(inBossRoom + " " + inMaze);
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
 		}
 		else if (Statics.mazeEntrance.inMazePropoerly) {
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
-			//print("there");
 		}
 	}
 

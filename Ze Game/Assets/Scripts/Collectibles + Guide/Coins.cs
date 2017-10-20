@@ -38,7 +38,7 @@ public class Coins : MonoBehaviour {
 			Vector3 newpos = GenerateNewPos(oldpos);
 			Timer.run = true;
 
-			Statics.enemySpawner.spawnKillerBlock();
+			Statics.enemySpawner.SpawnKillerBlock();
 
 
 			gameObject.transform.position = newpos;
@@ -57,7 +57,7 @@ public class Coins : MonoBehaviour {
 	}
 	public void ChatchUpToAttempt(int attempt) {
 		for(int i = 0; i <= attempt; i++) {
-			Statics.enemySpawner.spawnKillerBlock();
+			Statics.enemySpawner.SpawnKillerBlock();
 		}
 	}
 

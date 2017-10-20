@@ -20,10 +20,6 @@ public class SoundFXHandler : MonoBehaviour {
 	public void PlayFX(AudioClip clip) {
 
 		switch (clip.name) {
-			case "FX - CollectCoin": {
-				sound.volume = 1f;
-				break;
-			}
 			default: {
 				sound.volume = 1f;
 				break;

@@ -12,6 +12,8 @@ public class UI_Manager : MonoBehaviour {
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
 
+	private static bool isShown = false;
+
 	public delegate void WindowChangedHandler(Window changed);
 	public static event WindowChangedHandler OnWindowClose;
 
@@ -34,36 +36,8 @@ public class UI_Manager : MonoBehaviour {
 	public static void AddWindow(GameObject win) {
 		Window.WindowType t;
 		switch (win.name) {
-			case "MenuPanel": {
-				t = Window.WindowType.MOVING;
-				break;
-			}
-			case "GameSettingsPanel": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
-			case "EditorSettingsPanel": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
-			case "SaveOrLoad": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
-			case "SavePanel": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
-			case "LoadPanel": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
-			case "UPGRADE_Selection_To_UI": {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
 			default: {
-				t = Window.WindowType.MOVING;
+				t = Window.WindowType.ACTIVATING;
 				break;
 			}
 		}
@@ -111,7 +85,9 @@ public class UI_Manager : MonoBehaviour {
 							Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
 						}
 					}
-					OnWindowClose(win);
+					if (OnWindowClose != null) {
+						OnWindowClose(win);
+					}
 				}
 				else {
 					//Would pause the game
@@ -133,8 +109,6 @@ public class UI_Manager : MonoBehaviour {
 		}
 	}
 
-	private static bool isShown = false;
-
 	public static void ToggleWindow(GameObject window) {
 		Animator anim;
 		try {
@@ -148,9 +122,8 @@ public class UI_Manager : MonoBehaviour {
 				isShown = true;
 			}
 		}
-		catch (System.NullReferenceException e) {
+		catch (NullReferenceException e) {
 			print(e.Source + " No Animator Present");
-
 		}
 	}
 
@@ -216,21 +189,12 @@ public class Window {
 		ACTIVATING,
 	}
 
-	public Window(GameObject window, WindowType type) {
+	public Window(GameObject window, WindowType type, bool disableAfterMoving = false) {
 		_window = window;
 		_type = type;
 		if (type == WindowType.MOVING) {
 			_anim = window.GetComponent<Animator>();
-			switch (window.name) {
-				case "MenuPanel": {
-					_disableAfterMoving = true;
-					return;
-				}
-				default: {
-					_disableAfterMoving = false;
-					return;
-				}
-			}
+			_disableAfterMoving = disableAfterMoving;
 		}
 	}
 

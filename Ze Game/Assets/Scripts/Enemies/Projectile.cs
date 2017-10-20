@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 	public static float projectileSpeed = 15;
-	public float timeTillDestruct = -1337;
 
 	public bool ready = false;
 
@@ -16,7 +15,7 @@ public class Projectile : MonoBehaviour {
 	public Sprite Icicle;
 	public Sprite Cracked;
 
-	public bool DisableCollisions = false;
+	public bool disableCollisions = false;
 
 	public static bool spawnedByAvoidance = false;
 	public static bool spawnedByKillerWall = false;
@@ -63,7 +62,7 @@ public class Projectile : MonoBehaviour {
 
 
 	private void OnTriggerEnter2D(Collider2D col){
-		if (!DisableCollisions) {
+		if (!disableCollisions) {
 			if (col.tag == "Wall" || col.tag == "Wall/Door") {
 				selfRender.sprite = Trigger;
 				if (spawnedByKillerWall) {
@@ -80,7 +79,7 @@ public class Projectile : MonoBehaviour {
 	}
 
 	private void OnTriggerExit2D(Collider2D col){
-		if (!DisableCollisions) {
+		if (!disableCollisions) {
 			if (col.tag == "BG") {
 				if (!spawnedByKillerWall) {
 					selfCol.isTrigger = true;
@@ -98,7 +97,7 @@ public class Projectile : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D col) {
-		if (!DisableCollisions) {
+		if (!disableCollisions) {
 			if(col.transform.tag == "Wall" || col.transform.tag == "Wall/Door") {
 				gameObject.SetActive(false);
 			}
@@ -114,7 +113,6 @@ public class Projectile : MonoBehaviour {
 		}
 		
 	}
-
 
 	void OnDisable(){
 		Statics.projectile = null;

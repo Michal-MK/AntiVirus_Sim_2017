@@ -285,6 +285,7 @@ public class M_Player : MonoBehaviour {
 
 	private Sprite previous;
 	int i = 0;
+
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
@@ -303,7 +304,7 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == "Background_Start") {
 				if (gameProgression != 0) {
-					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle());
+					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle(1.8f, 1.5f));
 				}
 			}
 
@@ -359,6 +360,7 @@ public class M_Player : MonoBehaviour {
 			face.GetComponent<SpriteRenderer>().sprite = sad;
 		}
 	}
+
 	private void OnTriggerExit2D(Collider2D col) {
 		if (col.transform.tag == "BG") {
 			cam.RaycastForRooms();
@@ -373,7 +375,6 @@ public class M_Player : MonoBehaviour {
 			face.GetComponent<SpriteRenderer>().sprite = previous;
 		}
 	}
-
 
 	public void FloorComplete() {
 
@@ -406,6 +407,7 @@ public class M_Player : MonoBehaviour {
 			delEnemies = false;
 		}
 	}
+
 	private IEnumerator StopTime() {
 		yield return new WaitForSeconds(1);
 		Time.timeScale = 0;
@@ -413,5 +415,11 @@ public class M_Player : MonoBehaviour {
 
 	private void OnDestroy() {
 		Statics.mPlayer = null;
+	}
+
+	public static Vector2 GetDistanceByAxis(GameObject other) {
+		float xDist = Mathf.Abs(Statics.mPlayer.transform.position.x - other.transform.position.x);
+		float yDist = Mathf.Abs(Statics.mPlayer.transform.position.y - other.transform.position.y);
+		return new Vector2(xDist, yDist);
 	}
 }
