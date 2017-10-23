@@ -1,0 +1,3 @@
+﻿interface IKillable {
+	void Kill();
+}
