@@ -19,7 +19,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		timer.time = 0;
+		Timer.time = 0;
 		if (Statics.camFade != null) {
 			Statics.camFade.anim.SetTrigger("UnDim");
 		}
@@ -58,7 +58,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		timer.time = 0;
+		Timer.time = 0;
 		SceneManager.LoadScene(i);
 	}
 

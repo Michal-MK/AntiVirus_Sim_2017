@@ -16,7 +16,7 @@ public class SaveGame : MonoBehaviour {
 			playerName = System.Environment.UserName;
 		}
 
-		string currentTimeString = string.Format("{0:00}:{1:00}.{2:00}", (int)timer.time / 60, timer.time % 60, timer.time.ToString().Remove(0, timer.time.ToString().Length - 2));
+		string currentTimeString = string.Format("{0:00}:{1:00}.{2:00}", (int)Timer.time / 60, Timer.time % 60, Timer.time.ToString().Remove(0, Timer.time.ToString().Length - 2));
 		;
 
 		WWWForm form = new WWWForm();
@@ -28,7 +28,7 @@ public class SaveGame : MonoBehaviour {
 		new WWW("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);
 		//print("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php");
 
-		float currentTime = Mathf.Round(timer.time * 100) / 100;
+		float currentTime = Mathf.Round(Timer.time * 100) / 100;
 
 		if (difficulty == 0) {
 

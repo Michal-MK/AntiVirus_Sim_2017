@@ -36,7 +36,7 @@ public class Coins : MonoBehaviour {
 		if (coinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
-			timer.run = true;
+			Timer.run = true;
 
 			Statics.enemySpawner.spawnKillerBlock();
 

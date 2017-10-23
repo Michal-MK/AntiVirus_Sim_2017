@@ -643,7 +643,7 @@ if (doNotMove == false) {
 
 		doNotMove = true;
 		Cursor.visible = true;
-		timer.run = false;
+		Timer.run = false;
 		save.saveScore();
 
 	}
@@ -656,7 +656,7 @@ if (doNotMove == false) {
 		loadButton.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
-		timer.run = false;
+		Timer.run = false;
 		Statics.camFade.PlayTransition("Dim");
 		GameOverImg.SetTrigger("Appear");
 		Statics.music.StartCoroutine(Statics.music.StopMusic());

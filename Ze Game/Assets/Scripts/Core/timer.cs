@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class timer : MonoBehaviour {
+public class Timer : MonoBehaviour {
 	public static float time;
 	public static bool run;
 	public bool attacking = false;
