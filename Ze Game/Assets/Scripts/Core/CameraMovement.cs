@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
 
+	public float zero = 0;
 	public RectTransform bg;
 	public Transform player;
 	public M_Player playerScript;
@@ -49,7 +50,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 
-	public void RaycastForRooms() {
+	public void raycastForRooms() {
 		BackGroundS.Clear();
 
 		bg = GameObject.Find(M_Player.currentBG_name).GetComponent<RectTransform>();
@@ -107,6 +108,7 @@ public class CameraMovement : MonoBehaviour {
 
 		continueInLoop = true;
 		foreach (RaycastHit2D hits in left) {
+
 			if (continueInLoop == false) {
 				break;
 			}
@@ -139,32 +141,29 @@ public class CameraMovement : MonoBehaviour {
 
 			}
 		}
-
-		print("Backgrounds stored are: ");
+		foreach (var item in BackGroundS) {
+			print("BGS " + item.name);
+		}
 
 		if (BackGroundS.Count != 0) {
-			foreach (var item in BackGroundS) {
-				print(item.name + " ");
-			}
-			CalculateArea();
+			calculateArea();
 		}
 	}
 
-	public void CalculateArea() {
+
+
+	public void calculateArea() {
 		print("Calculated");
 		currentBGX = 0;
 		currentBGY = 0;
 		int i = 0;
 		bool Vertical = true;
 		bool Horisontal = true;
-
-		Debug.Log("Hello ? I have an array, then I create a new array with the same items and then I create a third array.");
-
 		GameObject[] BGarray = new GameObject[BackGroundS.Count];
+
 		BGarray = BackGroundS.ToArray();
 		loadedZones = new GameObject[BGarray.Length];
 		loadedZones = BGarray;
-
 		//foreach (GameObject zones in loadedZones) {
 		//	Debug.Log (i + "  " + zones);
 		//	i++;
@@ -207,6 +206,9 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
+
+
+
 			}
 			middle.x = bg.position.x;
 			middle.y = (BottomBorder + TopBorder) / 2;
@@ -248,8 +250,10 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
-			}
 
+
+
+			}
 			currentBGY = (-BottomBorder + TopBorder) / 2;
 			middle.y = (BottomBorder + TopBorder) / 2;
 			float LeftBorder = Mathf.Infinity;
@@ -270,7 +274,12 @@ public class CameraMovement : MonoBehaviour {
 		}
 		if (!inMaze) {
 			Statics.zoom.canZoom = true;
+			print("heppenin");
 		}
+		
+	}
+	private void Update() {
+		//print("Cam Position ==" + gameObject.transform.position);
 	}
 
 	void LateUpdate() {
@@ -278,12 +287,14 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 
 		if (!inBossRoom && !inMaze) {
-			cam_pos = new Vector3(camX, camY, -10);
+			//print(inBossRoom + " " + inMaze);
+			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
 		}
 		else if (Statics.mazeEntrance.inMazePropoerly) {
-			cam_pos = new Vector3(camX, camY, -10);
+			cam_pos = new Vector3(camX(), camY(), -10);
 			gameObject.transform.position = cam_pos;
+			//print("there");
 		}
 	}
 
@@ -309,45 +320,43 @@ public class CameraMovement : MonoBehaviour {
 		}
 	}
 
-	public float camX {
-		get {
-			if (player.position.x > currentBGX + middle.x - camWidht) {
+	public float camX() {
+		if (player.position.x > currentBGX + middle.x - camWidht) {
 
-				return currentBGX + middle.x - camWidht;
+			return currentBGX + middle.x - camWidht;
 
-			}
-			else if (player.position.x < -currentBGX + middle.x + camWidht) {
+		}
+		else if (player.position.x < -currentBGX + middle.x + camWidht) {
 
-				return -currentBGX + middle.x + camWidht;
+			return -currentBGX + middle.x + camWidht;
 
-			}
-			else {
+		}
+		else {
 
-				return player.position.x;
-			}
+			return player.position.x;
+		}
+
+	}
+
+	public float camY() {
+
+		if (player.position.y > currentBGY + middle.y - camHeight) {
+
+			return currentBGY + middle.y - camHeight;
+
+		}
+		else if (player.position.y < -currentBGY + middle.y + camHeight) {
+
+			return -currentBGY + middle.y + camHeight;
+
+		}
+		else {
+
+			return player.position.y;
 		}
 	}
 
-	public float camY {
-		get {
-			if (player.position.y > currentBGY + middle.y - camHeight) {
-
-				return currentBGY + middle.y - camHeight;
-
-			}
-			else if (player.position.y < -currentBGY + middle.y + camHeight) {
-
-				return -currentBGY + middle.y + camHeight;
-
-			}
-			else {
-
-				return player.position.y;
-			}
-		}
-	}
-
-	public void BossFightCamera(int bossNo) {
+	public void bossFightCam(int bossNo) {
 		inBossRoom = true;
 
 		bossRoom = GameObject.Find("Background_room_Boss_" + bossNo).GetComponent<RectTransform>();
@@ -366,12 +375,10 @@ public class CameraMovement : MonoBehaviour {
 		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
 		ParticleSystem.MainModule main = psA.main;
 		main.startLifetime = 25;
-	}
-
+			}
 	private void OnDestroy() {
 		Statics.cameraMovement = null;
 	}
-
 	public void SetParticleLifetime() {
 		ParticleSystem.ShapeModule shapeA = psA.shape;
 		psB.gameObject.SetActive(false);

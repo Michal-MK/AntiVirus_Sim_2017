@@ -28,7 +28,7 @@ public class BossEntrance : MonoBehaviour {
 				player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
 				GameObject health = Instantiate(bossHP,HPHolder.transform.position,Quaternion.identity,HPHolder.transform);
 				health.name = "BossHealth";
-				cam.BossFightCamera(1);
+				cam.bossFightCam(1);
 				StartCoroutine(cam.LerpSize(cam.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
 				bossHP.SetActive(true);
 

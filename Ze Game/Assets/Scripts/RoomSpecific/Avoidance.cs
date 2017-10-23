@@ -10,41 +10,46 @@ public class Avoidance : MonoBehaviour {
 	public GameObject door1;
 	public EnemySpawner spawner;
 	public Spike spike;
+	float avoidDuration = 60;
 	public bool displayAvoidInfo = true;
 	public TurretAttack turr;
-	public Toggle saveButton;
+	public Toggle SaveButton;
 	public GameObject sign;
 
 	private void Awake() {
 		Statics.avoidance = this;
 	}
 
+
 	public void StartAvoidance() {
 		door1.SetActive(true);
-		spawner.SpawnAvoidance();
-		StartCoroutine(HoldAvoidance(60f));
-		saveButton.interactable = false;
+		spawner.spawnAvoidance();
+		StartCoroutine(hold());
+		SaveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
 		//Statics.music.PlayMusic(Statics.music.avoidance);
-		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
+		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
+		StartCoroutine(TimeLeft());
 	}
 
-	private IEnumerator HoldAvoidance(float seconds) {
-		StartCoroutine(TimeLeft(seconds));
-		yield return new WaitForSeconds(seconds);
-		saveButton.interactable = true;
+
+	private IEnumerator hold() {
+		yield return new WaitForSeconds(avoidDuration);
+		SaveButton.interactable = true;
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
-		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
+		Camera.main.GetComponent<CameraMovement>().raycastForRooms();
 		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		StopAllCoroutines();
+
+
 	}
 
-	private IEnumerator TimeLeft(float seconds) {
+	private IEnumerator TimeLeft() {
 		Text SideText = Statics.canvasRenderer.info_S;
-		int i = (int)seconds - 1;
+		int i = (int)avoidDuration - 1;
 		bool show = false;
 
 		while (true) {
@@ -57,7 +62,7 @@ public class Avoidance : MonoBehaviour {
 				SideText.text = string.Format("{0:00} seconds left!", i);
 			}
 			if (i <= 0) {
-				StopCoroutine(TimeLeft(seconds));
+				StopCoroutine(TimeLeft());
 				break;
 			}
 		}

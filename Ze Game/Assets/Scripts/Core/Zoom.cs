@@ -33,7 +33,7 @@ public class Zoom : MonoBehaviour {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.2f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX, Statics.cameraMovement.camY, -10);
+			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);
 			//
 			cam.transform.position = cam_pos;
 			//
@@ -52,7 +52,7 @@ public class Zoom : MonoBehaviour {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX, Statics.cameraMovement.camY, -10);
+			Vector3 cam_pos = new Vector3(Statics.cameraMovement.camX(), Statics.cameraMovement.camY(), -10);
 			cam.transform.position = cam_pos;
 		}
 		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !Statics.cameraMovement.inBossRoom) {

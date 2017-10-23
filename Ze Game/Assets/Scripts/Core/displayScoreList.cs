@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DisplayScoreList : MonoBehaviour {
+public class displayScoreList : MonoBehaviour {
 
 	GameObject textField;
 	public RectTransform resultsTransform;
@@ -18,6 +18,7 @@ public class DisplayScoreList : MonoBehaviour {
 	public GameObject[] results0;
 	public List<string> clearTimes0 = new List<string>();
 	public List<string> names0 = new List<string>();
+
 
 	public GameObject[] results1;
 	public List<string> clearTimes1 = new List<string>();
@@ -42,6 +43,9 @@ public class DisplayScoreList : MonoBehaviour {
 	private void Start() {
 		StartCoroutine(RetrieveData());
 	}
+
+
+
 
 	public IEnumerator RetrieveData() {
 		string[] values;
@@ -70,6 +74,7 @@ public class DisplayScoreList : MonoBehaviour {
 				currentDiff = int.Parse(edited);
 				print(currentDiff);
 			}
+
 			else if (values[i].IndexOf('@') == 0) {
 				string edited = values[i].Remove(0, 1);
 
@@ -152,7 +157,11 @@ public class DisplayScoreList : MonoBehaviour {
 						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d1);
 						textBox.name = "Result " + j;
 
+
 						results1[j] = textBox;
+
+
+
 					}
 				}
 			}
@@ -165,7 +174,10 @@ public class DisplayScoreList : MonoBehaviour {
 						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d2);
 						textBox.name = "Result " + j;
 
+
 						results2[j] = textBox;
+
+
 					}
 				}
 			}
@@ -179,6 +191,7 @@ public class DisplayScoreList : MonoBehaviour {
 						textBox.name = "Result " + j;
 
 						results3[j] = textBox;
+
 					}
 				}
 			}
@@ -193,6 +206,7 @@ public class DisplayScoreList : MonoBehaviour {
 						textBox.name = "Result " + j;
 
 						results4[j] = textBox;
+
 					}
 				}
 			}
@@ -272,22 +286,6 @@ public class DisplayScoreList : MonoBehaviour {
 					}
 					else if (Obj.name == "Time") {
 						Obj.GetComponent<Text>().text = clearTimes4[i];
-					}
-				}
-			}
-		}
-	}
-
-	public void AltrenateDisplay(GameObject[] resultsX, List<string> names, List<string> times) {
-		for (int i = 0; i < times.Count; i++) {
-			if (resultsX.Length >= i) {
-				RectTransform[] res = resultsX[i].GetComponentsInChildren<RectTransform>();
-				foreach (RectTransform Obj in res) {
-					if (Obj.name == "Name") {
-						Obj.GetComponent<Text>().text = names[i];
-					}
-					else if (Obj.name == "Time") {
-						Obj.GetComponent<Text>().text = times[i];
 					}
 				}
 			}

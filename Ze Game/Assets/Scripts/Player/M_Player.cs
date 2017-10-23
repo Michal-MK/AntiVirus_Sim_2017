@@ -82,6 +82,7 @@ public class M_Player : MonoBehaviour {
 			newGame = false;
 		}
 		else if (Control.script.isRestarting) {
+			print("ISRESTARTING");
 			Statics.music.PlayMusic(Statics.music.room1);
 			Statics.canvasRenderer.infoRenderer(null, "Good luck & Have fun!");
 			Control.script.isRestarting = false;
@@ -260,6 +261,268 @@ public class M_Player : MonoBehaviour {
 		onceOnAxis = true;
 	}
 
+	/* Ancient Arrow/Mouse movement
+if (Input.GetKey(KeyCode.UpArrow)) {
+
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.y = 1;
+	}
+	else {
+		move.y = distanceToWall - 2 * transform.localScale.y;
+	}
+}
+
+if (Input.GetKey(KeyCode.DownArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.y = -1;
+	}
+	else {
+		move.y = -distanceToWall + 2 * transform.localScale.y;
+	}
+}
+
+if (Input.GetKey(KeyCode.RightArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.x = 1;
+	}
+	else {
+		move.x = distanceToWall - 2 * transform.localScale.x;
+	}
+}
+
+if (Input.GetKey(KeyCode.LeftArrow)) {
+	distanceToWall = Mathf.Infinity;
+
+
+	Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
+	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
+	foreach (RaycastHit2D hits in result) {
+		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+			distanceToWall = hits.distance;
+			break;
+		}
+
+	}
+	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
+		move.x = -1;
+	}
+	else {
+		move.x = -distanceToWall + 2 * transform.localScale.x;
+	}
+}
+if (doNotMove == false) {
+	gameObject.transform.position += move * Time.deltaTime * ARRspeed;
+}
+*/
+
+	/* Deprecated Arrow move Function
+			//if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
+			//	up = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, 1 * Speed) * 4);
+			//	}
+			//}
+			//else {
+			//	up = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
+			//	right = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(1 * Speed, 0) * 4);
+			//	}
+			//}
+			//else {
+			//	right = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
+			//	down = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(0, -1 * Speed) * 4);
+			//	}
+			//}
+			//else {
+			//	down = false;
+			//}
+
+			//if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
+			//	left = true;
+			//	if (!cam.inBossRoom && !cam.inMaze) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0));
+			//	}
+			//	else if (cam.inBossRoom) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
+			//	}
+			//	else if (cam.inMaze) {
+			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 4);
+			//	}
+			//}
+			//else {
+			//	left = false;
+			//}
+			//if (!up && !right && !down && !left) {
+			//	rg.velocity = Vector2.zero;
+			//}
+			*/
+
+	/* Deprecated Mouse move Function
+	public void Movement() {
+		move = new Vector3(0, 0, 0);
+
+		if (Input.GetAxis("Mouse X") > 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed;
+			if (totalDist >= distanceToWall - 2) {
+				move.x = distanceToWall - 2;
+			}
+			else {
+				move.x = Input.GetAxis("Mouse X") / 2;
+			}
+
+		}
+		else if (Input.GetAxis("Mouse X") < 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Mathf.Abs(Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed);
+			if (totalDist >= distanceToWall - 2) {
+				move.x = -distanceToWall + 2;
+			}
+			else {
+				move.x = Input.GetAxis("Mouse X") / 2;
+			}
+
+
+
+		}
+		if (Input.GetAxis("Mouse Y") > 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed;
+			if (totalDist >= distanceToWall - 2) {
+				move.y = distanceToWall - 2;
+			}
+			else {
+				move.y = Input.GetAxis("Mouse Y") / 2;
+			}
+
+		}
+		else if (Input.GetAxis("Mouse Y") < 0) {
+
+			distanceToWall = Mathf.Infinity;
+
+
+			Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
+			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
+			foreach (RaycastHit2D hits in result) {
+				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
+					distanceToWall = hits.distance;
+					break;
+				}
+
+			}
+			float totalDist = Mathf.Abs(Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed);
+			if (totalDist >= distanceToWall - 2) {
+				move.y = -distanceToWall + 2;
+			}
+			else {
+				move.y = Input.GetAxis("Mouse Y") / 2;
+			}
+		}
+		if (doNotMove == false) {
+			gameObject.transform.position += move * Time.deltaTime * speed * 2;
+		}
+	}
+	*/
+
 	private bool once = true;
 
 	private void OnCollisionEnter2D(Collision2D collision) {
@@ -285,7 +548,6 @@ public class M_Player : MonoBehaviour {
 
 	private Sprite previous;
 	int i = 0;
-
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
@@ -300,11 +562,12 @@ public class M_Player : MonoBehaviour {
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
-			cam.RaycastForRooms();
+			cam.raycastForRooms();
 
+			//spawner.spawnArrowTrap();
 			if (col.name == "Background_Start") {
 				if (gameProgression != 0) {
-					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle(1.8f, 1.5f));
+					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle());
 				}
 			}
 
@@ -360,10 +623,9 @@ public class M_Player : MonoBehaviour {
 			face.GetComponent<SpriteRenderer>().sprite = sad;
 		}
 	}
-
 	private void OnTriggerExit2D(Collider2D col) {
 		if (col.transform.tag == "BG") {
-			cam.RaycastForRooms();
+			cam.raycastForRooms();
 		}
 
 		if (col.name == "Background_room_1") {
@@ -376,12 +638,13 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
+
 	public void FloorComplete() {
 
 		doNotMove = true;
 		Cursor.visible = true;
-		Timer.run = false;
-		save.SaveScore();
+		timer.run = false;
+		save.saveScore();
 
 	}
 
@@ -393,8 +656,8 @@ public class M_Player : MonoBehaviour {
 		loadButton.SetActive(true);
 		doNotMove = true;
 		Cursor.visible = true;
-		Timer.run = false;
-		Statics.camFade.PlayTransition(CamFadeOut.CamTransitionModes.DIM_CAMERA);
+		timer.run = false;
+		Statics.camFade.PlayTransition("Dim");
 		GameOverImg.SetTrigger("Appear");
 		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;
@@ -407,7 +670,6 @@ public class M_Player : MonoBehaviour {
 			delEnemies = false;
 		}
 	}
-
 	private IEnumerator StopTime() {
 		yield return new WaitForSeconds(1);
 		Time.timeScale = 0;
@@ -415,11 +677,5 @@ public class M_Player : MonoBehaviour {
 
 	private void OnDestroy() {
 		Statics.mPlayer = null;
-	}
-
-	public static Vector2 GetDistanceByAxis(GameObject other) {
-		float xDist = Mathf.Abs(Statics.mPlayer.transform.position.x - other.transform.position.x);
-		float yDist = Mathf.Abs(Statics.mPlayer.transform.position.y - other.transform.position.y);
-		return new Vector2(xDist, yDist);
 	}
 }

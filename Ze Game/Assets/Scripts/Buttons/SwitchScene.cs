@@ -19,7 +19,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		Timer.time = 0;
+		timer.time = 0;
 		if (Statics.camFade != null) {
 			Statics.camFade.anim.SetTrigger("UnDim");
 		}
@@ -44,7 +44,7 @@ public class SwitchScene : MonoBehaviour {
 		}
 		quit.transform.position = new Vector3(0,-200,10);
 
-		Statics.camFade.PlayTransition(CamFadeOut.CamTransitionModes.TRANSITION_SCENES);
+		Statics.camFade.PlayTransition("Trans");
 		if (Statics.music.sound.volume != 0) {
 			Statics.music.StartCoroutine(Statics.music.StopMusic());
 		}
@@ -58,7 +58,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		Timer.time = 0;
+		timer.time = 0;
 		SceneManager.LoadScene(i);
 	}
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SignPost : MonoBehaviour {
@@ -20,7 +22,6 @@ public class SignPost : MonoBehaviour {
 
 		}
 	}
-
 	private void OnTriggerExit2D(Collider2D col) {
 		if (col.tag == "Player") {
 			awaitingInput = false;
@@ -29,7 +30,6 @@ public class SignPost : MonoBehaviour {
 			}
 		}
 	}
-
 	private IEnumerator Fade() {
 		for (float f = 255; f > 0; f -= 1) {
 			sign.color = new Color32(255, 255, 255, (byte)f);

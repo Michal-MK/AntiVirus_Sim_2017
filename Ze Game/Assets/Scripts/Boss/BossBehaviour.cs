@@ -89,7 +89,7 @@ public class BossBehaviour : MonoBehaviour {
 
 
 	public bool bossSpawned = false;
-	private bool initialDelay = true;
+	private bool initialDealy = true;
 	private bool doneBouncing = false;
 
 	Vector3 attack1StartPos;
@@ -165,6 +165,8 @@ public class BossBehaviour : MonoBehaviour {
 		bossSpawned = true;
 
 		Camera.main.transform.position = BG.transform.position + new Vector3(0,0,-10);
+
+		print(Camera.main.transform.position);
 
 		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
@@ -354,7 +356,7 @@ public class BossBehaviour : MonoBehaviour {
 				isAttacking = false;
 				Attack3 = false;
 				moveCage = false;
-				initialDelay = true;
+				initialDealy = true;
 				dontChangeL = false;
 				dontChangeR = false;
 				distL = 0;
@@ -542,10 +544,10 @@ public class BossBehaviour : MonoBehaviour {
 	//Dodge KillerBlocks Attack Code
 	public IEnumerator ChangeDir() {
 
-		if (initialDelay) {
+		if (initialDealy) {
 			yield return new WaitForSeconds(3);
 			Attack3 = true;
-			initialDelay = false;
+			initialDealy = false;
 			anim.Play("SpeedUp");
 		}
 		while (Attack3) {
@@ -615,7 +617,7 @@ public class BossBehaviour : MonoBehaviour {
 					Projectile script = shot.GetComponent<Projectile>();
 					Projectile.projectileSpeed = distToPly / change;
 
-					script.disableCollisions = true;
+					script.DisableCollisions = true;
 					shot.transform.position = transform.position;
 					shot.transform.rotation = Quaternion.Euler(0, 0, 270);
 					shot.SetActive(true);
