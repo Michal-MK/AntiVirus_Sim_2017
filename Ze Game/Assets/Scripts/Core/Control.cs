@@ -19,6 +19,8 @@ public class Control : MonoBehaviour {
 	public bool isNewGame = true;
 	public bool isRestarting = false;
 
+	private bool load = false;
+
 	private SaveData loadedData;
 
 
@@ -76,12 +78,12 @@ public class Control : MonoBehaviour {
 		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
 			yield return new WaitForSeconds(1f);
 			Wrapper wrp = GameObject.Find("Canvas").GetComponent<Wrapper>();
-			wrp.makeButtonsNotInteractable();
+			wrp.ToggleButtonInteractivity();
 			GameObject auth = Instantiate(authentication);
 			auth.transform.SetParent(GameObject.Find("Canvas").transform);
 			auth.transform.localPosition = Vector3.zero;
 			yield return new WaitUntil(() => Input.GetButtonDown("Submit"));
-			wrp.makeButtonsNotInteractable();
+			wrp.ToggleButtonInteractivity();
 
 		}
 	}
@@ -180,20 +182,20 @@ public class Control : MonoBehaviour {
 		StartCoroutine(FilesLoaded());
 	}
 
-	private bool load = false;
+
 
 	public IEnumerator StartNewGame(int difficulty) {
 
 		PlayerPrefs.SetInt("difficulty", difficulty);
 		chosenDifficulty = difficulty;
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		yield return new WaitForFixedUpdate();
 		load = false;
 		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
 		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
 		Statics.camFade.anim.speed = 0;
 
-		yield return new WaitUntil(() => load = true);
+		yield return new WaitUntil(() => load == true);
 		loading.allowSceneActivation = true;
 		Statics.camFade.anim.speed = 1;
 		load = false;
@@ -217,7 +219,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private IEnumerator FilesLoaded() {
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		yield return new WaitForEndOfFrame();
 		isNewGame = false;
 		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
@@ -232,7 +234,6 @@ public class Control : MonoBehaviour {
 
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		load = true;
 		if (scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
 			SetName();
 		}

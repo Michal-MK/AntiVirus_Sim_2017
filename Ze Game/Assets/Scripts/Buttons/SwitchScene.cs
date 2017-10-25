@@ -44,7 +44,7 @@ public class SwitchScene : MonoBehaviour {
 		}
 		quit.transform.position = new Vector3(0,-200,10);
 
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		if (Statics.music.sound.volume != 0) {
 			Statics.music.StartCoroutine(Statics.music.StopMusic());
 		}

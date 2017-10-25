@@ -43,6 +43,8 @@ public class M_Player : MonoBehaviour {
 	public Sprite happy;
 	public Sprite sad;
 
+	private Sprite previous;
+	int i = 0;
 
 	private void Awake() {
 		Statics.mPlayer = this;
@@ -56,6 +58,7 @@ public class M_Player : MonoBehaviour {
 		loadButton.SetActive(false);
 
 		string name = PlayerPrefs.GetString("player_name");
+
 		if (name == null || name == "") {
 			PlayerPrefs.SetInt("Attempts", 0);
 		}
@@ -95,26 +98,23 @@ public class M_Player : MonoBehaviour {
 
 		switch (mode) {
 
-			case 0:
-			//Move();
-			ArrowMove();
-			doFlappy = false;
-			break;
+			case 0: {
+				//Move();
+				ArrowMove();
+				doFlappy = false;
+				break;
+			}
 
-			case 1:
-			doFlappy = true;
-			break;
+			case 1: {
+				doFlappy = true;
+				break;
+			}
 		}
-
 	}
-	private bool onceDisable = true;
 
 	private void Update() {
-
-
-		if (disableSavesByBoss && onceDisable) {
+		if (disableSavesByBoss && saveButton.GetComponent<Toggle>().interactable) {
 			saveButton.GetComponent<Toggle>().interactable = false;
-			onceDisable = false;
 		}
 
 		if (doFlappy) {
@@ -226,18 +226,18 @@ public class M_Player : MonoBehaviour {
 	public void ChangeFlappy(bool start = false) {
 		print("ChnagedToFlappy");
 		switch (start) {
-			case true:
-			rg.gravityScale = gravity;
-			rg.drag = 0;
-			mode = 1;
-			break;
-
-
-			case false:
-			rg.gravityScale = 0;
-			rg.drag = linearDrag;
-			mode = 0;
-			break;
+			case true: {
+				rg.gravityScale = gravity;
+				rg.drag = 0;
+				mode = 1;
+				break;
+			}
+			case false: {
+				rg.gravityScale = 0;
+				rg.drag = linearDrag;
+				mode = 0;
+				break;
+			}
 		}
 	}
 
@@ -261,278 +261,17 @@ public class M_Player : MonoBehaviour {
 		onceOnAxis = true;
 	}
 
-	/* Ancient Arrow/Mouse movement
-if (Input.GetKey(KeyCode.UpArrow)) {
-
-	distanceToWall = Mathf.Infinity;
-
-
-	Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
-	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
-	foreach (RaycastHit2D hits in result) {
-		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-			distanceToWall = hits.distance;
-			break;
-		}
-
-	}
-	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-		move.y = 1;
-	}
-	else {
-		move.y = distanceToWall - 2 * transform.localScale.y;
-	}
-}
-
-if (Input.GetKey(KeyCode.DownArrow)) {
-	distanceToWall = Mathf.Infinity;
-
-
-	Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
-	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
-	foreach (RaycastHit2D hits in result) {
-		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-			distanceToWall = hits.distance;
-			break;
-		}
-
-	}
-	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-		move.y = -1;
-	}
-	else {
-		move.y = -distanceToWall + 2 * transform.localScale.y;
-	}
-}
-
-if (Input.GetKey(KeyCode.RightArrow)) {
-	distanceToWall = Mathf.Infinity;
-
-
-	Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
-	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
-	foreach (RaycastHit2D hits in result) {
-		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-			distanceToWall = hits.distance;
-			break;
-		}
-
-	}
-	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-		move.x = 1;
-	}
-	else {
-		move.x = distanceToWall - 2 * transform.localScale.x;
-	}
-}
-
-if (Input.GetKey(KeyCode.LeftArrow)) {
-	distanceToWall = Mathf.Infinity;
-
-
-	Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
-	RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
-	foreach (RaycastHit2D hits in result) {
-		if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-			distanceToWall = hits.distance;
-			break;
-		}
-
-	}
-	if (distanceToWall > 2.1f || distanceToWall == Mathf.Infinity) {
-		move.x = -1;
-	}
-	else {
-		move.x = -distanceToWall + 2 * transform.localScale.x;
-	}
-}
-if (doNotMove == false) {
-	gameObject.transform.position += move * Time.deltaTime * ARRspeed;
-}
-*/
-
-	/* Deprecated Arrow move Function
-			//if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-			//	up = true;
-			//	if (!cam.inBossRoom && !cam.inMaze) {
-			//		rg.AddForce(new Vector2(0, 1 * Speed));
-			//	}
-			//	else if (cam.inBossRoom) {
-			//		rg.AddForce(new Vector2(0, 1 * Speed) * 5);
-			//	}
-			//	else if (cam.inMaze) {
-			//		rg.AddForce(new Vector2(0, 1 * Speed) * 4);
-			//	}
-			//}
-			//else {
-			//	up = false;
-			//}
-
-			//if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-			//	right = true;
-			//	if (!cam.inBossRoom && !cam.inMaze) {
-			//		rg.AddForce(new Vector2(1 * Speed, 0));
-			//	}
-			//	else if (cam.inBossRoom) {
-			//		rg.AddForce(new Vector2(1 * Speed, 0) * 5);
-			//	}
-			//	else if (cam.inMaze) {
-			//		rg.AddForce(new Vector2(1 * Speed, 0) * 4);
-			//	}
-			//}
-			//else {
-			//	right = false;
-			//}
-
-			//if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
-			//	down = true;
-			//	if (!cam.inBossRoom && !cam.inMaze) {
-			//		rg.AddForce(new Vector2(0, -1 * Speed));
-			//	}
-			//	else if (cam.inBossRoom) {
-			//		rg.AddForce(new Vector2(0, -1 * Speed) * 5);
-			//	}
-			//	else if (cam.inMaze) {
-			//		rg.AddForce(new Vector2(0, -1 * Speed) * 4);
-			//	}
-			//}
-			//else {
-			//	down = false;
-			//}
-
-			//if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-			//	left = true;
-			//	if (!cam.inBossRoom && !cam.inMaze) {
-			//		rg.AddForce(new Vector2(-1 * Speed, 0));
-			//	}
-			//	else if (cam.inBossRoom) {
-			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 5);
-			//	}
-			//	else if (cam.inMaze) {
-			//		rg.AddForce(new Vector2(-1 * Speed, 0) * 4);
-			//	}
-			//}
-			//else {
-			//	left = false;
-			//}
-			//if (!up && !right && !down && !left) {
-			//	rg.velocity = Vector2.zero;
-			//}
-			*/
-
-	/* Deprecated Mouse move Function
-	public void Movement() {
-		move = new Vector3(0, 0, 0);
-
-		if (Input.GetAxis("Mouse X") > 0) {
-
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.right * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.right, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			float totalDist = Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed;
-			if (totalDist >= distanceToWall - 2) {
-				move.x = distanceToWall - 2;
-			}
-			else {
-				move.x = Input.GetAxis("Mouse X") / 2;
-			}
-
-		}
-		else if (Input.GetAxis("Mouse X") < 0) {
-
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.left * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.left, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			float totalDist = Mathf.Abs(Input.GetAxis("Mouse X") * Time.smoothDeltaTime * speed);
-			if (totalDist >= distanceToWall - 2) {
-				move.x = -distanceToWall + 2;
-			}
-			else {
-				move.x = Input.GetAxis("Mouse X") / 2;
-			}
-
-
-
-		}
-		if (Input.GetAxis("Mouse Y") > 0) {
-
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.up * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.up, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			float totalDist = Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed;
-			if (totalDist >= distanceToWall - 2) {
-				move.y = distanceToWall - 2;
-			}
-			else {
-				move.y = Input.GetAxis("Mouse Y") / 2;
-			}
-
-		}
-		else if (Input.GetAxis("Mouse Y") < 0) {
-
-			distanceToWall = Mathf.Infinity;
-
-
-			Debug.DrawRay(transform.position, Vector2.down * 100, Color.red);
-			RaycastHit2D[] result = Physics2D.RaycastAll((Vector2)transform.position, Vector2.down, 100);
-			foreach (RaycastHit2D hits in result) {
-				if (hits.transform.tag == "Wall" || hits.transform.tag == "Wall/Door") {
-					distanceToWall = hits.distance;
-					break;
-				}
-
-			}
-			float totalDist = Mathf.Abs(Input.GetAxis("Mouse Y") * Time.smoothDeltaTime * speed);
-			if (totalDist >= distanceToWall - 2) {
-				move.y = -distanceToWall + 2;
-			}
-			else {
-				move.y = Input.GetAxis("Mouse Y") / 2;
-			}
-		}
-		if (doNotMove == false) {
-			gameObject.transform.position += move * Time.deltaTime * speed * 2;
-		}
-	}
-	*/
-
-	private bool once = true;
 
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.transform.name == "killerblock") {
 			Statics.sound.PlayFX(Statics.sound.ELShock);
 		}
-		if (once && collision.transform.name == "Block") {
-			guide.enableGuide();
-			guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
-			once = false;
+		if (collision.transform.name == "Block") {
+			print("Collided!");
+			if (!BlockScript.pressurePlateTriggered) {
+				guide.enableGuide();
+				guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
+			}
 		}
 		if (collision.transform.tag == "Enemy") {
 			print("Collided");
@@ -546,8 +285,6 @@ if (doNotMove == false) {
 		}
 	}
 
-	private Sprite previous;
-	int i = 0;
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
@@ -562,7 +299,7 @@ if (doNotMove == false) {
 		}
 		if (col.transform.tag == "BG") {
 			currentBG_name = col.name;
-			cam.raycastForRooms();
+			cam.RaycastForRooms();
 
 			//spawner.spawnArrowTrap();
 			if (col.name == "Background_Start") {
@@ -625,7 +362,7 @@ if (doNotMove == false) {
 	}
 	private void OnTriggerExit2D(Collider2D col) {
 		if (col.transform.tag == "BG") {
-			cam.raycastForRooms();
+			cam.RaycastForRooms();
 		}
 
 		if (col.name == "Background_room_1") {
@@ -644,7 +381,7 @@ if (doNotMove == false) {
 		doNotMove = true;
 		Cursor.visible = true;
 		Timer.run = false;
-		save.saveScore();
+		save.SaveScore();
 
 	}
 
@@ -657,7 +394,7 @@ if (doNotMove == false) {
 		doNotMove = true;
 		Cursor.visible = true;
 		Timer.run = false;
-		Statics.camFade.PlayTransition("Dim");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
 		GameOverImg.SetTrigger("Appear");
 		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;

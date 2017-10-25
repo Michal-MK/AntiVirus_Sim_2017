@@ -56,3 +56,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3140395643
+    locked: 0
+  - name: Background Features
+    uniqueID: 3141276177
+    locked: 0
+  - name: Walls
+    uniqueID: 3418423351
+    locked: 0
+  - name: Player
+    uniqueID: 2982745699
+    locked: 0
+  - name: Enemy
+    uniqueID: 760407085
+    locked: 0
+  - name: Special
+    uniqueID: 2047818299
+    locked: 0
+  - name: Matrix Particles
+    uniqueID: 1336061699
+    locked: 0

@@ -3,11 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class displayScoreList : MonoBehaviour {
+public class DisplayScoreList : MonoBehaviour {
 
-	GameObject textField;
 	public RectTransform resultsTransform;
-	public GameObject aaa;
+	public GameObject databaseTimes;
 
 	public RectTransform d0;
 	public RectTransform d1;
@@ -37,7 +36,7 @@ public class displayScoreList : MonoBehaviour {
 	public List<string> names4 = new List<string>();
 
 	private int count;
-	private int longestScoreList;
+	//private int longestScoreList;
 
 
 	private void Start() {
@@ -142,7 +141,7 @@ public class displayScoreList : MonoBehaviour {
 						if (count >= 9) {
 							d0.sizeDelta += new Vector2(0,40);
 						}
-						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d0);
+						GameObject textBox = Instantiate(databaseTimes, Vector3.zero, Quaternion.identity, d0);
 						textBox.name = "Result " + j;
 						results0[j] = textBox;
 					}
@@ -154,7 +153,7 @@ public class displayScoreList : MonoBehaviour {
 				results1 = new GameObject[count];
 				if (count != 0) {
 					for (int j = 0; j < count; j++) {
-						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d1);
+						GameObject textBox = Instantiate(databaseTimes, Vector3.zero, Quaternion.identity, d1);
 						textBox.name = "Result " + j;
 
 
@@ -171,7 +170,7 @@ public class displayScoreList : MonoBehaviour {
 				results2 = new GameObject[count];
 				if (count != 0) {
 					for (int j = 0; j < count; j++) {
-						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d2);
+						GameObject textBox = Instantiate(databaseTimes, Vector3.zero, Quaternion.identity, d2);
 						textBox.name = "Result " + j;
 
 
@@ -187,7 +186,7 @@ public class displayScoreList : MonoBehaviour {
 				results3 = new GameObject[count];
 				if (count != 0) {
 					for (int j = 0; j < count; j++) {
-						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d3);
+						GameObject textBox = Instantiate(databaseTimes, Vector3.zero, Quaternion.identity, d3);
 						textBox.name = "Result " + j;
 
 						results3[j] = textBox;
@@ -202,7 +201,7 @@ public class displayScoreList : MonoBehaviour {
 				results4 = new GameObject[count];
 				if (count != 0) {
 					for (int j = 0; j < count; j++) {
-						GameObject textBox = Instantiate(aaa, Vector3.zero, Quaternion.identity, d4);
+						GameObject textBox = Instantiate(databaseTimes, Vector3.zero, Quaternion.identity, d4);
 						textBox.name = "Result " + j;
 
 						results4[j] = textBox;

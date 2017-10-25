@@ -58,6 +58,8 @@ public class PressurePlate : MonoBehaviour {
 				sound.clip = On;
 				sound.Play();
 				spike.SetPosition();
+				Statics.guide.Recalculate(spike.gameObject, true);
+				BlockScript.pressurePlateTriggered = true;
 			}
 		}
 	}
@@ -74,6 +76,7 @@ public class PressurePlate : MonoBehaviour {
 			sound.Play();
 			selfSprite.sprite = Inactive;
 			spike.Hide();
+			BlockScript.pressurePlateTriggered = false;
 		}
 	}
 	public void CreateBarrier() {

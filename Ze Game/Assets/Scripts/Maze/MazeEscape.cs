@@ -27,7 +27,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 	public IEnumerator FromMazeTrans() {
 		entrance.gameObject.SetActive(false);
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		yield return new WaitForSeconds(1.5f);
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		zoom.canZoom = true;
@@ -61,7 +61,7 @@ public class MazeEscape : MonoBehaviour {
 
 	private IEnumerator FadeWalls() {
 		print("Fading");
-		Image one = wall.GetComponent<Image>();
+		SpriteRenderer one = wall.GetComponent<SpriteRenderer>();
 
 		Color32 newColor;
 

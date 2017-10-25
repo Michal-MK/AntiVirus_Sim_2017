@@ -9,16 +9,35 @@ public class Enemy : MonoBehaviour, IKillable {
 	}
 
 	private bool _instantDeath = true;
-	private bool _is_Destroyable;
-	private float _damage;
+	private bool _is_Destroyable = true;
+	private float _damage = 1;
 	private EnemyType _type;
 
 	public virtual void DealDamage(float damage) {
-		if (_instantDeath) { }
+		if (_instantDeath) {
+			
+		}
 	}
 
 	public void Kill() {
-		print("Destroying " + gameObject.name);
-		Destroy(gameObject);
+		if (_is_Destroyable) {
+			print("Destroying " + gameObject.name);
+			Destroy(gameObject);
+		}
+	}
+
+	public bool isDestroyable {
+		get { return _is_Destroyable; }
+		set { _is_Destroyable = value; }
+	}
+
+	public float damage {
+		get { return _damage; }
+		set { _damage = value; }
+	}
+
+	public EnemyType enemyType {
+		get { return _type; }
+		set { _type = value; }
 	}
 }

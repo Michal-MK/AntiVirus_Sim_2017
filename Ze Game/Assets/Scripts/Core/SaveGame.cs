@@ -8,7 +8,7 @@ public class SaveGame : MonoBehaviour {
 		Statics.saveGame = this;
 	}
 
-	public void saveScore() {
+	public void SaveScore() {
 		int difficulty = PlayerPrefs.GetInt("difficulty");
 		string playerName = PlayerPrefs.GetString("player_name");
 		if(playerName == null || playerName == "") {
@@ -16,138 +16,191 @@ public class SaveGame : MonoBehaviour {
 			playerName = System.Environment.UserName;
 		}
 
-		string currentTimeString = string.Format("{0:00}:{1:00}.{2:00}", (int)Timer.time / 60, Timer.time % 60, Timer.time.ToString().Remove(0, Timer.time.ToString().Length - 2));
-		;
+		string currentTimeString = string.Format("{0:00}:{1:00}.{2:00}",
+				(int)Timer.time / 60, Timer.time % 60, Timer.time.ToString().Remove(0, Timer.time.ToString().Length - 2));
 
 		WWWForm form = new WWWForm();
 		form.AddField("time", currentTimeString);
 		form.AddField("player_name", playerName);
 
-		//print(difficulty);
 
 		new WWW("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);
-		//print("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php");
 
 		float currentTime = Mathf.Round(Timer.time * 100) / 100;
 
-		if (difficulty == 0) {
+		RearangeTimes(currentTime, difficulty);
 
-			int Min = 0;
-			int toMax = 9;
+	//	if (difficulty == 0) {
 
-			for (int i = toMax; i >= Min; i--) {
-				string current = i.ToString();
-				string oneInFrontOfCurrent = (i - 1).ToString();
+	//		int Min = 0;
+	//		int toMax = 9;
 
-				if (PlayerPrefs.GetFloat(current) == Mathf.Infinity || PlayerPrefs.GetFloat(current) == 0 && i == toMax) {
-					PlayerPrefs.SetFloat(current, currentTime);
-				}
-				if (i != Min) {
-					if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+	//		for (int i = toMax; i >= Min; i--) {
+	//			string current = i.ToString();
+	//			string oneInFrontOfCurrent = (i - 1).ToString();
 
-						float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
-						PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
-						PlayerPrefs.SetFloat(current, previousTime);
-					}
+	//			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity || PlayerPrefs.GetFloat(current) == 0 && i == toMax) {
+	//				PlayerPrefs.SetFloat(current, currentTime);
+	//			}
+	//			if (i != Min) {
+	//				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+	//					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+	//					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+	//					PlayerPrefs.SetFloat(current, previousTime);
+	//				}
+	//			}
+	//		}
+	//	}
+
+	//	if (difficulty == 1) {
+
+	//		int Min = 10;
+	//		int toMax = 19;
+
+
+	//		for (int i = toMax; i >= Min; i--) {
+	//			string current = i.ToString();
+	//			string oneInFrontOfCurrent = (i - 1).ToString();
+
+	//			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+	//				PlayerPrefs.SetFloat(current, currentTime);
+	//			}
+	//			if (i != Min) {
+	//				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+	//					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+	//					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+	//					PlayerPrefs.SetFloat(current, previousTime);
+	//				}
+	//			}
+	//		}
+	//	}
+
+	//	if (difficulty == 2) {
+
+	//		int Min = 20;
+	//		int toMax = 29;
+
+
+	//		for (int i = toMax; i >= Min; i--) {
+	//			string current = i.ToString();
+	//			string oneInFrontOfCurrent = (i - 1).ToString();
+
+	//			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+	//				PlayerPrefs.SetFloat(current, currentTime);
+	//			}
+	//			if (i != Min) {
+	//				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+	//					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+	//					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+	//					PlayerPrefs.SetFloat(current, previousTime);
+	//				}
+	//			}
+	//		}
+	//	}
+
+	//	if (difficulty == 3) {
+
+	//		int Min = 30;
+	//		int toMax = 39;
+
+
+	//		for (int i = toMax; i >= Min; i--) {
+	//			string current = i.ToString();
+	//			string oneInFrontOfCurrent = (i - 1).ToString();
+
+	//			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+	//				PlayerPrefs.SetFloat(current, currentTime);
+	//			}
+	//			if (i != Min) {
+	//				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+	//					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+	//					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+	//					PlayerPrefs.SetFloat(current, previousTime);
+	//				}
+	//			}
+	//		}
+	//	}
+
+	//	if (difficulty == 4) {
+
+	//		int Min = 40;
+	//		int toMax = 49;
+
+
+	//		for (int i = toMax; i >= Min; i--) {
+	//			string current = i.ToString();
+	//			string oneInFrontOfCurrent = (i - 1).ToString();
+
+	//			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
+	//				PlayerPrefs.SetFloat(current, currentTime);
+	//			}
+	//			if (i != Min) {
+	//				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+	//					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+	//					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+	//					PlayerPrefs.SetFloat(current, previousTime);
+	//				}
+	//			}
+	//		}
+	//	}
+	}
+
+	private void RearangeTimes(float currentTime, int difficulty) {
+		int minRange;
+		int maxRange;
+		switch (difficulty) {
+			case 0: {
+				minRange = 0;
+				maxRange = 9;
+				break;
+			}
+			case 1: {
+				minRange = 10;
+				maxRange = 19;
+				break;
+			}
+			case 2: {
+				minRange = 20;
+				maxRange = 29;
+				break;
+			}
+			case 3: {
+				minRange = 30;
+				maxRange = 39;
+				break;
+			}
+			case 4: {
+				minRange = 40;
+				maxRange = 49;
+				break;
+			}
+			default: {
+				throw new System.Exception("Undefined difficulty!!");
+			}
+		}
+
+		for (int i = maxRange; i >= minRange; i--) {
+			string current = i.ToString();
+			string oneInFrontOfCurrent = (i - 1).ToString();
+
+			if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == maxRange) {
+				PlayerPrefs.SetFloat(current, currentTime);
+			}
+			if (i != minRange) {
+				if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
+
+					float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
+					PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
+					PlayerPrefs.SetFloat(current, previousTime);
 				}
 			}
 		}
 
-		if (difficulty == 1) {
-
-			int Min = 10;
-			int toMax = 19;
-
-
-			for (int i = toMax; i >= Min; i--) {
-				string current = i.ToString();
-				string oneInFrontOfCurrent = (i - 1).ToString();
-
-				if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
-					PlayerPrefs.SetFloat(current, currentTime);
-				}
-				if (i != Min) {
-					if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
-
-						float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
-						PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
-						PlayerPrefs.SetFloat(current, previousTime);
-					}
-				}
-			}
-		}
-
-		if (difficulty == 2) {
-
-			int Min = 20;
-			int toMax = 29;
-
-
-			for (int i = toMax; i >= Min; i--) {
-				string current = i.ToString();
-				string oneInFrontOfCurrent = (i - 1).ToString();
-
-				if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
-					PlayerPrefs.SetFloat(current, currentTime);
-				}
-				if (i != Min) {
-					if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
-
-						float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
-						PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
-						PlayerPrefs.SetFloat(current, previousTime);
-					}
-				}
-			}
-		}
-
-		if (difficulty == 3) {
-
-			int Min = 30;
-			int toMax = 39;
-
-
-			for (int i = toMax; i >= Min; i--) {
-				string current = i.ToString();
-				string oneInFrontOfCurrent = (i - 1).ToString();
-
-				if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
-					PlayerPrefs.SetFloat(current, currentTime);
-				}
-				if (i != Min) {
-					if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
-
-						float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
-						PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
-						PlayerPrefs.SetFloat(current, previousTime);
-					}
-				}
-			}
-		}
-
-		if (difficulty == 4) {
-
-			int Min = 40;
-			int toMax = 49;
-
-
-			for (int i = toMax; i >= Min; i--) {
-				string current = i.ToString();
-				string oneInFrontOfCurrent = (i - 1).ToString();
-
-				if (PlayerPrefs.GetFloat(current) == Mathf.Infinity && i == toMax) {
-					PlayerPrefs.SetFloat(current, currentTime);
-				}
-				if (i != Min) {
-					if (PlayerPrefs.GetFloat(oneInFrontOfCurrent) > PlayerPrefs.GetFloat(current)) {
-
-						float previousTime = PlayerPrefs.GetFloat(oneInFrontOfCurrent);
-						PlayerPrefs.SetFloat(oneInFrontOfCurrent, PlayerPrefs.GetFloat(current));
-						PlayerPrefs.SetFloat(current, previousTime);
-					}
-				}
-			}
-		}
 	}
 
 	private void OnDestroy() {

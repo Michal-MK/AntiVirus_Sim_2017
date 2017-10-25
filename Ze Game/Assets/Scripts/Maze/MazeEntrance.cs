@@ -39,7 +39,7 @@ public class MazeEntrance : MonoBehaviour {
 	}
 	public IEnumerator TransToPos() {
 
-		Statics.camFade.PlayTransition("Trans");
+		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		cam.inMaze = true;
 		yield return new WaitForSeconds(1.5f);
 		M_Player.doNotMove = true;

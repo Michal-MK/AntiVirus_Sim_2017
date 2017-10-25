@@ -9,6 +9,8 @@ public class BlockScript : MonoBehaviour {
 	Quaternion startingrotation;
 	float dist;
 
+	public static bool pressurePlateTriggered = false;
+
 	public bool showInfo = true;
 
 	private void Awake() {

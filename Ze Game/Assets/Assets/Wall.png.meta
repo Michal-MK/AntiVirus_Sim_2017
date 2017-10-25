@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 1446ba373b95a1242a3d3188dddc79f8
-timeCreated: 1481301410
+guid: 3aa4644543f67e84a82685e5a6f1ec39
+timeCreated: 1508953055
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Barrier_0
+    21300000: Wall_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -27,12 +27,12 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
-    aniso: 16
+    filterMode: -1
+    aniso: -1
     mipBias: -1
     wrapU: 1
     wrapV: 1
@@ -40,13 +40,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spriteBorder: {x: 22, y: 20, z: 20, w: 22}
+  spritePixelsToUnits: 10
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -82,23 +82,17 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Barrier_0
-      rect:
-        serializedVersion: 2
-        x: 23
-        y: 21
-        width: 106
-        height: 106
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 19, y: 19, z: 19, w: 19}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
+    sprites: []
     outline: []
-    physicsShape: []
+    physicsShape:
+    - - {x: -53, y: 55}
+      - {x: -55, y: 53}
+      - {x: -55, y: -55}
+      - {x: -53, y: -57}
+      - {x: 55, y: -57}
+      - {x: 57, y: -55}
+      - {x: 57, y: 53}
+      - {x: 55, y: 55}
   spritePackingTag: 
   userData: 
   assetBundleName: 

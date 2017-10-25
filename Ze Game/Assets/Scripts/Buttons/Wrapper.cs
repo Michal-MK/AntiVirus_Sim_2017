@@ -58,7 +58,6 @@ public class Wrapper : MonoBehaviour {
 		if (dim != null) {
 			dim.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
 			if (PlayerPrefs.GetString("player_name") == null) {
-				print("AAAA");
 				canvas.DisableButtons();
 			}
 		}
@@ -101,7 +100,7 @@ public class Wrapper : MonoBehaviour {
 		}
 	}
 
-	public void makeButtonsNotInteractable() {
+	public void ToggleButtonInteractivity() {
 
 		foreach (var item in buttons) {
 			item.interactable = !item.interactable;

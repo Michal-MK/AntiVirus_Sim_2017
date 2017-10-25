@@ -91,7 +91,7 @@ public class GameProgression : MonoBehaviour {
 
 		}
 		if (Statics.cameraMovement != null) {
-			Statics.cameraMovement.raycastForRooms();
+			Statics.cameraMovement.RaycastForRooms();
 		}
 	}
 	private void OnDestroy() {
