@@ -40,7 +40,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 				GameObject save = Instantiate(SaveObj, content.transform);
 				save.name = saveFiles[i].FullName;
 				lastSave = save;
-				byte[] img = File.ReadAllBytes(saveDirectory + "/Resources/" + saveFiles[i].Name.Remove(saveFiles[i].Name.Length - 6, 6) + ".png");
+				byte[] img = File.ReadAllBytes(saveDirectory +  "/Resources/" + saveFiles[i].Name.Remove(saveFiles[i].Name.Length - 6, 6) + ".png");
 				Texture2D tex = new Texture2D(800, 600);
 				tex.LoadImage(img);
 				Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
@@ -97,7 +97,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 											"Time: 00:00:00 minutes";
 
 				}
-				content.sizeDelta += new Vector2(0, 225);
+				//content.sizeDelta += new Vector2(0, 225);
 			}
 		}
 		if (content.GetComponentsInChildren<RectTransform>().Length == 1) {

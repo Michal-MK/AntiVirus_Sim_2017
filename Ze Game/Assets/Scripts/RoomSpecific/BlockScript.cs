@@ -6,7 +6,8 @@ public class BlockScript : MonoBehaviour {
 
 	Vector3 currentpos;
 	Vector3 startingpos;
-	Quaternion startingrotation;
+	private Quaternion startingrotation = Quaternion.Euler(0,0,0);
+
 	float dist;
 
 	public static bool pressurePlateTriggered = false;
@@ -20,7 +21,6 @@ public class BlockScript : MonoBehaviour {
 	private void Start() {
 		startingpos = gameObject.transform.position;
 		startingrotation = gameObject.transform.localRotation;
-
 	}
 
 	private void Update() {

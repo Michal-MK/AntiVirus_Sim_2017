@@ -7,8 +7,8 @@ public class Coins : MonoBehaviour {
 	public RectTransform coin;
 	public Spike spike;
 	
-	Vector3 oldpos;
-	float scale;
+	private Vector3 oldpos;
+	private float scale;
 
 	public static int coinsCollected = 0;
 
@@ -25,20 +25,20 @@ public class Coins : MonoBehaviour {
 		if (col.name == "Player") {
 			Statics.mPlayer.face.GetComponent<SpriteRenderer>().sprite = Statics.mPlayer.happy;
 
-			coinsCollected = coinsCollected + 1;
+			coinsCollected += 1;
 			CoinBehavior();
 			Statics.sound.PlayFX(Statics.sound.CoinCollected);
 			Statics.canvasRenderer.Counters("Coin");
 		}
 	}
 	public void CoinBehavior() {
-		print(coinsCollected);
+		//print(coinsCollected);
 		if (coinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
 			Timer.run = true;
 
-			Statics.enemySpawner.spawnKillerBlock();
+			Statics.enemySpawner.SpawnKillerBlock();
 
 
 			gameObject.transform.position = newpos;
@@ -49,15 +49,13 @@ public class Coins : MonoBehaviour {
 			Statics.guide.disableGuide();
 			coin.gameObject.SetActive(false);
 			if (Spike.spikesCollected == 0) {
-				print("This");
-				print(Spike.spikesCollected);
 				spike.SetPosition();
 			}
 		}
 	}
 	public void ChatchUpToAttempt(int attempt) {
 		for(int i = 0; i <= attempt; i++) {
-			Statics.enemySpawner.spawnKillerBlock();
+			Statics.enemySpawner.SpawnKillerBlock();
 		}
 	}
 

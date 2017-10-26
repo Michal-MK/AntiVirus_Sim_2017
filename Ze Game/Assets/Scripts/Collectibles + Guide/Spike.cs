@@ -159,6 +159,7 @@ public class Spike : MonoBehaviour {
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
+			gameObject.transform.localScale = Vector2.one * 3;
 			gameObject.SetActive(true);
 			guide.Recalculate(gameObject, true);
 

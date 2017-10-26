@@ -111,7 +111,7 @@ public class Canvas_Renderer : MonoBehaviour {
 			CoinC.text = "x " + Coins.coinsCollected;
 
 			if (Coins.coinsCollected == 5) {
-				CoinC.transform.localPosition = CoinC.transform.localPosition + new Vector3(50, 0, 0);
+				CoinC.transform.localPosition += new Vector3(50, 0, 0);
 				CoinC.text = CoinC.text + " Completed!";
 			}
 		}

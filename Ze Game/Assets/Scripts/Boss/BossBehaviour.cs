@@ -617,7 +617,7 @@ public class BossBehaviour : MonoBehaviour {
 					Projectile script = shot.GetComponent<Projectile>();
 					Projectile.projectileSpeed = distToPly / change;
 
-					script.DisableCollisions = true;
+					script.disableCollisions = true;
 					shot.transform.position = transform.position;
 					shot.transform.rotation = Quaternion.Euler(0, 0, 270);
 					shot.SetActive(true);

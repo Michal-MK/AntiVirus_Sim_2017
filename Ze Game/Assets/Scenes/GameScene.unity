@@ -13342,13 +13342,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foundation: {fileID: 1000011124791074, guid: 8a1293f4f7771304da8cc9e1e510e20c, type: 2}
-  arrowtrap: []
   deathBlock: {fileID: 1000014159002608, guid: 118097892002e6c4c814ee883d79926a, type: 2}
+  warningObj: {fileID: 1453356624916970, guid: e7b20d27fa650684ea7057d018840b66, type: 2}
+  arrowtrap: []
   player: {fileID: 1574297776}
   amIHere: 0
   forTheFirstTime: 1
-  warningObj: {fileID: 1453356624916970, guid: e7b20d27fa650684ea7057d018840b66, type: 2}
-  EPPooler: {fileID: 1411366522}
   ICEPooler: {fileID: 1330436914}
   Blocks: []
   Warnings: []

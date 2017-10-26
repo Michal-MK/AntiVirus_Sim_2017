@@ -13,19 +13,18 @@ public class Avoidance : MonoBehaviour {
 	float avoidDuration = 60;
 	public bool displayAvoidInfo = true;
 	public TurretAttack turr;
-	public Toggle SaveButton;
+	public Toggle saveButton;
 	public GameObject sign;
 
 	private void Awake() {
 		Statics.avoidance = this;
 	}
 
-
 	public void StartAvoidance() {
 		door1.SetActive(true);
-		spawner.spawnAvoidance();
-		StartCoroutine(hold());
-		SaveButton.interactable = false;
+		spawner.SpawnAvoidance();
+		StartCoroutine(HoldAvoidance());
+		saveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
 		//Statics.music.PlayMusic(Statics.music.avoidance);
@@ -33,18 +32,15 @@ public class Avoidance : MonoBehaviour {
 		StartCoroutine(TimeLeft());
 	}
 
-
-	private IEnumerator hold() {
+	private IEnumerator HoldAvoidance() {
 		yield return new WaitForSeconds(avoidDuration);
-		SaveButton.interactable = true;
+		saveButton.interactable = true;
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
 		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
 		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		StopAllCoroutines();
-
-
 	}
 
 	private IEnumerator TimeLeft() {

@@ -9,7 +9,7 @@ public class TurretAttack : MonoBehaviour {
 	public float turretSpawnRateEnd;
 	private float currSpawnRate;
 
-	private float OriginSpawnRate;
+	private float originSpawnRate;
 
 	public bool stop = false;
 
@@ -54,10 +54,9 @@ public class TurretAttack : MonoBehaviour {
 				break;
 			}
 		}
-		print("THIS");
-		OriginSpawnRate = turretSpawnRateStart;
+		originSpawnRate = turretSpawnRateStart;
 		ChangeFireRate = StartCoroutine(CurrentSpawnRate(turretSpawnRateStart, turretSpawnRateEnd));
-		StartCoroutine(waitForAttack(turretSpawnRateStart));
+		StartCoroutine(WaitForAttack(turretSpawnRateStart));
 	}
 
 	private IEnumerator CurrentSpawnRate(float startSpeed, float endSpeed) {
@@ -74,7 +73,7 @@ public class TurretAttack : MonoBehaviour {
 	}
 
 
-	private IEnumerator waitForAttack(float spawnRate) {
+	private IEnumerator WaitForAttack(float spawnRate) {
 		while (true) {
 			yield return new WaitForSeconds(spawnRate);
 			playerpos = GameObject.FindGameObjectWithTag("Player").transform.position;
@@ -122,15 +121,12 @@ public class TurretAttack : MonoBehaviour {
 		}
 		else
 			return Vector3.zero;
-
-
-
 	}
 
 	void OnDestroy() {
 		StopAllCoroutines();
 		Projectile.spawnedByAvoidance = false;
-		turretSpawnRateStart = OriginSpawnRate;
+		turretSpawnRateStart = originSpawnRate;
 		Statics.turretAttack = null;
 	}
 }

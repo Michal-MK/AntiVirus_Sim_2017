@@ -71,7 +71,6 @@ public class DisplayScoreList : MonoBehaviour {
 			if (values[i].IndexOf('#') == 0) {
 				string edited = values[i].Remove(0, 1);
 				currentDiff = int.Parse(edited);
-				print(currentDiff);
 			}
 
 			else if (values[i].IndexOf('@') == 0) {

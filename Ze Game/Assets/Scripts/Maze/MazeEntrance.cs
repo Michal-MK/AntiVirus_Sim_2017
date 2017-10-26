@@ -37,45 +37,49 @@ public class MazeEntrance : MonoBehaviour {
 			}
 		}
 	}
+
 	public IEnumerator TransToPos() {
 
 		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+
 		cam.inMaze = true;
 		yield return new WaitForSeconds(1.5f);
 		M_Player.doNotMove = true;
-		StartCoroutine(cam.LerpSize(cam.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
-		spike.SetPosition();
+
 		cam.transform.position = new Vector3(MazeBG.position.x, MazeBG.position.y, -10);
-		print(cam.transform.position);
+		StartCoroutine(cam.LerpSize(cam.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
+
+		spike.SetPosition();
 		player.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
-		infoBoardMaze.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
 		player.transform.localScale = new Vector3(2, 2, 0);
-		wrapper.SetSaving(false);
+
+		infoBoardMaze.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
+		wrapper.AllowSaving(false);
+
 		Statics.cameraMovement.psA.gameObject.SetActive(false);
 		Statics.cameraMovement.psB.gameObject.SetActive(false);
 		zoom.canZoom = false;
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
-		StartCoroutine(enter());
+
+		StartCoroutine(PreventPlayerIdle());
 		Statics.canvasRenderer.infoRenderer("What do we have here...? \n" +
 											"Grab the spike and let's get out of this place.", "A maze ... duh?!", new Color32(255, 255, 255, 200));
 		yield return new WaitWhile(() => Statics.canvasRenderer.isRunning);
-		print(PlayerPrefs.GetInt("difficulty"));
-		if(PlayerPrefs.GetInt("difficulty") >= 3) {
-			print("ADJUSTING MAZE");
+
+		if (PlayerPrefs.GetInt("difficulty") >= 3) {
 			StartCoroutine(LerpCamPos(cam.transform.position, player.transform.position));
 			StartCoroutine(cam.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
 			multiplier = 2;
-		}else {
+		}
+		else {
 			multiplier = 4;
 		}
 
-
 		inMazePropoerly = true;
 		M_Player.doNotMove = false;
-		StopCoroutine(TransToPos());
 	}
 
-	private IEnumerator enter() {
+	private IEnumerator PreventPlayerIdle() {
 		yield return new WaitForSecondsRealtime(10);
 		InputSimulator.SimulateKeyPress(VirtualKeyCode.RETURN);
 	}

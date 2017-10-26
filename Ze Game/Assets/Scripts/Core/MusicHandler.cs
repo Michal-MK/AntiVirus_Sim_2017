@@ -25,14 +25,12 @@ public class MusicHandler : MonoBehaviour {
 
 	public void PlayMusic(AudioClip clip) {
 		//sound.volume = 1;
-		StartCoroutine(Avoidance(clip));
+		StartCoroutine(PlayClip(clip));
 	}
 
-	private IEnumerator Avoidance(AudioClip clip) {
-		print("Avoidaing NOW");
+	private IEnumerator PlayClip(AudioClip clip) {
 		avoid = true;
 		yield return new WaitForSecondsRealtime(0.1f);
-		print("Muted");
 		float volume = sound.volume;
 		for (float f = volume; f > -1; f -= Time.unscaledDeltaTime) {
 			if (f > 0) {

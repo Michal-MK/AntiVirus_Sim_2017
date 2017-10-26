@@ -310,7 +310,7 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == "Background_room_1") {
 				Statics.music.MusicTransition(Statics.music.room2);
-				spawner.InvokeRepeating("spawnKillerWall", 0, 0.7f);
+				spawner.InvokeRepeating("SpawnKillerWall", 0, 0.7f);
 				if (gameProgression == 3) {
 					Statics.canvasRenderer.infoRenderer(null, "Go down even further.");
 				}
