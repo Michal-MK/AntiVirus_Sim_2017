@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
 
-	public float zero = 0;
 	public RectTransform bg;
 	public Transform player;
 	public M_Player playerScript;
@@ -16,7 +15,7 @@ public class CameraMovement : MonoBehaviour {
 	public ParticleSystem psB;
 
 
-	Camera cam;
+	private Camera cam;
 	public List<GameObject> BackGroundS = new List<GameObject>();
 	public float camWidht;
 	public float camHeight;
@@ -35,7 +34,7 @@ public class CameraMovement : MonoBehaviour {
 
 	public static bool doneMoving = true;
 
-	public float defaultCamSize = 15;
+	public const float defaultCamSize = 15;
 
 	private void Awake() {
 		Statics.cameraMovement = this;
@@ -72,9 +71,9 @@ public class CameraMovement : MonoBehaviour {
 		bool continueInLoop = true;
 
 		foreach (RaycastHit2D hits in up) {
-			if (continueInLoop == false) {
-				break;
-			}
+			//if (continueInLoop == false) {
+			//	break;
+			//}
 			if (hits.transform.gameObject.activeInHierarchy == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
 				continueInLoop = false;
 				break;
@@ -89,9 +88,9 @@ public class CameraMovement : MonoBehaviour {
 
 		continueInLoop = true;
 		foreach (RaycastHit2D hits in down) {
-			if (continueInLoop == false) {
-				break;
-			}
+			//if (continueInLoop == false) {
+			//	break;
+			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
 				continueInLoop = false;
 				break;
@@ -109,9 +108,9 @@ public class CameraMovement : MonoBehaviour {
 		continueInLoop = true;
 		foreach (RaycastHit2D hits in left) {
 
-			if (continueInLoop == false) {
-				break;
-			}
+			//if (continueInLoop == false) {
+			//	break;
+			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
 				continueInLoop = false;
 				break;
@@ -127,9 +126,9 @@ public class CameraMovement : MonoBehaviour {
 
 		continueInLoop = true;
 		foreach (RaycastHit2D hits in right) {
-			if (continueInLoop == false) {
-				break;
-			}
+			//if (continueInLoop == false) {
+			//	break;
+			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
 				continueInLoop = false;
 				break;
@@ -275,7 +274,7 @@ public class CameraMovement : MonoBehaviour {
 		if (!inMaze) {
 			Statics.zoom.canZoom = true;
 		}
-		
+
 	}
 
 	void LateUpdate() {
@@ -373,7 +372,7 @@ public class CameraMovement : MonoBehaviour {
 		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
 		ParticleSystem.MainModule main = psA.main;
 		main.startLifetime = 25;
-			}
+	}
 	private void OnDestroy() {
 		Statics.cameraMovement = null;
 	}

@@ -8,7 +8,6 @@ public class TurretAttack : MonoBehaviour {
 	public float turretSpawnRateStart;
 	public float turretSpawnRateEnd;
 	private float currSpawnRate;
-
 	private float originSpawnRate;
 
 	public bool stop = false;
@@ -81,23 +80,21 @@ public class TurretAttack : MonoBehaviour {
 			Projectile.spawnedByAvoidance = true;
 			spawnRate = currSpawnRate;
 
-			if (PlayerPrefs.GetInt("difficulty") <= 2) {
-				for (int i = 0; i < 1; i++) {
+			int diff = PlayerPrefs.GetInt("difficulty");
 
-					GameObject bullet = pooler.GetPool();
-					Vector3 rnd = RandomVec();
-					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
-					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
-					bullet.transform.SetParent(enemy);
-					bullet.SetActive(true);
-				}
+			if (diff <= 2) {
+				GameObject bullet = pooler.GetPool();
+				Vector3 rnd = RandomVec(diff);
+				bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
+				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
+				bullet.transform.SetParent(enemy);
+				bullet.SetActive(true);
 			}
-
-			if (PlayerPrefs.GetInt("difficulty") >= 3) {
+			else {
 				for (int i = 0; i < 2; i++) {
 
 					GameObject bullet = pooler.GetPool();
-					Vector3 rnd = RandomVec();
+					Vector3 rnd = RandomVec(diff);
 
 					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - (gameObject.transform.position)));
 
@@ -109,18 +106,19 @@ public class TurretAttack : MonoBehaviour {
 		}
 	}
 
-	public Vector3 RandomVec() {
+	public Vector3 RandomVec(int difficulty) {
 		int r = 0;
-		if (PlayerPrefs.GetInt("difficulty") <= 2) {
+		if (difficulty <= 2) {
 			r = Random.Range(-10, 10);
 			return Vector2.one * r;
 		}
-		else if (PlayerPrefs.GetInt("difficulty") >= 3) {
+		else if (difficulty >= 3) {
 			r = Random.Range(-20, 20);
 			return Vector2.one * r;
 		}
-		else
+		else {
 			return Vector3.zero;
+		}
 	}
 
 	void OnDestroy() {

@@ -9,8 +9,10 @@ public class SignPost : MonoBehaviour {
 	public GameObject E;
 
 	private bool awaitingInput = false;
-	private bool interact = true;
+	private bool interacted = false;
 
+	public delegate void SignPostInteractions();
+	public static event SignPostInteractions OnAvoidanceBegin;
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.tag == "Player") {
@@ -39,76 +41,74 @@ public class SignPost : MonoBehaviour {
 			else {
 				sign.color = new Color(1, 1, 1, 0);
 				Destroy(gameObject);
-				print("Destroyed");
 				break;
 			}
 		}
 	}
 
 	private void Update() {
-		if (awaitingInput) {
-			if (Input.GetButtonDown("Interact")) {
-				if (interact && Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
-					switch (gameObject.name) {
-						case "SignPost Avoidance": {
-							Statics.music.PlayMusic(Statics.music.avoidance);
-							Statics.avoidance.StartAvoidance();
-							Statics.avoidance.preformed = true;
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							if (Statics.avoidance.displayAvoidInfo) {
-								Statics.canvasRenderer.infoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
-																	"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
-								Statics.avoidance.displayAvoidInfo = false;
-							}
-							interact = false;
-							break;
+		if (awaitingInput && Input.GetButtonDown("Interact") && Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
+			if (!interacted) {
+				switch (gameObject.name) {
+					case "SignPost Avoidance": {
+						if (OnAvoidanceBegin != null) {
+							OnAvoidanceBegin();
 						}
-						case "SignPost Start": {
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("The virus can not be damaged while attacking.",null);
-							break;
+						Statics.music.PlayMusic(Statics.music.avoidance);
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						if (Statics.avoidance.displayAvoidInfo) {
+							Statics.canvasRenderer.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+																"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
+							Statics.avoidance.displayAvoidInfo = false;
 						}
-						case "SignPost Room 1": {
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("All the spikes you are collecting have a purpouse, hold on to them.",null);
-							break;
-						}
-						case "SignPost PostAvoidance": {
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
-							break;
-						}
-						case "SignPost Maze": {
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("The coins are up to no use.", null);
-							break;
-						}
-						case "SignPost PreBoss": {
-							StartCoroutine(Fade());
-							interact = false;
-							gameObject.GetComponent<BoxCollider2D>().enabled = false;
-							InteractInfo.SetActive(false);
-							Statics.canvasRenderer.infoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget.", null);
-							break;
-						}
+						break;
+					}
+					case "SignPost Start": {
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						Statics.canvasRenderer.InfoRenderer("The virus can not be damaged while it is attacking.", null);
+						break;
+					}
+					case "SignPost Room 1": {
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						Statics.canvasRenderer.InfoRenderer("All the spikes you are collecting have a purpouse, hold on to them.", null);
+						break;
+					}
+					case "SignPost PostAvoidance": {
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						Statics.canvasRenderer.InfoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
+						break;
+					}
+					case "SignPost Maze": {
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						Statics.canvasRenderer.InfoRenderer("The coins are up to no use.", null);
+						break;
+					}
+					case "SignPost PreBoss": {
+						StartCoroutine(Fade());
+						interacted = true;
+						gameObject.GetComponent<BoxCollider2D>().enabled = false;
+						InteractInfo.SetActive(false);
+						Statics.canvasRenderer.InfoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
+						break;
 					}
 				}
 			}
+
 		}
 	}
 }

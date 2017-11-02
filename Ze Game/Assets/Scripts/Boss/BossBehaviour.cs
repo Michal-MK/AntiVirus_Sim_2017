@@ -168,7 +168,7 @@ public class BossBehaviour : MonoBehaviour {
 
 		print(Camera.main.transform.position);
 
-		Statics.canvasRenderer.infoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
+		Statics.canvasRenderer.InfoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
 		StartCoroutine(Attacks(ChooseAttack()));
 
@@ -265,7 +265,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
 				yield return new WaitForSeconds(3);
-				Statics.canvasRenderer.infoRenderer(null, "Don't forget about the zooming feature :]");
+				Statics.canvasRenderer.InfoRenderer(null, "Don't forget about the zooming feature :]");
 				float waitTime = 1.1f;
 				
 
@@ -424,7 +424,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2);
 				if (informOnce) {
 					informOnce = false;
-					Statics.canvasRenderer.infoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+					Statics.canvasRenderer.InfoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 				}
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
 

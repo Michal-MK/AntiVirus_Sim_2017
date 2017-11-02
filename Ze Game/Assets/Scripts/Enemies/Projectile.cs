@@ -48,7 +48,7 @@ public class Projectile : Enemy {
 				selfRigid.velocity = transform.rotation * Vector3.down * projectileSpeed;
 			}
 		}
-		if (byBoss) {
+		else {
 			StartCoroutine(BossAttack());
 		}
 	}
@@ -59,9 +59,9 @@ public class Projectile : Enemy {
 		StopCoroutine(BossAttack());
 	}
 
-	public IEnumerator SelfDestruct(float timeTillDestruction) { 
+	public IEnumerator SelfDestruct(float timeTillDestruction) {
 		yield return new WaitForSeconds(timeTillDestruction);
-		if(spawnedByKillerWall == true) {
+		if (spawnedByKillerWall == true) {
 			selfRender.sprite = Icicle;
 			gameObject.tag = "Enemy";
 		}
@@ -69,7 +69,7 @@ public class Projectile : Enemy {
 	}
 
 
-	private void OnTriggerEnter2D(Collider2D col){
+	private void OnTriggerEnter2D(Collider2D col) {
 		if (!disableCollisions) {
 			if (col.tag == "Wall" || col.tag == "Wall/Door") {
 				selfRender.sprite = Trigger;
@@ -84,14 +84,14 @@ public class Projectile : Enemy {
 		}
 	}
 
-	private void OnTriggerExit2D(Collider2D col){
+	private void OnTriggerExit2D(Collider2D col) {
 		if (!disableCollisions) {
 			if (col.tag == "BG") {
 				if (!spawnedByKillerWall) {
 					selfCol.isTrigger = true;
 					selfRender.sprite = Trigger;
 				}
-				
+
 				if (spawnedByKillerWall) {
 					selfRender.sprite = Icicle;
 				}
@@ -103,22 +103,22 @@ public class Projectile : Enemy {
 
 	private void OnCollisionEnter2D(Collision2D col) {
 		if (!disableCollisions) {
-			if(col.transform.tag == "Wall" || col.transform.tag == "Wall/Door") {
+			if (col.transform.tag == "Wall" || col.transform.tag == "Wall/Door") {
 				gameObject.SetActive(false);
 			}
-			if(col.transform.name == "Block") {
+			if (col.transform.name == "Block") {
 				selfRender.sprite = Cracked;
 				gameObject.tag = "EnemyInactive";
 				StartCoroutine(SelfDestruct(2));
 			}
-			if(col.transform.name == "Blocker") {
+			if (col.transform.name == "Blocker") {
 				gameObject.SetActive(false);
 			}
 		}
 	}
 
 
-	void OnDisable(){
+	void OnDisable() {
 		Statics.projectile = null;
 		ready = false;
 		byBoss = false;

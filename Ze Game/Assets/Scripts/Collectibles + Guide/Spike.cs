@@ -27,12 +27,6 @@ public class Spike : MonoBehaviour {
 		Statics.spike = this;
 	}
 
-	void Start() {
-		if (PlayerPrefs.HasKey("difficulty") == false) {
-			PlayerPrefs.SetInt("difficluty", 0);
-		}
-	}
-
 	private void OnEnable() {
 		guide.enableGuide();
 		guide.Recalculate(gameObject, true);
@@ -47,8 +41,7 @@ public class Spike : MonoBehaviour {
 			spikesCollected++;
 
 			gameObject.SetActive(false);
-			guide.disableGuide();
-
+			guide.gameObject.SetActive(false);
 
 			if (stage == 1) {
 				Statics.pressurePlate.alreadyTriggered = true;
@@ -56,7 +49,7 @@ public class Spike : MonoBehaviour {
 
 			if (displayArrowGuideInfo == true) {
 				displayArrowGuideInfo = false;
-				Statics.canvasRenderer.infoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+				Statics.canvasRenderer.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 			}
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
@@ -75,7 +68,7 @@ public class Spike : MonoBehaviour {
 				else {
 					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
 				}
-				Statics.canvasRenderer.infoRenderer(text, "Don't give up now.");
+				Statics.canvasRenderer.InfoRenderer(text, "Don't give up now.");
 			}
 			int p = M_Player.gameProgression;
 			switch (p) {
@@ -100,16 +93,13 @@ public class Spike : MonoBehaviour {
 					break;
 				}
 			}
-
 			M_Player.gameProgression++;
 			Statics.gameProgression.Progress();
 		}
 	}
 
-
 	public void SetPosition() {
 		stage = M_Player.gameProgression;
-
 
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
@@ -127,11 +117,9 @@ public class Spike : MonoBehaviour {
 		}
 		if (stage == 1) {
 
-
 			float x = Random.Range(BG1.position.x - BG1.sizeDelta.x / 2 + Xscale * 4, BG1.position.x);
 			float y = Random.Range(BG1.position.y - BG1.sizeDelta.y / 2 + Yscale * 4, BG1.position.y);
 			float z = 0f;
-
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
@@ -153,7 +141,6 @@ public class Spike : MonoBehaviour {
 			print(stage);
 			GameObject lastPos = Maze.grid[Maze.rowcollCount / 2, Maze.rowcollCount / 2];
 
-
 			float x = lastPos.transform.position.x;
 			float y = lastPos.transform.position.y;
 			float z = 0f;
@@ -162,9 +149,6 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.localScale = Vector2.one * 3;
 			gameObject.SetActive(true);
 			guide.Recalculate(gameObject, true);
-
-
-
 		}
 		if (stage == 4) {
 			print(stage);
@@ -184,7 +168,7 @@ public class Spike : MonoBehaviour {
 	}
 	public void Hide() {
 		gameObject.SetActive(false);
-		guide.disableGuide();
+		guide.gameObject.SetActive(false);
 	}
 
 	private void OnDestroy() {

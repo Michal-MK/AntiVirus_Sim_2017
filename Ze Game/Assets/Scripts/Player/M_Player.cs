@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-
+public delegate void BackgroundChanged(RectTransform background);
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
 	public float Speed;
@@ -46,6 +46,8 @@ public class M_Player : MonoBehaviour {
 	private Sprite previous;
 	int i = 0;
 
+	public static event BackgroundChanged OnRoomEnter;
+
 	private void Awake() {
 		Statics.mPlayer = this;
 	}
@@ -76,7 +78,7 @@ public class M_Player : MonoBehaviour {
 			//Control.script.Save(true);
 			Statics.music.PlayMusic(Statics.music.room1);
 			attempts++;
-			Statics.canvasRenderer.infoRenderer("Welcome! \n" +
+			Statics.canvasRenderer.InfoRenderer("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
@@ -87,7 +89,7 @@ public class M_Player : MonoBehaviour {
 		else if (Control.script.isRestarting) {
 			print("ISRESTARTING");
 			Statics.music.PlayMusic(Statics.music.room1);
-			Statics.canvasRenderer.infoRenderer(null, "Good luck & Have fun!");
+			Statics.canvasRenderer.InfoRenderer(null, "Good luck & Have fun!");
 			Control.script.isRestarting = false;
 		}
 		Control.script.isNewGame = false;
@@ -298,32 +300,22 @@ public class M_Player : MonoBehaviour {
 
 		}
 		if (col.transform.tag == "BG") {
+			if (OnRoomEnter != null) {
+				OnRoomEnter(col.GetComponent<RectTransform>());
+			}
 			currentBG_name = col.name;
 			cam.RaycastForRooms();
 
-			//spawner.spawnArrowTrap();
-			if (col.name == "Background_Start") {
-				if (gameProgression != 0) {
-					Statics.enemySpawner.StartCoroutine(Statics.enemySpawner.KBCycle());
-				}
-			}
-
 			if (col.name == "Background_room_1") {
-				Statics.music.MusicTransition(Statics.music.room2);
-				spawner.InvokeRepeating("SpawnKillerWall", 0, 0.7f);
 				if (gameProgression == 3) {
-					Statics.canvasRenderer.infoRenderer(null, "Go down even further.");
+					Statics.canvasRenderer.InfoRenderer(null, "Go down even further.");
 				}
 			}
-			if (col.name == "Background_room_2a") {
-				Statics.music.MusicTransition(Statics.music.room1);
+			if (col.name == "Background_room_Boss_1") {
+				gameProgression = 10;
 			}
-
 		}
-		if (col.name == "Background_room_Boss_1") {
-			gameProgression = 10;
 
-		}
 		if (col.tag == "Spike") {
 			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
 			Statics.gameProgression.Progress();
@@ -337,11 +329,10 @@ public class M_Player : MonoBehaviour {
 		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
-			Statics.canvasRenderer.infoRenderer("You found a bomb, it will be useful later on.", null);
+			Statics.canvasRenderer.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
+
 		if (col.name == "Test") {
-
-
 			if (i % 2 == 0) {
 				print(i % 2 + " " + i);
 				ChangeFlappy(true);
@@ -355,6 +346,7 @@ public class M_Player : MonoBehaviour {
 			//save.saveScore();
 			//print("Saved");
 		}
+
 		if (col.tag == "ArrowTrap") {
 			previous = face.GetComponent<SpriteRenderer>().sprite;
 			face.GetComponent<SpriteRenderer>().sprite = sad;
@@ -375,14 +367,11 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
-
 	public void FloorComplete() {
-
 		doNotMove = true;
 		Cursor.visible = true;
 		Timer.run = false;
 		save.SaveScore();
-
 	}
 
 	bool delEnemies = true;
@@ -391,15 +380,18 @@ public class M_Player : MonoBehaviour {
 		restartButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		loadButton.SetActive(true);
+
 		doNotMove = true;
 		Cursor.visible = true;
 		Timer.run = false;
+
 		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
 		GameOverImg.SetTrigger("Appear");
 		Statics.music.StartCoroutine(Statics.music.StopMusic());
 		Statics.zoom.canZoom = false;
 		StartCoroutine(StopTime());
 		gameOver = true;
+
 		EventSystem e = EventSystem.current;
 		e.SetSelectedGameObject(quitToMenu);
 		if (delEnemies) {

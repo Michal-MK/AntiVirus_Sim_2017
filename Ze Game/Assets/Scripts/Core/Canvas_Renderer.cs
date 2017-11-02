@@ -7,7 +7,6 @@ public class Canvas_Renderer : MonoBehaviour {
 	public Text info_S;
 	Animator Slide;
 
-
 	public Animator InfoPanel;
 	public Image InfoPanelImg;
 	public Text InfoPanelText;
@@ -34,12 +33,13 @@ public class Canvas_Renderer : MonoBehaviour {
 		defaultColor = InfoPanelImg.color;
 	}
 
-	public void infoRenderer(string displayedTextPanel, string displayedTextSide, Color32? color = null) {
+	public void InfoRenderer(string displayedTextMain, string displayedTextSide, Color32? color = null) {
+		//If we are already displaying something =, wait for it to finish, and try again then.
 		if (isRunning) {
-			StartCoroutine(ReturnLater(displayedTextPanel,displayedTextSide,color));
+			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide, color));
 			return;
 		}
-		//print(displayedTextSide);
+
 		if (color != null) {
 			InfoPanelImg.color = (Color32)color;
 		}
@@ -48,20 +48,20 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 
 		tempDisplayedText = displayedTextSide;
-		if (displayedTextPanel != null) {
-			InfoPanelText.text = displayedTextPanel;
+		if (displayedTextMain != null) {
+			InfoPanelText.text = displayedTextMain;
 			InfoPanel.SetTrigger("Down");
 			isRunning = true;
 			Time.timeScale = 0;
 		}
-		else if (displayedTextPanel == null && displayedTextSide != null) {
-			StartCoroutine(SlideInfo());
+		else if (displayedTextMain == null && displayedTextSide != null) {
+			StartCoroutine(SlideInfo(displayedTextSide));
 		}
 	}
-	
-	private IEnumerator ReturnLater(string s,string ss, Color32? color = null) {
+
+	private IEnumerator RetryLater(string main, string side, Color32? color = null) {
 		yield return new WaitWhile(() => isRunning == true);
-		infoRenderer(s, ss, color);
+		InfoRenderer(main, side, color);
 	}
 
 	private void Update() {
@@ -69,30 +69,28 @@ public class Canvas_Renderer : MonoBehaviour {
 			InfoPanel.SetTrigger("Up");
 			isRunning = false;
 			Time.timeScale = 1;
-			StartCoroutine(SlideInfo());
+			StartCoroutine(SlideInfo(tempDisplayedText));
 		}
 	}
-	private IEnumerator SlideInfo() {
+	private IEnumerator SlideInfo(string textToDisplay) {
 		if (!info_S.text.StartsWith("DEFAULT")) {
 			Slide.SetTrigger("SlideOut");
 		}
 		yield return new WaitForSeconds(1);
-		info_S.text = tempDisplayedText;
+		info_S.text = textToDisplay;
 		Slide.SetTrigger("SlideIn");
 	}
 
 
-	public void DisplayDirection(int i) {
+	public void DisplayDirection(Directions dir) {
 		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
 		if (!wrp.Objects[0].activeInHierarchy) {
-			StartCoroutine("Pulse", directions[i]);
+			StartCoroutine(Pulse(directions[(int)dir]));
 		}
 		else {
 			Statics.guide.Recalculate(wrp.Objects[0].gameObject, true);
 		}
 	}
-
-
 
 	private IEnumerator Pulse(GameObject info) {
 		for (int i = 0; i < 3; i++) {
@@ -101,9 +99,7 @@ public class Canvas_Renderer : MonoBehaviour {
 			info.SetActive(false);
 			yield return new WaitForSecondsRealtime(1);
 		}
-		StopCoroutine("Pulse");
 	}
-
 
 	public void Counters(string name) {
 

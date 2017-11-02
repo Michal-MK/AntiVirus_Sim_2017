@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour {
 	
 	/// <summary>
-	/// Stack of active windows, wince windows tend to "Stack up" may be switched for a list  in the future to allow for removing from the middle.
+	/// Stack of active windows,swince windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
 
@@ -109,6 +109,7 @@ public class UI_Manager : MonoBehaviour {
 		}
 	}
 
+	[Obsolete("Use Window version instead!")]
 	public static void ToggleWindow(GameObject window) {
 		Animator anim;
 		try {
@@ -143,7 +144,9 @@ public class UI_Manager : MonoBehaviour {
 	}
 
 	public void ToggleWindowWrapper(GameObject g) {
+#pragma warning disable CS0618 // Type or member is obsolete
 		ToggleWindow(g);
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	public static void CloseAllActive() {

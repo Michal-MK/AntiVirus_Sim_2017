@@ -40,13 +40,12 @@ public class Coins : MonoBehaviour {
 
 			Statics.enemySpawner.SpawnKillerBlock();
 
-
 			gameObject.transform.position = newpos;
 			Statics.guide.Recalculate(gameObject, true);
 
 		}
 		if (coinsCollected == 5) {
-			Statics.guide.disableGuide();
+			Statics.guide.gameObject.SetActive(false);
 			coin.gameObject.SetActive(false);
 			if (Spike.spikesCollected == 0) {
 				spike.SetPosition();
@@ -59,7 +58,6 @@ public class Coins : MonoBehaviour {
 		}
 	}
 
-
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
 		//print(oldpos);
 		Vector3 newpos = oldpos;
@@ -71,7 +69,6 @@ public class Coins : MonoBehaviour {
 
 			newpos = new Vector3(x, y, z);
 		}
-		//print(newpos);
 		return newpos;
 	}
 

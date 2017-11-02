@@ -47,7 +47,7 @@ public class MazeEntrance : MonoBehaviour {
 		M_Player.doNotMove = true;
 
 		cam.transform.position = new Vector3(MazeBG.position.x, MazeBG.position.y, -10);
-		StartCoroutine(cam.LerpSize(cam.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
+		StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
 
 		spike.SetPosition();
 		player.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
@@ -62,7 +62,7 @@ public class MazeEntrance : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 
 		StartCoroutine(PreventPlayerIdle());
-		Statics.canvasRenderer.infoRenderer("What do we have here...? \n" +
+		Statics.canvasRenderer.InfoRenderer("What do we have here...? \n" +
 											"Grab the spike and let's get out of this place.", "A maze ... duh?!", new Color32(255, 255, 255, 200));
 		yield return new WaitWhile(() => Statics.canvasRenderer.isRunning);
 

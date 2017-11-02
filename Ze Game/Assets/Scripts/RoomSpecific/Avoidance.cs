@@ -4,17 +4,14 @@ using UnityEngine.UI;
 
 public class Avoidance : MonoBehaviour {
 
-	public RectTransform BG;
-	public bool preformed = false;
+	public bool performed = false;
 	public RectTransform player;
 	public GameObject door1;
 	public EnemySpawner spawner;
 	public Spike spike;
-	float avoidDuration = 60;
+	public float avoidDuration = 60;
 	public bool displayAvoidInfo = true;
-	public TurretAttack turr;
 	public Toggle saveButton;
-	public GameObject sign;
 
 	private void Awake() {
 		Statics.avoidance = this;
@@ -27,19 +24,21 @@ public class Avoidance : MonoBehaviour {
 		saveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
-		//Statics.music.PlayMusic(Statics.music.avoidance);
-		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
+		Statics.cameraMovement.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
 
 	private IEnumerator HoldAvoidance() {
-		yield return new WaitForSeconds(avoidDuration);
+		yield return new WaitForSeconds(avoidDuration - 5);
+		spawner.DespawnAvoidance();
+		yield return new WaitForSeconds(5);
 		saveButton.interactable = true;
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
-		Camera.main.GetComponent<CameraMovement>().RaycastForRooms();
-		Statics.canvasRenderer.infoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		Statics.cameraMovement.RaycastForRooms();
+		Statics.canvasRenderer.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		performed = true;
 		StopAllCoroutines();
 	}
 

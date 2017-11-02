@@ -65,7 +65,7 @@ public class BossHealth : MonoBehaviour {
 	public void CheckShields() {
 		print(t + " " + r + " " + b + " " + l);
 		if (t && r && b && l && once) {
-			Statics.canvasRenderer.infoRenderer("His shields are up ... but we got a bomb!\n " +
+			Statics.canvasRenderer.InfoRenderer("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
@@ -112,7 +112,7 @@ public class BossHealth : MonoBehaviour {
 		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		boss.transform.position = new Vector3(0, 0, 10);
 		
-		Statics.canvasRenderer.infoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
+		Statics.canvasRenderer.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
 		Timer.run = false;

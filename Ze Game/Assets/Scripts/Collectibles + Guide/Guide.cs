@@ -180,9 +180,6 @@ public class Guide : MonoBehaviour {
 		}
 	}
 
-	public void disableGuide(){
-		gameObject.SetActive (false);
-	}
 	public void enableGuide() {
 		gameObject.SetActive(true);
 	}

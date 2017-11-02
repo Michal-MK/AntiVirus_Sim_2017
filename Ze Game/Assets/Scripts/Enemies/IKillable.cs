@@ -1,3 +1,4 @@
 ﻿interface IKillable {
-	void Kill();
+	void Damage(float amount);
+	void DealDamage(float damage);
 }

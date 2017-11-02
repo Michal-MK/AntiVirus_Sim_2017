@@ -7,11 +7,11 @@ public class Zoom : MonoBehaviour {
 
 	public bool canZoom = true;
 
-	float BossMax = 108f;
-	float BossMin = 10f;
+	public float BossMax = 108f;
+	public float BossMin = 10f;
 
-	float NormMax = 25;
-	float NormMin = 15;
+	public float NormMax = 25;
+	public float NormMin = 15;
 
 
 	private void Awake() {
@@ -19,7 +19,6 @@ public class Zoom : MonoBehaviour {
 	}
 
 	private void LateUpdate() {
-		//print(Input.GetAxis("Mouse Scroll Wheel"));
 		if (Statics.cameraMovement.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			
@@ -40,7 +39,6 @@ public class Zoom : MonoBehaviour {
 		}
 		else if (!Statics.cameraMovement.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
-			//print("Heeeeere");
 			if (roll > 0) {
 				if (cam.orthographicSize < NormMax) {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;

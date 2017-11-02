@@ -29,12 +29,12 @@ public class BossEntrance : MonoBehaviour {
 				GameObject health = Instantiate(bossHP,HPHolder.transform.position,Quaternion.identity,HPHolder.transform);
 				health.name = "BossHealth";
 				cam.BossFightCam(1);
-				StartCoroutine(cam.LerpSize(cam.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
+				StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
 				bossHP.SetActive(true);
 
 			}
 			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
-				Statics.canvasRenderer.infoRenderer("You are not a worthy opponent!\n"+
+				Statics.canvasRenderer.InfoRenderer("You are not a worthy opponent!\n"+
 													"Bullets: " + PlayerAttack.bullets +"/5\n"+
 													"Bombs: "+ PlayerAttack.bombs + "/1\n"+
 													"Return to me once you have everyting... to meet your demise!\n" +

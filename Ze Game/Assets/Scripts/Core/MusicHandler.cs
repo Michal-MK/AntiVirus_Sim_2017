@@ -23,8 +23,20 @@ public class MusicHandler : MonoBehaviour {
 		Statics.music = this;
 	}
 
+	private void Start() {
+		M_Player.OnRoomEnter += NewRoom;
+	}
+
+	private void NewRoom(RectTransform background) {
+		if (background.name == "Background_room_1") {
+			MusicTransition(room2);
+		}
+		if (background.name == "Background_room_2a") {
+			MusicTransition(room1);
+		}
+	}
+
 	public void PlayMusic(AudioClip clip) {
-		//sound.volume = 1;
 		StartCoroutine(PlayClip(clip));
 	}
 
@@ -93,7 +105,7 @@ public class MusicHandler : MonoBehaviour {
 					}
 					if (f >= 0) {
 						sound.volume = f;
-						if(sound.clip == Statics.pressurePlate.On) {
+						if (sound.clip == Statics.pressurePlate.On) {
 							sound.clip = newClip;
 							StartCoroutine(StartMusic());
 							break;
@@ -158,8 +170,8 @@ public class MusicHandler : MonoBehaviour {
 		}
 	}
 
-
 	private void OnDestroy() {
 		Statics.music = null;
+		M_Player.OnRoomEnter -= NewRoom;
 	}
 }

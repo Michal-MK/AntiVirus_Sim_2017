@@ -1,4 +1,5 @@
-﻿//Data to be saved
+﻿using SaveData_Helper;
+//Data to be saved
 [System.Serializable]
 public class SaveData {
 
@@ -9,10 +10,13 @@ public class SaveData {
 	public int bullets;
 	public int bombs;
 
-	public float playerPositionX, playerPositionY, playerPositionZ;
-	public float blockPosX, blockPosY, blockPosZ;
-	public float spikePosX, spikePosY, spikePosZ;
+	public SVector3 playerPos;
+
+	public SVector3 blockPos;
 	public float blockZRotation;
+
+	public SVector3 spikePos;
+
 	public bool spikeActive;
 
 	public int difficulty;
@@ -39,5 +43,14 @@ public class SaveData {
 	public bool doneAvoidance;
 	public bool bossSpawned;
 
+	public Player player = new Player();
+	public DisplayedHints shownHints = new DisplayedHints();
+	public World world = new World();
+	public Core core = new Core();
+
 }
+
+
+
+
 

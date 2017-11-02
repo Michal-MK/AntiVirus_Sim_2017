@@ -76,14 +76,14 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			if (M_Player.gameProgression != 10 && displayShootingInfo) {
 				if (bullets != 0) {
-					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n " +
+					Statics.canvasRenderer.InfoRenderer("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n "+
 														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
 														"Currently you have: " + bullets + " bullets.\n "+
 														"Don't lose them", null);
 					displayShootingInfo = false;
 				}else {
-					Statics.canvasRenderer.infoRenderer("Wow, you figured out how to shoot ... ok.\n" +
+					Statics.canvasRenderer.InfoRenderer("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n "+
 														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
 														"Currently you have: " + bullets + " bullets.", null);
@@ -185,7 +185,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public IEnumerator RefreshBombs() {
-		Statics.canvasRenderer.infoRenderer(null, "Wait for the bomb to regenerate!");
+		Statics.canvasRenderer.InfoRenderer(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSecondsRealtime(8);
 		bombs++;
 		bombCount.text = "x " + bombs;

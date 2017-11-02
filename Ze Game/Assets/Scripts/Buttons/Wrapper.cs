@@ -111,20 +111,7 @@ public class Wrapper : MonoBehaviour {
 
 
 	public void DeactivateButtons() {
-		print("READY");
-		DeactivateButtonsCoroutine();
-	}
-
-	public void DeactivateObjects() {
-		foreach (var item in Objects) {
-			item.SetActive(!item.activeInHierarchy);
-		}
-	}
-
-
-	private void DeactivateButtonsCoroutine() {
 		foreach (Button item in GameObject.Find("Canvas").GetComponentsInChildren<Button>()) {
-			//print(item.name);
 			item.gameObject.SetActive(!item.gameObject.activeInHierarchy);
 		}
 		foreach (Toggle item in GameObject.Find("Canvas").GetComponentsInChildren<Toggle>()) {
@@ -132,6 +119,12 @@ public class Wrapper : MonoBehaviour {
 			item.gameObject.SetActive(!item.gameObject.activeInHierarchy);
 		}
 		Control.script.Restart();
+	}
+
+	public void DeactivateObjects() {
+		foreach (var item in Objects) {
+			item.SetActive(!item.activeInHierarchy);
+		}
 	}
 
 	public void AllowSaving(bool state) {

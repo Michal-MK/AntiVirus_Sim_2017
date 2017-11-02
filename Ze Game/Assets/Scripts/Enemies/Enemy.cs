@@ -13,17 +13,19 @@ public class Enemy : MonoBehaviour, IKillable {
 	private float _damage = 1;
 	private EnemyType _type;
 
-	public virtual void DealDamage(float damage) {
-		if (_instantDeath) {
-			
-		}
-	}
-
-	public void Kill() {
+	public virtual void Kill() {
 		if (_is_Destroyable) {
 			print("Destroying " + gameObject.name);
 			Destroy(gameObject);
 		}
+	}
+
+	public virtual void Damage(float amount) {
+		print("Damaged for " + amount + " points of damage.");
+	}
+
+	public virtual void DealDamage(float damage) {
+
 	}
 
 	public bool isDestroyable {

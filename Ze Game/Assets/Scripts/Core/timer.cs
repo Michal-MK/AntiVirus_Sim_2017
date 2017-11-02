@@ -20,7 +20,6 @@ public class Timer : MonoBehaviour {
 		}
 	}
 
-
 	void Update() {
 
 		if (run == true && Coins.coinsCollected != 0) {

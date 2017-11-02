@@ -1,11 +1,8 @@
 using UnityEngine;
-using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class Control : MonoBehaviour {
 
@@ -22,7 +19,6 @@ public class Control : MonoBehaviour {
 	private bool load = false;
 
 	private SaveData loadedData;
-
 
 	void Awake() {
 		//PlayerPrefs.DeleteKey("player_name");
@@ -70,10 +66,6 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-	private void Start() {
-		//StartCoroutine(SetName());
-	}
-
 	public IEnumerator SetName() {
 		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
 			yield return new WaitForSeconds(1f);
@@ -118,15 +110,9 @@ public class Control : MonoBehaviour {
 		data.bombs = PlayerAttack.bombs;
 		data.bullets = PlayerAttack.bullets;
 		print(data.bombs + " " + data.bullets);
-		data.playerPositionX = Statics.gameProgression.currentPositionPlayerX;
-		data.playerPositionY = Statics.gameProgression.currentPositionPlayerY;
-		data.playerPositionZ = Statics.gameProgression.currentPositionPlayerZ;
-		data.blockPosX = Statics.gameProgression.currentPositionBoxX;
-		data.blockPosY = Statics.gameProgression.currentPositionBoxY;
-		data.blockPosZ = Statics.gameProgression.currentPositionBoxZ;
-		data.spikePosX = Statics.gameProgression.currentPositionSpikeX;
-		data.spikePosY = Statics.gameProgression.currentPositionSpikeY;
-		data.spikePosZ = Statics.gameProgression.currentPositionSpikeZ;
+		data.playerPos = Statics.gameProgression.playerPos;
+		data.blockPos = Statics.gameProgression.boxPos;
+		data.spikePos = Statics.gameProgression.spikePos;
 		data.blockZRotation = Statics.gameProgression.ZRotationBlock;
 		data.difficulty = chosenDifficulty;
 		data.currentBGName = M_Player.currentBG_name;
@@ -135,7 +121,7 @@ public class Control : MonoBehaviour {
 		data.shownAttempt = Statics.mPlayer.newGame;
 		data.shownShotInfo = Statics.playerAttack.displayShootingInfo;
 		data.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
-		data.doneAvoidance = Statics.avoidance.preformed;
+		data.doneAvoidance = Statics.avoidance.performed;
 		data.shownBlockInfo = Statics.blockScript.showInfo;
 		data.blockPushAttempt = Statics.pressurePlate.attempts;
 		data.camSize = Camera.main.orthographicSize;
@@ -151,10 +137,7 @@ public class Control : MonoBehaviour {
 		formatter.Serialize(file, data);
 		file.Close();
 		StartCoroutine(ScreenShot(attempt));
-
-
 	}
-
 
 	private IEnumerator ScreenShot(int currAttempt) {
 		GameObject saveButton = GameObject.Find("saveGame");
@@ -178,11 +161,8 @@ public class Control : MonoBehaviour {
 		loadedData = data;
 		localAttempt = loadedData.localAttempt;
 
-		print("ATTEMPT IS NOW EQUAL LOCAL ATTEMPT " + loadedData.localAttempt  + "  " + attempt);
 		StartCoroutine(FilesLoaded());
 	}
-
-
 
 	public IEnumerator StartNewGame(int difficulty) {
 
@@ -202,7 +182,6 @@ public class Control : MonoBehaviour {
 	}
 
 
-
 	public void Restart() {
 		M_Player.doNotMove = false;
 		Spike.spikesCollected = 0;
@@ -211,6 +190,7 @@ public class Control : MonoBehaviour {
 		PlayerAttack.bullets = 0;
 		M_Player.gameProgression = 0;
 		Projectile.projectileSpeed = 15;
+		Timer.time = 0f;
 		Time.timeScale = 1;
 		script.isRestarting = true;
 		print(script.isRestarting);
@@ -229,7 +209,6 @@ public class Control : MonoBehaviour {
 		loading.allowSceneActivation = true;
 		yield return new WaitUntil(() => loading.isDone);
 		Statics.camFade.anim.speed = 1;
-
 	}
 
 
@@ -253,10 +232,10 @@ public class Control : MonoBehaviour {
 
 			M_Player.gameProgression = loadedData.spikesCollected;
 
-			Vector3 playerPos = new Vector3(loadedData.playerPositionX, loadedData.playerPositionY, loadedData.playerPositionZ);
+			Vector3 playerPos = loadedData.playerPos;
 			player.transform.position = playerPos;
 
-			Vector3 spikePos = new Vector3(loadedData.spikePosX, loadedData.spikePosY, loadedData.spikePosZ);
+			Vector3 spikePos = loadedData.spikePos;
 
 			wrp.Objects[0].gameObject.SetActive(loadedData.spikeActive);
 			if (wrp.Objects[0].activeInHierarchy == true) {
@@ -267,15 +246,13 @@ public class Control : MonoBehaviour {
 			Spike.spikesCollected = loadedData.spikesCollected;
 			Statics.canvasRenderer.Counters("Update");
 
-
 			PlayerAttack.bullets = loadedData.bullets;
 			PlayerAttack.bombs = loadedData.bombs;
-
 
 			Statics.playerAttack.displayShootingInfo = loadedData.shownShotInfo;
 
 			Statics.blockScript.showInfo = loadedData.shownBlockInfo;
-			block.transform.position = new Vector3(loadedData.blockPosX, loadedData.blockPosY, loadedData.blockPosZ);
+			block.transform.position = loadedData.blockPos;
 			block.transform.rotation = Quaternion.AngleAxis(loadedData.blockZRotation, Vector3.back);
 			if (loadedData.blockPushAttempt == 3) {
 				Statics.pressurePlate.CreateBarrier();
@@ -298,22 +275,17 @@ public class Control : MonoBehaviour {
 				Statics.guide.Recalculate(GameObject.Find("Coin"), true);
 			}
 
-
 			PlayerPrefs.SetInt("difficulty", loadedData.difficulty);
 
-
-
 			Statics.avoidance.displayAvoidInfo = loadedData.shownAvoidanceInfo;
-			Statics.avoidance.preformed = loadedData.doneAvoidance;
+			Statics.avoidance.performed = loadedData.doneAvoidance;
 			if (loadedData.doneAvoidance) {
 				GameObject.Find("SignPost Avoidance").SetActive(false);
 				Statics.music.PlayMusic(Statics.music.room1);
 			}
 
-
 			Timer.time = loadedData.time;
 			
-
 			Camera.main.orthographicSize = loadedData.camSize;
 			Statics.zoom.canZoom = loadedData.canZoom;
 
@@ -329,17 +301,15 @@ public class Control : MonoBehaviour {
 				Statics.bossEntrance.SpawnBossOnLoad();
 				print(Camera.main.transform.position);
 				Statics.zoom.canZoom = false;
-
 			}
 
-			Statics.canvasRenderer.infoRenderer(null, loadedData.currentlyDisplayedSideInfo);
+			Statics.canvasRenderer.InfoRenderer(null, loadedData.currentlyDisplayedSideInfo);
 			Statics.pressurePlate.alreadyTriggered = loadedData.pressurePlateTriggered;
 
 			GameObject.Find("Blocker3").SetActive(loadedData.postMazeDoorOpen);
 
 			isNewGame = loadedData.isNewGame;
 			isRestarting = loadedData.isRestarting;
-
 
 
 			Statics.mPlayer.newGame = false;

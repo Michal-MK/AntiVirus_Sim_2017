@@ -25,6 +25,7 @@ public class MazeEscape : MonoBehaviour {
 			Statics.music.MusicTransition(Statics.music.room1);
 		}
 	}
+
 	public IEnumerator FromMazeTrans() {
 		entrance.gameObject.SetActive(false);
 		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
@@ -51,11 +52,7 @@ public class MazeEscape : MonoBehaviour {
 		shapeA.radius = Camera.main.orthographicSize * 2;
 		shapeB.radius = Camera.main.orthographicSize * 2;
 		
-
-
 		wrp.AllowSaving(true);
-
-
 	}
 
 	private IEnumerator FadeWalls() {
