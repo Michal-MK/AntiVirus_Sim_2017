@@ -116,7 +116,6 @@ public class EnemySpawner : MonoBehaviour {
 		}
 	}
 
-
 	public IEnumerator KBCycle() {
 
 		KBCycleRunning = true;

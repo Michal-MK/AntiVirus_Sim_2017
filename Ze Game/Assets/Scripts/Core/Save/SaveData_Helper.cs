@@ -65,5 +65,10 @@ namespace SaveData_Helper {
 		public bool pressurePlateTriggered;
 		public bool postMazeDoorOpen;
 	}
+
+	[System.Serializable]
+	public class Maze {
+
+	}
 }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System;
 
 public delegate void BackgroundChanged(RectTransform background);
 public class M_Player : MonoBehaviour {
@@ -50,6 +51,11 @@ public class M_Player : MonoBehaviour {
 
 	private void Awake() {
 		Statics.mPlayer = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		throw new NotImplementedException();
 	}
 
 	void Start() {
@@ -405,6 +411,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		Statics.mPlayer = null;
 	}
 }

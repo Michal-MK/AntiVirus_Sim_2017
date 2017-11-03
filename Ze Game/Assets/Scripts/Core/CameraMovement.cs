@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -38,6 +39,11 @@ public class CameraMovement : MonoBehaviour {
 
 	private void Awake() {
 		Statics.cameraMovement = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		throw new NotImplementedException();
 	}
 
 	void Start() {
@@ -375,6 +381,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 	private void OnDestroy() {
 		Statics.cameraMovement = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 	public void SetParticleLifetime() {
 		ParticleSystem.ShapeModule shapeA = psA.shape;

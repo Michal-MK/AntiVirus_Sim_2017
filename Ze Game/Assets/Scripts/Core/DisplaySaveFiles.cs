@@ -40,7 +40,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 				GameObject save = Instantiate(SaveObj, content.transform);
 				save.name = saveFiles[i].FullName;
 				lastSave = save;
-				byte[] img = File.ReadAllBytes(saveDirectory +  "/Resources/" + saveFiles[i].Name.Remove(saveFiles[i].Name.Length - 6, 6) + ".png");
+				byte[] img = File.ReadAllBytes(saveDirectory + "/Resources/" + saveFiles[i].Name.Remove(saveFiles[i].Name.Length - 6, 6) + ".png");
 				Texture2D tex = new Texture2D(800, 600);
 				tex.LoadImage(img);
 				Sprite sp = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
@@ -53,7 +53,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 				SaveData saveInfo = (SaveData)br.Deserialize(file);
 				file.Close();
 
-				switch (saveInfo.currentBGName) {
+				switch (saveInfo.player.currentBGName) {
 					case "Background_Start": {
 						BGName = "Electical Hall";
 						break;
@@ -84,25 +84,24 @@ public class DisplaySaveFiles : MonoBehaviour {
 					}
 
 				}
-				if (saveInfo.time != 0) {
-					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
-																"Loaction: " + BGName + "\n" + "Attempt " + /*saveInfo.localAttempt + */
-																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.time / 60, saveInfo.time % 60, saveInfo.time.ToString().Remove(0, saveInfo.time.ToString().Length - 2)) + "\n" +
-																"Spikes: " + saveInfo.spikesCollected + " Bullets: " + saveInfo.bullets + "\n" +
-																"Coins: " + saveInfo.coinsCollected + " Bombs: " + saveInfo.bombs;
+				if (saveInfo.core.time != 0) {
+					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.core.difficulty + 1) + "\n" +
+																"Loaction: " + BGName + "\n" + "Attempt " +
+																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.core.time / 60, saveInfo.core.time % 60, saveInfo.core.time.ToString().Remove(0, saveInfo.core.time.ToString().Length - 2)) + "\n" +
+																"Spikes: " + saveInfo.player.spikesCollected + " Bullets: " + saveInfo.player.bullets + "\n" +
+																"Coins: " + saveInfo.player.coinsCollected + " Bombs: " + saveInfo.player.bombs;
 				}
 				else {
-					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.difficulty + 1) + "\n" +
-											"Loaction: " + BGName + "\n" +
-											"Time: 00:00:00 minutes";
+					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.core.difficulty + 1) + "\n" +
+																"Loaction: " + BGName + "\n" +
+																"Time: 00:00:00 minutes";
 
 				}
-				//content.sizeDelta += new Vector2(0, 225);
 			}
 		}
 		if (content.GetComponentsInChildren<RectTransform>().Length == 1) {
 
-			GameObject noSave = Instantiate(NoSaves, GameObject.Find("Scroll View").transform);
+			GameObject noSave = Instantiate(NoSaves, GameObject.Find("Saves").transform);
 			noSave.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 		}
 	}

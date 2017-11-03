@@ -10,10 +10,15 @@ public class Coins : MonoBehaviour {
 	private Vector3 oldpos;
 	private float scale;
 
-	public static int coinsCollected = 0;
+	private static int _coinsCollected = 0;
 
 	private void Awake() {
 		Statics.coins = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		throw new System.NotImplementedException();
 	}
 
 	void Start() {
@@ -72,7 +77,16 @@ public class Coins : MonoBehaviour {
 		return newpos;
 	}
 
+	public static int coinsCollected {
+		get { return _coinsCollected; }
+		set {
+			_coinsCollected = value;
+			Statics.canvasRenderer.Counters("Coins");
+		}
+	}
+
 	private void OnDestroy() {
 		Statics.coins = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

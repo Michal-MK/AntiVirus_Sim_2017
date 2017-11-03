@@ -14,7 +14,7 @@ public class Spike : MonoBehaviour {
 	public GameObject teleporter;
 	public Animator anim;
 
-	public static int spikesCollected;
+	private static int _spikesCollected;
 	public int stage;
 
 	public bool firstSpike = false;
@@ -25,6 +25,11 @@ public class Spike : MonoBehaviour {
 
 	private void Awake() {
 		Statics.spike = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		throw new System.NotImplementedException();
 	}
 
 	private void OnEnable() {
@@ -171,8 +176,17 @@ public class Spike : MonoBehaviour {
 		guide.gameObject.SetActive(false);
 	}
 
+	public static int spikesCollected {
+		get { return _spikesCollected; }
+		set {
+			_spikesCollected = value;
+			Statics.canvasRenderer.Counters("Spike");
+		}
+	}
+
 	private void OnDestroy() {
 		Statics.spike = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
 

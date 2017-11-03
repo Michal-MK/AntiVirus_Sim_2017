@@ -8,10 +8,10 @@ public class Enemy : MonoBehaviour, IKillable {
 		LONG_RANGE,
 	}
 
-	private bool _instantDeath = true;
-	private bool _is_Destroyable = true;
-	private float _damage = 1;
-	private EnemyType _type;
+	protected bool _instantDeath = true;
+	protected bool _is_Destroyable = true;
+	protected float _damage = 1;
+	protected EnemyType _type;
 
 	public virtual void Kill() {
 		if (_is_Destroyable) {

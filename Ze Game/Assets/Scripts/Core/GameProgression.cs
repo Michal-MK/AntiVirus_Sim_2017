@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameProgression : MonoBehaviour {
@@ -17,6 +18,11 @@ public class GameProgression : MonoBehaviour {
 
 	private void Awake() {
 		Statics.gameProgression = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		throw new NotImplementedException();
 	}
 
 	public void GetValues() {
@@ -73,5 +79,6 @@ public class GameProgression : MonoBehaviour {
 	}
 	private void OnDestroy() {
 		Statics.gameProgression = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
