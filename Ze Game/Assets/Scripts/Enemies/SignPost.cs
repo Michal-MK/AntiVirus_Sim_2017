@@ -47,23 +47,18 @@ public class SignPost : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (awaitingInput && Input.GetButtonDown("Interact") && Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
+		if (awaitingInput && Input.GetButtonDown("Interact") && CamFadeOut.script.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
 			if (!interacted) {
 				switch (gameObject.name) {
 					case "SignPost Avoidance": {
 						if (OnAvoidanceBegin != null) {
 							OnAvoidanceBegin();
 						}
-						Statics.music.PlayMusic(Statics.music.avoidance);
+						MusicHandler.script.PlayMusic(MusicHandler.script.avoidance);
 						StartCoroutine(Fade());
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						if (Statics.avoidance.displayAvoidInfo) {
-							Canvas_Renderer.script.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
-																"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
-							Statics.avoidance.displayAvoidInfo = false;
-						}
 						break;
 					}
 					case "SignPost Start": {

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class Avoidance : MonoBehaviour {
 
+	public CameraMovement camMovement;
+
 	public bool performed = false;
 	public RectTransform player;
 	public GameObject door1;
@@ -14,17 +16,31 @@ public class Avoidance : MonoBehaviour {
 	public Toggle saveButton;
 
 	private void Awake() {
-		Statics.avoidance = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		SignPost.OnAvoidanceBegin += SignPost_OnAvoidanceBegin;
+	}
+
+	private void SignPost_OnAvoidanceBegin() {
+		if (displayAvoidInfo) {
+			Canvas_Renderer.script.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+												"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
+			displayAvoidInfo = false;
+		}
+		StartAvoidance();
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		displayAvoidInfo = data.shownHints.shownAvoidanceInfo;
+		performed = data.world.doneAvoidance;
 	}
 
 	public void StartAvoidance() {
 		door1.SetActive(true);
-		spawner.SpawnAvoidance();
 		StartCoroutine(HoldAvoidance());
 		saveButton.interactable = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
-		Statics.cameraMovement.RaycastForRooms();
+		camMovement.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
 
@@ -36,7 +52,7 @@ public class Avoidance : MonoBehaviour {
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
-		Statics.cameraMovement.RaycastForRooms();
+		camMovement.RaycastForRooms();
 		Canvas_Renderer.script.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();
@@ -64,6 +80,7 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		Statics.avoidance = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		SignPost.OnAvoidanceBegin -= SignPost_OnAvoidanceBegin;
 	}
 }

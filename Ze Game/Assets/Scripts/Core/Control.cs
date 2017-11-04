@@ -98,16 +98,16 @@ public class Control : MonoBehaviour {
 
 		PlayerPrefs.SetInt("difficulty", difficulty);
 		chosenDifficulty = difficulty;
-		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		yield return new WaitForFixedUpdate();
 		load = false;
-		yield return new WaitUntil(() => Statics.camFade.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
+		yield return new WaitUntil(() => CamFadeOut.script.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
 		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
-		Statics.camFade.anim.speed = 0;
+		CamFadeOut.script.anim.speed = 0;
 
 		yield return new WaitUntil(() => load == true);
 		loading.allowSceneActivation = true;
-		Statics.camFade.anim.speed = 1;
+		CamFadeOut.script.anim.speed = 1;
 		load = false;
 	}
 
@@ -125,7 +125,7 @@ public class Control : MonoBehaviour {
 		script.isRestarting = true;
 		print(script.isRestarting);
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		Statics.camFade.anim.SetTrigger("UnDim");
+		CamFadeOut.script.anim.SetTrigger("UnDim");
 	}
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
@@ -134,8 +134,7 @@ public class Control : MonoBehaviour {
 		}
 
 		if (scene.buildIndex == 1 && isNewGame) {
-			Statics.mPlayer.newGame = true;
-			Statics.camFade.anim.speed = 1;
+			CamFadeOut.script.anim.speed = 1;
 		}
 		else if (isRestarting) {
 			isNewGame = false;

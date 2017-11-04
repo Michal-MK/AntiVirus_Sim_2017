@@ -17,7 +17,6 @@ public class DisplaySaveFiles : MonoBehaviour {
 	public static int selectedAttempt;
 
 	private void Awake() {
-		Statics.displaySaves = this;
 		dataPath = Application.dataPath + "/Saves/";
 	}
 
@@ -117,10 +116,5 @@ public class DisplaySaveFiles : MonoBehaviour {
 		if (lastSave != null && e.currentSelectedGameObject == null) {
 			e.SetSelectedGameObject(lastSave);
 		}
-	}
-
-
-	private void OnDestroy() {
-		Statics.displaySaves = null;
 	}
 }

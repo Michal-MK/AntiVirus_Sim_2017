@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MazeEscape : MonoBehaviour {
 	public Animator transitionBlack;
@@ -15,23 +14,27 @@ public class MazeEscape : MonoBehaviour {
 
 	public GameObject wall;
 
-	private void Awake() {
-		Statics.mazeEscape = this;
-	}
+
+	public static event Maze.MazeBehaviour OnMazeEscape;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 			StartCoroutine(FromMazeTrans());
-			Statics.music.MusicTransition(Statics.music.room1);
+			MusicHandler.script.MusicTransition(MusicHandler.script.room1);
 		}
 	}
 
 	public IEnumerator FromMazeTrans() {
 		entrance.gameObject.SetActive(false);
-		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 		yield return new WaitForSeconds(1.5f);
+		if(OnMazeEscape != null) {
+			OnMazeEscape();
+		}
+		Maze.inMaze = false;
+
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
-		zoom.canZoom = true;
+		Zoom.canZoom = true;
 		player.transform.position = new Vector3(BG.position.x, BG.position.y + BG.sizeDelta.y / 2 - 10, 0);
 		Camera.main.orthographicSize = 25;
 		Camera.main.transform.position = player.transform.position;
@@ -39,18 +42,6 @@ public class MazeEscape : MonoBehaviour {
 		spike.SetPosition();
 		StartCoroutine(FadeWalls());
 		pathOpen = true;
-
-		ParticleSystem.ShapeModule shapeA = Statics.cameraMovement.psA.shape;
-		ParticleSystem.ShapeModule shapeB = Statics.cameraMovement.psB.shape;
-
-		ParticleSystem psA = Statics.cameraMovement.psA;
-		ParticleSystem psB = Statics.cameraMovement.psB;
-
-		psA.gameObject.SetActive(true);
-		psB.gameObject.SetActive(true);
-
-		shapeA.radius = Camera.main.orthographicSize * 2;
-		shapeB.radius = Camera.main.orthographicSize * 2;
 		
 		wrp.AllowSaving(true);
 	}
@@ -79,8 +70,5 @@ public class MazeEscape : MonoBehaviour {
 				}
 			}
 		}
-	}
-	private void OnDestroy() {
-		Statics.mazeEscape = null;
 	}
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicHandler : MonoBehaviour {
@@ -19,15 +18,22 @@ public class MusicHandler : MonoBehaviour {
 
 	Coroutine currentMusic;
 
+	public static MusicHandler script;
+
 	private void Awake() {
-		Statics.music = this;
+		if(script == null) {
+			script = this;
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
 	}
 
 	private void Start() {
 		M_Player.OnRoomEnter += NewRoom;
 	}
 
-	private void NewRoom(RectTransform background) {
+	private void NewRoom(RectTransform background, M_Player sender) {
 		if (background.name == "Background_room_1") {
 			MusicTransition(room2);
 		}
@@ -105,11 +111,6 @@ public class MusicHandler : MonoBehaviour {
 					}
 					if (f >= 0) {
 						sound.volume = f;
-						if (sound.clip == Statics.pressurePlate.On) {
-							sound.clip = newClip;
-							StartCoroutine(StartMusic());
-							break;
-						}
 						yield return null;
 					}
 					else {
@@ -171,7 +172,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		Statics.music = null;
+		script = null;
 		M_Player.OnRoomEnter -= NewRoom;
 	}
 }

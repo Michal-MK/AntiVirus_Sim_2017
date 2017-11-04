@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class Maze : MonoBehaviour {
+
+	public delegate void MazeBehaviour();
 
 	public GameObject Cell;
 	public GameObject WallI;
@@ -28,9 +28,7 @@ public class Maze : MonoBehaviour {
 	public GameObject[,] wallsB;
 	public GameObject[,] wallsL;
 
-	private void Awake() {
-		Statics.mazeScript = this;
-	}
+	public static bool inMaze = false;
 
 	void Start() {
 
@@ -514,9 +512,5 @@ public class Maze : MonoBehaviour {
 			run = false;
 			StopAllCoroutines();
 		}
-	}
-
-	private void OnDestroy() {
-		Statics.mazeScript = null;
 	}
 }

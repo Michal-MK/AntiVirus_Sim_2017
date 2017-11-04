@@ -43,18 +43,23 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite attack;
 	public Sprite happy;
 
-
 	private void Awake() {
-		Statics.playerAttack = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		if (data.shownHints.shownShotInfo) {
+			displayShootingInfo = data.shownHints.shownShotInfo;
+		}
+		else {
+			StartCoroutine(UpdateStats());
+		}
+	}
+
 	private void Start() {
 		bombGUI = GameObject.Find("BombGUI").GetComponent<Image>();
 		bulletGUI = GameObject.Find("BulletGUI").GetComponent<Image>();
 		currentAmmo = GameObject.Find("CurrentAmmo").GetComponent<Image>();
-		if (Statics.mPlayer.newGame) {
-			bullets = 0;
-			bombs = 0;
-		}
 	}
 
 	void Update() {
@@ -77,14 +82,15 @@ public class PlayerAttack : MonoBehaviour {
 			if (M_Player.gameProgression != 10 && displayShootingInfo) {
 				if (bullets != 0) {
 					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n " +
-														"Use your mouse to aim.\n "+
+														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
-														"Currently you have: " + bullets + " bullets.\n "+
+														"Currently you have: " + bullets + " bullets.\n " +
 														"Don't lose them", null);
 					displayShootingInfo = false;
-				}else {
+				}
+				else {
 					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n" +
-														"Use your mouse to aim.\n "+
+														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
 														"Currently you have: " + bullets + " bullets.", null);
 					displayShootingInfo = false;
@@ -103,7 +109,7 @@ public class PlayerAttack : MonoBehaviour {
 		if (fireMode && Input.GetButtonDown("Right Mouse Button")) {
 			fireBullets = !fireBullets;
 		}
-		if (!Statics.pauseUnpause.isPaused) {
+		if (!PauseUnpause.isPaused) {
 			if (fireMode/* && M_Player.gameProgression == 10*/) {
 				if (Input.GetButtonDown("Left Mouse Button") && fireBullets) {
 					if (bullets >= 1) {
@@ -163,7 +169,7 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.name = "Bullet";
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
-		Statics.sound.PlayFX(Statics.sound.ArrowSound);
+		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
 		bullets--;
 		bulletCount.text = "x " + bullets;
@@ -197,15 +203,16 @@ public class PlayerAttack : MonoBehaviour {
 			Destroy(col.gameObject);
 			bullets++;
 			bulletCount.text = "x " + bullets;
-			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 		if (col.name == "BombPickup") {
 			bombGUI.color = visible;
 			bombCount.text = "x " + bombs;
 		}
 	}
+
 	private void OnDestroy() {
-		Statics.playerAttack = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
 

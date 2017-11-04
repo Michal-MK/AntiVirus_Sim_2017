@@ -32,8 +32,6 @@ public class Projectile : Enemy {
 
 
 	void OnEnable() {
-		Statics.projectile = this;
-
 		selfRigid = gameObject.GetComponent<Rigidbody2D>();
 		selfCol = gameObject.GetComponent<EdgeCollider2D>();
 		selfRender = gameObject.GetComponent<SpriteRenderer>();
@@ -119,7 +117,6 @@ public class Projectile : Enemy {
 
 
 	void OnDisable() {
-		Statics.projectile = null;
 		ready = false;
 		byBoss = false;
 	}

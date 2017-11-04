@@ -116,16 +116,16 @@ public class BossBehaviour : MonoBehaviour {
 
 	public bool donePositioning = true;
 
-	public float playerSpeedMultiplier = 5;
+	public static float playerSpeedMultiplier = 5;
 
-	public delegate void BossBehavior();
+	public delegate void BossBehavior(BossBehaviour sender);
 	public static event BossBehavior OnBossfightBegin;
 	#endregion
 
 
 	void Start() {
 		if(OnBossfightBegin != null) {
-			OnBossfightBegin();
+			OnBossfightBegin(this);
 		}
 		playerSpeedMultiplier = 5;
 		Projectile.spawnedByAvoidance = false;

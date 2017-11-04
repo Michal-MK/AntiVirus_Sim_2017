@@ -5,6 +5,8 @@ using System;
 
 public class CameraMovement : MonoBehaviour {
 
+	public static event Zoom.Zooming OnZoomModeSwitch;
+
 	public RectTransform bg;
 	public Transform player;
 	public M_Player playerScript;
@@ -40,14 +42,8 @@ public class CameraMovement : MonoBehaviour {
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
-	}
-
-	private void BossBehaviour_OnBossfightBegin() {
-		SetParticleLifetime();
-	}
-
-	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		throw new NotImplementedException();
+		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
+		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
 	}
 
 	void Start() {
@@ -58,6 +54,43 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 	}
 
+	#region Events
+	private void MazeEntrance_OnMazeEnter() {
+		psA.gameObject.SetActive(false);
+		psB.gameObject.SetActive(false);
+	}
+
+	private void MazeEscape_OnMazeEscape() {
+		ParticleSystem.ShapeModule shapeA = psA.shape;
+		ParticleSystem.ShapeModule shapeB = psB.shape;
+
+		psA.gameObject.SetActive(true);
+		psB.gameObject.SetActive(true);
+
+		shapeA.radius = cam.orthographicSize * 2;
+		shapeB.radius = cam.orthographicSize * 2;
+	}
+
+	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
+		SetParticleLifetime();
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		inBossRoom = data.world.bossSpawned;
+		if (data.world.bossSpawned) {
+			RectTransform bg = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
+			Camera.main.transform.position = bg.position + new Vector3(0, 0, -10);
+			psA.transform.position = bg.position + new Vector3(0, bg.sizeDelta.y / 2, 0);
+			ParticleSystem.ShapeModule shape = psA.shape;
+			shape.radius = 108 * 2;
+			psB.gameObject.SetActive(false);
+			M_Player.gameProgression = 10;
+
+			Zoom.canZoom = false;
+		}
+	}
+
+	#endregion
 
 	public void RaycastForRooms() {
 		BackGroundS.Clear();
@@ -281,8 +314,8 @@ public class CameraMovement : MonoBehaviour {
 			middle.x = (LeftBorder + RightBorder) / 2;
 			currentBGX = (-LeftBorder + RightBorder) / 2;
 		}
-		if (!inMaze) {
-			Statics.zoom.canZoom = true;
+		if (!inMaze && OnZoomModeSwitch != null) {
+			OnZoomModeSwitch(true);
 		}
 
 	}
@@ -296,7 +329,7 @@ public class CameraMovement : MonoBehaviour {
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
 		}
-		else if (Statics.mazeEntrance.inMazePropoerly) {
+		else if (Maze.inMaze) {
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
 			//print("there");
@@ -383,10 +416,11 @@ public class CameraMovement : MonoBehaviour {
 		ParticleSystem.MainModule main = psA.main;
 		main.startLifetime = 25;
 	}
+
 	private void OnDestroy() {
-		Statics.cameraMovement = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
+
 	public void SetParticleLifetime() {
 		ParticleSystem.ShapeModule shapeA = psA.shape;
 		psB.gameObject.SetActive(false);

@@ -113,7 +113,7 @@ public class BossHealth : MonoBehaviour {
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
 		Timer.run = false;
-		Statics.music.MusicTransition(null);
+		MusicHandler.script.MusicTransition(null);
 		yield return new WaitForSeconds(5);
 		GameObject.Find("TransitionBlack").GetComponent<Animator>().Play("CamTransition");
 

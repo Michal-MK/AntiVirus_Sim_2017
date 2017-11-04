@@ -8,9 +8,6 @@ public class Timer : MonoBehaviour {
 	public CameraMovement cam;
 	Text Timer_text;
 
-	private void Awake() {
-		Statics.timerScript = this;
-	}
 	void Start() {
 
 		Timer_text = GameObject.Find("Timer_text").GetComponent<Text>();
@@ -36,8 +33,5 @@ public class Timer : MonoBehaviour {
 			//Timer_text.text = "Time:\t" + (Mathf.Round(time * 100) / 100).ToString("0.00") + " s";
 			Timer_text.text = "Time:\t" + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)time / 60, time % 60, time.ToString().Remove(0, time.ToString().Length - 2));
 		}
-	}
-	private void OnDestroy() {
-		Statics.timerScript = null;
 	}
 }

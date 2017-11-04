@@ -20,9 +20,20 @@ public class PressurePlate : MonoBehaviour {
 
 	public RectTransform BG;
 
+	public static event Guide.GuideTarget OnNewTarget;
 
 	private void Awake() {
-		Statics.pressurePlate = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		if (data.world.blockPushAttempt == 3) {
+			CreateBarrier();
+		}
+		else {
+			attempts = data.world.blockPushAttempt;
+		}
+		alreadyTriggered = data.world.pressurePlateTriggered;
 	}
 
 	void Start() {
@@ -58,7 +69,9 @@ public class PressurePlate : MonoBehaviour {
 				sound.clip = On;
 				sound.Play();
 				spike.SetPosition();
-				Statics.guide.Recalculate(spike.gameObject, true);
+				if(OnNewTarget != null) {
+					OnNewTarget(spike.gameObject);
+				}
 				BlockScript.pressurePlateTriggered = true;
 			}
 		}
@@ -87,6 +100,6 @@ public class PressurePlate : MonoBehaviour {
 		protection.transform.localScale = new Vector3(0.2f, 0.1f, 1);
 	}
 	private void OnDestroy() {
-		Statics.pressurePlate = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

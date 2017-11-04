@@ -14,9 +14,6 @@ public class Wrapper : MonoBehaviour {
 	public Button[] buttons = new Button[4];
 	public GameObject[] Objects = new GameObject[4];
 
-	private void Awake() {
-		Statics.wrapper = this;
-	}
 
 	private void Start() {
 		if (field != null) {
@@ -54,7 +51,8 @@ public class Wrapper : MonoBehaviour {
 	}
 
 	public void UpdateName() {
-		Statics.profile.DisplayProfile();
+		Debug.LogWarning("Something is broken!");
+		//Statics.profile.DisplayProfile();
 		if (dim != null) {
 			dim.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
 			if (PlayerPrefs.GetString("player_name") == null) {
@@ -64,11 +62,11 @@ public class Wrapper : MonoBehaviour {
 	}
 
 	public void SaveGame(bool createNew) {
-		Control.script.Save(createNew);
+		Control.script.saveManager.Save(createNew);
 	}
 
-	public void LoadGame(Transform Parrent) {
-		Control.script.Load(Parrent.name);
+	public void LoadGame(Transform myParent) {
+		Control.script.loadManager.Load(myParent.name);
 	}
 
 	public void SelectButton(int i = 0) {
@@ -154,9 +152,5 @@ public class Wrapper : MonoBehaviour {
 				EventSystem.current.SetSelectedGameObject(startG);
 			}
 		}
-	}
-
-	private void OnDestroy() {
-		Statics.wrapper = null;
 	}
 }

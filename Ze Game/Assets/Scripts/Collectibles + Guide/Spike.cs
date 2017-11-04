@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Spike : MonoBehaviour {
+public class Spike : MonoBehaviour, ICollectible {
 	public CameraMovement cam;
 	public RectTransform BGS;
 	public RectTransform BG1;
 	public RectTransform BG2a;
-	public Maze Maze;
+	public Maze maze;
 	public RectTransform BG2b;
 
 	public GameObject player;
@@ -25,6 +25,55 @@ public class Spike : MonoBehaviour {
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+	}
+
+	private void M_Player_OnSpikePickup(M_Player sender,GameObject spikeObj) {
+
+		spikesCollected++;
+
+		gameObject.SetActive(false);
+
+		if (displayArrowGuideInfo == true) {
+			displayArrowGuideInfo = false;
+			Canvas_Renderer.script.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+		}
+
+		if (spikesCollected >= 0 || spikesCollected <= 4) {
+			Canvas_Renderer.script.Counters("Spike");
+
+		}
+		if (spikesCollected == 4) {
+			maze.MazeEscape();
+		}
+
+
+		int p = M_Player.gameProgression;
+		switch (p) {
+			case 0: {
+				firstSpike = true;
+				break;
+			}
+			case 1: {
+				secondSpike = true;
+				break;
+			}
+			case 2: {
+				thirdSpkie = true;
+				break;
+			}
+			case 3: {
+				fourthSpike = true;
+				break;
+			}
+			case 4: {
+				fifthSpike = true;
+				break;
+			}
+		}
+		M_Player.gameProgression++;
+		GameProgression.script.Progress();
+
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -37,70 +86,6 @@ public class Spike : MonoBehaviour {
 	}
 
 	public bool displayArrowGuideInfo = true;
-
-	void OnTriggerEnter2D(Collider2D col) {
-
-		if (col.tag == "Player") {
-
-			spikesCollected++;
-
-			gameObject.SetActive(false);
-			guide.gameObject.SetActive(false);
-
-			if (stage == 1) {
-				Statics.pressurePlate.alreadyTriggered = true;
-			}
-
-			if (displayArrowGuideInfo == true) {
-				displayArrowGuideInfo = false;
-				Canvas_Renderer.script.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
-			}
-
-			if (spikesCollected >= 0 || spikesCollected <= 4) {
-				Canvas_Renderer.script.Counters("Spike");
-
-			}
-			if (spikesCollected == 4) {
-				Maze.MazeEscape();
-			}
-			if (spikesCollected == 5) {
-				string text;
-				if (Statics.playerAttack.displayShootingInfo) {
-					text = "You found all the bullets.\n You can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\n The bullets are limited, don't lose them!";
-					Statics.playerAttack.displayShootingInfo = false;
-				}
-				else {
-					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
-				}
-				Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
-			}
-			int p = M_Player.gameProgression;
-			switch (p) {
-				case 0: {
-					firstSpike = true;
-					break;
-				}
-				case 1: {
-					secondSpike = true;
-					break;
-				}
-				case 2: {
-					thirdSpkie = true;
-					break;
-				}
-				case 3: {
-					fourthSpike = true;
-					break;
-				}
-				case 4: {
-					fifthSpike = true;
-					break;
-				}
-			}
-			M_Player.gameProgression++;
-			Statics.gameProgression.Progress();
-		}
-	}
 
 	public void SetPosition() {
 		stage = M_Player.gameProgression;
@@ -143,7 +128,7 @@ public class Spike : MonoBehaviour {
 		}
 		if (stage == 3) {
 			print(stage);
-			GameObject lastPos = Maze.grid[Maze.rowcollCount / 2, Maze.rowcollCount / 2];
+			GameObject lastPos = maze.grid[maze.rowcollCount / 2, maze.rowcollCount / 2];
 
 			float x = lastPos.transform.position.x;
 			float y = lastPos.transform.position.y;
@@ -179,7 +164,9 @@ public class Spike : MonoBehaviour {
 		get { return _spikesCollected; }
 		set {
 			_spikesCollected = value;
-			Canvas_Renderer.script.Counters("Spike");
+			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene") {
+				Canvas_Renderer.script.Counters("Spike");
+			}
 		}
 	}
 

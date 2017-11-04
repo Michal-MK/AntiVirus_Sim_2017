@@ -4,7 +4,10 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System;
 
-public delegate void BackgroundChanged(RectTransform background);
+public delegate void BackgroundChanged(RectTransform background, M_Player sender);
+public delegate void CoinEvents(M_Player sender);
+public delegate void SpikeEvents(M_Player sender);
+public delegate void PlayerColision(M_Player sender, GameObject other);
 
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
@@ -48,14 +51,32 @@ public class M_Player : MonoBehaviour {
 	private Sprite previous;
 	int i = 0;
 
+	public PlayerAttack pAttack;
+
+	public int mazeSpeedMultiplier = 2;
+
+	public static M_Player player;
+
 	public static event BackgroundChanged OnRoomEnter;
 
+	public static event PlayerColision OnSpikePickup;
+	public static event PlayerColision OnCoinPickup;
+
+	public static event Zoom.Zooming OnZoomModeSwitch;
+
 	private void Awake() {
+		if(player == null) {
+			player = this;
+		}
+		else if(player != this) {
+			Destroy(gameObject);
+		}
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		throw new NotImplementedException();
+		transform.position = data.player.playerPos;
+		gameProgression = data.player.spikesCollected;
 	}
 
 	void Start() {
@@ -78,11 +99,11 @@ public class M_Player : MonoBehaviour {
 	private IEnumerator DelayIntro() {
 		newGame = Control.script.isNewGame;
 		yield return new WaitForSeconds(1);
-		Statics.gameProgression.Progress();
+		GameProgression.script.Progress();
 		if (newGame && !Control.script.isRestarting) {
 
 			//Control.script.Save(true);
-			Statics.music.PlayMusic(Statics.music.room1);
+			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 			attempts++;
 			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
@@ -94,7 +115,7 @@ public class M_Player : MonoBehaviour {
 		}
 		else if (Control.script.isRestarting) {
 			print("ISRESTARTING");
-			Statics.music.PlayMusic(Statics.music.room1);
+			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 			Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
 			Control.script.isRestarting = false;
 		}
@@ -167,10 +188,10 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.bossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * mazeSpeedMultiplier);
 				}
 			}
 			else {
@@ -183,10 +204,10 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.bossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * mazeSpeedMultiplier);
 				}
 			}
 			else {
@@ -199,10 +220,10 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.bossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * Statics.mazeEntrance.multiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * mazeSpeedMultiplier);
 				}
 			}
 			else {
@@ -215,10 +236,10 @@ public class M_Player : MonoBehaviour {
 					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.bossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * Statics.mazeEntrance.multiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * mazeSpeedMultiplier);
 				}
 			}
 			else {
@@ -272,7 +293,7 @@ public class M_Player : MonoBehaviour {
 
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.transform.name == "killerblock") {
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 		}
 		if (collision.transform.name == "Block") {
 			print("Collided!");
@@ -288,7 +309,7 @@ public class M_Player : MonoBehaviour {
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			collision.transform.parent = GameObject.Find("Collectibles").transform;
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
 		}
 	}
@@ -296,18 +317,19 @@ public class M_Player : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.tag == "Enemy") {
+			print(col.gameObject.name);
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
 			face.GetComponent<SpriteRenderer>().sprite = sad;
-			Statics.sound.PlayFX(Statics.sound.ELShock);
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
 
 		}
 		if (col.transform.tag == "BG") {
 			if (OnRoomEnter != null) {
-				OnRoomEnter(col.GetComponent<RectTransform>());
+				OnRoomEnter(col.GetComponent<RectTransform>(),this);
 			}
 			currentBG_name = col.name;
 			cam.RaycastForRooms();
@@ -323,15 +345,39 @@ public class M_Player : MonoBehaviour {
 		}
 
 		if (col.tag == "Spike") {
-			Statics.sound.PlayFX(Statics.sound.ArrowCollected);
-			Statics.gameProgression.Progress();
+			if(OnSpikePickup != null) {
+				OnSpikePickup(this,col.gameObject);
+			}
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
+			GameProgression.script.Progress();
 			face.GetComponent<SpriteRenderer>().sprite = happy;
 			PlayerAttack.bullets++;
 			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
 				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
 			}
 
+			if (Spike.spikesCollected == 5) {
+				string text;
+				if (pAttack.displayShootingInfo) {
+					text = "You found all the bullets.\n You can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\n The bullets are limited, don't lose them!";
+					pAttack.displayShootingInfo = false;
+				}
+				else {
+					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
+				}
+				Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
+			}
+
 		}
+		if (col.name == "Coin") {
+			face.GetComponent<SpriteRenderer>().sprite = happy;
+			if(OnCoinPickup != null) {
+				OnCoinPickup(this,col.gameObject);
+			}
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
+			Canvas_Renderer.script.Counters("Coin");
+		}
+
 		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
@@ -349,8 +395,6 @@ public class M_Player : MonoBehaviour {
 				ChangeFlappy(false);
 				i++;
 			}
-			//save.saveScore();
-			//print("Saved");
 		}
 
 		if (col.tag == "ArrowTrap") {
@@ -391,10 +435,12 @@ public class M_Player : MonoBehaviour {
 		Cursor.visible = true;
 		Timer.run = false;
 
-		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
 		GameOverImg.SetTrigger("Appear");
-		Statics.music.StartCoroutine(Statics.music.StopMusic());
-		Statics.zoom.canZoom = false;
+		MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
+		if(OnZoomModeSwitch!= null) {
+			OnZoomModeSwitch(false);
+		}
 		StartCoroutine(StopTime());
 		gameOver = true;
 
@@ -412,6 +458,5 @@ public class M_Player : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		Statics.mPlayer = null;
 	}
 }

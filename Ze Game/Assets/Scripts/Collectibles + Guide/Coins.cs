@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coins : MonoBehaviour {
+public class Coins : MonoBehaviour, ICollectible {
 	public Transform collec;
 	public GameObject amount;
 	public RectTransform BG;
@@ -12,12 +12,26 @@ public class Coins : MonoBehaviour {
 
 	private static int _coinsCollected = 0;
 
+	public static event Guide.GuideTarget OnNewTarget;
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		M_Player.OnCoinPickup += CoinBehavior;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		throw new System.NotImplementedException();
+		if (data.player.coinsCollected == 5) {
+			ChatchUpToAttempt(data.player.coinsCollected - 2);
+			GameObject.Find("Coin").SetActive(false);
+			CoinBehavior(null,null);
+		}
+		else if (data.player.coinsCollected <= 4) {
+			ChatchUpToAttempt(data.player.coinsCollected - 2);
+			CoinBehavior(null, null);
+			if(OnNewTarget != null) {
+				OnNewTarget(gameObject);
+			}
+		}
 	}
 
 	void Start() {
@@ -25,45 +39,30 @@ public class Coins : MonoBehaviour {
 		scale = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
 	}
 
-	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.name == "Player") {
-			Statics.mPlayer.face.GetComponent<SpriteRenderer>().sprite = Statics.mPlayer.happy;
-
-			coinsCollected += 1;
-			CoinBehavior();
-			Statics.sound.PlayFX(Statics.sound.CoinCollected);
-			Canvas_Renderer.script.Counters("Coin");
-		}
-	}
-	public void CoinBehavior() {
-		//print(coinsCollected);
+	public void CoinBehavior(M_Player sender, GameObject coinObj) {
+		coinsCollected++;
 		if (coinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
 			Timer.run = true;
-
-			Statics.enemySpawner.SpawnKillerBlock();
-
 			gameObject.transform.position = newpos;
-			Statics.guide.Recalculate(gameObject, true);
-
 		}
 		if (coinsCollected == 5) {
-			Statics.guide.gameObject.SetActive(false);
 			coin.gameObject.SetActive(false);
 			if (Spike.spikesCollected == 0) {
 				spike.SetPosition();
 			}
 		}
 	}
+
 	public void ChatchUpToAttempt(int attempt) {
-		for(int i = 0; i <= attempt; i++) {
-			Statics.enemySpawner.SpawnKillerBlock();
+		for (int i = 0; i <= attempt; i++) {
+			print("Borked");
+			//Statics.enemySpawner.SpawnKillerBlock();
 		}
 	}
 
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
-		//print(oldpos);
 		Vector3 newpos = oldpos;
 		while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
 
@@ -80,7 +79,9 @@ public class Coins : MonoBehaviour {
 		get { return _coinsCollected; }
 		set {
 			_coinsCollected = value;
-			Canvas_Renderer.script.Counters("Coins");
+			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene") {
+				Canvas_Renderer.script.Counters("Coins");
+			}
 		}
 	}
 

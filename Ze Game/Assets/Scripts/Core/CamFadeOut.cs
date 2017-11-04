@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CamFadeOut : MonoBehaviour {
 	public Animator anim;
+
+	public static CamFadeOut script;
 
 	public enum CameraModeChanges {
 		DIM_CAMERA,
@@ -11,11 +11,11 @@ public class CamFadeOut : MonoBehaviour {
 	}
 
 	private void Awake() {
-		if(Statics.camFade == null) {
+		if(script == null) {
 			DontDestroyOnLoad(transform.parent.gameObject);
-			Statics.camFade = this;
+			script = this;
 		}
-		else if(Statics.camFade != this) {
+		else if(script != this) {
 			Destroy(gameObject);
 		}
 	}
@@ -26,7 +26,6 @@ public class CamFadeOut : MonoBehaviour {
 			case "Dim": {
 				anim.Play("DimCamera");
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
-				//print("Dimming");
 				break;
 			}
 			case "Trans": {
@@ -38,7 +37,6 @@ public class CamFadeOut : MonoBehaviour {
 					anim.Play("CamTransition");
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
-				//print("Transitioning");
 				break;
 			}
 		}
@@ -62,5 +60,9 @@ public class CamFadeOut : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	private void OnDestroy() {
+		
 	}
 }

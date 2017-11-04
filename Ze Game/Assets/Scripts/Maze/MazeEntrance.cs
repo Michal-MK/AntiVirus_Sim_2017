@@ -13,12 +13,9 @@ public class MazeEntrance : MonoBehaviour {
 	public Wrapper wrapper;
 
 	public bool inMazePropoerly = false;
-	public int multiplier;
 	private bool entered = false;
 
-	private void Awake() {
-		Statics.mazeEntrance = this;
-	}
+	public static event Maze.MazeBehaviour OnMazeEnter;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
@@ -33,17 +30,22 @@ public class MazeEntrance : MonoBehaviour {
 				entered = true;
 				M_Player.gameProgression = 3;
 				StartCoroutine(TransToPos());
-				Statics.music.MusicTransition(Statics.music.maze);
+				MusicHandler.script.MusicTransition(MusicHandler.script.maze);
 			}
 		}
 	}
 
 	public IEnumerator TransToPos() {
 
-		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
 
 		cam.inMaze = true;
 		yield return new WaitForSeconds(1.5f);
+		if(OnMazeEnter != null) {
+			OnMazeEnter();
+		}
+
+		Maze.inMaze = true;
 		M_Player.doNotMove = true;
 
 		cam.transform.position = new Vector3(MazeBG.position.x, MazeBG.position.y, -10);
@@ -56,9 +58,7 @@ public class MazeEntrance : MonoBehaviour {
 		infoBoardMaze.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
 		wrapper.AllowSaving(false);
 
-		Statics.cameraMovement.psA.gameObject.SetActive(false);
-		Statics.cameraMovement.psB.gameObject.SetActive(false);
-		zoom.canZoom = false;
+		Zoom.canZoom = false;
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 
 		StartCoroutine(PreventPlayerIdle());
@@ -69,11 +69,8 @@ public class MazeEntrance : MonoBehaviour {
 		if (PlayerPrefs.GetInt("difficulty") >= 3) {
 			StartCoroutine(LerpCamPos(cam.transform.position, player.transform.position));
 			StartCoroutine(cam.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
-			multiplier = 2;
 		}
-		else {
-			multiplier = 4;
-		}
+
 
 		inMazePropoerly = true;
 		M_Player.doNotMove = false;
@@ -99,9 +96,5 @@ public class MazeEntrance : MonoBehaviour {
 				break;
 			}
 		}
-	}
-
-	private void OnDestroy() {
-		Statics.mazeEntrance = null;
 	}
 }

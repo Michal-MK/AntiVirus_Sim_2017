@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BossEntrance : MonoBehaviour {
+
 	public GameObject player;
 	public GameObject boss;
 	public CameraMovement cam;
@@ -10,6 +11,16 @@ public class BossEntrance : MonoBehaviour {
 	public GameObject bossHP;
 
 	private GameObject HPHolder;
+
+	private void Awake() {
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		if (data.world.bossSpawned) {
+			SpawnBossOnLoad();
+		}
+	}
 
 	private void Start() {
 		HPHolder = GameObject.Find("BossHealthPlaceHolder");
@@ -19,7 +30,7 @@ public class BossEntrance : MonoBehaviour {
 		if (collision.tag == "Player") {
 
 			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
-				Statics.music.MusicTransition(Statics.music.boss);
+				MusicHandler.script.MusicTransition(MusicHandler.script.boss);
 				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 				spawnedBoss.name = "Boss";
 				player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
@@ -28,7 +39,7 @@ public class BossEntrance : MonoBehaviour {
 				cam.BossFightCam(1);
 				StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
 				bossHP.SetActive(true);
-
+				
 			}
 			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
 				Canvas_Renderer.script.InfoRenderer("You are not a worthy opponent!\n"+
@@ -51,5 +62,9 @@ public class BossEntrance : MonoBehaviour {
 		HPHolder = GameObject.Find("BossHealthPlaceHolder");
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
 		health.name = "BossHealth";
+	}
+
+	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

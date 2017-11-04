@@ -17,8 +17,8 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
 		Timer.time = 0;
-		if (Statics.camFade != null) {
-			Statics.camFade.anim.SetTrigger("UnDim");
+		if (CamFadeOut.script != null) {
+			CamFadeOut.script.anim.SetTrigger("UnDim");
 		}
 	}
 
@@ -41,9 +41,9 @@ public class SwitchScene : MonoBehaviour {
 		}
 		quit.transform.position = new Vector3(0,-200,10);
 
-		Statics.camFade.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
-		if (Statics.music.sound.volume != 0) {
-			Statics.music.StartCoroutine(Statics.music.StopMusic());
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		if (MusicHandler.script.sound.volume != 0) {
+			MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
 		}
 		yield return new WaitForSecondsRealtime(2);
 

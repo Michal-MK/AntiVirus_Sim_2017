@@ -15,7 +15,13 @@ public class BlockScript : MonoBehaviour {
 	public bool showInfo = true;
 
 	private void Awake() {
-		Statics.blockScript = this;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		showInfo = data.shownHints.shownBlockInfo;
+		transform.position = data.world.blockPos;
+		transform.rotation = Quaternion.AngleAxis(data.world.blockZRotation, Vector3.back);
 	}
 
 	private void Start() {
@@ -51,6 +57,6 @@ public class BlockScript : MonoBehaviour {
 
 	}
 	private void OnDestroy() {
-		Statics.blockScript = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

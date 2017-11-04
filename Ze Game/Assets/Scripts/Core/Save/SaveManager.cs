@@ -5,6 +5,19 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour {
 
+	public PressurePlate pPlate;
+	public Avoidance avoidance;
+	public BlockScript block;
+	public BossBehaviour boss;
+
+	private void Awake() {
+		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
+	}
+
+	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
+		boss = sender;
+	}
+
 	public void Save(bool newSaveFile) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		int chosenDifficulty = Control.currDifficulty;
@@ -19,28 +32,34 @@ public class SaveManager : MonoBehaviour {
 			file = File.Open(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + ".Kappa", FileMode.Open);
 			data = SaveData.current;
 		}
-		Statics.gameProgression.GetValues();
+		GameProgression.script.GetValues();
 
 		#region Player data
 		data.player.bombs = PlayerAttack.bombs;
 		data.player.bullets = PlayerAttack.bullets;
-		data.player.playerPos = Statics.gameProgression.playerPos;
+		data.player.playerPos = GameProgression.script.playerPos;
 		data.player.spikesCollected = Spike.spikesCollected;
 		data.player.coinsCollected = Coins.coinsCollected;
-		data.player.canZoom = Statics.zoom.canZoom;
+		data.player.canZoom = Zoom.canZoom;
 		data.player.currentBGName = M_Player.currentBG_name;
 		#endregion
 
 		#region World data
-		data.world.blockPos = Statics.gameProgression.boxPos;
-		data.world.blockZRotation = Statics.gameProgression.ZRotationBlock;
-		data.world.blockPushAttempt = Statics.pressurePlate.attempts;
+		data.world.blockPos = GameProgression.script.boxPos;
+		data.world.blockZRotation = GameProgression.script.ZRotationBlock;
+		data.world.blockPushAttempt = pPlate.attempts;
 		data.world.spikeActive = GameObject.Find("Collectibles").GetComponent<Wrapper>().Objects[0].activeSelf;
-		data.world.spikePos = Statics.gameProgression.spikePos;
-		data.world.pressurePlateTriggered = Statics.pressurePlate.alreadyTriggered;
-		data.world.postMazeDoorOpen = !Statics.mazeEscape.pathOpen;
-		data.world.doneAvoidance = Statics.avoidance.performed;
-		data.world.bossSpawned = Statics.bossBehaviour.bossSpawned;
+		data.world.spikePos = GameProgression.script.spikePos;
+		data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
+		data.world.doneAvoidance = avoidance.performed;
+		data.world.bossSpawned = boss.bossSpawned;
+
+		if(Maze.inMaze == false && Spike.spikesCollected >= 4) {
+			data.world.postMazeDoorOpen = true;
+		}
+		else {
+			data.world.postMazeDoorOpen = false;
+		}
 		#endregion
 
 		#region Core data
@@ -52,10 +71,16 @@ public class SaveManager : MonoBehaviour {
 
 		#region Hints data
 		data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.info_S.text;
-		data.shownHints.shownAttempt = Statics.mPlayer.newGame;
-		data.shownHints.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
-		data.shownHints.shownBlockInfo = Statics.blockScript.showInfo;
-		data.shownHints.shownShotInfo = Statics.playerAttack.displayShootingInfo;
+		data.shownHints.shownAttempt = M_Player.player.newGame;
+		data.shownHints.shownAvoidanceInfo = avoidance.displayAvoidInfo;
+		data.shownHints.shownBlockInfo = block.showInfo;
+		data.shownHints.shownShotInfo = M_Player.player.pAttack.displayShootingInfo;
+		#endregion
+
+		#region Core data
+		data.core.time = Timer.time;
+		data.core.difficulty = Control.currDifficulty;
+		data.core.camSize = Camera.main.orthographicSize;
 		#endregion
 
 		formatter.Serialize(file, data);
@@ -70,5 +95,9 @@ public class SaveManager : MonoBehaviour {
 		}
 		print("Captured");
 		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + currAttempt + "/Resources/Save-D" + currAttempt + "_" + currAttempt.ToString("000") + ".png");
+	}
+
+	private void OnDestroy() {
+		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
 	}
 }

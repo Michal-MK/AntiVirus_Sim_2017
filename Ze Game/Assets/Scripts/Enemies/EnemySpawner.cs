@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour {
 
-	#region
+	#region Prefabs
 	public GameObject foundation;
 	public GameObject deathBlock;
 	public GameObject warningObj;
 	#endregion
+
+	public M_Player player;
 
 	public float timeKillerBlocksActive = 1.8f;
 	public float timeCycleIdle = 0.2f;
@@ -34,15 +36,19 @@ public class EnemySpawner : MonoBehaviour {
 	public List<GameObject> KWProjectiles = new List<GameObject>();
 
 	private void Awake() {
-		Statics.enemySpawner = this;
 		SignPost.OnAvoidanceBegin += SpawnAvoidance;
 		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
+		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
 	}
 
-	private void M_Player_OnRoomEnter(RectTransform background) {
+	private void M_Player_OnCoinPickup(M_Player sender, GameObject coinObj) {
+		SpawnKillerBlock();
+	}
+
+	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
 		if (background.name == "Background_Start") {
 			if (M_Player.gameProgression != 0 && !KBCycleRunning) {
-				StartCoroutine(KBCycle());
+				//StartCoroutine(KBCycle());
 			}
 		}
 		if (background.name == "Background_room_1") {
@@ -202,8 +208,8 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public Vector3 KBPositions() {
-		killerblockpos = Statics.mPlayer.transform.position;
-		while (Vector2.Distance(Statics.mPlayer.transform.position, killerblockpos) < 12) {
+		killerblockpos = player.transform.position;
+		while (Vector2.Distance(player.transform.position, killerblockpos) < 12) {
 
 			float x = Random.Range(-killerblockBG.sizeDelta.x / 2 + scale, killerblockBG.sizeDelta.x / 2 - scale);
 			float y = Random.Range(-killerblockBG.sizeDelta.y / 2 + scale, killerblockBG.sizeDelta.y / 2 - scale);
@@ -217,7 +223,6 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		Statics.enemySpawner = null;
 		SignPost.OnAvoidanceBegin -= SpawnAvoidance;
 	}
 }

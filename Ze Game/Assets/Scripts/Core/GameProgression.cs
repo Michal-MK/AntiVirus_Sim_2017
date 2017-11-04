@@ -4,8 +4,7 @@ using UnityEngine;
 public class GameProgression : MonoBehaviour {
 
 	public GameObject[] doors;
-	public Sprite sprtOff;
-	public Sprite sprtOn;
+
 	public Canvas_Renderer canvas_Renderer;
 	public GameObject Block;
 
@@ -16,8 +15,16 @@ public class GameProgression : MonoBehaviour {
 	public Vector3 spikePos;
 	public float ZRotationBlock;
 
+	public static GameProgression script;
+
 	private void Awake() {
-		Statics.gameProgression = this;
+		if(script == null) {
+			script = this;
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
+
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
@@ -73,12 +80,12 @@ public class GameProgression : MonoBehaviour {
 
 			canvas_Renderer.DisplayDirection(Directions.BOTTOM);
 		}
-		if (Statics.cameraMovement != null) {
-			Statics.cameraMovement.RaycastForRooms();
-		}
+		//if (Statics.cameraMovement != null) {
+		//	Statics.cameraMovement.RaycastForRooms();
+		//}
 	}
+
 	private void OnDestroy() {
-		Statics.gameProgression = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

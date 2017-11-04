@@ -27,7 +27,6 @@ public class Canvas_Renderer : MonoBehaviour {
 	private void Awake() {
 		if (script == null) {
 			script = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else if (script != this) {
 			Destroy(gameObject);
@@ -93,9 +92,6 @@ public class Canvas_Renderer : MonoBehaviour {
 		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
 		if (!wrp.Objects[0].activeInHierarchy) {
 			StartCoroutine(Pulse(directions[(int)dir]));
-		}
-		else {
-			Statics.guide.Recalculate(wrp.Objects[0].gameObject, true);
 		}
 	}
 

@@ -4,10 +4,6 @@ using System.Collections;
 
 public class SaveGame : MonoBehaviour {
 
-	private void Awake() {
-		Statics.saveGame = this;
-	}
-
 	public void SaveScore() {
 		int difficulty = PlayerPrefs.GetInt("difficulty");
 		string playerName = PlayerPrefs.GetString("player_name");
@@ -201,10 +197,6 @@ public class SaveGame : MonoBehaviour {
 			}
 		}
 
-	}
-
-	private void OnDestroy() {
-		Statics.saveGame = null;
 	}
 }
 

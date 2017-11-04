@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundFXHandler : MonoBehaviour {
@@ -13,8 +11,15 @@ public class SoundFXHandler : MonoBehaviour {
 
 	private bool lastClip = false;
 
+	public static SoundFXHandler script;
+
 	private void Awake() {
-		Statics.sound = this;
+		if (script == null) {
+			script = this;
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
 	}
 
 	public void PlayFX(AudioClip clip) {
@@ -41,6 +46,6 @@ public class SoundFXHandler : MonoBehaviour {
 		}
 	}
 	private void OnDestroy() {
-		Statics.sound = null;
+		script = null;
 	}
 }
