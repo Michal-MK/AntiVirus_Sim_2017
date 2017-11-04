@@ -117,14 +117,16 @@ public class BossBehaviour : MonoBehaviour {
 	public bool donePositioning = true;
 
 	public float playerSpeedMultiplier = 5;
+
+	public delegate void BossBehavior();
+	public static event BossBehavior OnBossfightBegin;
 	#endregion
 
-	private void Awake() {
-		Statics.bossBehaviour = this;
-	}
 
 	void Start() {
-		Statics.cameraMovement.SetParticleLifetime();
+		if(OnBossfightBegin != null) {
+			OnBossfightBegin();
+		}
 		playerSpeedMultiplier = 5;
 		Projectile.spawnedByAvoidance = false;
 		Projectile.spawnedByKillerWall = false;
@@ -134,8 +136,6 @@ public class BossBehaviour : MonoBehaviour {
 		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
 		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
 		Buttons = GameObject.Find("Buttons");
-
-		Statics.mPlayer.disableSavesByBoss = true;
 
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 		rigid.freezeRotation = true;
@@ -161,14 +161,13 @@ public class BossBehaviour : MonoBehaviour {
 
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 
-		Control.script.Save(false,false);
 		bossSpawned = true;
 
 		Camera.main.transform.position = BG.transform.position + new Vector3(0,0,-10);
 
 		print(Camera.main.transform.position);
 
-		Statics.canvasRenderer.InfoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
+		Canvas_Renderer.script.InfoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
 		StartCoroutine(Attacks(ChooseAttack()));
 
@@ -265,7 +264,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, BG.transform.position));
 				yield return new WaitForSeconds(3);
-				Statics.canvasRenderer.InfoRenderer(null, "Don't forget about the zooming feature :]");
+				Canvas_Renderer.script.InfoRenderer(null, "Don't forget about the zooming feature :]");
 				float waitTime = 1.1f;
 				
 
@@ -424,7 +423,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2);
 				if (informOnce) {
 					informOnce = false;
-					Statics.canvasRenderer.InfoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+					Canvas_Renderer.script.InfoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 				}
 				Positioning = StartCoroutine(LerpPos(positioningCage, positioningCage.transform.position, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20)));
 
@@ -846,11 +845,6 @@ public class BossBehaviour : MonoBehaviour {
 				}
 			}
 		}
-	}
-	//
-
-	private void OnDestroy() {
-		Statics.bossBehaviour = null;
 	}
 }
 

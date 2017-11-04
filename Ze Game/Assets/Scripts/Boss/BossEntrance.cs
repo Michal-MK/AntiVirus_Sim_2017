@@ -11,9 +11,6 @@ public class BossEntrance : MonoBehaviour {
 
 	private GameObject HPHolder;
 
-	private void Awake() {
-		Statics.bossEntrance = this;
-	}
 	private void Start() {
 		HPHolder = GameObject.Find("BossHealthPlaceHolder");
 	}
@@ -34,7 +31,7 @@ public class BossEntrance : MonoBehaviour {
 
 			}
 			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
-				Statics.canvasRenderer.InfoRenderer("You are not a worthy opponent!\n"+
+				Canvas_Renderer.script.InfoRenderer("You are not a worthy opponent!\n"+
 													"Bullets: " + PlayerAttack.bullets +"/5\n"+
 													"Bombs: "+ PlayerAttack.bombs + "/1\n"+
 													"Return to me once you have everyting... to meet your demise!\n" +
@@ -54,9 +51,5 @@ public class BossEntrance : MonoBehaviour {
 		HPHolder = GameObject.Find("BossHealthPlaceHolder");
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
 		health.name = "BossHealth";
-	}
-
-	private void OnDestroy() {
-		Statics.bossEntrance = null;
 	}
 }

@@ -22,9 +22,16 @@ public class Canvas_Renderer : MonoBehaviour {
 	public bool isRunning = false;
 	private string tempDisplayedText;
 	private Color32 defaultColor;
+	public static Canvas_Renderer script;
 
 	private void Awake() {
-		Statics.canvasRenderer = this;
+		if (script == null) {
+			script = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
 		defaultColor = new Color32(255, 255, 255, 100);
 	}
 
@@ -120,7 +127,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 	}
 	private void OnDestroy() {
-		Statics.canvasRenderer = null;
+		script = null; 
 	}
 }
 

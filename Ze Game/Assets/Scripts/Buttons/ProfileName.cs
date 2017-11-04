@@ -4,10 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class ProfileName : MonoBehaviour {
 
-	private void Awake() {
-		Statics.profile = this;
-	}
-
 	private void Start() {
 		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "" && SceneManager.GetActiveScene().buildIndex == 0) {
 			Control.script.StartCoroutine(Control.script.SetName());
@@ -29,9 +25,5 @@ public class ProfileName : MonoBehaviour {
 	}
 	public void OnPress() {
 		PlayerPrefs.DeleteKey("player_name");
-	}
-
-	private void OnDestroy() {
-		Statics.profile = null;
 	}
 }

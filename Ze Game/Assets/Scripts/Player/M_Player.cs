@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using System;
 
 public delegate void BackgroundChanged(RectTransform background);
+
 public class M_Player : MonoBehaviour {
 	public int attemptNr;
 	public float Speed;
@@ -50,7 +51,6 @@ public class M_Player : MonoBehaviour {
 	public static event BackgroundChanged OnRoomEnter;
 
 	private void Awake() {
-		Statics.mPlayer = this;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
@@ -84,7 +84,7 @@ public class M_Player : MonoBehaviour {
 			//Control.script.Save(true);
 			Statics.music.PlayMusic(Statics.music.room1);
 			attempts++;
-			Statics.canvasRenderer.InfoRenderer("Welcome! \n" +
+			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
 												"Good luck & Have fun!");
@@ -95,7 +95,7 @@ public class M_Player : MonoBehaviour {
 		else if (Control.script.isRestarting) {
 			print("ISRESTARTING");
 			Statics.music.PlayMusic(Statics.music.room1);
-			Statics.canvasRenderer.InfoRenderer(null, "Good luck & Have fun!");
+			Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
 			Control.script.isRestarting = false;
 		}
 		Control.script.isNewGame = false;
@@ -277,7 +277,7 @@ public class M_Player : MonoBehaviour {
 		if (collision.transform.name == "Block") {
 			print("Collided!");
 			if (!BlockScript.pressurePlateTriggered) {
-				guide.enableGuide();
+				guide.gameObject.SetActive(true);
 				guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
 			}
 		}
@@ -314,7 +314,7 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == "Background_room_1") {
 				if (gameProgression == 3) {
-					Statics.canvasRenderer.InfoRenderer(null, "Go down even further.");
+					Canvas_Renderer.script.InfoRenderer(null, "Go down even further.");
 				}
 			}
 			if (col.name == "Background_room_Boss_1") {
@@ -335,7 +335,7 @@ public class M_Player : MonoBehaviour {
 		if (col.name == "BombPickup") {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
-			Statics.canvasRenderer.InfoRenderer("You found a bomb, it will be useful later on.", null);
+			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (col.name == "Test") {

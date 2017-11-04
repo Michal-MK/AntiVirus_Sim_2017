@@ -24,7 +24,6 @@ public class Spike : MonoBehaviour {
 	public bool fifthSpike = false;
 
 	private void Awake() {
-		Statics.spike = this;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
@@ -33,7 +32,7 @@ public class Spike : MonoBehaviour {
 	}
 
 	private void OnEnable() {
-		guide.enableGuide();
+		guide.gameObject.SetActive(true);
 		guide.Recalculate(gameObject, true);
 	}
 
@@ -54,11 +53,11 @@ public class Spike : MonoBehaviour {
 
 			if (displayArrowGuideInfo == true) {
 				displayArrowGuideInfo = false;
-				Statics.canvasRenderer.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+				Canvas_Renderer.script.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 			}
 
 			if (spikesCollected >= 0 || spikesCollected <= 4) {
-				Statics.canvasRenderer.Counters("Spike");
+				Canvas_Renderer.script.Counters("Spike");
 
 			}
 			if (spikesCollected == 4) {
@@ -73,7 +72,7 @@ public class Spike : MonoBehaviour {
 				else {
 					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
 				}
-				Statics.canvasRenderer.InfoRenderer(text, "Don't give up now.");
+				Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
 			}
 			int p = M_Player.gameProgression;
 			switch (p) {
@@ -180,12 +179,11 @@ public class Spike : MonoBehaviour {
 		get { return _spikesCollected; }
 		set {
 			_spikesCollected = value;
-			Statics.canvasRenderer.Counters("Spike");
+			Canvas_Renderer.script.Counters("Spike");
 		}
 	}
 
 	private void OnDestroy() {
-		Statics.spike = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

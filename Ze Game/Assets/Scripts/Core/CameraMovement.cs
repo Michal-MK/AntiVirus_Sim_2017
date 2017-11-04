@@ -38,8 +38,12 @@ public class CameraMovement : MonoBehaviour {
 	public const float defaultCamSize = 15;
 
 	private void Awake() {
-		Statics.cameraMovement = this;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
+	}
+
+	private void BossBehaviour_OnBossfightBegin() {
+		SetParticleLifetime();
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {

@@ -6,7 +6,6 @@ public class SpikeBullet : MonoBehaviour {
 	public Rigidbody2D rg;
 
 	private void OnEnable() {
-		Statics.spikeBullet = this;
 		rg.velocity = transform.rotation * Vector3.up * 30f;
 		StartCoroutine(StopBullet());
 	}
@@ -36,8 +35,5 @@ public class SpikeBullet : MonoBehaviour {
 		newspikeBullet.name = "Spike1";
 		gameObject.SetActive(false);
 		StopAllCoroutines();
-	}
-	private void OnDestroy() {
-		Statics.spikeBullet = null;
 	}
 }

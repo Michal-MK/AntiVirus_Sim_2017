@@ -16,10 +16,6 @@ public class Guide : MonoBehaviour {
 	public Sprite guide;
 	public float r;
 
-	private void Awake() {
-		Statics.guide = this;
-	}
-
 	void Start(){
 		
 		GuideObj = GameObject.Find ("Guide").transform;
@@ -178,13 +174,5 @@ public class Guide : MonoBehaviour {
 				}
 			}
 		}
-	}
-
-	public void enableGuide() {
-		gameObject.SetActive(true);
-	}
-
-	private void OnDestroy() {
-		Statics.guide = null;
 	}
 }

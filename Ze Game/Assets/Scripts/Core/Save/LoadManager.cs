@@ -53,7 +53,7 @@ public class LoadManager : MonoBehaviour {
 
 		Coins.coinsCollected = loadedData.player.coinsCollected;
 		Spike.spikesCollected = loadedData.player.spikesCollected;
-		//Statics.canvasRenderer.Counters("Update");
+		//Canvas_Renderer.script.Counters("Update");
 
 		PlayerAttack.bullets = loadedData.player.bullets;
 		PlayerAttack.bombs = loadedData.player.bombs;
@@ -112,7 +112,7 @@ public class LoadManager : MonoBehaviour {
 			Statics.zoom.canZoom = false;
 		}
 
-		Statics.canvasRenderer.InfoRenderer(null, loadedData.shownHints.currentlyDisplayedSideInfo);
+		Canvas_Renderer.script.InfoRenderer(null, loadedData.shownHints.currentlyDisplayedSideInfo);
 		Statics.pressurePlate.alreadyTriggered = loadedData.world.pressurePlateTriggered;
 
 		GameObject.Find("Blocker3").SetActive(loadedData.world.postMazeDoorOpen);

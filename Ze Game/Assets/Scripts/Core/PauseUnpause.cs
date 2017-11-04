@@ -16,7 +16,7 @@ public class PauseUnpause : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (!Statics.canvasRenderer.isRunning && !Statics.mPlayer.gameOver) {
+		if (!Canvas_Renderer.script.isRunning && !Statics.mPlayer.gameOver) {
 			if (Input.GetButtonDown("Escape") && !isPaused) {
 
 				Cursor.visible = true;

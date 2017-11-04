@@ -4,9 +4,6 @@ using System.Collections;
 
 
 public class SwitchScene : MonoBehaviour {
-	private void Awake() {
-		Statics.switchScene = this;
-	}
 
 	public void SwitchTo(int Index) {
 
@@ -60,9 +57,5 @@ public class SwitchScene : MonoBehaviour {
 		Time.timeScale = 1;
 		Timer.time = 0;
 		SceneManager.LoadScene(i);
-	}
-
-	private void OnDestroy() {
-		Statics.switchScene = null;
 	}
 }

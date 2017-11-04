@@ -60,7 +60,7 @@ public class SignPost : MonoBehaviour {
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
 						if (Statics.avoidance.displayAvoidInfo) {
-							Statics.canvasRenderer.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+							Canvas_Renderer.script.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
 																"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
 							Statics.avoidance.displayAvoidInfo = false;
 						}
@@ -71,7 +71,7 @@ public class SignPost : MonoBehaviour {
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						Statics.canvasRenderer.InfoRenderer("The virus can not be damaged while it is attacking.", null);
+						Canvas_Renderer.script.InfoRenderer("The virus can not be damaged while it is attacking.", null);
 						break;
 					}
 					case "SignPost Room 1": {
@@ -79,7 +79,7 @@ public class SignPost : MonoBehaviour {
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						Statics.canvasRenderer.InfoRenderer("All the spikes you are collecting have a purpouse, hold on to them.", null);
+						Canvas_Renderer.script.InfoRenderer("All the spikes you are collecting have a purpouse, hold on to them.", null);
 						break;
 					}
 					case "SignPost PostAvoidance": {
@@ -87,7 +87,7 @@ public class SignPost : MonoBehaviour {
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						Statics.canvasRenderer.InfoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
+						Canvas_Renderer.script.InfoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
 						break;
 					}
 					case "SignPost Maze": {
@@ -95,7 +95,7 @@ public class SignPost : MonoBehaviour {
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						Statics.canvasRenderer.InfoRenderer("The coins are up to no use.", null);
+						Canvas_Renderer.script.InfoRenderer("The coins are up to no use.", null);
 						break;
 					}
 					case "SignPost PreBoss": {
@@ -103,7 +103,7 @@ public class SignPost : MonoBehaviour {
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;
 						InteractInfo.SetActive(false);
-						Statics.canvasRenderer.InfoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
+						Canvas_Renderer.script.InfoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
 						break;
 					}
 				}

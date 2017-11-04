@@ -51,7 +51,7 @@ public class SaveManager : MonoBehaviour {
 		#endregion
 
 		#region Hints data
-		data.shownHints.currentlyDisplayedSideInfo = Statics.canvasRenderer.info_S.text;
+		data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.info_S.text;
 		data.shownHints.shownAttempt = Statics.mPlayer.newGame;
 		data.shownHints.shownAvoidanceInfo = Statics.avoidance.displayAvoidInfo;
 		data.shownHints.shownBlockInfo = Statics.blockScript.showInfo;

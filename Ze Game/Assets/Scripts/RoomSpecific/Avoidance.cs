@@ -37,13 +37,13 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(false);
 		spike.SetPosition();
 		Statics.cameraMovement.RaycastForRooms();
-		Statics.canvasRenderer.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		Canvas_Renderer.script.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();
 	}
 
 	private IEnumerator TimeLeft() {
-		Text SideText = Statics.canvasRenderer.info_S;
+		Text SideText = Canvas_Renderer.script.info_S;
 		int i = (int)avoidDuration - 1;
 		bool show = false;
 

@@ -13,7 +13,6 @@ public class Coins : MonoBehaviour {
 	private static int _coinsCollected = 0;
 
 	private void Awake() {
-		Statics.coins = this;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
@@ -33,7 +32,7 @@ public class Coins : MonoBehaviour {
 			coinsCollected += 1;
 			CoinBehavior();
 			Statics.sound.PlayFX(Statics.sound.CoinCollected);
-			Statics.canvasRenderer.Counters("Coin");
+			Canvas_Renderer.script.Counters("Coin");
 		}
 	}
 	public void CoinBehavior() {
@@ -81,12 +80,11 @@ public class Coins : MonoBehaviour {
 		get { return _coinsCollected; }
 		set {
 			_coinsCollected = value;
-			Statics.canvasRenderer.Counters("Coins");
+			Canvas_Renderer.script.Counters("Coins");
 		}
 	}
 
 	private void OnDestroy() {
-		Statics.coins = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

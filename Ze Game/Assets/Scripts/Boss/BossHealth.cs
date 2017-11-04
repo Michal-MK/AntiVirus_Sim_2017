@@ -4,13 +4,14 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class BossHealth : MonoBehaviour {
+
+	public BossBehaviour behaviour;
+
 	public GameObject heart;
 	public SpriteRenderer sprite;
 	public GameObject bossHealth;
 	public Slider theSlider;
 	public PlayerAttack atk;
-
-	
 
 	public GameObject ShieldT;
 	public GameObject ShieldR;
@@ -25,10 +26,6 @@ public class BossHealth : MonoBehaviour {
 	private bool once = true;
 
 	bool stop = false;
-
-	private void Awake() {
-		Statics.bossHealth = this;
-	}
 
 	void Start() {
 		if (GameObject.Find("BossHealth") != null) {
@@ -51,10 +48,10 @@ public class BossHealth : MonoBehaviour {
 			it.gameObject.SetActive(false);
 			theSlider.value--;
 			RaiseShields(with.name);
-			for (int i = 0; i < Statics.bossBehaviour.spikeHitboxes.Length; i++) {
-				Statics.bossBehaviour.spikeHitboxes[i].enabled = false;
+			for (int i = 0; i < behaviour.spikeHitboxes.Length; i++) {
+				behaviour.spikeHitboxes[i].enabled = false;
 			}
-			Statics.bossBehaviour.selfRender.sprite = Statics.bossBehaviour.Invincible;
+			behaviour.selfRender.sprite = behaviour.Invincible;
 		}
 		if (theSlider.value == 0 && !stop) {
 			StartCoroutine(Death());
@@ -65,7 +62,7 @@ public class BossHealth : MonoBehaviour {
 	public void CheckShields() {
 		print(t + " " + r + " " + b + " " + l);
 		if (t && r && b && l && once) {
-			Statics.canvasRenderer.InfoRenderer("His shields are up ... but we got a bomb!\n " +
+			Canvas_Renderer.script.InfoRenderer("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
@@ -112,7 +109,7 @@ public class BossHealth : MonoBehaviour {
 		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		boss.transform.position = new Vector3(0, 0, 10);
 		
-		Statics.canvasRenderer.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
+		Canvas_Renderer.script.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
 		Timer.run = false;
@@ -122,9 +119,5 @@ public class BossHealth : MonoBehaviour {
 
 		yield return new WaitForSeconds(2);
 		SceneManager.LoadScene(3);
-	}
-
-	private void OnDestroy() {
-		Statics.bossHealth = null;
 	}
 }
