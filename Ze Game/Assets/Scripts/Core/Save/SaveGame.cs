@@ -13,7 +13,7 @@ public class SaveGame : MonoBehaviour {
 		}
 
 		string currentTimeString = string.Format("{0:00}:{1:00}.{2:00}",
-				(int)Timer.time / 60, Timer.time % 60, Timer.time.ToString().Remove(0, Timer.time.ToString().Length - 2));
+				(int)Timer.getTime / 60, Timer.getTime % 60, Timer.getTime.ToString().Remove(0, Timer.getTime.ToString().Length - 2));
 
 		WWWForm form = new WWWForm();
 		form.AddField("time", currentTimeString);
@@ -22,7 +22,7 @@ public class SaveGame : MonoBehaviour {
 
 		new WWW("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);
 
-		float currentTime = Mathf.Round(Timer.time * 100) / 100;
+		float currentTime = Mathf.Round(Timer.getTime * 100) / 100;
 
 		RearangeTimes(currentTime, difficulty);
 

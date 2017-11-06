@@ -81,7 +81,6 @@ public class Control : MonoBehaviour {
 			auth.transform.localPosition = Vector3.zero;
 			yield return new WaitUntil(() => Input.GetButtonDown("Submit"));
 			wrp.ToggleButtonInteractivity();
-
 		}
 	}
 
@@ -120,7 +119,7 @@ public class Control : MonoBehaviour {
 		PlayerAttack.bullets = 0;
 		M_Player.gameProgression = 0;
 		Projectile.projectileSpeed = 15;
-		Timer.time = 0f;
+		Timer.ResetTimer();
 		Time.timeScale = 1;
 		script.isRestarting = true;
 		print(script.isRestarting);

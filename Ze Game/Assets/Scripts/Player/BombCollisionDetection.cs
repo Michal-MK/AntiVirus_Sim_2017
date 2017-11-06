@@ -9,8 +9,9 @@ public class BombCollisionDetection : MonoBehaviour {
 		if(col.name == "Top" || col.name == "Right" || col.name == "Bottom" || col.name == "Left")
 		bomb.Collided(col);
 	}
+
 	private void Update() {
-		if(bomb.primed == true) {
+		if(bomb.primed) {
 			bomb.col.enabled = false;
 		}
 	}

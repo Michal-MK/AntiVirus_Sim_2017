@@ -16,7 +16,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		Timer.time = 0;
+		Timer.ResetTimer();
 		if (CamFadeOut.script != null) {
 			CamFadeOut.script.anim.SetTrigger("UnDim");
 		}
@@ -55,7 +55,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.gameProgression = 0;
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		Timer.time = 0;
+		Timer.ResetTimer();
 		SceneManager.LoadScene(i);
 	}
 }

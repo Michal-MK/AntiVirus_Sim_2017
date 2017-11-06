@@ -63,7 +63,7 @@ public class Guide : MonoBehaviour {
 
 	void Update() {
 
-		if (pointArrow != null && Timer.run == true) {
+		if (pointArrow != null && Timer.isRunning == true) {
 			Vector2 PlayToDestination = (Vector2)destinationGlobal.transform.position - (Vector2)player.transform.position;
 			Vector2 normVec = new Vector2(PlayToDestination.y, -PlayToDestination.x);
 
@@ -195,5 +195,10 @@ public class Guide : MonoBehaviour {
 				}
 			}
 		}
+	}
+	private void OnDestroy() {
+		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
+		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		Coins.OnNewTarget -= Coins_OnNewTarget;
 	}
 }

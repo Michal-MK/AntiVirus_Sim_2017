@@ -80,9 +80,9 @@ public class GameProgression : MonoBehaviour {
 
 			canvas_Renderer.DisplayDirection(Directions.BOTTOM);
 		}
-		//if (Statics.cameraMovement != null) {
-		//	Statics.cameraMovement.RaycastForRooms();
-		//}
+		if (CameraMovement.script != null) {
+			CameraMovement.script.RaycastForRooms();
+		}
 	}
 
 	private void OnDestroy() {

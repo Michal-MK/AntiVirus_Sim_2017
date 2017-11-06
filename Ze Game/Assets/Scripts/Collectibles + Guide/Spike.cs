@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Spike : MonoBehaviour, ICollectible {
+public class Spike : MonoBehaviour /*,ICollectible*/ {
 	public CameraMovement cam;
 	public RectTransform BGS;
 	public RectTransform BG1;
@@ -23,12 +23,14 @@ public class Spike : MonoBehaviour, ICollectible {
 	public bool fourthSpike = false;
 	public bool fifthSpike = false;
 
+	public bool displayArrowGuideInfo = true;
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
 	}
 
-	private void M_Player_OnSpikePickup(M_Player sender,GameObject spikeObj) {
+	private void M_Player_OnSpikePickup(M_Player sender, GameObject spikeObj) {
 
 		spikesCollected++;
 
@@ -77,15 +79,13 @@ public class Spike : MonoBehaviour, ICollectible {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		throw new System.NotImplementedException();
+
 	}
 
 	private void OnEnable() {
 		guide.gameObject.SetActive(true);
 		guide.Recalculate(gameObject, true);
 	}
-
-	public bool displayArrowGuideInfo = true;
 
 	public void SetPosition() {
 		stage = M_Player.gameProgression;
@@ -172,6 +172,6 @@ public class Spike : MonoBehaviour, ICollectible {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 	}
 }
-

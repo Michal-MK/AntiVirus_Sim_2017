@@ -20,7 +20,7 @@ public class M_Player : MonoBehaviour {
 	public GameObject loadButton;
 	public Animator GameOverImg;
 
-	public static float distanceToWall;
+	//public static float distanceToWall;
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
@@ -55,6 +55,9 @@ public class M_Player : MonoBehaviour {
 
 	public int mazeSpeedMultiplier = 2;
 
+	private bool onceOnAxis = true;
+	bool delEnemies = true;
+
 	public static M_Player player;
 
 	public static event BackgroundChanged OnRoomEnter;
@@ -63,6 +66,13 @@ public class M_Player : MonoBehaviour {
 	public static event PlayerColision OnCoinPickup;
 
 	public static event Zoom.Zooming OnZoomModeSwitch;
+
+	public static PlayerState playerState = PlayerState.NORMAL;
+
+	public enum PlayerState {
+		NORMAL,
+		ATTACKING
+	}
 
 	private void Awake() {
 		if(player == null) {
@@ -102,7 +112,6 @@ public class M_Player : MonoBehaviour {
 		GameProgression.script.Progress();
 		if (newGame && !Control.script.isRestarting) {
 
-			//Control.script.Save(true);
 			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 			attempts++;
 			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
@@ -270,8 +279,6 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
-	private bool onceOnAxis = true;
-
 	public void Flappy() {
 		if (Input.GetAxis("Vertical") > 0.5f) {
 			if (onceOnAxis) {
@@ -420,11 +427,9 @@ public class M_Player : MonoBehaviour {
 	public void FloorComplete() {
 		doNotMove = true;
 		Cursor.visible = true;
-		Timer.run = false;
+		Timer.PauseTimer();
 		save.SaveScore();
 	}
-
-	bool delEnemies = true;
 
 	public void GameOver() {
 		restartButton.SetActive(true);
@@ -433,7 +438,7 @@ public class M_Player : MonoBehaviour {
 
 		doNotMove = true;
 		Cursor.visible = true;
-		Timer.run = false;
+		Timer.PauseTimer();
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
 		GameOverImg.SetTrigger("Appear");

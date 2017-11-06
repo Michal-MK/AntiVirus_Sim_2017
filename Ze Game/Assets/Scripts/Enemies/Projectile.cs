@@ -115,7 +115,6 @@ public class Projectile : Enemy {
 		}
 	}
 
-
 	void OnDisable() {
 		ready = false;
 		byBoss = false;

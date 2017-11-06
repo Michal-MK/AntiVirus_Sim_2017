@@ -112,7 +112,7 @@ public class BossHealth : MonoBehaviour {
 		Canvas_Renderer.script.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		M_Player mp = GameObject.FindGameObjectWithTag("Player").GetComponent<M_Player>();
 		mp.FloorComplete();
-		Timer.run = false;
+		Timer.PauseTimer();
 		MusicHandler.script.MusicTransition(null);
 		yield return new WaitForSeconds(5);
 		GameObject.Find("TransitionBlack").GetComponent<Animator>().Play("CamTransition");

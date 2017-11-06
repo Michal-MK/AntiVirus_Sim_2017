@@ -4,8 +4,6 @@
 [System.Serializable]
 public class SaveData {
 
-	public static SaveData current;
-
 	public Player player = new Player();
 	public DisplayedHints shownHints = new DisplayedHints();
 	public World world = new World();

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class BombScript : MonoBehaviour {
@@ -10,9 +8,6 @@ public class BombScript : MonoBehaviour {
 	public GameObject exp;
 	public bool primed = false;
 	private bool once = true;
-
-
-
 
 	void Start() {
 

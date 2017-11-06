@@ -4,16 +4,17 @@ using UnityEngine;
 public class MenuMusic : MonoBehaviour {
 	public AudioSource source;
 
-	public static MenuMusic script;
+	//public static MenuMusic script;
 
 	private void Awake() {
-		if (script == null) {
-			script = this;
-			DontDestroyOnLoad(gameObject);
-		}
-		else if (script != this) {
-			Destroy(gameObject);
-		}
+		Debug.Log("MenuMusic Plz?");
+		//if (script == null) {
+		//	script = this;
+		//	DontDestroyOnLoad(gameObject);
+		//}
+		//else if (script != this) {
+		//	Destroy(gameObject);
+		//}
 	}
 
 	void Start() {
@@ -45,6 +46,10 @@ public class MenuMusic : MonoBehaviour {
 		else {
 			source.UnPause();
 		}
+	}
+
+	private void OnDestroy() {
+		//script = null;
 	}
 }
 

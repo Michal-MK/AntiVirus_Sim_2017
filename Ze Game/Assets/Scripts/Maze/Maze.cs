@@ -20,7 +20,7 @@ public class Maze : MonoBehaviour {
 	public Vector3 hpos;
 	public int rowcollCount;
 
-	float widhtHeight;
+	private float widhtHeight;
 
 	public GameObject[,] grid;
 	public GameObject[,] wallsT;
@@ -32,7 +32,7 @@ public class Maze : MonoBehaviour {
 
 	void Start() {
 
-		MazeLevel();
+		rowcollCount = MazeLevel();
 
 		int size = (int)Mathf.Pow(rowcollCount, 2);
 		grid = new GameObject[rowcollCount, rowcollCount];
@@ -85,7 +85,7 @@ public class Maze : MonoBehaviour {
 				wallB.transform.position = cell.transform.position + new Vector3(0, -widhtHeight, 0);
 				wallL.transform.position = cell.transform.position + new Vector3(-widhtHeight, 0, 0);
 
-				Vector3 currScale = CalculateScale();
+				Vector3 currScale = CalculateScale(rowcollCount);
 
 				wallT.transform.localScale = currScale;
 				wallR.transform.localScale = currScale;
@@ -105,38 +105,36 @@ public class Maze : MonoBehaviour {
 		StartCoroutine(CreatePath());
 	}
 
-	public void MazeLevel() {
+	public int MazeLevel() {
 		switch (PlayerPrefs.GetInt("difficulty")) {
 			case 0: {
-				rowcollCount = 15;
-				return;
+				return 15;
 			}
 
 			case 1: {
-				rowcollCount = 21;
-				return;
+				return 21;
 			}
 
 			case 2: {
-				rowcollCount = 23;
-				return;
+				return 23;
 			}
 
 			case 3: {
-				rowcollCount = 25;
-				return;
+				return 25;
 			}
 
 			case 4: {
-				rowcollCount = 29;
-				return;
+				return 29;
+			}
+			default: {
+				return -1;
 			}
 		}
 	}
 
-	public Vector3 CalculateScale() {
+	public Vector3 CalculateScale(int rowColCount) {
 
-		switch (rowcollCount) {
+		switch (rowColCount) {
 			case 15: {
 				return new Vector3(2.7f, 2.7f, 1);
 			}
@@ -168,7 +166,6 @@ public class Maze : MonoBehaviour {
 	public GameObject chosenNeighbor;
 
 	public IEnumerator CreatePath() {
-
 
 		GameObject start = grid[0, 0];
 		current = start;

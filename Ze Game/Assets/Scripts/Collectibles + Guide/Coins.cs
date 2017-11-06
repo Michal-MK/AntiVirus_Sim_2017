@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coins : MonoBehaviour, ICollectible {
+public class Coins : MonoBehaviour/*, ICollectible*/ {
 	public Transform collec;
 	public GameObject amount;
 	public RectTransform BG;
@@ -44,7 +44,12 @@ public class Coins : MonoBehaviour, ICollectible {
 		if (coinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
-			Timer.run = true;
+			if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
+				Timer.StartTimer(1f);
+			}
+			else {
+				Timer.StartTimer(2f);
+			}
 			gameObject.transform.position = newpos;
 		}
 		if (coinsCollected == 5) {
@@ -87,5 +92,7 @@ public class Coins : MonoBehaviour, ICollectible {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		M_Player.OnCoinPickup -= CoinBehavior;
+
 	}
 }

@@ -60,8 +60,6 @@ public class LoadManager : MonoBehaviour {
 			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 		}
 
-		Timer.time = loadedData.core.time;
-
 		Camera.main.orthographicSize = loadedData.core.camSize;
 		Zoom.canZoom = loadedData.player.canZoom;
 
@@ -91,7 +89,7 @@ public class LoadManager : MonoBehaviour {
 			}
 		}
 		M_Player.doNotMove = false;
-		Timer.run = true;
 		Time.timeScale = 1;
+		SaveManager.current = loadedData;
 	}
 }

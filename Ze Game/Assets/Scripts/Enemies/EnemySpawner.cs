@@ -224,5 +224,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	private void OnDestroy() {
 		SignPost.OnAvoidanceBegin -= SpawnAvoidance;
+		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
+		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 	}
 }

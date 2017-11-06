@@ -56,7 +56,7 @@ public class MazeEntrance : MonoBehaviour {
 		player.transform.localScale = new Vector3(2, 2, 0);
 
 		infoBoardMaze.transform.position = maze.grid[maze.GetRandomGridPos(true), maze.GetRandomGridPos(false)].transform.position;
-		wrapper.AllowSaving(false);
+		SaveManager.canSave = false;
 
 		Zoom.canZoom = false;
 		yield return new WaitUntil(() => CameraMovement.doneMoving);

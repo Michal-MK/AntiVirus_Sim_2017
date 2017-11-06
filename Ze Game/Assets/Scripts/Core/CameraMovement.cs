@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -39,11 +38,22 @@ public class CameraMovement : MonoBehaviour {
 
 	public const float defaultCamSize = 15;
 
+	public static CameraMovement script;
+
+
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
+
+		if(script == null) {
+			script = this;
+		}
+		else if(script != this) {
+			Destroy(gameObject);
+		}
 	}
 
 	void Start() {
@@ -419,6 +429,9 @@ public class CameraMovement : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
+		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
+		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 
 	public void SetParticleLifetime() {

@@ -8,15 +8,26 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour {
 	
 	/// <summary>
-	/// Stack of active windows,swince windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
+	/// Stack of active windows, since windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
 
 	private static bool isShown = false;
 
 	public delegate void WindowChangedHandler(Window changed);
+	/// <summary>
+	/// Called when a window closes, null when closing everything
+	/// </summary>
 	public static event WindowChangedHandler OnWindowClose;
+	/// <summary>
+	/// Called when a new window is open
+	/// </summary>
+	public static event WindowChangedHandler OnWindowOpen;
 
+	/// <summary>
+	/// Adds a new window to the stack
+	/// </summary>
+	/// <param name="win"></param>
 	public static void AddWindow(Window win) {
 		activeWindows.Push(win);
 		if (win.type == Window.WindowType.ACTIVATING) {
@@ -30,21 +41,13 @@ public class UI_Manager : MonoBehaviour {
 				win.animator.SetTrigger("Show");
 			}
 		}
-	}
-
-	[Obsolete("Use the more specific version of \"AddWindow\" whenever possible.")]
-	public static void AddWindow(GameObject win) {
-		Window.WindowType t;
-		switch (win.name) {
-			default: {
-				t = Window.WindowType.ACTIVATING;
-				break;
-			}
+		if(OnWindowOpen != null) {
+			OnWindowOpen(win);
 		}
-		Window w = new Window(win, t);
-		AddWindow(w);
 	}
-
+	/// <summary>
+	/// Closes the most recent window
+	/// </summary>
 	public static void CloseMostRecent() {
 		if (activeWindows.Count > 0) {
 			Window win = activeWindows.Pop();
@@ -70,7 +73,10 @@ public class UI_Manager : MonoBehaviour {
 			//Would pause the game
 		}
 	}
-
+	/// <summary>
+	/// Closes the most recent windows
+	/// </summary>
+	/// <param name="count">How many.</param>
 	public static void CloseMostRecent(int count) {
 		if (activeWindows.Count >= count) {
 			for (int i = 0; i < count; i++) {
@@ -108,29 +114,19 @@ public class UI_Manager : MonoBehaviour {
 			win.gameObject.SetActive(false);
 		}
 	}
-
-	[Obsolete("Use Window version instead!")]
-	public static void ToggleWindow(GameObject window) {
-		Animator anim;
-		try {
-			anim = window.GetComponent<Animator>();
-			if (isShown) {
-				anim.SetTrigger("Hide");
-				isShown = false;
-			}
-			else {
-				anim.SetTrigger("Show");
-				isShown = true;
-			}
-		}
-		catch (NullReferenceException e) {
-			print(e.Source + " No Animator Present");
-		}
-	}
-
+	/// <summary>
+	/// Enables / Disables a window.
+	/// </summary>
+	/// <param name="win"></param>
 	public static void ToggleWindow(Window win) {
 		if (win.type == Window.WindowType.ACTIVATING) {
 			win.window.SetActive(!win.window.activeInHierarchy);
+			if (win.window.activeInHierarchy && OnWindowOpen != null) {
+				OnWindowOpen(win);
+			}
+			else if(OnWindowClose != null) {
+				OnWindowClose(win);
+			}
 		}
 		else {
 			AnimatorStateInfo s = win.animator.GetCurrentAnimatorStateInfo(0);
@@ -143,12 +139,9 @@ public class UI_Manager : MonoBehaviour {
 		}
 	}
 
-	public void ToggleWindowWrapper(GameObject g) {
-#pragma warning disable CS0618 // Type or member is obsolete
-		ToggleWindow(g);
-#pragma warning restore CS0618 // Type or member is obsolete
-	}
-
+	/// <summary>
+	/// Clears the screen of any open windows.
+	/// </summary>
 	public static void CloseAllActive() {
 		foreach (Window win in activeWindows) {
 			if (win.type == Window.WindowType.ACTIVATING) {
@@ -159,8 +152,15 @@ public class UI_Manager : MonoBehaviour {
 			}
 		}
 		activeWindows = new Stack<Window>();
+		if (OnWindowClose != null) {
+			OnWindowClose(null);
+		}
 	}
 
+	/// <summary>
+	/// Loops though all active windows and closes matching one.
+	/// </summary>
+	/// <param name="window"></param>
 	public static void CloseWindow(GameObject window) {
 		foreach (Window w in activeWindows) {
 			if (w.window == window) {
@@ -171,10 +171,12 @@ public class UI_Manager : MonoBehaviour {
 				else {
 					w.animator.SetTrigger("Hide");
 				}
-				activeWindows.Pop();
+				activeWindows.Remove(w);
+
 				break;
 			}
 		}
+		Debug.LogWarning("No window " + window + " found.");
 	}
 
 	public static int getWindowCount {
@@ -182,7 +184,6 @@ public class UI_Manager : MonoBehaviour {
 			return activeWindows.Count;
 		}
 	}
-
 }
 
 public class Window {
@@ -222,3 +223,22 @@ public class Window {
 		get { return _disableAfterMoving; }
 	}
 }
+public static class WindowExtensions {
+	public static void Remove(this Stack<Window> stack, Window element) {
+		Window[] wins = stack.ToArray();
+		for (int i = 0; i < wins.Length; i++) {
+			if (wins[i] == element) {
+				wins[i] = null;
+				break;
+			}
+		}
+		stack.Clear();
+		for (int i = 0; i < wins.Length; i++) {
+			if (wins[i] != null) {
+				stack.Push(wins[i]);
+			}
+		}
+	}
+}
+
+

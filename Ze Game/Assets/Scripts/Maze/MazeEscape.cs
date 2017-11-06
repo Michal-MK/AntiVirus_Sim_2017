@@ -42,8 +42,8 @@ public class MazeEscape : MonoBehaviour {
 		spike.SetPosition();
 		StartCoroutine(FadeWalls());
 		pathOpen = true;
-		
-		wrp.AllowSaving(true);
+
+		SaveManager.canSave = true;
 	}
 
 	private IEnumerator FadeWalls() {

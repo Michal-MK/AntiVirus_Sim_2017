@@ -71,13 +71,13 @@ public class PlayerAttack : MonoBehaviour {
 				face.GetComponent<SpriteRenderer>().sprite = attack;
 				hands.GetComponent<SpriteRenderer>().sprite = wHands;
 				Cursor.visible = true;
-				timer.attacking = true;
+				Timer.StartTimer(2f);
 			}
 			else {
 				face.GetComponent<SpriteRenderer>().sprite = happy;
 				hands.GetComponent<SpriteRenderer>().sprite = noHands;
 				Cursor.visible = false;
-				timer.attacking = false;
+				Timer.StartTimer(1f);
 			}
 			if (M_Player.gameProgression != 10 && displayShootingInfo) {
 				if (bullets != 0) {
@@ -105,10 +105,16 @@ public class PlayerAttack : MonoBehaviour {
 			bombCount.text = "x " + bombs;
 		}
 
-
 		if (fireMode && Input.GetButtonDown("Right Mouse Button")) {
 			fireBullets = !fireBullets;
+			if (fireBullets) {
+				currentAmmo.sprite = spikeSprite;
+			}
+			else {
+				currentAmmo.sprite = bombSprite;
+			}
 		}
+
 		if (!PauseUnpause.isPaused) {
 			if (fireMode/* && M_Player.gameProgression == 10*/) {
 				if (Input.GetButtonDown("Left Mouse Button") && fireBullets) {
@@ -130,13 +136,6 @@ public class PlayerAttack : MonoBehaviour {
 					}
 				}
 			}
-		}
-		if (fireBullets) {
-			currentAmmo.sprite = spikeSprite;
-		}
-		else {
-			currentAmmo.sprite = bombSprite;
-
 		}
 	}
 

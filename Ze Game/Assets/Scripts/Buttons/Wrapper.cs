@@ -42,12 +42,13 @@ public class Wrapper : MonoBehaviour {
 	}
 
 	public void StopMusic() {
-		try{
-			MenuMusic.script.StopMusicWrapper();
-		}
-		catch(System.Exception) {
+		Debug.Log("Should stop musiic now.");
+		//try {
+		//	MenuMusic.script.StopMusicWrapper();
+		//}
+		//catch (System.Exception) {
 
-		}
+		//}
 	}
 
 	public void UpdateName() {
@@ -123,10 +124,6 @@ public class Wrapper : MonoBehaviour {
 		foreach (var item in Objects) {
 			item.SetActive(!item.activeInHierarchy);
 		}
-	}
-
-	public void AllowSaving(bool state) {
-		save.interactable = state;
 	}
 
 	private void Update() {

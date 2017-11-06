@@ -2,16 +2,27 @@
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour {
+
+	private static Toggle saveToggle;
 
 	public PressurePlate pPlate;
 	public Avoidance avoidance;
 	public BlockScript block;
 	public BossBehaviour boss;
 
+	private static bool _canSave = true;
+
+	public static SaveData current;
+
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
+	}
+
+	private void Start() {
+		saveToggle = GameObject.Find("saveGame").GetComponent<Toggle>();	
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
@@ -30,7 +41,7 @@ public class SaveManager : MonoBehaviour {
 		}
 		else {
 			file = File.Open(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + ".Kappa", FileMode.Open);
-			data = SaveData.current;
+			data = current;
 		}
 		GameProgression.script.GetValues();
 
@@ -65,7 +76,7 @@ public class SaveManager : MonoBehaviour {
 		#region Core data
 		data.core.camSize = Camera.main.orthographicSize;
 		data.core.difficulty = chosenDifficulty;
-		data.core.time = Timer.time;
+		data.core.time = Timer.getTime;
 		data.core.localAttempt = Control.currAttempt;
 		#endregion
 
@@ -78,7 +89,7 @@ public class SaveManager : MonoBehaviour {
 		#endregion
 
 		#region Core data
-		data.core.time = Timer.time;
+		data.core.time = Timer.getTime;
 		data.core.difficulty = Control.currDifficulty;
 		data.core.camSize = Camera.main.orthographicSize;
 		#endregion
@@ -99,5 +110,19 @@ public class SaveManager : MonoBehaviour {
 
 	private void OnDestroy() {
 		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
+	}
+
+
+	public static bool canSave {
+		get { return _canSave; }
+		set {
+			_canSave = value;
+			if (value) {
+				saveToggle.interactable = true;
+			}
+			else {
+				saveToggle.interactable = false;
+			}
+		}
 	}
 }

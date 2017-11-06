@@ -1,9 +1,16 @@
+using System.Collections;
 using UnityEngine;
 
 public class CamFadeOut : MonoBehaviour {
 	public Animator anim;
+	public const float CAM_FULLY_FADED_NORMAL = 1.5f;
+	public const float CAM_FULLY_FADED_DIMMED = 1.5f;
 
 	public static CamFadeOut script;
+
+	public delegate void CamFaded();
+
+	public static event CamFaded OnCamFullyFaded;
 
 	public enum CameraModeChanges {
 		DIM_CAMERA,
@@ -31,10 +38,12 @@ public class CamFadeOut : MonoBehaviour {
 			case "Trans": {
 				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
 					anim.Play("TransitionFromDim");
+					StartCoroutine(AnimState(CAM_FULLY_FADED_DIMMED));
 				}
 				else
 				{
 					anim.Play("CamTransition");
+					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
 				break;
@@ -52,17 +61,21 @@ public class CamFadeOut : MonoBehaviour {
 			case CameraModeChanges.TRANSITION_SCENES: {
 				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
 					anim.Play("TransitionFromDim");
+					StartCoroutine(AnimState(CAM_FULLY_FADED_DIMMED));
 				}
 				else {
 					anim.Play("CamTransition");
+					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
 				break;
 			}
 		}
 	}
-
-	private void OnDestroy() {
-		
+	private IEnumerator AnimState(float delay) {
+		yield return new WaitForSeconds(delay);
+		if(OnCamFullyFaded != null) {
+			OnCamFullyFaded();
+		}
 	}
 }
