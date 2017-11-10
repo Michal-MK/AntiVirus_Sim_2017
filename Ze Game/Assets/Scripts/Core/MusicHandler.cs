@@ -62,7 +62,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		sound.clip = clip;
-		print("Switchin + Playing");
+
 		sound.Play();
 		for (float f = 0; f < 2; f += Time.unscaledDeltaTime * 0.5f) {
 			if (f < 1) {

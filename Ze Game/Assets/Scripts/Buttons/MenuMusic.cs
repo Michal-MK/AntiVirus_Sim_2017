@@ -4,17 +4,16 @@ using UnityEngine;
 public class MenuMusic : MonoBehaviour {
 	public AudioSource source;
 
-	//public static MenuMusic script;
+	public static MenuMusic script;
 
 	private void Awake() {
-		Debug.Log("MenuMusic Plz?");
-		//if (script == null) {
-		//	script = this;
-		//	DontDestroyOnLoad(gameObject);
-		//}
-		//else if (script != this) {
-		//	Destroy(gameObject);
-		//}
+		if (script == null) {
+			script = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
 	}
 
 	void Start() {
@@ -26,30 +25,26 @@ public class MenuMusic : MonoBehaviour {
 	}
 
 	public IEnumerator StopMusic() {
-		for (float f = 0.2f; f >= -1; f -= Time.unscaledDeltaTime * 0.1f) {
+		for (float f = 0.2f; f >= -1; f -= CamFadeOut.CAM_FULLY_FADED_NORMAL * Time.unscaledDeltaTime * 0.1f) {
 			if (f > 0) {
 				source.volume = f;
 				yield return null;
 			}
 			else {
 				source.volume = 0;
-				StopAllCoroutines();
-				Destroy(gameObject);
+				source.Stop();
 				break;
 			}
 		}
 	}
+
 	private void OnApplicationFocus(bool focus) {
-		if(focus == false) {
+		if (focus == false) {
 			source.Pause();
 		}
 		else {
 			source.UnPause();
 		}
-	}
-
-	private void OnDestroy() {
-		//script = null;
 	}
 }
 

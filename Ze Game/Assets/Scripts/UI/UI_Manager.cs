@@ -5,14 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UI_Manager : MonoBehaviour {
+public class UI_Manager {
 	
 	/// <summary>
 	/// Stack of active windows, since windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
-
-	private static bool isShown = false;
 
 	public delegate void WindowChangedHandler(Window changed);
 	/// <summary>
@@ -101,7 +99,7 @@ public class UI_Manager : MonoBehaviour {
 			}
 		}
 		else {
-			print("Invalid count " + count + " is bigger than all active windows " + activeWindows.Count);
+			Debug.Log("Invalid count " + count + " is bigger than all active windows " + activeWindows.Count);
 			//Would pause the game
 		}
 	}
@@ -148,7 +146,7 @@ public class UI_Manager : MonoBehaviour {
 				win.window.SetActive(false);
 			}
 			else {
-				print(win.window.name);
+				Debug.Log(win.window.name);
 			}
 		}
 		activeWindows = new Stack<Window>();

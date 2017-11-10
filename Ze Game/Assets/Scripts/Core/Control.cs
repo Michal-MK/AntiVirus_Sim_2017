@@ -19,12 +19,10 @@ public class Control : MonoBehaviour {
 	public bool isNewGame = true;
 	public bool isRestarting = false;
 
-	private bool load = false;
-
-	public static SaveData currSaveFile;
-
 	public static int currAttempt = 0;
 	public static int currDifficulty = 0;
+
+	private bool fullyFaded = false;
 
 	void Awake() {
 		if (script == null) {
@@ -84,32 +82,18 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator ScreenShot(int currAttempt) {
-		GameObject saveButton = GameObject.Find("saveGame");
-		if (saveButton != null) {
-			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
-		}
-		print("Captured");
-		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Resources/Save-D" + chosenDifficulty + "_" + currAttempt.ToString("000") + ".png");
-	}
-
-	public IEnumerator StartNewGame(int difficulty) {
-
+	public void StartNewGame(int difficulty) {
+		SaveManager.SaveNewGame(difficulty);
 		PlayerPrefs.SetInt("difficulty", difficulty);
-		chosenDifficulty = difficulty;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
-		yield return new WaitForFixedUpdate();
-		load = false;
-		yield return new WaitUntil(() => CamFadeOut.script.anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f);
-		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
-		CamFadeOut.script.anim.speed = 0;
-
-		yield return new WaitUntil(() => load == true);
-		loading.allowSceneActivation = true;
-		CamFadeOut.script.anim.speed = 1;
-		load = false;
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 	}
 
+	private void CamFadeOut_OnCamFullyFaded() {
+		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
+		SceneManager.LoadScene(1);
+		CamFadeOut.script.anim.speed = 0.75f;
+	}
 
 	public void Restart() {
 		M_Player.doNotMove = false;
@@ -121,8 +105,7 @@ public class Control : MonoBehaviour {
 		Projectile.projectileSpeed = 15;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
-		script.isRestarting = true;
-		print(script.isRestarting);
+		isRestarting = true;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		CamFadeOut.script.anim.SetTrigger("UnDim");
 	}

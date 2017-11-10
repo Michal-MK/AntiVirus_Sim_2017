@@ -751,7 +751,6 @@ GameObject:
   - component: {fileID: 224620284}
   - component: {fileID: 224620288}
   - component: {fileID: 224620286}
-  - component: {fileID: 224620285}
   m_Layer: 5
   m_Name: resetName
   m_TagString: Untagged
@@ -772,40 +771,13 @@ RectTransform:
   - {fileID: 1598937432}
   - {fileID: 102862571}
   m_Father: {fileID: 427368122}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 222, y: 75}
   m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &224620285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 224620283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 561131172}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 1768682039}
-  - {fileID: 1660138415}
-  - {fileID: 1992465635}
-  - {fileID: 1959707839}
-  - {fileID: 930765395}
 --- !u!114 &224620286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,23 +828,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 224620285}
-        m_MethodName: DeactivateObjects
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 224620286}
         m_MethodName: set_interactable
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1206,7 +1178,7 @@ RectTransform:
   - {fileID: 1959707840}
   - {fileID: 930765396}
   m_Father: {fileID: 427368122}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1400,12 +1372,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 224620284}
-  - {fileID: 701743021}
   - {fileID: 981743649}
   - {fileID: 561131170}
   - {fileID: 2140553400}
   - {fileID: 345162324}
+  - {fileID: 224620284}
+  - {fileID: 701743021}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1702,7 +1674,7 @@ RectTransform:
   - {fileID: 405649722}
   - {fileID: 100491830}
   m_Father: {fileID: 427368122}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -2191,7 +2163,7 @@ RectTransform:
   - {fileID: 1635583695}
   - {fileID: 1726825291}
   m_Father: {fileID: 427368122}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2378,7 +2350,7 @@ Prefab:
     - target: {fileID: 224935420449623294, guid: 3c3d3956e7fa36744955d2641d192b37,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224935420449623294, guid: 3c3d3956e7fa36744955d2641d192b37,
         type: 2}
@@ -2542,7 +2514,6 @@ GameObject:
   - component: {fileID: 1185523949}
   - component: {fileID: 1185523951}
   - component: {fileID: 1185523950}
-  - component: {fileID: 1185523952}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2595,29 +2566,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
---- !u!114 &1185523952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1185523948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 561131172}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &1292702307
 GameObject:
   m_ObjectHideFlags: 0
@@ -3196,7 +3144,6 @@ GameObject:
   - component: {fileID: 1635583698}
   - component: {fileID: 1635583697}
   - component: {fileID: 1635583696}
-  - component: {fileID: 1635583700}
   m_Layer: 5
   m_Name: Accept
   m_TagString: Untagged
@@ -3284,30 +3231,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1635583696}
-        m_MethodName: OnPress
-        m_Mode: 1
+      - m_Target: {fileID: 1185523951}
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 561131169}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1635583700}
-        m_MethodName: SelectButton
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1635583700}
-        m_MethodName: DeactivateObjects
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3363,33 +3299,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1635583694}
---- !u!114 &1635583700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1635583694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 561131172}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 1768682039}
-  - {fileID: 1660138415}
-  - {fileID: 1992465635}
-  - {fileID: 1959707839}
-  - {fileID: 930765395}
 --- !u!1 &1660138415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3645,7 +3554,6 @@ GameObject:
   - component: {fileID: 1726825294}
   - component: {fileID: 1726825293}
   - component: {fileID: 1726825292}
-  - component: {fileID: 1726825295}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -3722,19 +3630,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1726825295}
-        m_MethodName: SelectButton
-        m_Mode: 3
+      - m_Target: {fileID: 1185523951}
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 561131169}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1726825295}
-        m_MethodName: DeactivateObjects
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3790,33 +3698,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1726825290}
---- !u!114 &1726825295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1726825290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 561131172}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 1768682039}
-  - {fileID: 1660138415}
-  - {fileID: 1992465635}
-  - {fileID: 1959707839}
-  - {fileID: 930765395}
 --- !u!1 &1736869238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4627,7 +4508,7 @@ RectTransform:
   - {fileID: 1705938247}
   - {fileID: 33090315}
   m_Father: {fileID: 427368122}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

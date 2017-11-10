@@ -73,9 +73,10 @@ public class CamFadeOut : MonoBehaviour {
 		}
 	}
 	private IEnumerator AnimState(float delay) {
-		yield return new WaitForSeconds(delay);
+		yield return new WaitForSecondsRealtime(delay);
 		if(OnCamFullyFaded != null) {
 			OnCamFullyFaded();
 		}
+
 	}
 }

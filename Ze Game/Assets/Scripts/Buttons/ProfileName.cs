@@ -20,7 +20,6 @@ public class ProfileName : MonoBehaviour {
 		}
 		else {
 			gameObject.GetComponent<Text>().text += name;
-
 		}
 	}
 	public void OnPress() {

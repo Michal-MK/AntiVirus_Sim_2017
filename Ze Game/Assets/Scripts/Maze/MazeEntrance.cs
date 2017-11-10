@@ -10,7 +10,6 @@ public class MazeEntrance : MonoBehaviour {
 	public RectTransform MazeBG;
 	public Zoom zoom;
 	public GameObject infoBoardMaze;
-	public Wrapper wrapper;
 
 	public bool inMazePropoerly = false;
 	private bool entered = false;

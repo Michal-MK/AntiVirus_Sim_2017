@@ -904,6 +904,7 @@ MonoBehaviour:
   avoidance: {fileID: 1397492961}
   block: {fileID: 62052348}
   boss: {fileID: 0}
+  collectibles: {fileID: 1051639321}
 --- !u!1 &88533459
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +916,6 @@ GameObject:
   - component: {fileID: 88533461}
   - component: {fileID: 88533460}
   - component: {fileID: 88533463}
-  - component: {fileID: 88533464}
   m_Layer: 0
   m_Name: MazeEntrance
   m_TagString: Untagged
@@ -941,7 +941,6 @@ MonoBehaviour:
   MazeBG: {fileID: 510032459}
   zoom: {fileID: 1574297779}
   infoBoardMaze: {fileID: 1210446928}
-  wrapper: {fileID: 88533464}
   inMazePropoerly: 0
 --- !u!212 &88533461
 SpriteRenderer:
@@ -1013,32 +1012,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 6.55
---- !u!114 &88533464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 88533459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 1644658994}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &115402482
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,24 +1058,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 115402482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
+  m_Script: {fileID: 11500000, guid: e500e069677b3b649ac969b8ac8bb6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &115402485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5726,24 +5684,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 305003661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
+  m_Script: {fileID: 11500000, guid: e500e069677b3b649ac969b8ac8bb6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &305003664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6099,7 +6042,6 @@ GameObject:
   - component: {fileID: 331244543}
   - component: {fileID: 331244547}
   - component: {fileID: 331244545}
-  - component: {fileID: 331244544}
   m_Layer: 5
   m_Name: restartButton
   m_TagString: Untagged
@@ -6127,32 +6069,6 @@ RectTransform:
   m_AnchoredPosition: {x: -250, y: -250}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &331244544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 331244542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 1644658994}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &331244545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6191,18 +6107,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1606540829}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 331244544}
-        m_MethodName: DeactivateButtons
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!222 &331244547
@@ -12334,7 +12239,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1961390455}
-        m_MethodName: DelayMenuWrapper
+        m_MethodName: DelayMenu
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12776,6 +12681,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 970033709}
+  - component: {fileID: 970033710}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -12799,6 +12705,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &970033710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 970033708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50b64e88f586d2488396273d7daa0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lm: {fileID: 1946015043}
+  sm: {fileID: 85159807}
+  md: {fileID: 1279025842}
 --- !u!1001 &980152606
 Prefab:
   m_ObjectHideFlags: 0
@@ -13135,7 +13055,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1051639321}
-  - component: {fileID: 1051639322}
   m_Layer: 0
   m_Name: Collectibles
   m_TagString: Untagged
@@ -13158,30 +13077,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1051639322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1051639320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 399954885}
-  - {fileID: 804709450}
 --- !u!224 &1094892182 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224000011293349190, guid: 282439eccf794294ebc14354c67d6dd6,
@@ -16052,7 +15947,7 @@ MonoBehaviour:
   smile: {fileID: 21300000, guid: ecda8c94ad4f59f4d984b1c73c28f6ab, type: 3}
   happy: {fileID: 21300000, guid: 8ef7510ae6dc9b34fa182a125407f316, type: 3}
   sad: {fileID: 21300000, guid: d127f0f3d4860af478ebacf335e32b91, type: 3}
-  pAttack: {fileID: 0}
+  pAttack: {fileID: 1574297778}
   mazeSpeedMultiplier: 2
 --- !u!114 &1574297777
 MonoBehaviour:
@@ -16382,7 +16277,6 @@ GameObject:
   - component: {fileID: 1644658993}
   - component: {fileID: 1644658997}
   - component: {fileID: 1644658994}
-  - component: {fileID: 1644658995}
   m_Layer: 5
   m_Name: saveGame
   m_TagString: SaveButton
@@ -16464,12 +16358,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1644658995}
-        m_MethodName: SelectButton
-        m_Mode: 3
+      - m_Target: {fileID: 1520824756}
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1961390453}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -16478,32 +16372,6 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
---- !u!114 &1644658995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1644658992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 115402485}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!222 &1644658997
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27845,7 +27713,7 @@ MonoBehaviour:
   spike: {fileID: 399954889}
   zoom: {fileID: 1574297779}
   entrance: {fileID: 88533460}
-  wrp: {fileID: 88533464}
+  wrp: {fileID: 0}
   pathOpen: 0
   wall: {fileID: 171794216}
 --- !u!212 &1933509653
@@ -28051,7 +27919,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1961390455}
-        m_MethodName: DelayMenuWrapper
+        m_MethodName: DelayMenu
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

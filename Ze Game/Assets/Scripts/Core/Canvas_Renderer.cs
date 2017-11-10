@@ -89,10 +89,9 @@ public class Canvas_Renderer : MonoBehaviour {
 
 
 	public void DisplayDirection(Directions dir) {
-		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
-		if (!wrp.Objects[0].activeInHierarchy) {
+		//if (!wrp.Objects[0].activeInHierarchy) {
 			StartCoroutine(Pulse(directions[(int)dir]));
-		}
+		//}
 	}
 
 	private IEnumerator Pulse(GameObject info) {

@@ -1,0 +1,53 @@
+﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Notifications : MonoBehaviour {
+	public GameObject notificationPrefab;
+	public GameObject warningPrefab;
+	public GameObject confirmationPrefab;
+	public RectTransform canvas;
+
+	private static GameObject _notificationPrefabStatic;
+	private static GameObject _warningPrefabStatic;
+	private static GameObject _confirmationPrefabStatic;
+	private static Transform _canvas;
+
+	private void Start() {
+		_notificationPrefabStatic = notificationPrefab;
+		_warningPrefabStatic = warningPrefab;
+		_confirmationPrefabStatic = confirmationPrefab;
+		_canvas = canvas;
+	}
+
+	public static void Warn<T>(string msg, T value, Action<T> action) {
+		GameObject w = Instantiate(_warningPrefabStatic, _canvas, false);
+		Button ok = w.transform.Find("Ok").GetComponent<Button>();
+		Button back = w.transform.Find("Back").GetComponent<Button>();
+		Text message = w.transform.Find("Warning").GetComponent<Text>();
+		message.text = msg;
+
+		ok.onClick.AddListener(delegate { Destroy(w); action.Invoke(value); });
+		back.onClick.AddListener(delegate { Destroy(w); });
+	}
+
+	public static void Notify<T>(string msg) {
+		GameObject w = Instantiate(_notificationPrefabStatic, _canvas, false);
+		Button ok = w.transform.Find("Ok").GetComponent<Button>();
+		Text message = w.transform.Find("Notification").GetComponent<Text>();
+		message.text = msg;
+
+		ok.onClick.AddListener(delegate { Destroy(w);  });
+	}
+
+	public static void Confirm<T>(string msg, T value, Action<T> action) {
+		GameObject w = Instantiate(_confirmationPrefabStatic, _canvas, false);
+		Button ok = w.transform.Find("Ok").GetComponent<Button>();
+		Button back = w.transform.Find("Back").GetComponent<Button>();
+		Text message = w.transform.Find("Confirmation").GetComponent<Text>();
+		message.text = msg;
+
+		ok.onClick.AddListener(delegate { Destroy(w); action.Invoke(value); });
+		back.onClick.AddListener(delegate { Destroy(w); });
+	}
+}

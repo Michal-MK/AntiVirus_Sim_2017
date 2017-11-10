@@ -37,15 +37,6 @@ public class LoadManager : MonoBehaviour {
 
 	private void OnSceneFinishedLoading(SaveData loadedData) {
 
-		Wrapper wrp = GameObject.Find("Collectibles").GetComponent<Wrapper>();
-
-		Vector3 spikePos = loadedData.world.spikePos;
-
-		wrp.Objects[0].gameObject.SetActive(loadedData.world.spikeActive);
-		if (wrp.Objects[0].activeInHierarchy == true) {
-			wrp.Objects[0].transform.position = spikePos;
-		}
-
 		Coins.coinsCollected = loadedData.player.coinsCollected;
 		Spike.spikesCollected = loadedData.player.spikesCollected;
 		//Canvas_Renderer.script.Counters("Update");

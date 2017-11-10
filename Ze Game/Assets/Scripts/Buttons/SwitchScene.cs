@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 
 public class SwitchScene : MonoBehaviour {
 
-	public void SwitchTo(int Index) {
+	private int sceneIndexHolder = 0;
 
+	public void SwitchTo(int Index) {
 		SceneManager.LoadScene(Index);
 		PlayerAttack.bullets = 0;
 		PlayerAttack.bombs = 0;
@@ -22,11 +22,7 @@ public class SwitchScene : MonoBehaviour {
 		}
 	}
 
-	public void DelayMenuWrapper(int i) {
-		StartCoroutine(DelayMenu(i));
-	}
-
-	private IEnumerator DelayMenu(int i) {
+	public void DelayMenu(int i) {
 		GameObject save = GameObject.Find("saveGame");
 		GameObject quit = GameObject.Find("quitToMenu");
 		GameObject rest = GameObject.Find("restartButton");
@@ -42,11 +38,14 @@ public class SwitchScene : MonoBehaviour {
 		quit.transform.position = new Vector3(0,-200,10);
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+		sceneIndexHolder = i;
 		if (MusicHandler.script.sound.volume != 0) {
 			MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
 		}
-		yield return new WaitForSecondsRealtime(2);
+	}
 
+	private void CamFadeOut_OnCamFullyFaded() {
 		PlayerAttack.bullets = 0;
 		PlayerAttack.bombs = 0;
 		Coins.coinsCollected = 0;
@@ -56,6 +55,7 @@ public class SwitchScene : MonoBehaviour {
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
 		Timer.ResetTimer();
-		SceneManager.LoadScene(i);
+		SceneManager.LoadScene(sceneIndexHolder);
+		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 }

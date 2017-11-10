@@ -91,7 +91,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	public void SpawnKillerBlock() {
 
-		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.script.chosenDifficulty));
+		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + SaveManager.current.core.difficulty));
 
 		for (int count = 0; count < totalBlocks; count++) {
 

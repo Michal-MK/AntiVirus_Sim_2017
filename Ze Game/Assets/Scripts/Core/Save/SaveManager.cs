@@ -12,6 +12,7 @@ public class SaveManager : MonoBehaviour {
 	public Avoidance avoidance;
 	public BlockScript block;
 	public BossBehaviour boss;
+	public Transform collectibles;
 
 	private static bool _canSave = true;
 
@@ -29,18 +30,43 @@ public class SaveManager : MonoBehaviour {
 		boss = sender;
 	}
 
-	public void Save(bool newSaveFile) {
+	public static void SaveNewGame(int difficulty) {
+		FileStream file;
 		BinaryFormatter formatter = new BinaryFormatter();
-		int chosenDifficulty = Control.currDifficulty;
+
+		file = File.Create(Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa");
+		string imgPath = Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "D" + difficulty + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "Save-D" + difficulty + ".png";
+		current = new SaveData();
+
+		current.core.time = 0;
+		current.core.difficulty = difficulty;
+		current.core.localAttempt = 0;
+
+		try {
+			File.Copy(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "NewGame.png", imgPath);
+		}
+		catch(IOException) {
+			if (File.Exists(imgPath)) {
+				print("File Exists already");
+			}
+		}
+		
+		formatter.Serialize(file, current);
+		file.Close();
+		file.Dispose();
+	}
+
+	public void Save(int difficulty, bool newSaveFile = false) {
+		BinaryFormatter formatter = new BinaryFormatter();
 		SaveData data;
 		FileStream file;
 
 		if (newSaveFile) {
-			file = File.Create(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + ".Kappa");
+			file = File.Create(Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa");
 			data = new SaveData();
 		}
 		else {
-			file = File.Open(Application.dataPath + "/Saves/D" + chosenDifficulty + "/Save-D" + chosenDifficulty + ".Kappa", FileMode.Open);
+			file = File.Open(Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa", FileMode.Open);
 			data = current;
 		}
 		GameProgression.script.GetValues();
@@ -59,12 +85,16 @@ public class SaveManager : MonoBehaviour {
 		data.world.blockPos = GameProgression.script.boxPos;
 		data.world.blockZRotation = GameProgression.script.ZRotationBlock;
 		data.world.blockPushAttempt = pPlate.attempts;
-		data.world.spikeActive = GameObject.Find("Collectibles").GetComponent<Wrapper>().Objects[0].activeSelf;
+		data.world.spikeActive = collectibles.Find("Spike").gameObject.activeSelf;
 		data.world.spikePos = GameProgression.script.spikePos;
 		data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
 		data.world.doneAvoidance = avoidance.performed;
-		data.world.bossSpawned = boss.bossSpawned;
-
+		if (boss != null) {
+			data.world.bossSpawned = true;
+		}
+		else {
+			data.world.bossSpawned = false;
+		}
 		if(Maze.inMaze == false && Spike.spikesCollected >= 4) {
 			data.world.postMazeDoorOpen = true;
 		}
@@ -75,7 +105,7 @@ public class SaveManager : MonoBehaviour {
 
 		#region Core data
 		data.core.camSize = Camera.main.orthographicSize;
-		data.core.difficulty = chosenDifficulty;
+		data.core.difficulty = difficulty;
 		data.core.time = Timer.getTime;
 		data.core.localAttempt = Control.currAttempt;
 		#endregion
@@ -96,7 +126,7 @@ public class SaveManager : MonoBehaviour {
 
 		formatter.Serialize(file, data);
 		file.Close();
-		StartCoroutine(ScreenShot(chosenDifficulty));
+		StartCoroutine(ScreenShot(difficulty));
 	}
 
 	private IEnumerator ScreenShot(int currAttempt) {
@@ -104,7 +134,7 @@ public class SaveManager : MonoBehaviour {
 		if (saveButton != null) {
 			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
 		}
-		print("Captured");
+		//print("Captured");
 		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + currAttempt + "/Resources/Save-D" + currAttempt + "_" + currAttempt.ToString("000") + ".png");
 	}
 

@@ -1,37 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class Wrapper : MonoBehaviour {
-	public Wrapper canvas;
-	public GameObject dim;
-	public InputField field;
-	public Toggle save;
 	public Toggle start;
-	public Button[] buttons = new Button[4];
-	public GameObject[] Objects = new GameObject[4];
+	public Button[] buttons;
 
+	#region Reasonable code here
 
-	private void Start() {
-		if (field != null) {
-			field.onValidateInput += delegate (string text, int index, char ch) { return Validate(ch); };
-			dim = GameObject.Find("Dim");
-			dim.GetComponent<Image>().color = new Color32(0, 0, 0, 150);
-			canvas = GameObject.Find("Canvas").GetComponent<Wrapper>();
-			canvas.DisableButtons();
-		}
-	}
-
-	public void StartNewGame(int difficulty) {
-		Control.script.isNewGame = true;
-		Control.script.StartCoroutine(Control.script.StartNewGame(difficulty));
-	}
-
-	public void SetPCName(InputField name) {
-		PlayerPrefs.SetString("player_name", name.text);
+	public void SetSelectedProfile(GameObject profile) {
+		Profile.SelectProfile(profile);
 	}
 
 	public char Validate(char ch) {
@@ -41,113 +18,13 @@ public class Wrapper : MonoBehaviour {
 		return ch;
 	}
 
-	public void StopMusic() {
-		Debug.Log("Should stop musiic now.");
-		//try {
-		//	MenuMusic.script.StopMusicWrapper();
-		//}
-		//catch (System.Exception) {
-
-		//}
-	}
-
-	public void UpdateName() {
-		Debug.LogWarning("Something is broken!");
-		//Statics.profile.DisplayProfile();
-		if (dim != null) {
-			dim.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
-			if (PlayerPrefs.GetString("player_name") == null) {
-				canvas.DisableButtons();
-			}
-		}
-	}
-
-	public void SaveGame(bool createNew) {
-		Control.script.saveManager.Save(createNew);
-	}
-
-	public void LoadGame(Transform myParent) {
-		Control.script.loadManager.Load(myParent.name);
-	}
-
-	public void SelectButton(int i = 0) {
-		print("Deselect");
-		EventSystem e = EventSystem.current;
-		if (buttons[i].gameObject != null) {
-			e.SetSelectedGameObject(buttons[i].gameObject);	
-		}
-		else {
-			e.SetSelectedGameObject(buttons[1].gameObject);
-		}
-	}
-	public void SelectGameObject(int i = 0) {
-		EventSystem e = EventSystem.current;
-		if (Objects[i] != null && Objects[i].activeInHierarchy) {
-			e.SetSelectedGameObject(Objects[i].gameObject);
-		}
-		else if (start != null) {
-			e.SetSelectedGameObject(start.gameObject);
-		}
-	}
-
-	public void DisableButtons() {
-		if (SceneManager.GetActiveScene().buildIndex == 0 && gameObject.name == "startGame") {
-			foreach (Button b in buttons) {
-				b.interactable = !b.interactable;
-
-			}
-		}
-	}
+	#endregion
 
 	public void ToggleButtonInteractivity() {
 
-		foreach (var item in buttons) {
+		foreach (Button item in buttons) {
 			item.interactable = !item.interactable;
 		}
 		start.interactable = !start.interactable;
-	}
-
-
-
-	public void DeactivateButtons() {
-		foreach (Button item in GameObject.Find("Canvas").GetComponentsInChildren<Button>()) {
-			item.gameObject.SetActive(!item.gameObject.activeInHierarchy);
-		}
-		foreach (Toggle item in GameObject.Find("Canvas").GetComponentsInChildren<Toggle>()) {
-			print(item.name);
-			item.gameObject.SetActive(!item.gameObject.activeInHierarchy);
-		}
-		Control.script.Restart();
-	}
-
-	public void DeactivateObjects() {
-		foreach (var item in Objects) {
-			item.SetActive(!item.activeInHierarchy);
-		}
-	}
-
-	private void Update() {
-		if (SceneManager.GetActiveScene().buildIndex != 1) {
-			EventSystem e = EventSystem.current;
-			if (e.currentSelectedGameObject == null) {
-				if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f) {
-					if (!e.alreadySelecting) {
-						e.SetSelectedGameObject(buttons[0].gameObject);
-					}
-				}
-			}
-		}
-
-		if (SceneManager.GetActiveScene().buildIndex != 1 && dim != null && field != null && canvas != null) {
-			if (Input.GetButtonDown("Submit")) {
-				GameObject startG = GameObject.Find("startGame");
-				PlayerPrefs.SetString("player_name", field.text);
-				canvas.DisableButtons();
-				dim.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
-				UpdateName();
-				gameObject.transform.parent.gameObject.SetActive(false);
-				EventSystem.current.SetSelectedGameObject(startG);
-			}
-		}
 	}
 }

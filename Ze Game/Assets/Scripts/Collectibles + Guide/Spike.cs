@@ -79,7 +79,8 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-
+		gameObject.SetActive(data.world.spikeActive);
+		gameObject.transform.position = data.world.spikePos;
 	}
 
 	private void OnEnable() {
