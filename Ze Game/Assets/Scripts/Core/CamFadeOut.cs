@@ -51,20 +51,23 @@ public class CamFadeOut : MonoBehaviour {
 		}
 	}
 
-	public void PlayTransition(CameraModeChanges changes) {
+	public void PlayTransition(CameraModeChanges changes, float speed) {
 		switch (changes) {
 			case CameraModeChanges.DIM_CAMERA: {
 				anim.Play("DimCamera");
+				anim.speed = speed;
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
 				break;
 			}
 			case CameraModeChanges.TRANSITION_SCENES: {
 				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
 					anim.Play("TransitionFromDim");
+					anim.speed = speed;
 					StartCoroutine(AnimState(CAM_FULLY_FADED_DIMMED));
 				}
 				else {
 					anim.Play("CamTransition");
+					anim.speed = speed;
 					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;

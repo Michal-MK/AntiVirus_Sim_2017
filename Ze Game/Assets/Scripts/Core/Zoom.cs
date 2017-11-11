@@ -18,6 +18,14 @@ public class Zoom : MonoBehaviour {
 	public float NormMax = 25;
 	public float NormMin = 15;
 
+	private void Awake() {
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		canZoom = data.player.canZoom;
+	}
+
 	private void LateUpdate() {
 		if (camMovement.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");

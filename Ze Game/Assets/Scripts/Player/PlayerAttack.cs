@@ -54,6 +54,9 @@ public class PlayerAttack : MonoBehaviour {
 		else {
 			StartCoroutine(UpdateStats());
 		}
+		bullets = data.player.bullets;
+		bombs = data.player.bombs;
+
 	}
 
 	private void Start() {

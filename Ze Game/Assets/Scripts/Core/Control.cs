@@ -1,35 +1,31 @@
 using UnityEngine;
 using System.IO;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Control : MonoBehaviour {
 
 	public static Control script;
+
 	public SaveManager saveManager;
 	public LoadManager loadManager;
 	public MapData mapData;
 
-	public int chosenDifficulty;
-	private int attempt;
-	private int localAttempt;
-
-	public GameObject spikeInScene;
-	public GameObject authentication;
-	public bool isNewGame = true;
-	public bool isRestarting = false;
-
 	public static int currAttempt = 0;
 	public static int currDifficulty = 0;
-
-	private bool fullyFaded = false;
+	public static Profile_Data currProfile;
 
 	void Awake() {
 		if (script == null) {
 			script = this;
+			loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
 		}
 		else if (script != this) {
+			if (script.loadManager == null) {
+				print("Somehow we lost a reference to the load manager...");
+				script.loadManager = new LoadManager();
+			}
 			Destroy(gameObject);
 		}
 
@@ -66,32 +62,39 @@ public class Control : MonoBehaviour {
 		if (!Directory.Exists(Application.dataPath + "/Saves/D4/Resources")) {
 			Directory.CreateDirectory(Application.dataPath + "/Saves/D4/Resources");
 		}
+		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
+			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
+		}
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-	public IEnumerator SetName() {
-		if (PlayerPrefs.GetString("player_name") == null || PlayerPrefs.GetString("player_name") == "") {
-			yield return new WaitForSeconds(1f);
-			Wrapper wrp = GameObject.Find("Canvas").GetComponent<Wrapper>();
-			wrp.ToggleButtonInteractivity();
-			GameObject auth = Instantiate(authentication);
-			auth.transform.SetParent(GameObject.Find("Canvas").transform);
-			auth.transform.localPosition = Vector3.zero;
-			yield return new WaitUntil(() => Input.GetButtonDown("Submit"));
-			wrp.ToggleButtonInteractivity();
-		}
+	private void Start() {
+		Profile.RequestProfiles();
 	}
 
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
-		PlayerPrefs.SetInt("difficulty", difficulty);
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
-		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += LoadToNewGame;
+		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 	}
 
-	private void CamFadeOut_OnCamFullyFaded() {
-		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
+	private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
+		MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+	}
+
+	private void LoadToNewGame() {
+		CamFadeOut.OnCamFullyFaded -= LoadToNewGame;
 		SceneManager.LoadScene(1);
+		Spike.spikesCollected = 0;
+		Coins.coinsCollected = 0;
+		PlayerAttack.bombs = 0;
+		PlayerAttack.bullets = 0;
+		M_Player.gameProgression = 0;
+		Projectile.projectileSpeed = 15;
+		Timer.ResetTimer();
+		Time.timeScale = 1;
 		CamFadeOut.script.anim.speed = 0.75f;
 	}
 
@@ -105,22 +108,19 @@ public class Control : MonoBehaviour {
 		Projectile.projectileSpeed = 15;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
-		isRestarting = true;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		CamFadeOut.script.anim.SetTrigger("UnDim");
 	}
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		if (scene.buildIndex == 0 && PlayerPrefs.GetString("player_name") == null) {
-			SetName();
-		}
+		if (scene.name == "GameScene") {
+			CamFadeOut.script.anim.speed = 0.5f;
 
-		if (scene.buildIndex == 1 && isNewGame) {
-			CamFadeOut.script.anim.speed = 1;
 		}
-		else if (isRestarting) {
-			isNewGame = false;
+		if(scene.name == "MainMenu" && !MenuMusic.script.isPlaying) {
+			MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());
 		}
+		Time.timeScale = 1;
 	}
 
 	private void OnDestroy() {

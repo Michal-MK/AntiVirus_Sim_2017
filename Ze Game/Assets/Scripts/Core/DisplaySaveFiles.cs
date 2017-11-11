@@ -49,10 +49,10 @@ public class DisplaySaveFiles : MonoBehaviour {
 				FileStream file = new FileStream(savePath, FileMode.Open);
 				BinaryFormatter br = new BinaryFormatter();
 
-				SaveData saveInfo = (SaveData)br.Deserialize(file);
+				SaveFile saveInfo = (SaveFile)br.Deserialize(file);
 				file.Close();
 
-				switch (saveInfo.player.currentBGName) {
+				switch (saveInfo.data.player.currentBGName) {
 					case "Background_Start": {
 						BGName = "Electical Hall";
 						break;
@@ -83,15 +83,15 @@ public class DisplaySaveFiles : MonoBehaviour {
 					}
 
 				}
-				if (saveInfo.core.time != 0) {
-					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.core.difficulty + 1) + "\n" +
+				if (saveInfo.data.core.time != 0) {
+					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
 																"Loaction: " + BGName + "\n" + "Attempt " +
-																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.core.time / 60, saveInfo.core.time % 60, saveInfo.core.time.ToString().Remove(0, saveInfo.core.time.ToString().Length - 2)) + "\n" +
-																"Spikes: " + saveInfo.player.spikesCollected + " Bullets: " + saveInfo.player.bullets + "\n" +
-																"Coins: " + saveInfo.player.coinsCollected + " Bombs: " + saveInfo.player.bombs;
+																"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.data.core.time / 60, saveInfo.data.core.time % 60, saveInfo.data.core.time.ToString().Remove(0, saveInfo.data.core.time.ToString().Length - 2)) + "\n" +
+																"Spikes: " + saveInfo.data.player.spikesCollected + " Bullets: " + saveInfo.data.player.bullets + "\n" +
+																"Coins: " + saveInfo.data.player.coinsCollected + " Bombs: " + saveInfo.data.player.bombs;
 				}
 				else {
-					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.core.difficulty + 1) + "\n" +
+					save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
 																"Loaction: " + BGName + "\n" +
 																"Time: 00:00:00 minutes";
 

@@ -75,10 +75,10 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void Awake() {
-		if(player == null) {
+		if (player == null) {
 			player = this;
 		}
-		else if(player != this) {
+		else if (player != this) {
 			Destroy(gameObject);
 		}
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -96,40 +96,30 @@ public class M_Player : MonoBehaviour {
 		saveButton.SetActive(false);
 		loadButton.SetActive(false);
 
-		string name = PlayerPrefs.GetString("player_name");
+		string name = Control.currProfile.getProfileName;
 
 		if (name == null || name == "") {
-			PlayerPrefs.SetInt("Attempts", 0);
+			Control.currAttempt = 0;
 		}
-		attempts = PlayerPrefs.GetInt("Attempts");
+		attempts = Control.currAttempt;
 
 		StartCoroutine(DelayIntro());
 	}
 
 	private IEnumerator DelayIntro() {
-		newGame = Control.script.isNewGame;
 		yield return new WaitForSeconds(1);
 		GameProgression.script.Progress();
-		if (newGame && !Control.script.isRestarting) {
-
-			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
-												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n",
-												"Good luck & Have fun!");
+												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n"
+												, null);
 
-			PlayerPrefs.SetInt("Attempts", attempts);
-			newGame = false;
+			Control.currAttempt = attempts;
 		}
-		else if (Control.script.isRestarting) {
-			print("ISRESTARTING");
-			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
-			Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
-			Control.script.isRestarting = false;
-		}
-		Control.script.isNewGame = false;
-		Control.script.isRestarting = false;
+
+		Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
 	}
 
 	private void FixedUpdate() {
@@ -336,7 +326,7 @@ public class M_Player : MonoBehaviour {
 		}
 		if (col.transform.tag == "BG") {
 			if (OnRoomEnter != null) {
-				OnRoomEnter(col.GetComponent<RectTransform>(),this);
+				OnRoomEnter(col.GetComponent<RectTransform>(), this);
 			}
 			currentBG_name = col.name;
 			cam.RaycastForRooms();
@@ -352,8 +342,8 @@ public class M_Player : MonoBehaviour {
 		}
 
 		if (col.tag == "Spike") {
-			if(OnSpikePickup != null) {
-				OnSpikePickup(this,col.gameObject);
+			if (OnSpikePickup != null) {
+				OnSpikePickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			GameProgression.script.Progress();
@@ -378,8 +368,8 @@ public class M_Player : MonoBehaviour {
 		}
 		if (col.name == "Coin") {
 			face.GetComponent<SpriteRenderer>().sprite = happy;
-			if(OnCoinPickup != null) {
-				OnCoinPickup(this,col.gameObject);
+			if (OnCoinPickup != null) {
+				OnCoinPickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 			Canvas_Renderer.script.Counters("Coin");
@@ -440,10 +430,10 @@ public class M_Player : MonoBehaviour {
 		Cursor.visible = true;
 		Timer.PauseTimer();
 
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA, 1f);
 		GameOverImg.SetTrigger("Appear");
 		MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
-		if(OnZoomModeSwitch!= null) {
+		if (OnZoomModeSwitch != null) {
 			OnZoomModeSwitch(false);
 		}
 		StartCoroutine(StopTime());

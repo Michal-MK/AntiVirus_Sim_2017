@@ -8,7 +8,7 @@ public class Buttons : MonoBehaviour {
 	}
 
 	public void SaveGame(bool createNew) {
-		Control.script.saveManager.Save(SaveManager.current.core.difficulty, createNew);
+		Control.script.saveManager.Save(SaveManager.current.data.core.difficulty, createNew);
 	}
 
 	public void LoadGame(Transform myParent) {
@@ -18,6 +18,10 @@ public class Buttons : MonoBehaviour {
 
 	public void Restart() {
 		Control.script.Restart();
+	}
+
+	public void CreateProfile(string p_name) {
+		Control.currProfile = new Profile().Create(p_name);
 	}
 
 	public void Quit() {

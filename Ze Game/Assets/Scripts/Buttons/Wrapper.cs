@@ -7,11 +7,7 @@ public class Wrapper : MonoBehaviour {
 
 	#region Reasonable code here
 
-	public void SetSelectedProfile(GameObject profile) {
-		Profile.SelectProfile(profile);
-	}
-
-	public char Validate(char ch) {
+	public static char Validate(char ch) {
 		if (ch == '$' || ch == '~' || ch == '@' || ch == '_' || ch == '#') {
 			ch = '\0';
 		}

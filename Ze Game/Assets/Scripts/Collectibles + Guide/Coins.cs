@@ -20,18 +20,19 @@ public class Coins : MonoBehaviour/*, ICollectible*/ {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		coinsCollected = data.player.coinsCollected;
+
 		if (data.player.coinsCollected == 5) {
-			ChatchUpToAttempt(data.player.coinsCollected - 2);
 			GameObject.Find("Coin").SetActive(false);
 			CoinBehavior(null,null);
 		}
 		else if (data.player.coinsCollected <= 4) {
-			ChatchUpToAttempt(data.player.coinsCollected - 2);
 			CoinBehavior(null, null);
 			if(OnNewTarget != null) {
 				OnNewTarget(gameObject);
 			}
 		}
+
 	}
 
 	void Start() {
@@ -57,13 +58,6 @@ public class Coins : MonoBehaviour/*, ICollectible*/ {
 			if (Spike.spikesCollected == 0) {
 				spike.SetPosition();
 			}
-		}
-	}
-
-	public void ChatchUpToAttempt(int attempt) {
-		for (int i = 0; i <= attempt; i++) {
-			print("Borked");
-			//Statics.enemySpawner.SpawnKillerBlock();
 		}
 	}
 

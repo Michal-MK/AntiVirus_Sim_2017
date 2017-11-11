@@ -5,6 +5,7 @@ public class MenuMusic : MonoBehaviour {
 	public AudioSource source;
 
 	public static MenuMusic script;
+	public bool isPlaying = false;
 
 	private void Awake() {
 		if (script == null) {
@@ -19,6 +20,23 @@ public class MenuMusic : MonoBehaviour {
 	void Start() {
 		source.Play();
 	}
+
+	public IEnumerator PlayMuic() {
+		source.volume = 0f;
+		source.Play();
+		for (float f = 0; f <= 0.3f; f += CamFadeOut.CAM_FULLY_FADED_NORMAL * Time.unscaledDeltaTime * 0.1f) {
+			if (f <= 0.2f) {
+				source.volume = f;
+				yield return null;
+			}
+			else {
+				source.volume = 0.2f;
+				break;
+			}
+		}
+		isPlaying = true;
+	}
+
 
 	public void StopMusicWrapper() {
 		StartCoroutine(StopMusic());
@@ -36,6 +54,7 @@ public class MenuMusic : MonoBehaviour {
 				break;
 			}
 		}
+		isPlaying = false;
 	}
 
 	private void OnApplicationFocus(bool focus) {

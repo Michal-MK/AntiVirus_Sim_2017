@@ -4,58 +4,46 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 
-public class LoadManager : MonoBehaviour {
+public class LoadManager {
 
 	public delegate void SaveState(SaveData data);
 	public static event SaveState OnSaveDataLoaded;
+	private SaveFile loadedData;
 
 	public void Load(string fileToLoad) {
 
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Open(fileToLoad, FileMode.Open);
 
-		SaveData data = (SaveData)bf.Deserialize(file);
+		loadedData = (SaveFile)bf.Deserialize(file);
 		file.Close();
 
-		StartCoroutine(FilesLoaded(data));
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+		SaveManager.current = loadedData;
 	}
 
-	private IEnumerator FilesLoaded(SaveData data) {
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
-		yield return new WaitUntil(() => CamFadeOut.script.anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
-		Time.timeScale = 0;
-		AsyncOperation loading = SceneManager.LoadSceneAsync(1);
-		CamFadeOut.script.anim.speed = 0;
-		loading.allowSceneActivation = true;
-		yield return new WaitUntil(() => loading.isDone);
+	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {
 		if (OnSaveDataLoaded != null) {
-			OnSaveDataLoaded(data);
+			OnSaveDataLoaded(loadedData.data);
 		}
-		OnSceneFinishedLoading(data);
-		CamFadeOut.script.anim.speed = 1;
+		OnSceneFinishedLoading(loadedData.data);
+		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+	}
+
+	private void CamFadeOut_OnCamFullyFaded() {
+		SceneManager.LoadScene(1);
+		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 
 	private void OnSceneFinishedLoading(SaveData loadedData) {
-
-		Coins.coinsCollected = loadedData.player.coinsCollected;
-		Spike.spikesCollected = loadedData.player.spikesCollected;
-		//Canvas_Renderer.script.Counters("Update");
-
-		PlayerAttack.bullets = loadedData.player.bullets;
-		PlayerAttack.bombs = loadedData.player.bombs;
-
-		PlayerPrefs.SetInt("difficulty", loadedData.core.difficulty);
-
 		if (loadedData.world.doneAvoidance) {
 			GameObject.Find("SignPost Avoidance").SetActive(false);
 			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 		}
-
 		Camera.main.orthographicSize = loadedData.core.camSize;
-		Zoom.canZoom = loadedData.player.canZoom;
-
 		Canvas_Renderer.script.InfoRenderer(null, loadedData.shownHints.currentlyDisplayedSideInfo);
-
 		GameObject.Find("Blocker3").SetActive(loadedData.world.postMazeDoorOpen);
 
 		switch (loadedData.player.currentBGName) {
@@ -81,6 +69,5 @@ public class LoadManager : MonoBehaviour {
 		}
 		M_Player.doNotMove = false;
 		Time.timeScale = 1;
-		SaveManager.current = loadedData;
 	}
 }

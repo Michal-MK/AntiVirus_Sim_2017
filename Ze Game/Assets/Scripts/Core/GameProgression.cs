@@ -29,7 +29,7 @@ public class GameProgression : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		throw new NotImplementedException();
+		//Empty
 	}
 
 	public void GetValues() {

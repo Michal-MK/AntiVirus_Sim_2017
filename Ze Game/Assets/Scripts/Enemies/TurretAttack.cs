@@ -22,7 +22,7 @@ public class TurretAttack : MonoBehaviour {
 		enemy = GameObject.Find("Enemies").transform;
 		playerpos = GameObject.FindGameObjectWithTag("Player").transform.position;
 
-		switch (PlayerPrefs.GetInt("difficulty")) {
+		switch (Control.currDifficulty) {
 			case 0: {
 				turretSpawnRateStart = 1.6f;
 				turretSpawnRateEnd = 1.4f;
@@ -76,7 +76,7 @@ public class TurretAttack : MonoBehaviour {
 			Projectile.spawnedByAvoidance = true;
 			spawnRate = currSpawnRate;
 
-			int diff = PlayerPrefs.GetInt("difficulty");
+			int diff = Control.currDifficulty;
 
 			if (diff <= 2) {
 				GameObject bullet = pooler.GetPool();

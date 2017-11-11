@@ -61,7 +61,7 @@ public class Maze : MonoBehaviour {
 				GameObject wallL;
 				GameObject wallB;
 
-				if (PlayerPrefs.GetInt("difficulty") < 3) {
+				if (Control.currDifficulty < 3) {
 					wallR = Instantiate(WallI, cell.transform);
 					wallT = Instantiate(WallT, cell.transform);
 					wallL = Instantiate(WallI, cell.transform);
@@ -106,7 +106,7 @@ public class Maze : MonoBehaviour {
 	}
 
 	public int MazeLevel() {
-		switch (PlayerPrefs.GetInt("difficulty")) {
+		switch (Control.currDifficulty) {
 			case 0: {
 				return 15;
 			}

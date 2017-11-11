@@ -39,6 +39,13 @@ public class EnemySpawner : MonoBehaviour {
 		SignPost.OnAvoidanceBegin += SpawnAvoidance;
 		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
+			SpawnKillerBlock();
+		}
 	}
 
 	private void M_Player_OnCoinPickup(M_Player sender, GameObject coinObj) {
@@ -91,7 +98,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	public void SpawnKillerBlock() {
 
-		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + SaveManager.current.core.difficulty));
+		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.currDifficulty));
 
 		for (int count = 0; count < totalBlocks; count++) {
 
@@ -171,7 +178,7 @@ public class EnemySpawner : MonoBehaviour {
 		isInvokingKillerWall = true;
 		ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
 		Projectile.spawnedByKillerWall = true;
-		int diff = PlayerPrefs.GetInt("difficulty");
+		int diff = Control.currDifficulty;
 
 		while (isInvokingKillerWall) {
 			yield return new WaitForSeconds(spawnDelay);

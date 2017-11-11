@@ -36,11 +36,11 @@ public class MazeEntrance : MonoBehaviour {
 
 	public IEnumerator TransToPos() {
 
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES);
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 
 		cam.inMaze = true;
 		yield return new WaitForSeconds(1.5f);
-		if(OnMazeEnter != null) {
+		if (OnMazeEnter != null) {
 			OnMazeEnter();
 		}
 
@@ -65,7 +65,7 @@ public class MazeEntrance : MonoBehaviour {
 											"Grab the spike and let's get out of this place.", "A maze ... duh?!", new Color32(255, 255, 255, 200));
 		yield return new WaitWhile(() => Canvas_Renderer.script.isRunning);
 
-		if (PlayerPrefs.GetInt("difficulty") >= 3) {
+		if (Control.currDifficulty >= 3) {
 			StartCoroutine(LerpCamPos(cam.transform.position, player.transform.position));
 			StartCoroutine(cam.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
 		}

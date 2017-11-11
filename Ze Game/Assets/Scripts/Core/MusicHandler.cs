@@ -47,6 +47,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private IEnumerator PlayClip(AudioClip clip) {
+
 		avoid = true;
 		yield return new WaitForSecondsRealtime(0.1f);
 		float volume = sound.volume;

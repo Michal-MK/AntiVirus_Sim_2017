@@ -18,7 +18,6 @@ public class DisplayScoreList : MonoBehaviour {
 	public List<string> clearTimes0 = new List<string>();
 	public List<string> names0 = new List<string>();
 
-
 	public GameObject[] results1;
 	public List<string> clearTimes1 = new List<string>();
 	public List<string> names1 = new List<string>();
@@ -54,7 +53,7 @@ public class DisplayScoreList : MonoBehaviour {
 		yield return times;
 
 		if (times == null) {
-			print("There was an error checking admin: " + times.error);
+			print("There was an error: " + times.error);
 			yield break;
 		}
 		else {

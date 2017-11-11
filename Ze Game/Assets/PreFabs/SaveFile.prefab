@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 222336862609348958}
   - component: {fileID: 114632609610782862}
   - component: {fileID: 114826147825207376}
-  - component: {fileID: 114655122803337100}
+  - component: {fileID: 114966360022291856}
   m_Layer: 5
   m_Name: LoadButton
   m_TagString: Untagged
@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 222720583833042026}
   - component: {fileID: 114857619261225618}
   - component: {fileID: 114018033453528172}
-  - component: {fileID: 114619367145081352}
   m_Layer: 5
   m_Name: DeleteButton
   m_TagString: Untagged
@@ -162,7 +161,6 @@ GameObject:
   - component: {fileID: 222927400948147886}
   - component: {fileID: 114676110482689922}
   - component: {fileID: 114304313132014180}
-  - component: {fileID: 114538811165673452}
   m_Layer: 5
   m_Name: Cancel
   m_TagString: Untagged
@@ -270,12 +268,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114619367145081352}
-        m_MethodName: SelectButton
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1955289386932294}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -393,12 +391,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 114538811165673452}
-        m_MethodName: SelectButton
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_MethodName: SetSelectedGameObject
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1166978014177586}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -439,30 +437,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Cancel
---- !u!114 &114538811165673452
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1955289386932294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 114826147825207376}
-  - {fileID: 114018033453528172}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &114550921007355838
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -496,30 +470,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Delete Save
---- !u!114 &114619367145081352
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1673851305915984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons:
-  - {fileID: 114304313132014180}
-  - {fileID: 114826147825207376}
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &114629092981497206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -580,28 +530,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114655122803337100
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1166978014177586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  dim: {fileID: 0}
-  field: {fileID: 0}
-  save: {fileID: 0}
-  start: {fileID: 0}
-  buttons: []
-  Objects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &114676110482689922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -759,7 +687,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114655122803337100}
+      - m_Target: {fileID: 114966360022291856}
         m_MethodName: LoadGame
         m_Mode: 2
         m_Arguments:
@@ -772,17 +700,6 @@ MonoBehaviour:
         m_CallState: 1
       - m_Target: {fileID: 0}
         m_MethodName: DisableButtons
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 114655122803337100}
-        m_MethodName: StopMusic
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -854,6 +771,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &114966360022291856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1166978014177586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e500e069677b3b649ac969b8ac8bb6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222028994869413998
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -1020,10 +948,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 366.5, y: -100}
+  m_SizeDelta: {x: 693, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224655175510473576
 RectTransform:
