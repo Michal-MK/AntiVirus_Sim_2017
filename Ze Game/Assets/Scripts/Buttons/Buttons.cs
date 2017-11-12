@@ -13,7 +13,13 @@ public class Buttons : MonoBehaviour {
 
 	public void LoadGame(Transform myParent) {
 		Control.script.loadManager.Load(myParent.name);
-		MenuMusic.script.StopMusicWrapper();
+		try {
+			MenuMusic.script.StopMusicWrapper();
+			Debug.LogWarning("Remove after");
+		}
+		catch {
+			Debug.LogWarning("Remove after");
+		}
 	}
 
 	public void Restart() {

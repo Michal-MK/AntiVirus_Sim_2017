@@ -5,20 +5,19 @@ public class GameProgression : MonoBehaviour {
 
 	public GameObject[] doors;
 
-	public Canvas_Renderer canvas_Renderer;
-	public GameObject Block;
+	public GameObject block;
+	public Spike spike;
 
 	public Vector3 playerPos;
-
 	public Vector3 boxPos;
-
 	public Vector3 spikePos;
 	public float ZRotationBlock;
+
 
 	public static GameProgression script;
 
 	private void Awake() {
-		if(script == null) {
+		if (script == null) {
 			script = this;
 		}
 		else if (script != this) {
@@ -34,13 +33,9 @@ public class GameProgression : MonoBehaviour {
 
 	public void GetValues() {
 		playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
-		boxPos = Block.transform.position;
-
-		ZRotationBlock = Block.transform.rotation.eulerAngles.z;
-
-		if (GameObject.Find("Spike") != null && GameObject.Find("Spike").activeInHierarchy) {
-			spikePos = GameObject.Find("Spike").GetComponent<Transform>().position;
-		}
+		boxPos = block.transform.position;
+		ZRotationBlock = block.transform.rotation.eulerAngles.z;
+		spikePos = spike.transform.position;
 	}
 
 	public void Progress() {
@@ -52,7 +47,7 @@ public class GameProgression : MonoBehaviour {
 			doors[0].SetActive(false);
 			doors[1].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(Directions.RIGHT);
+			Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
 		}
 
 		if (M_Player.gameProgression == 2) {
@@ -64,7 +59,7 @@ public class GameProgression : MonoBehaviour {
 			doors[2].SetActive(false);
 			doors[3].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(Directions.TOP);
+			Canvas_Renderer.script.DisplayDirection(Directions.TOP);
 
 		}
 		if (M_Player.gameProgression == 3) {
@@ -78,7 +73,7 @@ public class GameProgression : MonoBehaviour {
 			doors[4].SetActive(false);
 			doors[5].SetActive(false);
 
-			canvas_Renderer.DisplayDirection(Directions.BOTTOM);
+			Canvas_Renderer.script.DisplayDirection(Directions.BOTTOM);
 		}
 		if (CameraMovement.script != null) {
 			CameraMovement.script.RaycastForRooms();

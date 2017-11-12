@@ -2,18 +2,15 @@ using System.Collections;
 using UnityEngine;
 
 public class MazeEscape : MonoBehaviour {
-	public Animator transitionBlack;
+
 	public GameObject player;
 	public RectTransform BG;
 	public Spike spike;
-	public Zoom zoom;
 	public MazeEntrance entrance;
-	public Wrapper wrp;
 
 	public bool pathOpen = false;
 
 	public GameObject wall;
-
 
 	public static event Maze.MazeBehaviour OnMazeEscape;
 
@@ -61,7 +58,6 @@ public class MazeEscape : MonoBehaviour {
 				one.color = newColor;
 
 				if (f > 0) {
-					//print(f);
 					yield return null;
 				}
 				else if (f <= 0) {

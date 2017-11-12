@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Profile : MonoBehaviour {
@@ -15,7 +15,12 @@ public class Profile : MonoBehaviour {
 
 	[RuntimeInitializeOnLoadMethod()]
 	private static void Start() {
-		profile_name = GameObject.Find("Profile_Name").GetComponent<Text>();
+		try {
+			profile_name = GameObject.Find("Profile_Name").GetComponent<Text>();
+		}
+		catch {
+			print("Attempted to set an object reference, game will not behave properly.");
+		}
 	}
 
 	public Profile CurrentProfile {
@@ -73,7 +78,7 @@ public class Profile : MonoBehaviour {
 		if (pfs.Length == 0) {
 			GameObject auth = Instantiate(authentication, GameObject.Find("Canvas").transform);
 			InputField in_field = auth.transform.Find("InputField").GetComponent<InputField>();
-			in_field.onValidateInput += delegate (string input, int charIndex, char addedChar) { return Wrapper.Validate(addedChar); };
+			in_field.onValidateInput += delegate (string input, int charIndex, char addedChar) { return Validate(addedChar); };
 			in_field.onEndEdit.AddListener(delegate {
 				Control.currProfile = new Profile().Create(in_field.text);
 				Destroy(auth);
@@ -89,6 +94,7 @@ public class Profile : MonoBehaviour {
 					Destroy(g.gameObject);
 					profile_name.text += g.profileNames[i-1].text;
 					Control.currProfile = SelectProfile(g.profileNames[i - 1].text + ".gp");
+					EventSystem.current.SetSelectedGameObject(GameObject.Find("startGame"));
 				});
 			}
 
@@ -98,6 +104,13 @@ public class Profile : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	public static char Validate(char ch) {
+		if (ch == '$' || ch == '~' || ch == '@' || ch == '_' || ch == '#') {
+			ch = '\0';
+		}
+		return ch;
 	}
 }
 

@@ -20,8 +20,10 @@ public class MusicHandler : MonoBehaviour {
 
 	public static MusicHandler script;
 
+	public bool isAnythingPlaying = false;
+
 	private void Awake() {
-		if(script == null) {
+		if (script == null) {
 			script = this;
 		}
 		else if (script != this) {
@@ -43,6 +45,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public void PlayMusic(AudioClip clip) {
+		isAnythingPlaying = true;
 		StartCoroutine(PlayClip(clip));
 	}
 
@@ -146,6 +149,14 @@ public class MusicHandler : MonoBehaviour {
 	}
 	#endregion
 
+	public IEnumerator FadeOutMusic() {
+		for (float f = sound.volume; f > 0; f -= CamFadeOut.CAM_FULLY_FADED_NORMAL * Time.unscaledDeltaTime * 0.5f) {
+			print(f);
+			sound.volume = f;
+			yield return null;
+		}
+	}
+
 	public IEnumerator StopMusic() {
 		if (stopOnce) {
 			float soundVolume = sound.volume;
@@ -158,6 +169,7 @@ public class MusicHandler : MonoBehaviour {
 				else {
 					sound.volume = 0;
 					stopOnce = false;
+					isAnythingPlaying = false;
 					break;
 				}
 			}

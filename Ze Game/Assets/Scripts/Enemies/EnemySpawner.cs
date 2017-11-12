@@ -43,6 +43,7 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		print("OnSaveDataLoaded into menu");
 		for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
 			SpawnKillerBlock();
 		}
@@ -233,5 +234,7 @@ public class EnemySpawner : MonoBehaviour {
 		SignPost.OnAvoidanceBegin -= SpawnAvoidance;
 		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		StopAllCoroutines();
 	}
 }

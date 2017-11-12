@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class SaveFileScript : MonoBehaviour {
 
+	public SaveData associatedData;
+
 	public GameObject save;
 
 	public void DeleteFile() {
@@ -31,5 +33,9 @@ public class SaveFileScript : MonoBehaviour {
 		File.Delete(imgPath + ".png");
 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
+	public void LoadData() {
+		Control.script.loadManager.Load(associatedData);
 	}
 }

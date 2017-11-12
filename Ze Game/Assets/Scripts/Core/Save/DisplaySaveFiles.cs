@@ -52,6 +52,13 @@ public class DisplaySaveFiles : MonoBehaviour {
 				SaveFile saveInfo = (SaveFile)br.Deserialize(file);
 				file.Close();
 
+				try {
+					save.transform.Find("ShowHistory").GetComponent<DisplaySaveHistory>().selfHistory = saveInfo.saveHistory.saveHistory;
+				}
+				catch {
+					print("Failed to test");
+				}
+
 				switch (saveInfo.data.player.currentBGName) {
 					case "Background_Start": {
 						BGName = "Electical Hall";

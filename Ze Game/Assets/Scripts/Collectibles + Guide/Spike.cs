@@ -1,29 +1,22 @@
 using UnityEngine;
 
-public class Spike : MonoBehaviour /*,ICollectible*/ {
-	public CameraMovement cam;
+public class Spike : MonoBehaviour {
+
 	public RectTransform BGS;
 	public RectTransform BG1;
 	public RectTransform BG2a;
 	public Maze maze;
 	public RectTransform BG2b;
 
-	public GameObject player;
 	public Guide guide;
-	public EnemySpawner spawn;
-	public GameObject teleporter;
-	public Animator anim;
 
 	private static int _spikesCollected;
-	public int stage;
+	private int stage;
 
-	public bool firstSpike = false;
-	public bool secondSpike = false;
-	public bool thirdSpkie = false;
-	public bool fourthSpike = false;
-	public bool fifthSpike = false;
-
+	//Loading information
 	public bool displayArrowGuideInfo = true;
+
+	public static event Guide.GuideTarget OnNewTarget;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -42,51 +35,21 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 		}
 
 		if (spikesCollected >= 0 || spikesCollected <= 4) {
-			Canvas_Renderer.script.Counters("Spike");
-
+			Canvas_Renderer.script.UpdateCounters("Spike");
 		}
+
 		if (spikesCollected == 4) {
 			maze.MazeEscape();
 		}
 
-
-		int p = M_Player.gameProgression;
-		switch (p) {
-			case 0: {
-				firstSpike = true;
-				break;
-			}
-			case 1: {
-				secondSpike = true;
-				break;
-			}
-			case 2: {
-				thirdSpkie = true;
-				break;
-			}
-			case 3: {
-				fourthSpike = true;
-				break;
-			}
-			case 4: {
-				fifthSpike = true;
-				break;
-			}
-		}
 		M_Player.gameProgression++;
 		GameProgression.script.Progress();
-
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		spikesCollected = data.player.spikesCollected;
 		gameObject.SetActive(data.world.spikeActive);
 		gameObject.transform.position = data.world.spikePos;
-	}
-
-	private void OnEnable() {
-		guide.gameObject.SetActive(true);
-		guide.Recalculate(gameObject, true);
 	}
 
 	public void SetPosition() {
@@ -103,8 +66,9 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.Recalculate(gameObject, true);
-
+			if (OnNewTarget != null) {
+				OnNewTarget(gameObject);
+			}
 		}
 		if (stage == 1) {
 
@@ -114,8 +78,9 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.Recalculate(gameObject, true);
-
+			if (OnNewTarget != null) {
+				OnNewTarget(gameObject);
+			}
 		}
 		if (stage == 2) {
 
@@ -125,11 +90,12 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.Recalculate(gameObject, true);
-
+			if (OnNewTarget != null) {
+				OnNewTarget(gameObject);
+			}
 		}
 		if (stage == 3) {
-			print(stage);
+
 			GameObject lastPos = maze.grid[maze.rowcollCount / 2, maze.rowcollCount / 2];
 
 			float x = lastPos.transform.position.x;
@@ -139,36 +105,36 @@ public class Spike : MonoBehaviour /*,ICollectible*/ {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.transform.localScale = Vector2.one * 3;
 			gameObject.SetActive(true);
-			guide.Recalculate(gameObject, true);
 		}
 		if (stage == 4) {
-			print(stage);
+
 			float x = BG2b.transform.position.x - BG2b.sizeDelta.x / 2 + 20;
 			float y = BG2b.transform.position.y + BG2b.sizeDelta.y / 2 - 20;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
-			guide.Recalculate(gameObject, true);
-
+			if (OnNewTarget != null) {
+				OnNewTarget(gameObject);
+			}
 		}
 		if (stage == 5) {
-			print(stage);
 			gameObject.SetActive(false);
 		}
 	}
+
 	public void Hide() {
 		gameObject.SetActive(false);
-		guide.gameObject.SetActive(false);
+		if (OnNewTarget != null) {
+			OnNewTarget(null);
+		}
 	}
 
 	public static int spikesCollected {
 		get { return _spikesCollected; }
 		set {
 			_spikesCollected = value;
-			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene") {
-				Canvas_Renderer.script.Counters("Spike");
-			}
+			Canvas_Renderer.script.UpdateCounters("Spike");
 		}
 	}
 

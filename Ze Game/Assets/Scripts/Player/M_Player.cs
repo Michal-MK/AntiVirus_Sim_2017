@@ -372,7 +372,7 @@ public class M_Player : MonoBehaviour {
 				OnCoinPickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
-			Canvas_Renderer.script.Counters("Coin");
+			Canvas_Renderer.script.UpdateCounters("Coin");
 		}
 
 		if (col.name == "BombPickup") {
@@ -442,7 +442,7 @@ public class M_Player : MonoBehaviour {
 		EventSystem e = EventSystem.current;
 		e.SetSelectedGameObject(quitToMenu);
 		if (delEnemies) {
-			Destroy(GameObject.Find("Enemies").gameObject);
+			Destroy(GameObject.Find("Enemies"));
 			delEnemies = false;
 		}
 	}

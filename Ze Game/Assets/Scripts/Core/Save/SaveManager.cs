@@ -24,6 +24,7 @@ public class SaveManager : MonoBehaviour {
 
 	private void Start() {
 		saveToggle = GameObject.Find("saveGame").GetComponent<Toggle>();
+		Control.script.saveManager = this;
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
@@ -64,83 +65,97 @@ public class SaveManager : MonoBehaviour {
 
 	public void Save(int difficulty, bool newSaveFile = false) {
 		BinaryFormatter formatter = new BinaryFormatter();
-		SaveFile saveFile;
+		SaveFile newSave;
 		FileStream file;
+		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
 
-		file = File.Open(Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa", FileMode.Open);
-		saveFile = current;
+		file = File.Open(filePath,FileMode.Open);
+		newSave = current;
 
+		if (current.data.core.time != 0) {
+			newSave.saveHistory.saveHistory.Add(DeepCopy(current.data));
+		}
 		GameProgression.script.GetValues();
 
 		#region Player data
-		saveFile.data.player.bombs = PlayerAttack.bombs;
-		saveFile.data.player.bullets = PlayerAttack.bullets;
-		saveFile.data.player.playerPos = GameProgression.script.playerPos;
-		saveFile.data.player.spikesCollected = Spike.spikesCollected;
-		saveFile.data.player.coinsCollected = Coins.coinsCollected;
-		saveFile.data.player.canZoom = Zoom.canZoom;
-		saveFile.data.player.currentBGName = M_Player.currentBG_name;
+		newSave.data.player.bombs = PlayerAttack.bombs;
+		newSave.data.player.bullets = PlayerAttack.bullets;
+		newSave.data.player.playerPos = GameProgression.script.playerPos;
+		newSave.data.player.spikesCollected = Spike.spikesCollected;
+		newSave.data.player.coinsCollected = Coins.coinsCollected;
+		newSave.data.player.canZoom = Zoom.canZoom;
+		newSave.data.player.currentBGName = M_Player.currentBG_name;
 		#endregion
 
 		#region World data
-		saveFile.data.world.blockPos = GameProgression.script.boxPos;
-		saveFile.data.world.blockZRotation = GameProgression.script.ZRotationBlock;
-		saveFile.data.world.blockPushAttempt = pPlate.attempts;
-		saveFile.data.world.spikeActive = collectibles.Find("Spike").gameObject.activeSelf;
-		saveFile.data.world.spikePos = GameProgression.script.spikePos;
-		saveFile.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
-		saveFile.data.world.doneAvoidance = avoidance.performed;
+		newSave.data.world.blockPos = GameProgression.script.boxPos;
+		newSave.data.world.blockZRotation = GameProgression.script.ZRotationBlock;
+		newSave.data.world.blockPushAttempt = pPlate.attempts;
+		newSave.data.world.spikeActive = collectibles.Find("Spike").gameObject.activeSelf;
+		newSave.data.world.spikePos = GameProgression.script.spikePos;
+		newSave.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
+		newSave.data.world.doneAvoidance = avoidance.performed;
 		if (boss != null) {
-			saveFile.data.world.bossSpawned = true;
+			newSave.data.world.bossSpawned = true;
 		}
 		else {
-			saveFile.data.world.bossSpawned = false;
+			newSave.data.world.bossSpawned = false;
 		}
 		if (Maze.inMaze == false && Spike.spikesCollected >= 4) {
-			saveFile.data.world.postMazeDoorOpen = true;
+			newSave.data.world.postMazeDoorOpen = true;
 		}
 		else {
-			saveFile.data.world.postMazeDoorOpen = false;
+			newSave.data.world.postMazeDoorOpen = false;
 		}
 		#endregion
 
 		#region Core data
-		saveFile.data.core.camSize = Camera.main.orthographicSize;
-		saveFile.data.core.difficulty = difficulty;
-		saveFile.data.core.time = Timer.getTime;
-		saveFile.data.core.localAttempt = Control.currAttempt;
+		newSave.data.core.camSize = Camera.main.orthographicSize;
+		newSave.data.core.difficulty = difficulty;
+		newSave.data.core.time = Timer.getTime;
+		newSave.data.core.localAttempt = Control.currAttempt;
 		#endregion
 
 		#region Hints data
-		saveFile.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.info_S.text;
-		saveFile.data.shownHints.shownAttempt = M_Player.player.newGame;
-		saveFile.data.shownHints.shownAvoidanceInfo = avoidance.displayAvoidInfo;
-		saveFile.data.shownHints.shownBlockInfo = block.showInfo;
-		saveFile.data.shownHints.shownShotInfo = M_Player.player.pAttack.displayShootingInfo;
+		newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.info_S.text;
+		newSave.data.shownHints.shownAttempt = M_Player.player.newGame;
+		newSave.data.shownHints.shownAvoidanceInfo = avoidance.displayAvoidInfo;
+		newSave.data.shownHints.shownBlockInfo = block.showInfo;
+		newSave.data.shownHints.shownShotInfo = M_Player.player.pAttack.displayShootingInfo;
 		#endregion
 
 		#region Core data
-		saveFile.data.core.time = Timer.getTime;
-		saveFile.data.core.difficulty = Control.currDifficulty;
-		saveFile.data.core.camSize = Camera.main.orthographicSize;
+		newSave.data.core.time = Timer.getTime;
+		newSave.data.core.difficulty = Control.currDifficulty;
+		newSave.data.core.camSize = Camera.main.orthographicSize;
+		newSave.data.core.fileLocation = filePath;
 		#endregion
 
-		formatter.Serialize(file, saveFile);
+		formatter.Serialize(file, newSave);
 		file.Close();
-		StartCoroutine(ScreenShot(difficulty));
+		StartCoroutine(ScreenShot(difficulty, newSave.saveHistory.saveHistory.Count - 1));
 	}
 
-	private IEnumerator ScreenShot(int currAttempt) {
+	private IEnumerator ScreenShot(int difficulty, int currAttempt) {
 		GameObject saveButton = GameObject.Find("saveGame");
 		if (saveButton != null) {
 			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
 		}
 		//print("Captured");
-		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + currAttempt + "/Resources/Save-D" + currAttempt + "_" + currAttempt.ToString("000") + ".png");
+		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + currAttempt.ToString("000") + ".png");
 	}
 
 	private void OnDestroy() {
 		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
+	}
+
+	public static T DeepCopy<T>(T other) {
+		using (MemoryStream ms = new MemoryStream()) {
+			BinaryFormatter formatter = new BinaryFormatter();
+			formatter.Serialize(ms, other);
+			ms.Position = 0;
+			return (T)formatter.Deserialize(ms);
+		}
 	}
 
 

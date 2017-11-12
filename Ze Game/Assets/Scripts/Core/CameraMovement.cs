@@ -7,40 +7,29 @@ public class CameraMovement : MonoBehaviour {
 	public static event Zoom.Zooming OnZoomModeSwitch;
 
 	public RectTransform bg;
-	public Transform player;
-	public M_Player playerScript;
-	public GameObject spike;
-	public Vector3 cam_pos;
-	public Animator anim;
-
-	public ParticleSystem psA;
-	public ParticleSystem psB;
-
-
+	public RectTransform bossRoom;
+	public RectTransform player;
+	
+	private Vector3 cam_pos;
 	private Camera cam;
-	public List<GameObject> BackGroundS = new List<GameObject>();
-	public float camWidht;
-	public float camHeight;
-	public Vector3 middle;
-	public float currentBGX;
-	public float currentBGY;
-
+	private float camWidht;
+	private float camHeight;
+	private Vector3 middle;
+	private float currentBGX;
+	private float currentBGY;
 
 	public static GameObject[] loadedZones;
-
-	public RectTransform bossRoom;
-	public RectTransform MazeBG;
+	public List<GameObject> BackGroundS = new List<GameObject>();
 
 	public bool inBossRoom = false;
 	public bool inMaze = false;
 
+	public ParticleSystem psA;
+	public ParticleSystem psB;
+
 	public static bool doneMoving = true;
-
 	public const float defaultCamSize = 15;
-
 	public static CameraMovement script;
-
-
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -121,14 +110,14 @@ public class CameraMovement : MonoBehaviour {
 		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.left * 100, Color.red, 5);
 		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.right * 100, Color.yellow, 5);
 
-		bool continueInLoop = true;
+		//bool continueInLoop = true;
 
 		foreach (RaycastHit2D hits in up) {
 			//if (continueInLoop == false) {
 			//	break;
 			//}
 			if (hits.transform.gameObject.activeInHierarchy == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				continueInLoop = false;
+				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
@@ -139,13 +128,13 @@ public class CameraMovement : MonoBehaviour {
 			}
 		}
 
-		continueInLoop = true;
+		//continueInLoop = true;
 		foreach (RaycastHit2D hits in down) {
 			//if (continueInLoop == false) {
 			//	break;
 			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				continueInLoop = false;
+				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
@@ -158,14 +147,14 @@ public class CameraMovement : MonoBehaviour {
 
 		}
 
-		continueInLoop = true;
+		//continueInLoop = true;
 		foreach (RaycastHit2D hits in left) {
 
 			//if (continueInLoop == false) {
 			//	break;
 			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				continueInLoop = false;
+				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
@@ -177,13 +166,13 @@ public class CameraMovement : MonoBehaviour {
 
 		}
 
-		continueInLoop = true;
+		//continueInLoop = true;
 		foreach (RaycastHit2D hits in right) {
 			//if (continueInLoop == false) {
 			//	break;
 			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				continueInLoop = false;
+				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {

@@ -1,12 +1,11 @@
 using UnityEngine;
 
-public class Coins : MonoBehaviour/*, ICollectible*/ {
-	public Transform collec;
+public class Coins : MonoBehaviour {
+
 	public GameObject amount;
 	public RectTransform BG;
-	public RectTransform coin;
 	public Spike spike;
-	
+
 	private Vector3 oldpos;
 	private float scale;
 
@@ -19,29 +18,34 @@ public class Coins : MonoBehaviour/*, ICollectible*/ {
 		M_Player.OnCoinPickup += CoinBehavior;
 	}
 
+	void Start() {
+		oldpos = transform.position;
+		scale = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
+	}
+
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		coinsCollected = data.player.coinsCollected;
 
 		if (data.player.coinsCollected == 5) {
-			GameObject.Find("Coin").SetActive(false);
-			CoinBehavior(null,null);
+			gameObject.SetActive(false);
+			if (Spike.spikesCollected == 0) {
+				gameObject.SetActive(false);
+				spike.SetPosition();
+			}
 		}
 		else if (data.player.coinsCollected <= 4) {
 			CoinBehavior(null, null);
-			if(OnNewTarget != null) {
+			if (OnNewTarget != null) {
 				OnNewTarget(gameObject);
 			}
 		}
-
-	}
-
-	void Start() {
-		oldpos = coin.transform.position;
-		scale = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
 	}
 
 	public void CoinBehavior(M_Player sender, GameObject coinObj) {
-		coinsCollected++;
+		if (sender != null) {
+			coinsCollected++;
+		}
+
 		if (coinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
@@ -54,8 +58,8 @@ public class Coins : MonoBehaviour/*, ICollectible*/ {
 			gameObject.transform.position = newpos;
 		}
 		if (coinsCollected == 5) {
-			coin.gameObject.SetActive(false);
 			if (Spike.spikesCollected == 0) {
+				gameObject.SetActive(false);
 				spike.SetPosition();
 			}
 		}
@@ -78,9 +82,7 @@ public class Coins : MonoBehaviour/*, ICollectible*/ {
 		get { return _coinsCollected; }
 		set {
 			_coinsCollected = value;
-			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene") {
-				Canvas_Renderer.script.Counters("Coins");
-			}
+			Canvas_Renderer.script.UpdateCounters("Coin");
 		}
 	}
 

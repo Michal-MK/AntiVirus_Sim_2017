@@ -6,7 +6,7 @@ public class BlockScript : MonoBehaviour {
 
 	Vector3 currentpos;
 	Vector3 startingpos;
-	private Quaternion startingrotation = Quaternion.Euler(0,0,0);
+	private Quaternion startingrotation = Quaternion.Euler(0, 0, 0);
 
 	float dist;
 
@@ -30,32 +30,34 @@ public class BlockScript : MonoBehaviour {
 	}
 
 	private void Update() {
-		currentpos = gameObject.transform.position;
-		dist = Vector3.Distance(player.transform.position, gameObject.transform.position);
+		if (M_Player.currentBG_name == BG.name) {
+			currentpos = transform.position;
+			dist = Vector3.Distance(player.transform.position, transform.position);
 
-		if (currentpos.x < BG.position.x + -BG.sizeDelta.x / 2) {
-			gameObject.transform.position = startingpos;
-			gameObject.transform.rotation = startingrotation;
-		}
-		else if(currentpos.x > BG.position.x + BG.sizeDelta.x / 2) {
-			gameObject.transform.position = startingpos;
-			gameObject.transform.rotation = startingrotation;
-		}
-		else if (currentpos.y < BG.position.y + -BG.sizeDelta.y / 2) {
-			gameObject.transform.position = startingpos;
-			gameObject.transform.rotation = startingrotation;
-		}
-		else if (currentpos.y > BG.position.y + BG.sizeDelta.y / 2) {
-			gameObject.transform.position = startingpos;
-			gameObject.transform.rotation = startingrotation;
-		}
+			if (currentpos.x < BG.position.x + -BG.sizeDelta.x / 2) {
+				transform.position = startingpos;
+				transform.rotation = startingrotation;
+			}
+			else if (currentpos.x > BG.position.x + BG.sizeDelta.x / 2) {
+				transform.position = startingpos;
+				transform.rotation = startingrotation;
+			}
+			else if (currentpos.y < BG.position.y + -BG.sizeDelta.y / 2) {
+				transform.position = startingpos;
+				transform.rotation = startingrotation;
+			}
+			else if (currentpos.y > BG.position.y + BG.sizeDelta.y / 2) {
+				transform.position = startingpos;
+				transform.rotation = startingrotation;
+			}
 
-		if(showInfo && dist < 10) {
-			Canvas_Renderer.script.InfoRenderer("Find the activator and put the block in front of you on it.", null);
-			showInfo = false;
+			if (showInfo && dist < 10) {
+				Canvas_Renderer.script.InfoRenderer("Find the activator and put the block in front of you on it.", null);
+				showInfo = false;
+			}
 		}
-
 	}
+
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}

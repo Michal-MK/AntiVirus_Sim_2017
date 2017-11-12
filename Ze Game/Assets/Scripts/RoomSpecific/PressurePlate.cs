@@ -4,26 +4,33 @@ public class PressurePlate : MonoBehaviour {
 
 	public Sprite Active;
 	public Sprite Inactive;
-	SpriteRenderer selfSprite;
-
-	public Spike spike;
-
-	public AudioSource sound;
-
 	public AudioClip On;
 	public AudioClip Off;
 
+	public RectTransform BG;
+
+	public Spike spike;
+
+	//Prefabs
 	public GameObject wall;
 
+	//Save altered data
 	public int attempts = 0;
 	public bool alreadyTriggered = false;
 
-	public RectTransform BG;
-
 	public static event Guide.GuideTarget OnNewTarget;
+
+	private AudioSource sound;
+	private SpriteRenderer selfSprite;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	void Start() {
+		sound = GetComponent<AudioSource>();
+		selfSprite = GetComponent<SpriteRenderer>();
+		transform.position = GeneratePos();
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -36,26 +43,22 @@ public class PressurePlate : MonoBehaviour {
 		alreadyTriggered = data.world.pressurePlateTriggered;
 	}
 
-	void Start() {
-		selfSprite = gameObject.GetComponent<SpriteRenderer>();
-		gameObject.transform.position = GeneratePos();
-	}
-
 	public Vector3 GeneratePos() {
-		Vector3 pos = gameObject.transform.position;
+
+		Vector3 pos = transform.position;
 		Vector3 newPos = pos;
 
 		float f = Random.value;
 
 		if (f < 0.5) {
 			while (Vector3.Distance(pos, newPos) < 10) {
-				newPos = new Vector3(pos.x, Random.Range(BG.sizeDelta.y / 2 - 10,pos.y + 10),0);
+				newPos = new Vector3(pos.x, Random.Range(BG.sizeDelta.y / 2 - 10, pos.y + 10), 0);
 			}
 			return newPos;
 		}
 		else {
 			while (Vector3.Distance(pos, newPos) < 10) {
-				newPos = new Vector3(pos.x, Random.Range(-BG.sizeDelta.y / 2 + 10,pos.y - 10),0);
+				newPos = new Vector3(pos.x, Random.Range(-BG.sizeDelta.y / 2 + 10, pos.y - 10), 0);
 			}
 			return newPos;
 		}
@@ -69,7 +72,7 @@ public class PressurePlate : MonoBehaviour {
 				sound.clip = On;
 				sound.Play();
 				spike.SetPosition();
-				if(OnNewTarget != null) {
+				if (OnNewTarget != null) {
 					OnNewTarget(spike.gameObject);
 				}
 				BlockScript.pressurePlateTriggered = true;
@@ -80,7 +83,10 @@ public class PressurePlate : MonoBehaviour {
 		if (col.name == "Block") {
 			attempts++;
 			if (attempts == 1) {
-				Canvas_Renderer.script.InfoRenderer("A projectile pushed the block off of the activator...", "These projectiles sure are a nuisance.");
+				Canvas_Renderer.script.InfoRenderer("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
+			}
+			if (attempts == 2) {
+				Canvas_Renderer.script.InfoRenderer(null, "Aaand again... darn.");
 			}
 			if (attempts == 3) {
 				CreateBarrier();
@@ -94,11 +100,12 @@ public class PressurePlate : MonoBehaviour {
 	}
 	public void CreateBarrier() {
 		Canvas_Renderer.script.InfoRenderer(null, "Ok, let me help you a little.");
-		GameObject protection = Instantiate(wall, gameObject.transform.position + new Vector3(10, 0, 0), Quaternion.identity,gameObject.transform.parent);
+		GameObject protection = Instantiate(wall, transform.position + new Vector3(10, 0, 0), Quaternion.identity, transform.parent);
 		protection.name = "Blocker";
 		protection.GetComponent<BoxCollider2D>().isTrigger = true;
 		protection.transform.localScale = new Vector3(0.2f, 0.1f, 1);
 	}
+
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}

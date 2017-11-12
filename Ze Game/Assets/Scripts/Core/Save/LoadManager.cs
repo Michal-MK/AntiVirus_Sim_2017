@@ -10,6 +10,8 @@ public class LoadManager {
 	public static event SaveState OnSaveDataLoaded;
 	private SaveFile loadedData;
 
+	private SaveData save;
+
 	public void Load(string fileToLoad) {
 
 		BinaryFormatter bf = new BinaryFormatter();
@@ -22,6 +24,21 @@ public class LoadManager {
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 		SaveManager.current = loadedData;
+	}
+
+	public void Load(SaveData saveToLoad) {
+		save = saveToLoad;
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+		SceneManager.sceneLoaded += SceneLoadedWithData;
+	}
+
+	private void SceneLoadedWithData(Scene scene, LoadSceneMode mode) {
+		if (OnSaveDataLoaded != null) {
+			OnSaveDataLoaded(save);
+		}
+		OnSceneFinishedLoading(save);
+		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 	}
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {

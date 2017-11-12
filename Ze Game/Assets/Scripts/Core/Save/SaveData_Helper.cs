@@ -45,8 +45,7 @@ namespace SaveData_Helper {
 		public int difficulty;
 		public float time;
 		public float camSize;
-		public bool isNewGame;
-		public bool isRestarting;
+		public string fileLocation;
 	}
 
 	[System.Serializable]

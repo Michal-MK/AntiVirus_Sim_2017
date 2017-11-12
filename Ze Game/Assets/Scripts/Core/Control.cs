@@ -74,19 +74,15 @@ public class Control : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
+		MenuMusic.script.StopMusicWrapper();
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
-		CamFadeOut.OnCamFullyFaded += LoadToNewGame;
-		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
+		SceneManager.sceneLoaded += NewGameSceneLoaded;
 	}
 
-	private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
+	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
 		MusicHandler.script.PlayMusic(MusicHandler.script.room1);
-		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-	}
-
-	private void LoadToNewGame() {
-		CamFadeOut.OnCamFullyFaded -= LoadToNewGame;
-		SceneManager.LoadScene(1);
+		SceneManager.sceneLoaded -= NewGameSceneLoaded;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
 		PlayerAttack.bombs = 0;
@@ -98,7 +94,18 @@ public class Control : MonoBehaviour {
 		CamFadeOut.script.anim.speed = 0.75f;
 	}
 
+	private void TransitionToNewGame() {
+		CamFadeOut.OnCamFullyFaded -= TransitionToNewGame;
+		SceneManager.LoadScene(1);
+	}
+
 	public void Restart() {
+		MusicHandler.script.StartCoroutine(MusicHandler.script.FadeOutMusic());
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += RestartTransition;
+	}
+
+	private void RestartTransition() {
 		M_Player.doNotMove = false;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
@@ -108,14 +115,16 @@ public class Control : MonoBehaviour {
 		Projectile.projectileSpeed = 15;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		CamFadeOut.script.anim.SetTrigger("UnDim");
+		CamFadeOut.OnCamFullyFaded -= RestartTransition;
+		SceneManager.LoadScene(1);
 	}
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
 		if (scene.name == "GameScene") {
 			CamFadeOut.script.anim.speed = 0.5f;
-
+			if (MusicHandler.script.isAnythingPlaying == false) {
+				MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+			}
 		}
 		if(scene.name == "MainMenu" && !MenuMusic.script.isPlaying) {
 			MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());

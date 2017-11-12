@@ -5,14 +5,17 @@ public class Guide : MonoBehaviour {
 
 	public delegate void GuideTarget(GameObject target);
 
-	public Spike spike;
-	public Coins coin;
 	public M_Player player;
+
+	//Prefab
+	public GameObject Arrow;
+
+
 	private Vector3 destinationpos;
 	private Vector3 playerpos;
-	public GameObject Arrow;
-	GameObject pointArrow;
-	Transform GuideObj;
+	private GameObject pointArrow;
+	private  Transform GuideObj;
+
 	public GameObject destinationGlobal;
 
 	public Sprite guide;
@@ -22,6 +25,7 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
 		Coins.OnNewTarget += Coins_OnNewTarget;
+		Spike.OnNewTarget += Spike_OnNewTarget;
 	}
 
 	void Start() {
@@ -45,8 +49,15 @@ public class Guide : MonoBehaviour {
 	private void Coins_OnNewTarget(GameObject target) {
 		Recalculate(target, true);
 	}
+	private void Spike_OnNewTarget(GameObject target) {
+		Recalculate(target, true);
+	}
 
 	public void Recalculate(GameObject destination, bool isStatic) {
+		if(destination == null) {
+			Destroy(pointArrow);
+			return;
+		}
 
 		destinationGlobal = destination;
 
@@ -62,7 +73,6 @@ public class Guide : MonoBehaviour {
 	}
 
 	void Update() {
-
 		if (pointArrow != null && Timer.isRunning == true) {
 			Vector2 PlayToDestination = (Vector2)destinationGlobal.transform.position - (Vector2)player.transform.position;
 			Vector2 normVec = new Vector2(PlayToDestination.y, -PlayToDestination.x);
@@ -106,9 +116,6 @@ public class Guide : MonoBehaviour {
 					return;
 				}
 				else {
-					//Debug.Log(kinda_r);
-					//Debug.Log("X> " + (X - m));
-					//Debug.Log("Y> " + (Yline - n));
 					if (destinationpos.y - n > 0) {
 						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
@@ -145,7 +152,9 @@ public class Guide : MonoBehaviour {
 
 			}
 			else if (destinationpos.x - m < 0) {
-				float X = 1 / (2 * (a * a + b * b)) * (-Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c)) - 2 * a * b * n - 2 * a * c + 2 * b * b * m);
+				float X = 1 / (2 * (a * a + b * b)) *
+					(-Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c))
+					- 2 * a * b * n - 2 * a * c + 2 * b * b * m);
 
 
 				float Yline;
@@ -160,9 +169,6 @@ public class Guide : MonoBehaviour {
 					return;
 				}
 				else {
-					//Debug.Log(kinda_r);
-					//Debug.Log("X> " + (X - m));
-					//Debug.Log("Y> " + (Yline - n));
 					if (destinationpos.y - n > 0) {
 						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
@@ -200,5 +206,6 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 		Coins.OnNewTarget -= Coins_OnNewTarget;
+		Spike.OnNewTarget -= Spike_OnNewTarget;
 	}
 }

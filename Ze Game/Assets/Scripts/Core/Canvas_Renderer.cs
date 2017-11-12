@@ -89,9 +89,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 
 	public void DisplayDirection(Directions dir) {
-		//if (!wrp.Objects[0].activeInHierarchy) {
-			StartCoroutine(Pulse(directions[(int)dir]));
-		//}
+		StartCoroutine(Pulse(directions[(int)dir]));
 	}
 
 	private IEnumerator Pulse(GameObject info) {
@@ -103,7 +101,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 	}
 
-	public void Counters(string name) {
+	public void UpdateCounters(string name = null) {
 
 		if (name == "Coin") {
 			CoinC.text = "x " + Coins.coinsCollected;
@@ -116,13 +114,14 @@ public class Canvas_Renderer : MonoBehaviour {
 		if (name == "Spike") {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
-		if (name == "Update") {
-			CoinC.text = "x " + Coins.coinsCollected;
-			SpikeC.text = "x " + Spike.spikesCollected;
+
+		if (string.IsNullOrEmpty(name)) {
+			UpdateCounters("Spike");
+			UpdateCounters("Coin");
 		}
 	}
 	private void OnDestroy() {
-		script = null; 
+		script = null;
 	}
 }
 
