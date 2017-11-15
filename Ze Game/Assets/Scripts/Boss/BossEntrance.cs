@@ -39,7 +39,8 @@ public class BossEntrance : MonoBehaviour {
 				cam.BossFightCam(1);
 				StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, BossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(BossBG.position.x, BossBG.position.y, -10)));
 				bossHP.SetActive(true);
-				
+				Control.script.saveManager.Save(Control.currDifficulty);
+				SaveManager.canSave = false;
 			}
 			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
 				Canvas_Renderer.script.InfoRenderer("You are not a worthy opponent!\n"+
@@ -49,6 +50,7 @@ public class BossEntrance : MonoBehaviour {
 													"MuHAHaHaa!!!", "Explore this location further");
 
 			}
+			//Debug.Log("Cheating my way to vicotry");
 			//Spike.spikesCollected = 5;
 			//PlayerAttack.bullets = 5;
 			//PlayerAttack.bombs = 1;

@@ -13,7 +13,6 @@ public class Avoidance : MonoBehaviour {
 	public Spike spike;
 	public float avoidDuration = 60;
 	public bool displayAvoidInfo = true;
-	public Toggle saveButton;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -37,7 +36,7 @@ public class Avoidance : MonoBehaviour {
 	public void StartAvoidance() {
 		door1.SetActive(true);
 		StartCoroutine(HoldAvoidance());
-		saveButton.interactable = false;
+		SaveManager.canSave = false;
 		Projectile.spawnedByAvoidance = true;
 		Projectile.spawnedByKillerWall = false;
 		camMovement.RaycastForRooms();
@@ -48,7 +47,7 @@ public class Avoidance : MonoBehaviour {
 		yield return new WaitForSeconds(avoidDuration - 5);
 		spawner.DespawnAvoidance();
 		yield return new WaitForSeconds(5);
-		saveButton.interactable = true;
+		SaveManager.canSave = true;
 		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();

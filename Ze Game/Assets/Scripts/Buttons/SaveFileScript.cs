@@ -2,14 +2,14 @@ using System.IO;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-
+using UnityEngine.UI;
 
 public class SaveFileScript : MonoBehaviour {
 
 	public SaveData associatedData;
 
 	public GameObject save;
+	public RawImage rawImage;
 
 	public void DeleteFile() {
 		string savePath = "";
@@ -37,5 +37,6 @@ public class SaveFileScript : MonoBehaviour {
 
 	public void LoadData() {
 		Control.script.loadManager.Load(associatedData);
+		MenuMusic.script.StopMusicWrapper();
 	}
 }

@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 
 public class DisplaySaveHistory : MonoBehaviour {
 
 	public GameObject historyRep;
 
-	public Transform content;
+	private Transform content;
 	public List<SaveData> selfHistory;
 
 	public void Display() {
+		content = GameObject.Find("SaveSceneReferenceHolder").GetComponent<SaveSceneReferenceHolder>().content;
 		foreach (SaveData s in selfHistory) {
 			GameObject g = Instantiate(historyRep, content);
 			g.name = s.core.fileLocation;
 			g.transform.SetAsLastSibling();
 			g.GetComponent<SaveFileScript>().associatedData = s;
 			Text t = g.transform.Find("SaveInfo").GetComponent<Text>();
+			RawImage ri = g.transform.Find("SaveImage").GetComponent<RawImage>();
 			string BGName;
 
 			switch (s.player.currentBGName) {
@@ -60,6 +62,14 @@ public class DisplaySaveHistory : MonoBehaviour {
 				t.text ="Loaction: " + BGName + "\n" +
 						"Time: 00:00:00 minutes" + "\n" + 
 						"New Game";
+			}
+			Texture2D tex = new Texture2D(800, 600);
+			bool success = tex.LoadImage(File.ReadAllBytes(s.core.imgFileLocation));
+			if (success) {
+				ri.texture = tex;
+			}
+			else {
+				ri.texture = null;
 			}
 		}
 	}

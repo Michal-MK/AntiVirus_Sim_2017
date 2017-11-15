@@ -198,8 +198,8 @@ public class CameraMovement : MonoBehaviour {
 		currentBGX = 0;
 		currentBGY = 0;
 		int i = 0;
-		bool Vertical = true;
-		bool Horisontal = true;
+		bool vertical = true;
+		bool horizontal = true;
 		GameObject[] BGarray = new GameObject[BackGroundS.Count];
 
 		BGarray = BackGroundS.ToArray();
@@ -218,19 +218,19 @@ public class CameraMovement : MonoBehaviour {
 				yForAll = gg.transform.position.y;
 			}
 			if (gg.transform.position.x != xForAll) {
-				Vertical = false;
+				vertical = false;
 			}
 			if (gg.transform.position.y != yForAll) {
-				Horisontal = false;
+				horizontal = false;
 			}
 
 		}
-		if (Horisontal && Vertical) {
-			Horisontal = false;
-			Vertical = false;
+		if (horizontal && vertical) {
+			horizontal = false;
+			vertical = false;
 		}
 
-		if (Vertical == true) {
+		if (vertical == true) {
 			//			Debug.Log ("Vertical " + M_Player.currentBG_name);
 			float TopBorder = -Mathf.Infinity;
 			float BottomBorder = Mathf.Infinity;
@@ -255,7 +255,7 @@ public class CameraMovement : MonoBehaviour {
 			middle.y = (BottomBorder + TopBorder) / 2;
 
 		}
-		else if (Horisontal == true) {
+		else if (horizontal == true) {
 			//			Debug.Log ("Horizontal " + M_Player.currentBG_name);
 			float LeftBorder = Mathf.Infinity;
 			float RightBorder = -Mathf.Infinity;

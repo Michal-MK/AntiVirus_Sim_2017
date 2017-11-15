@@ -20,7 +20,6 @@ public class M_Player : MonoBehaviour {
 	public GameObject loadButton;
 	public Animator GameOverImg;
 
-	//public static float distanceToWall;
 	public static int gameProgression;
 	public static string currentBG_name;
 	public Rigidbody2D rg;
@@ -31,7 +30,6 @@ public class M_Player : MonoBehaviour {
 	public SaveGame save;
 	public Guide guide;
 
-	public bool disableSavesByBoss = false;
 	private int mode = 0;
 	public bool newGame = true;
 	public bool gameOver = false;
@@ -87,6 +85,7 @@ public class M_Player : MonoBehaviour {
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		transform.position = data.player.playerPos;
 		gameProgression = data.player.spikesCollected;
+		attempts = data.core.localAttempt;
 	}
 
 	void Start() {
@@ -96,13 +95,9 @@ public class M_Player : MonoBehaviour {
 		saveButton.SetActive(false);
 		loadButton.SetActive(false);
 
+#if !UNITY_EDITOR
 		string name = Control.currProfile.getProfileName;
-
-		if (name == null || name == "") {
-			Control.currAttempt = 0;
-		}
-		attempts = Control.currAttempt;
-
+#endif
 		StartCoroutine(DelayIntro());
 	}
 
@@ -141,9 +136,6 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (disableSavesByBoss && saveButton.GetComponent<Toggle>().interactable) {
-			saveButton.GetComponent<Toggle>().interactable = false;
-		}
 
 		if (doFlappy) {
 			Flappy();
@@ -173,79 +165,56 @@ public class M_Player : MonoBehaviour {
 	}
 
 	//Moving the Character using a Keyboard
-	private bool right = false;
-	private bool down = false;
-	private bool left = false;
-	private bool up = false;
-
 	public void ArrowMove() {
 
 		if (doNotMove == false) {
-			if (Input.GetAxis("Vertical") > 0) {
-				up = true;
+			if (Input.GetAxis("VertMovement") > 0) {
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * BossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * mazeSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
 				}
-			}
-			else {
-				up = false;
 			}
 
-			if (Input.GetAxis("Horizontal") > 0) {
-				right = true;
+			if (Input.GetAxis("HorMovement") > 0) {
+
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * mazeSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
 				}
-			}
-			else {
-				right = false;
 			}
 
-			if (Input.GetAxis("Vertical") < 0) {
-				down = true;
+			if (Input.GetAxis("VertMovement") < 0) {
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")));
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * BossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("Vertical")) * mazeSpeedMultiplier);
+					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
 				}
-			}
-			else {
-				down = false;
 			}
 
-			if (Input.GetAxis("Horizontal") < 0) {
-				left = true;
+			if (Input.GetAxis("HorMovement") < 0) {
 				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0));
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
 				}
 				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
 				}
 				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("Horizontal") * Speed, 0) * mazeSpeedMultiplier);
+					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
 				}
-			}
-			else {
-				left = false;
-			}
-			if (!up && !right && !down && !left) {
-				rg.velocity = Vector2.zero;
 			}
 		}
 	}
@@ -270,7 +239,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	public void Flappy() {
-		if (Input.GetAxis("Vertical") > 0.5f) {
+		if (Input.GetAxis("VertMovement") > 0.5f) {
 			if (onceOnAxis) {
 				rg.velocity = new Vector2(0, UpVelocity);
 				onceOnAxis = false;
@@ -283,7 +252,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private IEnumerator FlapAgain() {
-		yield return new WaitUntil(() => Input.GetAxis("Vertical") <= 0.5f);
+		yield return new WaitUntil(() => Input.GetAxis("VertMovement") <= 0.5f);
 		onceOnAxis = true;
 	}
 
@@ -418,7 +387,9 @@ public class M_Player : MonoBehaviour {
 		doNotMove = true;
 		Cursor.visible = true;
 		Timer.PauseTimer();
+#if !UNITY_EDITOR
 		save.SaveScore();
+#endif
 	}
 
 	public void GameOver() {

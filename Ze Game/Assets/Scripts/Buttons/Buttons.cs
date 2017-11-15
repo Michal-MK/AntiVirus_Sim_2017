@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Buttons : MonoBehaviour {
 
@@ -13,13 +15,7 @@ public class Buttons : MonoBehaviour {
 
 	public void LoadGame(Transform myParent) {
 		Control.script.loadManager.Load(myParent.name);
-		try {
-			MenuMusic.script.StopMusicWrapper();
-			Debug.LogWarning("Remove after");
-		}
-		catch {
-			Debug.LogWarning("Remove after");
-		}
+		MenuMusic.script.StopMusicWrapper();
 	}
 
 	public void Restart() {
@@ -31,10 +27,18 @@ public class Buttons : MonoBehaviour {
 	}
 
 	public void Quit() {
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
-	#else
+#else
 		Application.Quit();
-	#endif
+#endif
+	}
+
+	public void OpenWindowActive(GameObject window) {
+		WindowManager.AddWindow(new Window(window, Window.WindowType.ACTIVATING));
+	}
+
+	public void OpenWindowAnim(GameObject window) {
+		WindowManager.AddWindow(new Window(window, Window.WindowType.MOVING));
 	}
 }

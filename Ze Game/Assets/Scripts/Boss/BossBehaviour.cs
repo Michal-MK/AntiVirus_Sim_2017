@@ -197,6 +197,7 @@ public class BossBehaviour : MonoBehaviour {
 		while (previous == attackNo) {
 			attackNo = UnityEngine.Random.Range(2, 6);
 		}
+		//Debug.Log("Returning constant");
 		return attackNo;
 	}
 	//
@@ -376,19 +377,27 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2f);
 				isAttacking = true;
 				Attack4 = true;
-				topBrim = Instantiate(Brimstone);
+				topBrim = Instantiate(Brimstone,transform);
+				topBrim.transform.localPosition = Vector3.zero;
+
 				topBrim.name = "Top";
 				topRect = topBrim.GetComponent<RectTransform>();
 
-				rightBrim = Instantiate(Brimstone);
+				rightBrim = Instantiate(Brimstone, transform);
+				rightBrim.transform.localPosition = Vector3.zero;
+
 				rightBrim.name = "Right";
 				rightRect = rightBrim.GetComponent<RectTransform>();
 
-				bottomBrim = Instantiate(Brimstone);
+				bottomBrim = Instantiate(Brimstone, transform);
+				bottomBrim.transform.localPosition = Vector3.zero;
+
 				bottomBrim.name = "Bottom";
 				bottomRect = bottomBrim.GetComponent<RectTransform>();
 
-				leftBrim = Instantiate(Brimstone);
+				leftBrim = Instantiate(Brimstone, transform);
+				leftBrim.transform.localPosition = Vector3.zero;
+
 				leftBrim.name = "Left";
 				leftRect = leftBrim.GetComponent<RectTransform>();
 

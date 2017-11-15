@@ -15,6 +15,9 @@ public class Control : MonoBehaviour {
 	public static int currDifficulty = 0;
 	public static Profile_Data currProfile;
 
+	public delegate void Escape();
+	public static event Escape OnEscapePressed;
+
 	void Awake() {
 		if (script == null) {
 			script = this;
@@ -27,6 +30,7 @@ public class Control : MonoBehaviour {
 				script.loadManager = new LoadManager();
 			}
 			Destroy(gameObject);
+			LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		}
 
 		if (!Directory.Exists(Application.dataPath + "/Saves")) {
@@ -68,8 +72,15 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		currAttempt = data.core.localAttempt;
+		currDifficulty = data.core.difficulty;
+	}
+
 	private void Start() {
+#if !UNITY_EDITOR
 		Profile.RequestProfiles();
+#endif
 	}
 
 	public void StartNewGame(int difficulty) {
@@ -130,9 +141,19 @@ public class Control : MonoBehaviour {
 			MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());
 		}
 		Time.timeScale = 1;
+		WindowManager.ClearWindows();
+	}
+
+	private void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if(OnEscapePressed != null) {
+				OnEscapePressed();
+			}
+		}
 	}
 
 	private void OnDestroy() {
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

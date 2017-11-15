@@ -54,7 +54,14 @@ public class Timer : MonoBehaviour {
 	}
 
 	public static string getTimeFormated {
-		get { return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)getTime / 60, getTime % 60, getTime.ToString().Remove(0, getTime.ToString().Length - 2)); }
+		get {
+			if (getTime != 0) {
+				return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)getTime / 60, getTime % 60, getTime.ToString().Remove(0, getTime.ToString().Length - 2));
+			}
+			else {
+				return "0";
+			}
+		}
 	}
 
 	public static bool isRunning {

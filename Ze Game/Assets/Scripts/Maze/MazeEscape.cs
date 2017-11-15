@@ -44,7 +44,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private IEnumerator FadeWalls() {
-		SpriteRenderer one = wall.GetComponent<SpriteRenderer>();
+		SpriteRenderer wallSprite = wall.GetComponent<SpriteRenderer>();
 
 		Color32 newColor;
 
@@ -55,7 +55,7 @@ public class MazeEscape : MonoBehaviour {
 			}
 			else {
 				newColor = new Color32(255, 255, 255, (byte)f);
-				one.color = newColor;
+				wallSprite.color = newColor;
 
 				if (f > 0) {
 					yield return null;

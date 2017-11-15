@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
@@ -38,7 +37,8 @@ public class LoadManager {
 			OnSaveDataLoaded(save);
 		}
 		OnSceneFinishedLoading(save);
-		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+		SceneManager.sceneLoaded -= SceneLoadedWithData;
+
 	}
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {

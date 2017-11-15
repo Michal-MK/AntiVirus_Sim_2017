@@ -43,7 +43,6 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		print("OnSaveDataLoaded into menu");
 		for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
 			SpawnKillerBlock();
 		}
@@ -98,6 +97,10 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public void SpawnKillerBlock() {
+
+		if(player == null) {
+			return;
+		}
 
 		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.currDifficulty));
 

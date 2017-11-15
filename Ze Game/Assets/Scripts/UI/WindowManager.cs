@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UI_Manager {
+public class WindowManager {
 	
 	/// <summary>
 	/// Stack of active windows, since windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
@@ -175,6 +175,13 @@ public class UI_Manager {
 			}
 		}
 		Debug.LogWarning("No window " + window + " found.");
+	}
+
+	/// <summary>
+	/// Removes the content of activeWindows list
+	/// </summary>
+	public static void ClearWindows() {
+		activeWindows.Clear();
 	}
 
 	public static int getWindowCount {

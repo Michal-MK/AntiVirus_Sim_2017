@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour {
 
-	private static Toggle saveToggle;
-
+	public Button saveButton;
+	private static Button saveButton_static;
 	public PressurePlate pPlate;
 	public Avoidance avoidance;
 	public BlockScript block;
@@ -20,10 +20,10 @@ public class SaveManager : MonoBehaviour {
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
+		saveButton_static = saveButton;
 	}
 
 	private void Start() {
-		saveToggle = GameObject.Find("saveGame").GetComponent<Toggle>();
 		Control.script.saveManager = this;
 	}
 
@@ -65,12 +65,11 @@ public class SaveManager : MonoBehaviour {
 
 	public void Save(int difficulty, bool newSaveFile = false) {
 		BinaryFormatter formatter = new BinaryFormatter();
-		SaveFile newSave;
+		SaveFile newSave = current;
 		FileStream file;
 		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
-
+		string imgFilePath = Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + (newSave.saveHistory.saveHistory.Count - 1).ToString("000") + ".png";
 		file = File.Open(filePath,FileMode.Open);
-		newSave = current;
 
 		if (current.data.core.time != 0) {
 			newSave.saveHistory.saveHistory.Add(DeepCopy(current.data));
@@ -129,11 +128,12 @@ public class SaveManager : MonoBehaviour {
 		newSave.data.core.difficulty = Control.currDifficulty;
 		newSave.data.core.camSize = Camera.main.orthographicSize;
 		newSave.data.core.fileLocation = filePath;
+		newSave.data.core.imgFileLocation = imgFilePath;
 		#endregion
 
 		formatter.Serialize(file, newSave);
 		file.Close();
-		StartCoroutine(ScreenShot(difficulty, newSave.saveHistory.saveHistory.Count - 1));
+		StartCoroutine(ScreenShot(imgFilePath));
 	}
 
 	private IEnumerator ScreenShot(int difficulty, int currAttempt) {
@@ -141,8 +141,15 @@ public class SaveManager : MonoBehaviour {
 		if (saveButton != null) {
 			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
 		}
-		//print("Captured");
 		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + currAttempt.ToString("000") + ".png");
+	}
+
+	private IEnumerator ScreenShot(string filePath) {
+		GameObject saveButton = GameObject.Find("saveGame");
+		if (saveButton != null) {
+			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
+		}
+		ScreenCapture.CaptureScreenshot(filePath);
 	}
 
 	private void OnDestroy() {
@@ -164,10 +171,10 @@ public class SaveManager : MonoBehaviour {
 		set {
 			_canSave = value;
 			if (value) {
-				saveToggle.interactable = true;
+				saveButton_static.interactable = true;
 			}
 			else {
-				saveToggle.interactable = false;
+				saveButton_static.interactable = false;
 			}
 		}
 	}

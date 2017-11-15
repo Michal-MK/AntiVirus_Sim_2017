@@ -46,6 +46,7 @@ namespace SaveData_Helper {
 		public float time;
 		public float camSize;
 		public string fileLocation;
+		public string imgFileLocation;
 	}
 
 	[System.Serializable]
