@@ -21,7 +21,7 @@ namespace SaveData_Helper {
 	public class DisplayedHints {
 		public string currentlyDisplayedSideInfo;
 
-		public bool shownShotInfo;
+		public bool displayShootInfo;
 		public bool shownAttempt;
 		public bool shownBlockInfo;
 		public bool shownAvoidanceInfo;

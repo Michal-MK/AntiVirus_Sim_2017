@@ -29,6 +29,7 @@ public class Maze : MonoBehaviour {
 	public GameObject[,] wallsL;
 
 	public static bool inMaze = false;
+	private static float _mazeSpeedMultiplier;
 
 	void Start() {
 
@@ -108,22 +109,27 @@ public class Maze : MonoBehaviour {
 	public int MazeLevel() {
 		switch (Control.currDifficulty) {
 			case 0: {
+				getMazeSpeedMultiplier = 2;
 				return 15;
 			}
 
 			case 1: {
+				getMazeSpeedMultiplier = 1.75f;
 				return 21;
 			}
 
 			case 2: {
+				getMazeSpeedMultiplier = 1.75f;
 				return 23;
 			}
 
 			case 3: {
+				getMazeSpeedMultiplier = 0.75f;
 				return 25;
 			}
 
 			case 4: {
+				getMazeSpeedMultiplier = 0.5f;
 				return 29;
 			}
 			default: {
@@ -430,8 +436,6 @@ public class Maze : MonoBehaviour {
 	}
 	int reference = 0;
 
-
-
 	public int GetRandomGridPos(bool xAxis) {
 
 		int side = Random.Range(0, 4);
@@ -498,9 +502,62 @@ public class Maze : MonoBehaviour {
 			}
 		}
 	}
+	/// <summary>
+	/// Returns a vector of maze array indexes
+	/// </summary>
+	/// <param name="antiBias">Supply a vector to prevent getting simillar results.</param>
+	/// <returns></returns>
+	public Vector2 GetEdgeCell(Vector2 antiBias = default(Vector2)) {
+		Directions dir = (Directions)Random.Range(0, 4);
+		switch (dir) {
+			case Directions.TOP: {
+				Vector2 vec = new Vector2(Random.Range(0, rowcollCount), rowcollCount - 1);
+				if (antiBias != default(Vector2) && Vector2.Distance(antiBias, vec) <= 5) {
+					return GetEdgeCell(antiBias);
+				}
+				else {
+					return vec;
+				}
+			}
+			case Directions.RIGHT: {
+				Vector2 vec = new Vector2(0, Random.Range(0, rowcollCount));
+				if (antiBias != default(Vector2) && Vector2.Distance(antiBias, vec) <= 5) {
+					return GetEdgeCell(antiBias);
+				}
+				else {
+					return vec;
+				}
+			}
+			case Directions.BOTTOM: {
+				Vector2 vec = new Vector2(Random.Range(0, rowcollCount), 0);
+				if (antiBias != default(Vector2) && Vector2.Distance(antiBias, vec) <= 5) {
+					return GetEdgeCell(antiBias);
+				}
+				else {
+					return vec;
+				}
+			}
+			case Directions.LEFT: {
+				Vector2 vec = new Vector2(rowcollCount - 1, Random.Range(0, rowcollCount));
+				if (antiBias != default(Vector2) && Vector2.Distance(antiBias, vec) <= 5) {
+					return GetEdgeCell(antiBias);
+				}
+				else {
+					return vec;
+				}
+			}
+			default: {
+				throw new System.Exception("Undefined state.");
+			}
+		}
+	}
+
 
 	public void MazeEscape() {
+		Vector2 rndEdge = GetEdgeCell();
 		teleport.transform.position = grid[GetRandomGridPos(true), GetRandomGridPos(false)].transform.position;
+		teleport.transform.position = grid[(int)rndEdge.x, (int)rndEdge.y].transform.position;
+		print("Testing edge code");
 	}
 
 
@@ -510,4 +567,10 @@ public class Maze : MonoBehaviour {
 			StopAllCoroutines();
 		}
 	}
+
+	public static float getMazeSpeedMultiplier {
+		get { return _mazeSpeedMultiplier; }
+		private set { _mazeSpeedMultiplier = value; }
+	}
+
 }

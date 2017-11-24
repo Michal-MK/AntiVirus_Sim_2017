@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class Buttons : MonoBehaviour {
 
@@ -34,11 +33,11 @@ public class Buttons : MonoBehaviour {
 #endif
 	}
 
-	public void OpenWindowActive(GameObject window) {
-		WindowManager.AddWindow(new Window(window, Window.WindowType.ACTIVATING));
+	public void ToggleWindowActive(GameObject window) {
+		WindowManager.ToggleWindow(new Window(window, Window.WindowType.ACTIVATING));
 	}
 
-	public void OpenWindowAnim(GameObject window) {
-		WindowManager.AddWindow(new Window(window, Window.WindowType.MOVING));
+	public void ToggleWindowAnim(GameObject window) {
+		WindowManager.ToggleWindow(new Window(window, Window.WindowType.MOVING));
 	}
 }

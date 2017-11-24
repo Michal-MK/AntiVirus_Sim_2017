@@ -3,8 +3,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour {
+	public static event PauseUnpause.Pause OnPauseChange;
+	private static UIScene _sceneMode;
 
-	public static UIScene sceneMode;
+	public static UIScene sceneMode {
+		set { _sceneMode = value; }
+	}
 
 	public enum UIScene {
 		MAIN_MENU,
@@ -16,11 +20,11 @@ public class UserInterface : MonoBehaviour {
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	public static void ListenForEscape() {
 		Control.OnEscapePressed += Control_OnEscapePressed;
-		sceneMode = UIScene.MAIN_MENU;
+		_sceneMode = UIScene.MAIN_MENU;
 	}
 
 	private static void Control_OnEscapePressed() {
-		switch (sceneMode) {
+		switch (_sceneMode) {
 			case UIScene.MAIN_MENU: {
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
@@ -31,11 +35,17 @@ public class UserInterface : MonoBehaviour {
 			case UIScene.GAME: {
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
+
 					try {
 						EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);
 					}
 					catch {
 						print("No Buttons are selectable.");
+					}
+				}
+				else {
+					if (OnPauseChange != null) {
+						OnPauseChange(!PauseUnpause.isPaused);
 					}
 				}
 				return;
@@ -59,25 +69,41 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	private void Update() {
-		switch (sceneMode) {
+		switch (_sceneMode) {
 			case UIScene.MAIN_MENU: {
 				if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0) {
 					EventSystem.current.SetSelectedGameObject(null);
 				}
-				break;
+				return;
 			}
 			case UIScene.GAME: {
-				break;
+				return;
 			}
 			case UIScene.SAVES: {
-				break;
+				return;
 			}
 			case UIScene.OTHER: {
-				break;
+				return;
 			}
 			default: {
-				break;
+				return;
 			}
 		}
 	}
+
+	#region Menu Functions
+	public void Deactivate(Button button) {
+		button.interactable = false;
+	}
+
+	public void Activate(Button button) {
+		button.interactable = true;
+	}
+
+	public void ToggleMenuButtons() {
+		foreach (Button b in FindObjectOfType<MainMenu_Holder>().getButtons) {
+			b.interactable = !b.interactable;
+		}
+	}
+	#endregion
 }

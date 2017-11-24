@@ -37,6 +37,7 @@ public class MazeEscape : MonoBehaviour {
 		Camera.main.transform.position = player.transform.position;
 		player.transform.localScale = Vector3.one;
 		spike.SetPosition();
+		spike.transform.localScale = Vector3.one;
 		StartCoroutine(FadeWalls());
 		pathOpen = true;
 

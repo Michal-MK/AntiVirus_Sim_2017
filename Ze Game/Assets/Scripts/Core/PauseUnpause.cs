@@ -1,47 +1,68 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class PauseUnpause : MonoBehaviour {
+	public delegate void Pause(bool state);
 
-	public static bool isPaused = false;
+	private static bool _canPause = true;
+	private static bool _isPaused = false;
+
 	public GameObject restartButton;
 	public GameObject quitToMenu;
 	public GameObject saveButton;
 	public GameObject loadButton;
 
-	private void Update() {
-		if (!Canvas_Renderer.script.isRunning && !M_Player.player.gameOver) {
-			if (Input.GetButtonDown("Escape") && !isPaused) {
+	private void Awake() {
+		UserInterface.OnPauseChange += UserInterface_OnPauseChange;
+	}
 
-				Cursor.visible = true;
-				Timer.PauseTimer();
-				restartButton.SetActive(true);
-				quitToMenu.SetActive(true);
-				saveButton.SetActive(true);
-
-				Time.timeScale = 0;
-				EventSystem e = EventSystem.current;
-				e.SetSelectedGameObject(saveButton);
-				isPaused = true;
+	private void UserInterface_OnPauseChange(bool state) {
+		if (state == false) {
+			saveButton.GetComponentInChildren<Text>().text = "Save?";
+			saveButton.GetComponent<Button>().interactable = true;
+			saveButton.SetActive(false);
+			restartButton.SetActive(false);
+			quitToMenu.SetActive(false);
+			Cursor.visible = false;
+			Time.timeScale = 1;
+			Player_Movement.canMove = true;
+			if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
+				Timer.StartTimer(1f);
 			}
-			else if (Input.GetButtonDown("Escape") && isPaused) {
-				saveButton.GetComponentInChildren<Text>().text = "Save?";
-				saveButton.GetComponent<Button>().interactable = true;
-				saveButton.SetActive(false);
-				restartButton.SetActive(false);
-				quitToMenu.SetActive(false);
-				Cursor.visible = false;
-				Time.timeScale = 1;
-				if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
-					Timer.StartTimer(1f);
-				}
-				else {
-					Timer.StartTimer(2f);
-				}
-				isPaused = false;
+			else {
+				Timer.StartTimer(2f);
 			}
+			_isPaused = false;
 		}
+		else {
+			Cursor.visible = true;
+			Timer.PauseTimer();
+			restartButton.SetActive(true);
+			quitToMenu.SetActive(true);
+			saveButton.SetActive(true);
+
+			Time.timeScale = 0;
+			Player_Movement.canMove = false;
+			EventSystem e = EventSystem.current;
+			e.SetSelectedGameObject(saveButton);
+			_isPaused = true;
+		}
+	}
+
+	public static bool canPause {
+		get { return _canPause; }
+
+		set { _canPause = value; }
+	}
+
+	public static bool isPaused {
+		get { return _isPaused; }
+	}
+
+	private void OnDestroy() {
+		UserInterface.OnPauseChange -= UserInterface_OnPauseChange;
 	}
 }
 

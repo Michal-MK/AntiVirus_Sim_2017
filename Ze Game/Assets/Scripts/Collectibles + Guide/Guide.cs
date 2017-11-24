@@ -24,8 +24,15 @@ public class Guide : MonoBehaviour {
 	private void Awake() {
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+		M_Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
 		Coins.OnNewTarget += Coins_OnNewTarget;
 		Spike.OnNewTarget += Spike_OnNewTarget;
+	}
+
+	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
+		if(other.name == "Block") {
+			Recalculate(GameObject.Find("PressurePlate"), true);
+		}
 	}
 
 	void Start() {
@@ -205,6 +212,7 @@ public class Guide : MonoBehaviour {
 	private void OnDestroy() {
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		M_Player.OnTargetableObjectCollision -= M_Player_OnTargetableObjectCollision;
 		Coins.OnNewTarget -= Coins_OnNewTarget;
 		Spike.OnNewTarget -= Spike_OnNewTarget;
 	}

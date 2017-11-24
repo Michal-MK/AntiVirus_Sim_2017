@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class Zoom : MonoBehaviour {
 
-	public delegate void Zooming(bool alowed);
-
-	public CameraMovement camMovement;
+	public delegate void Zooming(bool allowed);
 
 	public Camera cam;
 	public ParticleSystem matrixA;
@@ -12,8 +10,8 @@ public class Zoom : MonoBehaviour {
 
 	public static bool canZoom = true;
 
-	public float BossMax = 108f;
-	public float BossMin = 10f;
+	public float BossMax = 107f;
+	public float BossMin = 15f;
 
 	public float NormMax = 25;
 	public float NormMin = 15;
@@ -27,7 +25,7 @@ public class Zoom : MonoBehaviour {
 	}
 
 	private void LateUpdate() {
-		if (camMovement.inBossRoom && canZoom) {
+		if (CameraMovement.script.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			
 			if (roll > 0) {
@@ -40,12 +38,12 @@ public class Zoom : MonoBehaviour {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.2f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(camMovement.camX, camMovement.camY, -10);
-			//
+			Vector3 cam_pos = new Vector3(CameraMovement.script.camX, CameraMovement.script.camY, -10);
+			
 			cam.transform.position = cam_pos;
-			//
+			
 		}
-		else if (!camMovement.inBossRoom && canZoom) {
+		else if (!CameraMovement.script.inBossRoom && canZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			if (roll > 0) {
 				if (cam.orthographicSize < NormMax) {
@@ -58,10 +56,10 @@ public class Zoom : MonoBehaviour {
 					cam.orthographicSize += Input.GetAxis("Mouse Scroll Wheel") * 0.08f;
 				}
 			}
-			Vector3 cam_pos = new Vector3(camMovement.camX, camMovement.camY, -10);
+			Vector3 cam_pos = new Vector3(CameraMovement.script.camX, CameraMovement.script.camY, -10);
 			cam.transform.position = cam_pos;
 		}
-		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !camMovement.inBossRoom) {
+		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !CameraMovement.script.inBossRoom) {
 
 			matrixA.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + Camera.main.orthographicSize,0);
 			matrixB.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y - Camera.main.orthographicSize, 0);

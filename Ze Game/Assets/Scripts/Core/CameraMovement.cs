@@ -18,7 +18,6 @@ public class CameraMovement : MonoBehaviour {
 	private float currentBGX;
 	private float currentBGY;
 
-	public static GameObject[] loadedZones;
 	public List<GameObject> BackGroundS = new List<GameObject>();
 
 	public bool inBossRoom = false;
@@ -29,6 +28,7 @@ public class CameraMovement : MonoBehaviour {
 
 	public static bool doneMoving = true;
 	public const float defaultCamSize = 15;
+
 	public static CameraMovement script;
 
 	private void Awake() {
@@ -71,7 +71,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
-		SetParticleLifetime();
+		SetParticleLifetime(25);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -105,93 +105,52 @@ public class CameraMovement : MonoBehaviour {
 		RaycastHit2D[] left = Physics2D.RaycastAll(new Vector2(bg.position.x, bg.position.y), Vector2.left, Mathf.Abs(-currentBGX - 10));
 		RaycastHit2D[] right = Physics2D.RaycastAll(new Vector2(bg.position.x, bg.position.y), Vector2.right, currentBGX + 10);
 
-		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.up * 100, Color.blue, 5);
-		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.down * 100, Color.green, 5);
-		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.left * 100, Color.red, 5);
-		Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.right * 100, Color.yellow, 5);
+		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.up * 100, Color.blue, 5);
+		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.down * 100, Color.green, 5);
+		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.left * 100, Color.red, 5);
+		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.right * 100, Color.yellow, 5);
 
-		//bool continueInLoop = true;
 
 		foreach (RaycastHit2D hits in up) {
-			//if (continueInLoop == false) {
-			//	break;
-			//}
 			if (hits.transform.gameObject.activeInHierarchy == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-
 				GameObject hitObj = hits.transform.gameObject;
 				BackGroundS.Add(hitObj);
-
 			}
 		}
-
-		//continueInLoop = true;
 		foreach (RaycastHit2D hits in down) {
-			//if (continueInLoop == false) {
-			//	break;
-			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-
-
 				GameObject hitObj = hits.transform.gameObject;
 				BackGroundS.Add(hitObj);
-
 			}
-
 		}
-
-		//continueInLoop = true;
 		foreach (RaycastHit2D hits in left) {
-
-			//if (continueInLoop == false) {
-			//	break;
-			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-
-
 				GameObject hitObj = hits.transform.gameObject;
 				BackGroundS.Add(hitObj);
 			}
-
 		}
-
-		//continueInLoop = true;
 		foreach (RaycastHit2D hits in right) {
-			//if (continueInLoop == false) {
-			//	break;
-			//}
 			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				//continueInLoop = false;
 				break;
 			}
 			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-
 				GameObject hitObj = hits.transform.gameObject;
 				BackGroundS.Add(hitObj);
-
 			}
 		}
-		//foreach (var item in BackGroundS) {
-		//	print("BGS " + item.name);
-		//}
-
 		if (BackGroundS.Count != 0) {
 			CalculateArea();
 		}
 	}
-
-
 
 	public void CalculateArea() {
 
@@ -200,11 +159,11 @@ public class CameraMovement : MonoBehaviour {
 		int i = 0;
 		bool vertical = true;
 		bool horizontal = true;
-		GameObject[] BGarray = new GameObject[BackGroundS.Count];
+		#region wtf is this thing
+		//GameObject[] BGarray = new GameObject[BackGroundS.Count];
+		//BGarray = BackGroundS.ToArray();
+		#endregion
 
-		BGarray = BackGroundS.ToArray();
-		loadedZones = new GameObject[BGarray.Length];
-		loadedZones = BGarray;
 		//foreach (GameObject zones in loadedZones) {
 		//	Debug.Log (i + "  " + zones);
 		//	i++;
@@ -212,15 +171,15 @@ public class CameraMovement : MonoBehaviour {
 
 		float xForAll = 0;
 		float yForAll = 0;
-		foreach (GameObject gg in BGarray) {
+		foreach (GameObject backgroundObj in BackGroundS) {
 			if (i == 0) {
-				xForAll = gg.transform.position.x;
-				yForAll = gg.transform.position.y;
+				xForAll = backgroundObj.transform.position.x;
+				yForAll = backgroundObj.transform.position.y;
 			}
-			if (gg.transform.position.x != xForAll) {
+			if (backgroundObj.transform.position.x != xForAll) {
 				vertical = false;
 			}
-			if (gg.transform.position.y != yForAll) {
+			if (backgroundObj.transform.position.y != yForAll) {
 				horizontal = false;
 			}
 
@@ -231,10 +190,9 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		if (vertical == true) {
-			//			Debug.Log ("Vertical " + M_Player.currentBG_name);
 			float TopBorder = -Mathf.Infinity;
 			float BottomBorder = Mathf.Infinity;
-			foreach (GameObject BackGroundRect in BGarray) {
+			foreach (GameObject BackGroundRect in BackGroundS) {
 				if (BackGroundRect.GetComponent<RectTransform>().sizeDelta.x / 2 > currentBGX) {
 					currentBGX = BackGroundRect.GetComponent<RectTransform>().sizeDelta.x / 2;
 				}
@@ -247,19 +205,14 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
-
-
-
 			}
 			middle.x = bg.position.x;
 			middle.y = (BottomBorder + TopBorder) / 2;
-
 		}
 		else if (horizontal == true) {
-			//			Debug.Log ("Horizontal " + M_Player.currentBG_name);
 			float LeftBorder = Mathf.Infinity;
 			float RightBorder = -Mathf.Infinity;
-			foreach (GameObject BackGroundRect in BGarray) {
+			foreach (GameObject BackGroundRect in BackGroundS) {
 				if (BackGroundRect.GetComponent<RectTransform>().sizeDelta.y / 2 > currentBGY) {
 					currentBGY = BackGroundRect.GetComponent<RectTransform>().sizeDelta.y / 2;
 				}
@@ -278,11 +231,9 @@ public class CameraMovement : MonoBehaviour {
 			middle.x = (LeftBorder + RightBorder) / 2;
 		}
 		else {
-			//			Debug.Log ("I never asked for this. Objects not in line or only one Object in Array " + M_Player.currentBG_name);
-
 			float TopBorder = -Mathf.Infinity;
 			float BottomBorder = Mathf.Infinity;
-			foreach (GameObject BackGroundRect in BGarray) {
+			foreach (GameObject BackGroundRect in BackGroundS) {
 				float specificTop = BackGroundRect.transform.position.y + BackGroundRect.GetComponent<RectTransform>().sizeDelta.y / 2;
 				float specificBottom = BackGroundRect.transform.position.y - BackGroundRect.GetComponent<RectTransform>().sizeDelta.y / 2;
 				if (specificBottom < BottomBorder) {
@@ -291,15 +242,12 @@ public class CameraMovement : MonoBehaviour {
 				if (specificTop > TopBorder) {
 					TopBorder = specificTop;
 				}
-
-
-
 			}
 			currentBGY = (-BottomBorder + TopBorder) / 2;
 			middle.y = (BottomBorder + TopBorder) / 2;
 			float LeftBorder = Mathf.Infinity;
 			float RightBorder = -Mathf.Infinity;
-			foreach (GameObject BackGroundRect in BGarray) {
+			foreach (GameObject BackGroundRect in BackGroundS) {
 
 				float specificLeft = BackGroundRect.transform.position.x - BackGroundRect.GetComponent<RectTransform>().sizeDelta.x / 2;
 				float specificRight = BackGroundRect.transform.position.x + BackGroundRect.GetComponent<RectTransform>().sizeDelta.x / 2;
@@ -316,7 +264,6 @@ public class CameraMovement : MonoBehaviour {
 		if (!inMaze && OnZoomModeSwitch != null) {
 			OnZoomModeSwitch(true);
 		}
-
 	}
 
 	void LateUpdate() {
@@ -324,14 +271,12 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 
 		if (!inBossRoom && !inMaze) {
-			//print(inBossRoom + " " + inMaze);
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
 		}
 		else if (Maze.inMaze) {
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
-			//print("there");
 		}
 	}
 
@@ -423,14 +368,14 @@ public class CameraMovement : MonoBehaviour {
 		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 
-	public void SetParticleLifetime() {
+	public void SetParticleLifetime(float time) {
 		ParticleSystem.ShapeModule shapeA = psA.shape;
 		psB.gameObject.SetActive(false);
 
 		shapeA.radius = 108 * 2;
 		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
 		ParticleSystem.MainModule main = psA.main;
-		main.startLifetime = 25;
+		main.startLifetime = time;
 	}
 }
 

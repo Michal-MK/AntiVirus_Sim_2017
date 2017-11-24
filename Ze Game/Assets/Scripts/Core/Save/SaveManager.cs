@@ -11,12 +11,13 @@ public class SaveManager : MonoBehaviour {
 	public PressurePlate pPlate;
 	public Avoidance avoidance;
 	public BlockScript block;
-	public BossBehaviour boss;
 	public Transform collectibles;
 
 	private static bool _canSave = true;
 
 	public static SaveFile current;
+
+	private bool bossSpawned = false;
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
@@ -28,7 +29,7 @@ public class SaveManager : MonoBehaviour {
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
-		boss = sender;
+		bossSpawned = true;
 	}
 
 	public static void SaveNewGame(int difficulty) {
@@ -94,12 +95,8 @@ public class SaveManager : MonoBehaviour {
 		newSave.data.world.spikePos = GameProgression.script.spikePos;
 		newSave.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
 		newSave.data.world.doneAvoidance = avoidance.performed;
-		if (boss != null) {
-			newSave.data.world.bossSpawned = true;
-		}
-		else {
-			newSave.data.world.bossSpawned = false;
-		}
+		newSave.data.world.bossSpawned = bossSpawned;
+
 		if (Maze.inMaze == false && Spike.spikesCollected >= 4) {
 			newSave.data.world.postMazeDoorOpen = true;
 		}
@@ -120,7 +117,7 @@ public class SaveManager : MonoBehaviour {
 		newSave.data.shownHints.shownAttempt = M_Player.player.newGame;
 		newSave.data.shownHints.shownAvoidanceInfo = avoidance.displayAvoidInfo;
 		newSave.data.shownHints.shownBlockInfo = block.showInfo;
-		newSave.data.shownHints.shownShotInfo = M_Player.player.pAttack.displayShootingInfo;
+		newSave.data.shownHints.displayShootInfo = M_Player.player.pAttack.displayShootingInfo;
 		#endregion
 
 		#region Core data
@@ -137,17 +134,15 @@ public class SaveManager : MonoBehaviour {
 	}
 
 	private IEnumerator ScreenShot(int difficulty, int currAttempt) {
-		GameObject saveButton = GameObject.Find("saveGame");
 		if (saveButton != null) {
-			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
+			yield return new WaitUntil(() => !saveButton.gameObject.activeInHierarchy);
 		}
 		ScreenCapture.CaptureScreenshot(Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + currAttempt.ToString("000") + ".png");
 	}
 
 	private IEnumerator ScreenShot(string filePath) {
-		GameObject saveButton = GameObject.Find("saveGame");
 		if (saveButton != null) {
-			yield return new WaitUntil(() => !saveButton.activeInHierarchy);
+			yield return new WaitUntil(() => !saveButton.gameObject.activeInHierarchy);
 		}
 		ScreenCapture.CaptureScreenshot(filePath);
 	}

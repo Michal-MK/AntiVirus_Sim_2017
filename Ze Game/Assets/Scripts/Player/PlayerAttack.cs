@@ -43,13 +43,15 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite attack;
 	public Sprite happy;
 
+	public float bombRechargeDelay;
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		if (data.shownHints.shownShotInfo) {
-			displayShootingInfo = data.shownHints.shownShotInfo;
+		if (data.shownHints.displayShootInfo) {
+			displayShootingInfo = data.shownHints.displayShootInfo;
 		}
 		else {
 			StartCoroutine(UpdateStats());
@@ -119,7 +121,7 @@ public class PlayerAttack : MonoBehaviour {
 		}
 
 		if (!PauseUnpause.isPaused) {
-			if (fireMode/* && M_Player.gameProgression == 10*/) {
+			if (fireMode) {
 				if (Input.GetButtonDown("Left Mouse Button") && fireBullets) {
 					if (bullets >= 1) {
 						print("Bullets remaining: " + (bullets - 1));
@@ -175,7 +177,6 @@ public class PlayerAttack : MonoBehaviour {
 
 		bullets--;
 		bulletCount.text = "x " + bullets;
-
 	}
 
 	public void FireBomb() {
@@ -194,7 +195,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	public IEnumerator RefreshBombs() {
 		Canvas_Renderer.script.InfoRenderer(null, "Wait for the bomb to regenerate!");
-		yield return new WaitForSecondsRealtime(8);
+		yield return new WaitForSeconds(bombRechargeDelay);
 		bombs++;
 		bombCount.text = "x " + bombs;
 		StopCoroutine(RefreshBombs());

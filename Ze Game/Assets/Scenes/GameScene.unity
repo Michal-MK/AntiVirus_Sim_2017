@@ -904,7 +904,6 @@ MonoBehaviour:
   pPlate: {fileID: 2019751417}
   avoidance: {fileID: 1397492961}
   block: {fileID: 62052348}
-  boss: {fileID: 0}
   collectibles: {fileID: 1051639321}
 --- !u!1 &88533459
 GameObject:
@@ -940,8 +939,9 @@ MonoBehaviour:
   spike: {fileID: 399954889}
   cam: {fileID: 2063632490}
   MazeBG: {fileID: 510032459}
-  zoom: {fileID: 1574297779}
+  zoom: {fileID: 0}
   infoBoardMaze: {fileID: 1210446928}
+  playerIdleTime: 10
   inMazePropoerly: 0
 --- !u!212 &88533461
 SpriteRenderer:
@@ -6089,7 +6089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &331244543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7141,12 +7141,12 @@ Prefab:
     - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
         type: 2}
       propertyPath: m_Size.x
-      value: 12
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
         type: 2}
       propertyPath: m_Size.y
-      value: 38
+      value: 103
       objectReference: {fileID: 0}
     - target: {fileID: 1000013305367900, guid: d69f378c68b483445ab7682aecb01848, type: 2}
       propertyPath: m_TagString
@@ -7171,6 +7171,16 @@ Prefab:
         type: 2}
       propertyPath: m_Size.x
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d69f378c68b483445ab7682aecb01848, type: 2}
@@ -7425,12 +7435,12 @@ Prefab:
     - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
         type: 2}
       propertyPath: m_Size.x
-      value: 12
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
         type: 2}
       propertyPath: m_Size.y
-      value: 38
+      value: 103
       objectReference: {fileID: 0}
     - target: {fileID: 1000013305367900, guid: d69f378c68b483445ab7682aecb01848, type: 2}
       propertyPath: m_TagString
@@ -7455,6 +7465,16 @@ Prefab:
         type: 2}
       propertyPath: m_Size.x
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 61000012283231480, guid: d69f378c68b483445ab7682aecb01848,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d69f378c68b483445ab7682aecb01848, type: 2}
@@ -7806,6 +7826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 564159080}
   - component: {fileID: 564159079}
+  - component: {fileID: 564159081}
   m_Layer: 0
   m_Name: GameProgress
   m_TagString: Untagged
@@ -7850,6 +7871,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &564159081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 564159078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c243e81bc5aee6e4e813acb12daef91e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  restartButton: {fileID: 331244542}
+  quitToMenu: {fileID: 1961390453}
+  saveButton: {fileID: 1644658992}
+  loadButton: {fileID: 872509656}
 --- !u!1001 &578834734
 Prefab:
   m_ObjectHideFlags: 0
@@ -12221,7 +12257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &872509657
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15963,11 +15999,10 @@ GameObject:
   - component: {fileID: 1574297771}
   - component: {fileID: 1574297774}
   - component: {fileID: 1574297776}
-  - component: {fileID: 1574297777}
   - component: {fileID: 1574297778}
-  - component: {fileID: 1574297779}
   - component: {fileID: 1574297780}
   - component: {fileID: 1574297773}
+  - component: {fileID: 1574297772}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -15992,9 +16027,25 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -122.8}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 4, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1574297772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1574297770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec34a24acee28984096ca5b6134688b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbody: {fileID: 1574297774}
+  movementSpeed: 200
+  flappyDrag: 0
+  flappyForceScale: 1
+  canFlapAgain: 0
 --- !u!61 &1574297773
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16032,7 +16083,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 20
+  m_LinearDrag: 30
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -16051,46 +16102,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbab7d43fd3c14a48b022fb44fb903f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attemptNr: 0
-  Speed: 400
-  move: {x: 0, y: 0, z: 0}
-  saveButton: {fileID: 1644658992}
-  restartButton: {fileID: 331244542}
-  quitToMenu: {fileID: 1961390453}
-  loadButton: {fileID: 872509656}
-  GameOverImg: {fileID: 1578350127}
   rg: {fileID: 1574297774}
-  cam: {fileID: 2063632490}
-  spawner: {fileID: 1110813255}
-  boss: {fileID: 0}
-  save: {fileID: 0}
-  guide: {fileID: 285850892}
+  face: {fileID: 278018624}
+  pAttack: {fileID: 1574297778}
+  GameOverImg: {fileID: 1578350127}
   newGame: 1
   gameOver: 0
-  gravity: 18
-  UpVelocity: 80
-  linearDrag: 20
-  face: {fileID: 278018624}
   smile: {fileID: 21300000, guid: ecda8c94ad4f59f4d984b1c73c28f6ab, type: 3}
   happy: {fileID: 21300000, guid: 8ef7510ae6dc9b34fa182a125407f316, type: 3}
   sad: {fileID: 21300000, guid: d127f0f3d4860af478ebacf335e32b91, type: 3}
-  pAttack: {fileID: 1574297778}
-  mazeSpeedMultiplier: 2
---- !u!114 &1574297777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1574297770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c243e81bc5aee6e4e813acb12daef91e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  restartButton: {fileID: 331244542}
-  quitToMenu: {fileID: 1961390453}
-  saveButton: {fileID: 1644658992}
-  loadButton: {fileID: 872509656}
 --- !u!114 &1574297778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16125,25 +16145,7 @@ MonoBehaviour:
   noHands: {fileID: 21300000, guid: bb85c61ba723d754b9c7aeea8a5d8e91, type: 3}
   attack: {fileID: 21300000, guid: 14cf2a57f1e664e44aab965709b6712e, type: 3}
   happy: {fileID: 21300000, guid: 8ef7510ae6dc9b34fa182a125407f316, type: 3}
---- !u!114 &1574297779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1574297770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cfff646c80ef084889787e8be0afdd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camMovement: {fileID: 2063632490}
-  cam: {fileID: 2063632488}
-  matrixA: {fileID: 643278893}
-  matrixB: {fileID: 1758618310}
-  BossMax: 108
-  BossMin: 10
-  NormMax: 25
-  NormMin: 15
+  bombRechargeDelay: 0
 --- !u!95 &1574297780
 Animator:
   serializedVersion: 3
@@ -16411,7 +16413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1644658993
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16473,7 +16475,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1644658995}
-        m_MethodName: OpenWindowActive
+        m_MethodName: ToggleWindowActive
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 517967548}
@@ -17206,7 +17208,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -927216359
+  randomSeed: 1958900999
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -24078,6 +24080,7 @@ GameObject:
   - component: {fileID: 1881603010}
   - component: {fileID: 1881603014}
   - component: {fileID: 1881603013}
+  - component: {fileID: 1881603015}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -24138,7 +24141,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
@@ -24209,6 +24212,21 @@ MonoBehaviour:
   - {fileID: 1967239557}
   - {fileID: 1482571166}
   isRunning: 0
+--- !u!114 &1881603015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1881603008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9429320ac0302da4299d0c55cb1d93fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  save: {fileID: 1644658994}
+  restart: {fileID: 331244545}
+  quitToMenu: {fileID: 1961390456}
+  load: {fileID: 872509659}
 --- !u!1 &1882714930
 GameObject:
   m_ObjectHideFlags: 0
@@ -27937,7 +27955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1961390454
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28604,6 +28622,7 @@ GameObject:
   - component: {fileID: 2063632486}
   - component: {fileID: 2063632485}
   - component: {fileID: 2063632490}
+  - component: {fileID: 2063632489}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -28668,6 +28687,24 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!114 &2063632489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2063632484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfff646c80ef084889787e8be0afdd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 2063632488}
+  matrixA: {fileID: 643278893}
+  matrixB: {fileID: 1758618310}
+  BossMax: 108
+  BossMin: 10
+  NormMax: 25
+  NormMin: 15
 --- !u!114 &2063632490
 MonoBehaviour:
   m_ObjectHideFlags: 0

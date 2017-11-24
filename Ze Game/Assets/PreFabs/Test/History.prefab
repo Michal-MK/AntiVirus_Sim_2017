@@ -186,7 +186,7 @@ MonoBehaviour:
       currentBGName: 
     shownHints:
       currentlyDisplayedSideInfo: 
-      shownShotInfo: 0
+      displayShootInfo: 0
       shownAttempt: 0
       shownBlockInfo: 0
       shownAvoidanceInfo: 0
@@ -204,6 +204,7 @@ MonoBehaviour:
       time: 0
       camSize: 0
       fileLocation: 
+      imgFileLocation: 
   save: {fileID: 0}
   rawImage: {fileID: 114505965946196374}
 --- !u!114 &114757451731677236
@@ -331,7 +332,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 75}
+  m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224972683516362876
 RectTransform:

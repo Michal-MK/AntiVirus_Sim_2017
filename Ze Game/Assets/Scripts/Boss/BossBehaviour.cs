@@ -438,12 +438,12 @@ public class BossBehaviour : MonoBehaviour {
 
 				yield return new WaitForSeconds(2);
 				Destroy(positioningCage.gameObject);
-				player.GetComponent<M_Player>().ChangeFlappy(true);
+				player.GetComponent<Player_Movement>().SetFlappyMode(true);
 				StartCoroutine(PipeGeneration());
 
 				yield return new WaitUntil(() => doneBouncing);
 
-				player.GetComponent<M_Player>().ChangeFlappy(false);
+				player.GetComponent<Player_Movement>().SetFlappyMode(false);
 				isAttacking = false;
 				doneBouncing = false;
 				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0)));

@@ -1,69 +1,42 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.EventSystems;
-using System;
+using UnityEngine;
 
 public delegate void BackgroundChanged(RectTransform background, M_Player sender);
 public delegate void CoinEvents(M_Player sender);
 public delegate void SpikeEvents(M_Player sender);
 public delegate void PlayerColision(M_Player sender, GameObject other);
+public delegate void PlayerDeath(M_Player sender);
 
 public class M_Player : MonoBehaviour {
-	public int attemptNr;
-	public float Speed;
-	public static bool doNotMove;
-	public Vector3 move;
-	public GameObject saveButton;
-	public GameObject restartButton;
-	public GameObject quitToMenu;
-	public GameObject loadButton;
+	#region PrefabReferences
+	public Rigidbody2D rg;
+	public GameObject face;
+	public PlayerAttack pAttack;
+	private Sprite previous;
+	#endregion
+
 	public Animator GameOverImg;
 
 	public static int gameProgression;
 	public static string currentBG_name;
-	public Rigidbody2D rg;
 
-	public CameraMovement cam;
-	public EnemySpawner spawner;
-	public BossBehaviour boss;
-	public SaveGame save;
-	public Guide guide;
-
-	private int mode = 0;
 	public bool newGame = true;
 	public bool gameOver = false;
 
-	public float gravity;
-	public float UpVelocity;
-	public float linearDrag;
-	private bool doFlappy = false;
 	private int attempts;
-
-	public GameObject face;
 
 	public Sprite smile;
 	public Sprite happy;
 	public Sprite sad;
 
-	private Sprite previous;
-	int i = 0;
-
-	public PlayerAttack pAttack;
-
-	public int mazeSpeedMultiplier = 2;
-
-	private bool onceOnAxis = true;
-	bool delEnemies = true;
-
 	public static M_Player player;
 
 	public static event BackgroundChanged OnRoomEnter;
-
 	public static event PlayerColision OnSpikePickup;
 	public static event PlayerColision OnCoinPickup;
-
+	public static event PlayerColision OnTargetableObjectCollision;
 	public static event Zoom.Zooming OnZoomModeSwitch;
+	public static event PlayerDeath OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
 
@@ -90,11 +63,6 @@ public class M_Player : MonoBehaviour {
 
 	void Start() {
 		Cursor.lockState = CursorLockMode.Confined;
-		restartButton.SetActive(false);
-		quitToMenu.SetActive(false);
-		saveButton.SetActive(false);
-		loadButton.SetActive(false);
-
 #if !UNITY_EDITOR
 		string name = Control.currProfile.getProfileName;
 #endif
@@ -117,144 +85,140 @@ public class M_Player : MonoBehaviour {
 		Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
 	}
 
-	private void FixedUpdate() {
+	//private void Update() {
+	//	switch (movementMode) {
+	//		case PlayerMovent.ARROW: {
+	//			ArrowMove();
+	//			break;
+	//		}
 
-		switch (mode) {
+	//		case PlayerMovent.FLAPPY: {
+	//			Flappy();
+	//			break;
+	//		}
 
-			case 0: {
-				//Move();
-				ArrowMove();
-				doFlappy = false;
-				break;
-			}
-
-			case 1: {
-				doFlappy = true;
-				break;
-			}
-		}
-	}
-
-	private void Update() {
-
-		if (doFlappy) {
-			Flappy();
-		}
-	}
+	//		case PlayerMovent.MOUSE: {
+	//			Move();
+	//			throw new System.NotImplementedException();
+	//		}
+	//	}
+	//}
 	//Moving the Character using a Rigidbody 2D
-	public void Move() {
-		move = new Vector3(0, 0, 0);
+	//public void Move() {
+	//	move = new Vector3(0, 0, 0);
 
-		if (doNotMove == false) {
-			if (Input.GetAxis("Mouse X") > 0) {
-				rg.AddForce(new Vector2(Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
-			}
+	//	if (doNotMove == false) {
+	//		if (Input.GetAxis("Mouse X") > 0) {
+	//			rg.AddForce(new Vector2(Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+	//		}
 
-			else if (Input.GetAxis("Mouse X") < 0) {
-				rg.AddForce(new Vector2(-Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
-			}
+	//		else if (Input.GetAxis("Mouse X") < 0) {
+	//			rg.AddForce(new Vector2(-Speed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+	//		}
 
-			if (Input.GetAxis("Mouse Y") > 0) {
-				rg.AddForce(new Vector2(0, Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
-			}
+	//		if (Input.GetAxis("Mouse Y") > 0) {
+	//			rg.AddForce(new Vector2(0, Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+	//		}
 
-			else if (Input.GetAxis("Mouse Y") < 0) {
-				rg.AddForce(new Vector2(0, -Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
-			}
-		}
-	}
+	//		else if (Input.GetAxis("Mouse Y") < 0) {
+	//			rg.AddForce(new Vector2(0, -Speed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+	//		}
+	//	}
+	//}
 
 	//Moving the Character using a Keyboard
-	public void ArrowMove() {
+	//public void ArrowMove() {
 
-		if (doNotMove == false) {
-			if (Input.GetAxis("VertMovement") > 0) {
-				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
-				}
-				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
-				}
-				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
-				}
-			}
+	//	if (doNotMove == false) {
+	//		if (Input.GetAxis("VertMovement") > 0) {
+	//			if (!cam.inBossRoom && !cam.inMaze) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
+	//			}
+	//			else if (cam.inBossRoom) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
+	//			}
+	//			else if (cam.inMaze) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
+	//			}
+	//		}
 
-			if (Input.GetAxis("HorMovement") > 0) {
+	//		if (Input.GetAxis("HorMovement") > 0) {
 
-				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
-				}
-				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
-				}
-				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
-				}
-			}
+	//			if (!cam.inBossRoom && !cam.inMaze) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
+	//			}
+	//			else if (cam.inBossRoom) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
+	//			}
+	//			else if (cam.inMaze) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
+	//			}
+	//		}
 
-			if (Input.GetAxis("VertMovement") < 0) {
-				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
-				}
-				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
-				}
-				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
-				}
-			}
+	//		if (Input.GetAxis("VertMovement") < 0) {
+	//			if (!cam.inBossRoom && !cam.inMaze) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")));
+	//			}
+	//			else if (cam.inBossRoom) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
+	//			}
+	//			else if (cam.inMaze) {
+	//				rg.AddForce(new Vector2(0, Speed * Input.GetAxis("VertMovement")) * mazeSpeedMultiplier);
+	//			}
+	//		}
 
-			if (Input.GetAxis("HorMovement") < 0) {
-				if (!cam.inBossRoom && !cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
-				}
-				else if (cam.inBossRoom) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
-				}
-				else if (cam.inMaze) {
-					rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
-				}
-			}
-		}
-	}
+	//		if (Input.GetAxis("HorMovement") < 0) {
+	//			if (!cam.inBossRoom && !cam.inMaze) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0));
+	//			}
+	//			else if (cam.inBossRoom) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * BossBehaviour.playerSpeedMultiplier);
+	//			}
+	//			else if (cam.inMaze) {
+	//				rg.AddForce(new Vector2(Input.GetAxis("HorMovement") * Speed, 0) * mazeSpeedMultiplier);
+	//			}
+	//		}
+	//	}
+	//}
 
 	//Moving the character FlappyBird style
-	public void ChangeFlappy(bool start = false) {
-		print("ChnagedToFlappy");
-		switch (start) {
-			case true: {
-				rg.gravityScale = gravity;
-				rg.drag = 0;
-				mode = 1;
-				break;
-			}
-			case false: {
-				rg.gravityScale = 0;
-				rg.drag = linearDrag;
-				mode = 0;
-				break;
-			}
-		}
-	}
 
-	public void Flappy() {
-		if (Input.GetAxis("VertMovement") > 0.5f) {
-			if (onceOnAxis) {
-				rg.velocity = new Vector2(0, UpVelocity);
-				onceOnAxis = false;
-				StartCoroutine(FlapAgain());
-			}
-		}
-		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
-			rg.velocity = new Vector2(0, UpVelocity);
-		}
-	}
+	//public void SetFlappyMode(bool enable) {
+	//	switch (enable) {
+	//		case true: {
+	//			print("Switching to flappy mode.");
+	//			rg.gravityScale = gravity;
+	//			rg.drag = 0;
+	//			movementMode = PlayerMovent.FLAPPY;
+	//			return;
+	//		}
+	//		case false: {
+	//			print("Switching from flappy mode.");
+	//			rg.gravityScale = 0;
+	//			rg.drag = linearDrag;
+	//			movementMode = PlayerMovent.ARROW;
+	//			return;
+	//		}
+	//	}
+	//}
 
-	private IEnumerator FlapAgain() {
-		yield return new WaitUntil(() => Input.GetAxis("VertMovement") <= 0.5f);
-		onceOnAxis = true;
-	}
+	//private void Flappy() {
+	//	if (Input.GetAxis("VertMovement") > 0.5f) {
+	//		if (onceOnAxis) {
+	//			rg.velocity = new Vector2(0, UpVelocity);
+	//			onceOnAxis = false;
+	//			StartCoroutine(FlapAgain());
+	//		}
+	//	}
+	//	if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+	//		rg.velocity = new Vector2(0, UpVelocity);
+	//	}
+	//}
+
+	//private IEnumerator FlapAgain() {
+	//	yield return new WaitUntil(() => Input.GetAxis("VertMovement") <= 0.5f);
+	//	onceOnAxis = true;
+	//}
 
 
 	private void OnCollisionEnter2D(Collision2D collision) {
@@ -262,10 +226,8 @@ public class M_Player : MonoBehaviour {
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 		}
 		if (collision.transform.name == "Block") {
-			print("Collided!");
-			if (!BlockScript.pressurePlateTriggered) {
-				guide.gameObject.SetActive(true);
-				guide.Recalculate(GameObject.Find("Pressure_Plate"), true);
+			if (!BlockScript.pressurePlateTriggered && OnTargetableObjectCollision != null) {
+				OnTargetableObjectCollision(this, collision.gameObject);
 			}
 		}
 		if (collision.transform.tag == "Enemy") {
@@ -298,7 +260,7 @@ public class M_Player : MonoBehaviour {
 				OnRoomEnter(col.GetComponent<RectTransform>(), this);
 			}
 			currentBG_name = col.name;
-			cam.RaycastForRooms();
+			CameraMovement.script.RaycastForRooms();
 
 			if (col.name == "Background_room_1") {
 				if (gameProgression == 3) {
@@ -350,54 +312,50 @@ public class M_Player : MonoBehaviour {
 			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 
-		if (col.name == "Test") {
-			if (i % 2 == 0) {
-				print(i % 2 + " " + i);
-				ChangeFlappy(true);
-				i++;
-			}
-			else {
-				print(i % 2 + " " + i);
-				ChangeFlappy(false);
-				i++;
-			}
-		}
+		//if (col.name == "Test") {
+		//	if (i % 2 == 0) {
+		//		print(i % 2 + " " + i);
+		//		SetFlappyMode(true);
+		//		i++;
+		//	}
+		//	else {
+		//		print(i % 2 + " " + i);
+		//		SetFlappyMode(false);
+		//		i++;
+		//	}
+		//}
 
 		if (col.tag == "ArrowTrap") {
 			previous = face.GetComponent<SpriteRenderer>().sprite;
 			face.GetComponent<SpriteRenderer>().sprite = sad;
 		}
 	}
-	private void OnTriggerExit2D(Collider2D col) {
-		if (col.transform.tag == "BG") {
-			cam.RaycastForRooms();
-		}
 
-		if (col.name == "Background_room_1") {
-			foreach (GameObject Projectile in spawner.KWProjectiles) {
-				Projectile.SetActive(false);
-			}
-		}
+	private void OnTriggerExit2D(Collider2D col) {
+		//if (col.transform.tag == "BG") {
+		//	CameraMovement.script.RaycastForRooms();
+		//}
 		if (col.tag == "ArrowTrap") {
 			face.GetComponent<SpriteRenderer>().sprite = previous;
 		}
 	}
 
 	public void FloorComplete() {
-		doNotMove = true;
+		Player_Movement.canMove = false;
 		Cursor.visible = true;
 		Timer.PauseTimer();
 #if !UNITY_EDITOR
-		save.SaveScore();
+		UploadScore score = new UploadScore();
 #endif
 	}
 
 	public void GameOver() {
-		restartButton.SetActive(true);
-		quitToMenu.SetActive(true);
-		loadButton.SetActive(true);
 
-		doNotMove = true;
+		if (OnPlayerDeath != null) {
+			OnPlayerDeath(this);
+		}
+
+		Player_Movement.canMove = false;
 		Cursor.visible = true;
 		Timer.PauseTimer();
 
@@ -407,19 +365,9 @@ public class M_Player : MonoBehaviour {
 		if (OnZoomModeSwitch != null) {
 			OnZoomModeSwitch(false);
 		}
-		StartCoroutine(StopTime());
 		gameOver = true;
 
-		EventSystem e = EventSystem.current;
-		e.SetSelectedGameObject(quitToMenu);
-		if (delEnemies) {
-			Destroy(GameObject.Find("Enemies"));
-			delEnemies = false;
-		}
-	}
-	private IEnumerator StopTime() {
-		yield return new WaitForSeconds(1);
-		Time.timeScale = 0;
+		Destroy(GameObject.Find("Enemies"));
 	}
 
 	private void OnDestroy() {

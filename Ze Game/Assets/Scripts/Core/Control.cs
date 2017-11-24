@@ -117,7 +117,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void RestartTransition() {
-		M_Player.doNotMove = false;
+		Player_Movement.canMove = false;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
 		PlayerAttack.bombs = 0;
@@ -127,19 +127,30 @@ public class Control : MonoBehaviour {
 		Timer.ResetTimer();
 		Time.timeScale = 1;
 		CamFadeOut.OnCamFullyFaded -= RestartTransition;
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene("GameScene");
 	}
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
 		if (scene.name == "GameScene") {
+			UserInterface.sceneMode = UserInterface.UIScene.GAME;
 			CamFadeOut.script.anim.speed = 0.5f;
 			if (MusicHandler.script.isAnythingPlaying == false) {
 				MusicHandler.script.PlayMusic(MusicHandler.script.room1);
 			}
 		}
-		if(scene.name == "MainMenu" && !MenuMusic.script.isPlaying) {
-			MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());
+		else if(scene.name == "MainMenu") {
+			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;
+			if (!MenuMusic.script.isPlaying) {
+				MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());
+			}
 		}
+		else if(scene.name == "SaveHistory") {
+			UserInterface.sceneMode = UserInterface.UIScene.SAVES;
+		}
+		else{
+			UserInterface.sceneMode = UserInterface.UIScene.OTHER;
+		}
+
 		Time.timeScale = 1;
 		WindowManager.ClearWindows();
 	}

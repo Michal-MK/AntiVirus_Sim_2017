@@ -33,7 +33,6 @@ public class BossEntrance : MonoBehaviour {
 				MusicHandler.script.MusicTransition(MusicHandler.script.boss);
 				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 				spawnedBoss.name = "Boss";
-				player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
 				GameObject health = Instantiate(bossHP,HPHolder.transform.position,Quaternion.identity,HPHolder.transform);
 				health.name = "BossHealth";
 				cam.BossFightCam(1);
@@ -60,7 +59,6 @@ public class BossEntrance : MonoBehaviour {
 	public void SpawnBossOnLoad() {
 		GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 		spawnedBoss.name = "Boss";
-		player.GetComponent<M_Player>().boss = spawnedBoss.GetComponent<BossBehaviour>();
 		HPHolder = GameObject.Find("BossHealthPlaceHolder");
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
 		health.name = "BossHealth";

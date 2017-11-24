@@ -84,7 +84,7 @@ public class LoadManager {
 				break;
 			}
 		}
-		M_Player.doNotMove = false;
+		Player_Movement.canMove = true;
 		Time.timeScale = 1;
 	}
 }
