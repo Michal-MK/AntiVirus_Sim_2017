@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DisplaySaveFiles : MonoBehaviour {
@@ -36,11 +37,18 @@ public class DisplaySaveFiles : MonoBehaviour {
 					SaveFile saveInfo = (SaveFile)br.Deserialize(file);
 
 					GameObject save = Instantiate(SaveObj, content.transform);
+					Text saveInfoText = save.transform.Find("SaveInfo").GetComponent<Text>();
+					RawImage saveImg = save.transform.Find("SaveImage").GetComponent<RawImage>();
+					Button showHistory = save.transform.Find("ShowHistory").GetComponent<Button>();
+					Button deleteSave = save.transform.Find("DeleteButton").GetComponent<Button>();
+					Button confirmDel = save.transform.Find("Confirm").GetComponent<Button>();
+					Button cancelDel = save.transform.Find("Cancel").GetComponent<Button>();
+
 					save.name = saveFiles[i].FullName;
 					byte[] img = File.ReadAllBytes(saveInfo.data.core.imgFileLocation);
 					Texture2D tex = new Texture2D(800, 600);
 					tex.LoadImage(img);
-					save.transform.Find("SaveImage").GetComponent<RawImage>().texture = tex;
+					saveImg.texture = tex;
 
 
 					try {
@@ -82,18 +90,32 @@ public class DisplaySaveFiles : MonoBehaviour {
 
 					}
 					if (saveInfo.data.core.time != 0) {
-						save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
+						saveInfoText.text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
 																	"Loaction: " + BGName + "\n" + "Attempt " +
 																	"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.data.core.time / 60, saveInfo.data.core.time % 60, saveInfo.data.core.time.ToString().Remove(0, saveInfo.data.core.time.ToString().Length - 2)) + "\n" +
 																	"Spikes: " + saveInfo.data.player.spikesCollected + " Bullets: " + saveInfo.data.player.bullets + "\n" +
 																	"Coins: " + saveInfo.data.player.coinsCollected + " Bombs: " + saveInfo.data.player.bombs;
 					}
 					else {
-						save.GetComponentInChildren<Text>().text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
+						saveInfoText.text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
 																	"Loaction: " + BGName + "\n" +
 																	"Time: 00:00:00 minutes";
 
 					}
+					deleteSave.onClick.AddListener
+						(
+						delegate {
+							EventSystem.current.SetSelectedGameObject(cancelDel.gameObject);
+							showHistory.interactable = false;
+						}	
+					);
+					cancelDel.onClick.AddListener
+						(
+						delegate {
+							EventSystem.current.SetSelectedGameObject(deleteSave.gameObject);
+							showHistory.interactable = true;
+						}
+					);
 				}
 			}
 			if (content.GetComponentsInChildren<RectTransform>().Length == 1) {
