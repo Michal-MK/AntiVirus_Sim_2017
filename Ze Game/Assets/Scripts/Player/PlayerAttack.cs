@@ -69,7 +69,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	void Update() {
 
-		if (Input.GetButtonDown("Attack")) {
+		if (Input.GetButtonDown("Attack") && M_Player.gameProgression!= -1) {
 			fireMode = !fireMode;
 
 			if (fireMode) {

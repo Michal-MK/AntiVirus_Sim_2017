@@ -15,31 +15,32 @@ public class Player_Movement : MonoBehaviour {
 
 	private static bool _canMove = true;
 
-	public float movementSpeed = 0;
+	public float movementSpeed = 500;
 
-	private float defaultGravity = 0;
-	public float flappyDrag;
-	public float flappyForceScale = 1;
-	public bool canFlapAgain = false;
+	public float flappyGravity = 8;
+	public float movementDrag = 30;
+	public float flappyForceScale = 35;
+	public bool canFlapAgain = true;
 
-	private void Update() {
+	private void FixedUpdate() {
 		switch (movementMode) {
 			case PlayerMovent.ARROW: {
 				ArrowMove();
 				break;
 			}
-
-			case PlayerMovent.FLAPPY: {
-				Flappy();
-				break;
-			}
-
 			case PlayerMovent.MOUSE: {
 				Move();
 				throw new System.NotImplementedException();
 			}
 		}
 	}
+
+	private void Update() {
+		if (movementMode == PlayerMovent.FLAPPY) {
+			Flappy();
+		}
+	}
+
 	//Moving the Character using a Rigidbody 2D
 	public void Move() {
 		if (_canMove) {
@@ -121,7 +122,7 @@ public class Player_Movement : MonoBehaviour {
 		switch (enable) {
 			case true: {
 				print("Switching to flappy mode.");
-				rigidbody.gravityScale = defaultGravity;
+				rigidbody.gravityScale = flappyGravity;
 				rigidbody.drag = 0;
 				movementMode = PlayerMovent.FLAPPY;
 				return;
@@ -129,7 +130,7 @@ public class Player_Movement : MonoBehaviour {
 			case false: {
 				print("Switching from flappy mode.");
 				rigidbody.gravityScale = 0;
-				rigidbody.drag = flappyDrag;
+				rigidbody.drag = movementDrag;
 				movementMode = PlayerMovent.ARROW;
 				return;
 			}
@@ -137,15 +138,18 @@ public class Player_Movement : MonoBehaviour {
 	}
 
 	private void Flappy() {
-		if (Input.GetAxis("VertMovement") > 0.5f) {
-			if (canFlapAgain) {
-				rigidbody.velocity = new Vector2(0, flappyForceScale);
-				canFlapAgain = false;
-				StartCoroutine(FlapAgain());
+		if (_canMove) {
+			if (Input.GetAxis("VertMovement") > 0.5f) {
+				if (canFlapAgain) {
+					rigidbody.velocity = new Vector2(0, flappyForceScale);
+					canFlapAgain = false;
+					StartCoroutine(FlapAgain());
+					print("Flapped");
+				}
 			}
-		}
-		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
-			rigidbody.velocity = new Vector2(0, flappyForceScale);
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+				rigidbody.velocity = new Vector2(0, flappyForceScale);
+			}
 		}
 	}
 

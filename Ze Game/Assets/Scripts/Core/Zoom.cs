@@ -18,6 +18,11 @@ public class Zoom : MonoBehaviour {
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		M_Player.OnZoomModeSwitch += M_Player_OnZoomModeSwitch;
+	}
+
+	private void M_Player_OnZoomModeSwitch(bool allowed) {
+		canZoom = false;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {

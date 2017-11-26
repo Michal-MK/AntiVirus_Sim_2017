@@ -34,6 +34,13 @@ public class Buttons : MonoBehaviour {
 	}
 
 	public void ToggleWindowActive(GameObject window) {
+		if (Profile.getCurrentProfile == null) {
+			Notifications.Confirm("You need to create a profile first", true, 
+				delegate { Profile.RequestProfiles(); },
+				delegate { FindObjectOfType<UserInterface>().ToggleMenuButtons(); }
+			);
+			return;
+		}
 		WindowManager.ToggleWindow(new Window(window, Window.WindowType.ACTIVATING));
 	}
 

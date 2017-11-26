@@ -7,12 +7,8 @@ public class MazeEntrance : MonoBehaviour {
 	public GameObject player;
 	public Spike spike;
 	public CameraMovement cam;
-	public RectTransform MazeBG;
-	public Zoom zoom;
-	public GameObject infoBoardMaze;
 
 	public float playerIdleTime = 10;
-	public bool inMazePropoerly = false;
 	private bool entered = false;
 
 	public static event Maze.MazeBehaviour OnMazeEnter;
@@ -40,6 +36,7 @@ public class MazeEntrance : MonoBehaviour {
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += MazeTransition;
+		Player_Movement.canMove = false;
 		cam.inMaze = true;
 
 		CameraMovement.doneMoving = false;
@@ -55,9 +52,6 @@ public class MazeEntrance : MonoBehaviour {
 			StartCoroutine(LerpCamPos(cam.transform.position, player.transform.position));
 			StartCoroutine(cam.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
 		}
-
-
-		inMazePropoerly = true;
 		Player_Movement.canMove = true;
 	}
 
@@ -66,23 +60,16 @@ public class MazeEntrance : MonoBehaviour {
 			OnMazeEnter();
 		}
 
-		Maze.inMaze = true;
-		Player_Movement.canMove = false;
-
-		cam.transform.position = new Vector3(MazeBG.position.x, MazeBG.position.y, -10);
-		StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, MazeBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.2f, new Vector3(MazeBG.position.x, MazeBG.position.y, -10)));
+		cam.transform.position = new Vector3(maze.middleCell.position.x, maze.middleCell.position.y, -10);
+		StartCoroutine(cam.LerpSize(CameraMovement.defaultCamSize, maze.mazeDimension/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
 
 		spike.SetPosition();
 		Vector2 rndEdge = maze.GetEdgeCell();
 		player.transform.position = maze.grid[(int)rndEdge.x, (int)rndEdge.y].transform.position;
 		player.transform.localScale = new Vector3(2, 2, 0);
 
-		Vector2 rndSignPos = maze.GetEdgeCell(rndEdge);
-		infoBoardMaze.transform.position = maze.grid[(int)rndSignPos.x, (int)rndSignPos.y].transform.position;
-
 		SaveManager.canSave = false;
 		Zoom.canZoom = false;
-
 		CamFadeOut.OnCamFullyFaded -= MazeTransition;
 
 	}

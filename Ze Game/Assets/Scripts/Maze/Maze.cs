@@ -12,24 +12,32 @@ public class Maze : MonoBehaviour {
 	public GameObject WallIDmg;
 	public GameObject WallTDmg;
 	public GameObject player;
-	public CameraMovement cam;
 
 	public GameObject teleport;
-	public GameObject MazePositon;
-	public RectTransform BG;
-	public Vector3 hpos;
+	public RectTransform mazeBackground;
 	public int rowcollCount;
 
-	private float widhtHeight;
+	private float widthHeight;
+	public float mazeDimension;
 
 	public GameObject[,] grid;
-	public GameObject[,] wallsT;
-	public GameObject[,] wallsR;
-	public GameObject[,] wallsB;
-	public GameObject[,] wallsL;
+	private GameObject[,] wallsT;
+	private GameObject[,] wallsR;
+	private GameObject[,] wallsB;
+	private GameObject[,] wallsL;
 
-	public static bool inMaze = false;
 	private static float _mazeSpeedMultiplier;
+	public Transform middleCell;
+	public GameObject infoBoardMaze;
+
+	private Stack<GameObject> stack = new Stack<GameObject>();
+	private List<GameObject> nope = new List<GameObject>();
+
+	private GameObject current;
+	private int XPosition = 0;
+	private int Yposition = 0;
+	public bool run = true;
+	private GameObject chosenNeighbor;
 
 	void Start() {
 
@@ -42,16 +50,14 @@ public class Maze : MonoBehaviour {
 		wallsB = new GameObject[size, size];
 		wallsL = new GameObject[size, size];
 
-
-		widhtHeight = MazePositon.GetComponent<RectTransform>().sizeDelta.x / (rowcollCount);
-
-		hpos = MazePositon.transform.position;
-
+		//Stupd hardcoded value...
+		widthHeight = 200 / (rowcollCount);
+		mazeDimension = widthHeight * rowcollCount;
 
 		for (int i = 0; i < rowcollCount; i++) {
 			for (int j = 0; j < rowcollCount; j++) {
 
-				GameObject cell = Instantiate(Cell, hpos + new Vector3((i * widhtHeight * 2), (j * widhtHeight * 2), 0), Quaternion.identity, gameObject.transform);
+				GameObject cell = Instantiate(Cell, transform.position + new Vector3((i * widthHeight * 2), (j * widthHeight * 2), 0), Quaternion.identity, gameObject.transform);
 				cell.name = "Cell " + i + " " + j;
 
 				cell.GetComponent<Cell>().selfX = i;
@@ -81,10 +87,10 @@ public class Maze : MonoBehaviour {
 				wallB.name = "WallBottom";
 				wallL.name = "WallLeft";
 
-				wallT.transform.position = cell.transform.position + new Vector3(0, widhtHeight, 0);
-				wallR.transform.position = cell.transform.position + new Vector3(widhtHeight, 0, 0);
-				wallB.transform.position = cell.transform.position + new Vector3(0, -widhtHeight, 0);
-				wallL.transform.position = cell.transform.position + new Vector3(-widhtHeight, 0, 0);
+				wallT.transform.position = cell.transform.position + new Vector3(0, widthHeight, 0);
+				wallR.transform.position = cell.transform.position + new Vector3(widthHeight, 0, 0);
+				wallB.transform.position = cell.transform.position + new Vector3(0, -widthHeight, 0);
+				wallL.transform.position = cell.transform.position + new Vector3(-widthHeight, 0, 0);
 
 				Vector3 currScale = CalculateScale(rowcollCount);
 
@@ -101,35 +107,35 @@ public class Maze : MonoBehaviour {
 				wallsL[i, j] = wallL;
 			}
 		}
-		BG.transform.position = new Vector3(grid[rowcollCount / 2, rowcollCount / 2].transform.position.x, grid[rowcollCount / 2, rowcollCount / 2].transform.position.y, 0);
-
+		middleCell = grid[rowcollCount / 2, rowcollCount / 2].transform;
+		mazeBackground.position = new Vector3(middleCell.position.x, middleCell.position.y, 0);
 		StartCoroutine(CreatePath());
 	}
 
 	public int MazeLevel() {
 		switch (Control.currDifficulty) {
 			case 0: {
-				getMazeSpeedMultiplier = 2;
+				getMazeSpeedMultiplier = 3;
 				return 15;
 			}
 
 			case 1: {
-				getMazeSpeedMultiplier = 1.75f;
+				getMazeSpeedMultiplier = 2.75f;
 				return 21;
 			}
 
 			case 2: {
-				getMazeSpeedMultiplier = 1.75f;
+				getMazeSpeedMultiplier = 2.75f;
 				return 23;
 			}
 
 			case 3: {
-				getMazeSpeedMultiplier = 0.75f;
+				getMazeSpeedMultiplier = 1.75f;
 				return 25;
 			}
 
 			case 4: {
-				getMazeSpeedMultiplier = 0.5f;
+				getMazeSpeedMultiplier = 1.5f;
 				return 29;
 			}
 			default: {
@@ -162,15 +168,6 @@ public class Maze : MonoBehaviour {
 		}
 	}
 
-	public Stack<GameObject> stack = new Stack<GameObject>();
-	List<GameObject> nope = new List<GameObject>();
-
-	public GameObject current;
-	private int XPosition = 0;
-	private int Yposition = 0;
-	public bool run = true;
-	public GameObject chosenNeighbor;
-
 	public IEnumerator CreatePath() {
 
 		GameObject start = grid[0, 0];
@@ -185,9 +182,7 @@ public class Maze : MonoBehaviour {
 				chosenNeighbor = GetNeighbor(XPosition, Yposition);
 			}
 
-
 			yield return null;
-
 
 			if (chosenNeighbor.transform.position.x < current.transform.position.x) {
 				string nameCurrent = "WallLeft";
@@ -322,9 +317,6 @@ public class Maze : MonoBehaviour {
 				MazeStopped();
 			}
 
-
-
-
 			if (currentPosX + 1 <= rowcollCount - 1) {
 				if (stack.Contains(grid[currentPosX + 1, currentPosY]) == false && nope.Contains(grid[currentPosX + 1, currentPosY]) == false) {
 					if (grid[currentPosX + 1, currentPosY].GetComponent<Cell>().neverVisitMeAgain == false) {
@@ -391,8 +383,6 @@ public class Maze : MonoBehaviour {
 				currentPosX = current.GetComponent<Cell>().selfX;
 				currentPosY = current.GetComponent<Cell>().selfY;
 
-				//print("OVER!");
-
 				MazeStopped();
 			}
 		}
@@ -434,74 +424,7 @@ public class Maze : MonoBehaviour {
 		}
 
 	}
-	int reference = 0;
 
-	public int GetRandomGridPos(bool xAxis) {
-
-		int side = Random.Range(0, 4);
-
-		if (xAxis) {
-			if (side == 0) {
-				reference = side;
-				int x = Random.Range(0, rowcollCount - 1);
-				return x;
-			}
-			else if (side == 1) {
-				reference = side;
-				int x = Random.Range(0, 2);
-				if (x == 0) {
-					return 0;
-				}
-				else {
-					return rowcollCount - 1;
-				}
-			}
-			else if (side == 2) {
-				reference = side;
-				int x = Random.Range(0, rowcollCount - 1);
-				return x;
-			}
-			else {
-				reference = side;
-				int x = Random.Range(0, 2);
-				if (x == 0) {
-					return 0;
-				}
-				else {
-					return rowcollCount - 1;
-				}
-			}
-		}
-
-		else {
-			if (reference == 0) {
-				int y = Random.Range(0, 2);
-				if (y == 0) {
-					return 0;
-				}
-				else {
-					return rowcollCount - 1;
-				}
-			}
-			else if (reference == 1) {
-				int y = Random.Range(0, rowcollCount - 1);
-				return y;
-			}
-			else if (reference == 2) {
-				int y = Random.Range(0, 2);
-				if (y == 0) {
-					return 0;
-				}
-				else {
-					return rowcollCount - 1;
-				}
-			}
-			else {
-				int y = Random.Range(0, rowcollCount - 1);
-				return y;
-			}
-		}
-	}
 	/// <summary>
 	/// Returns a vector of maze array indexes
 	/// </summary>
@@ -555,9 +478,7 @@ public class Maze : MonoBehaviour {
 
 	public void MazeEscape() {
 		Vector2 rndEdge = GetEdgeCell();
-		teleport.transform.position = grid[GetRandomGridPos(true), GetRandomGridPos(false)].transform.position;
 		teleport.transform.position = grid[(int)rndEdge.x, (int)rndEdge.y].transform.position;
-		print("Testing edge code");
 	}
 
 
@@ -565,6 +486,8 @@ public class Maze : MonoBehaviour {
 		if (neighbors.Count == 0 && stack.Count <= 1) {
 			run = false;
 			StopAllCoroutines();
+			Vector2 rndSignPos = GetEdgeCell();
+			infoBoardMaze.transform.position = grid[(int)rndSignPos.x, (int)rndSignPos.y].transform.position;
 		}
 	}
 

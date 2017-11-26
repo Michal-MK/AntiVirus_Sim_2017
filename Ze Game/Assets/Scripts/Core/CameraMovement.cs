@@ -57,6 +57,7 @@ public class CameraMovement : MonoBehaviour {
 	private void MazeEntrance_OnMazeEnter() {
 		psA.gameObject.SetActive(false);
 		psB.gameObject.SetActive(false);
+		inMaze = true;
 	}
 
 	private void MazeEscape_OnMazeEscape() {
@@ -68,6 +69,8 @@ public class CameraMovement : MonoBehaviour {
 
 		shapeA.radius = cam.orthographicSize * 2;
 		shapeB.radius = cam.orthographicSize * 2;
+
+		inMaze = false;
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
@@ -271,10 +274,6 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 
 		if (!inBossRoom && !inMaze) {
-			cam_pos = new Vector3(camX, camY, -10);
-			gameObject.transform.position = cam_pos;
-		}
-		else if (Maze.inMaze) {
 			cam_pos = new Vector3(camX, camY, -10);
 			gameObject.transform.position = cam_pos;
 		}

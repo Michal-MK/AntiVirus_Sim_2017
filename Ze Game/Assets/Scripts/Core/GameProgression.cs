@@ -16,6 +16,7 @@ public class GameProgression : MonoBehaviour {
 
 	public static GameProgression script;
 
+
 	private void Awake() {
 		if (script == null) {
 			script = this;

@@ -938,11 +938,7 @@ MonoBehaviour:
   player: {fileID: 1574297770}
   spike: {fileID: 399954889}
   cam: {fileID: 2063632490}
-  MazeBG: {fileID: 510032459}
-  zoom: {fileID: 0}
-  infoBoardMaze: {fileID: 1210446928}
   playerIdleTime: 10
-  inMazePropoerly: 0
 --- !u!212 &88533461
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1459,7 +1455,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0814bfcf1689a22479af823dc4dc6e0b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5e619b1d02628b140a69e07b7ee45d8d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -7276,39 +7272,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 463998148}
---- !u!1 &466975530
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 466975531}
-  m_Layer: 0
-  m_Name: BL
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &466975531
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 466975530}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 510032459}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -55, y: -50}
-  m_SizeDelta: {x: 200, y: 200}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &469797531
 Prefab:
   m_ObjectHideFlags: 0
@@ -7543,7 +7506,7 @@ GameObject:
   - component: {fileID: 510032461}
   - component: {fileID: 510032462}
   m_Layer: 0
-  m_Name: MazeBG
+  m_Name: MazeBackground
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7555,18 +7518,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 510032458}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
-  m_Children:
-  - {fileID: 466975531}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
   m_Father: {fileID: 1162538303}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 768, y: 432}
+  m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &510032460
 SpriteRenderer:
@@ -7604,8 +7566,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 1
+  m_Size: {x: 960, y: 540}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -7627,9 +7589,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 192, y: 108}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 960, y: 540}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
@@ -13503,15 +13465,13 @@ MonoBehaviour:
   WallIDmg: {fileID: 1338213195876334, guid: b386cc722007991409b06b5802b2e7df, type: 2}
   WallTDmg: {fileID: 1871367957734676, guid: 37e67b358f9e5244b9c0f6c841a3fcee, type: 2}
   player: {fileID: 1574297770}
-  cam: {fileID: 2063632490}
   teleport: {fileID: 1933509650}
-  MazePositon: {fileID: 466975530}
-  BG: {fileID: 510032459}
-  hpos: {x: 0, y: 0, z: 0}
+  mazeBackground: {fileID: 510032459}
   rowcollCount: 0
-  current: {fileID: 0}
+  mazeDimension: 0
+  middleCell: {fileID: 0}
+  infoBoardMaze: {fileID: 1210446928}
   run: 1
-  chosenNeighbor: {fileID: 0}
 --- !u!4 &1162538303
 Transform:
   m_ObjectHideFlags: 0
@@ -15722,6 +15682,16 @@ Prefab:
       propertyPath: m_Size.y
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 61000012897071408, guid: 851e871c456ac114c854ab84faf2f58e,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 88
+      objectReference: {fileID: 0}
+    - target: {fileID: 61000012897071408, guid: 851e871c456ac114c854ab84faf2f58e,
+        type: 2}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 851e871c456ac114c854ab84faf2f58e, type: 2}
   m_IsPrefabParent: 0
@@ -16020,10 +15990,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 1574297774}
-  movementSpeed: 200
-  flappyDrag: 0
-  flappyForceScale: 1
-  canFlapAgain: 0
+  movementSpeed: 550
+  flappyGravity: 10
+  movementDrag: 30
+  flappyForceScale: 45
+  canFlapAgain: 1
 --- !u!61 &1574297773
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16083,7 +16054,7 @@ MonoBehaviour:
   rg: {fileID: 1574297774}
   face: {fileID: 278018624}
   pAttack: {fileID: 1574297778}
-  GameOverImg: {fileID: 1578350127}
+  pMovement: {fileID: 0}
   newGame: 1
   gameOver: 0
   smile: {fileID: 21300000, guid: ecda8c94ad4f59f4d984b1c73c28f6ab, type: 3}
@@ -16835,8 +16806,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1778330893
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300018, guid: 816cebb4996bd2e4399d16480a765996, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -16878,7 +16849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -98.9, y: -56}
+  m_AnchoredPosition: {x: -97.9, y: -56.5}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1698452727
@@ -27818,7 +27789,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1933509650}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -437, y: -193, z: 0}
+  m_LocalPosition: {x: -499, y: -260, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1781750124}

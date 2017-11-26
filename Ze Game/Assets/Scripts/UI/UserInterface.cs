@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using WindowsInput;
 
 public class UserInterface : MonoBehaviour {
 	public static event PauseUnpause.Pause OnPauseChange;
@@ -20,8 +22,12 @@ public class UserInterface : MonoBehaviour {
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	public static void ListenForEscape() {
 		Control.OnEscapePressed += Control_OnEscapePressed;
+		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
 		_sceneMode = UIScene.MAIN_MENU;
+		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
+
+
 
 	private static void Control_OnEscapePressed() {
 		switch (_sceneMode) {
@@ -44,7 +50,7 @@ public class UserInterface : MonoBehaviour {
 					}
 				}
 				else {
-					if (OnPauseChange != null) {
+					if (OnPauseChange != null && M_Player.gameProgression != -1) {
 						OnPauseChange(!PauseUnpause.isPaused);
 					}
 				}
@@ -74,6 +80,9 @@ public class UserInterface : MonoBehaviour {
 				if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0) {
 					EventSystem.current.SetSelectedGameObject(null);
 				}
+				if ((Input.GetAxisRaw("HorMovement") != 0 || Input.GetAxisRaw("VertMovement") != 0) && EventSystem.current.currentSelectedGameObject == null) {
+					EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);	
+				}
 				return;
 			}
 			case UIScene.GAME: {
@@ -85,6 +94,19 @@ public class UserInterface : MonoBehaviour {
 			case UIScene.OTHER: {
 				return;
 			}
+			default: {
+				return;
+			}
+		}
+	}
+
+	private static void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
+		switch (scene.name) {
+			case "MainMenu": {
+				GameObject.Find("Profile_Name").GetComponent<Text>().text = "Selected profile: " + Profile.profileName;
+				return;
+			}
+
 			default: {
 				return;
 			}
@@ -105,5 +127,15 @@ public class UserInterface : MonoBehaviour {
 			b.interactable = !b.interactable;
 		}
 	}
+	#endregion
+
+	#region GameScene functions
+	private static void M_Player_OnPlayerDeath(M_Player sender) {
+		Animator gameOverAnim = GameObject.Find("GameOver").GetComponent<Animator>();
+		gameOverAnim.Play("GameOver");
+		Control.PressingEscape();
+		M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
+	}
+
 	#endregion
 }

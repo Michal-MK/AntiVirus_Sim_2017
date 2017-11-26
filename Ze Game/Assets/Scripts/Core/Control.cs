@@ -77,12 +77,6 @@ public class Control : MonoBehaviour {
 		currDifficulty = data.core.difficulty;
 	}
 
-	private void Start() {
-#if !UNITY_EDITOR
-		Profile.RequestProfiles();
-#endif
-	}
-
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
 		MenuMusic.script.StopMusicWrapper();
@@ -156,10 +150,16 @@ public class Control : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Input.GetButtonDown("Escape")) {
 			if(OnEscapePressed != null) {
 				OnEscapePressed();
 			}
+		}
+	}
+
+	public static void PressingEscape() {
+		if (OnEscapePressed != null) {
+			OnEscapePressed();
 		}
 	}
 

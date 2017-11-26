@@ -29,7 +29,9 @@ public class PauseUnpause : MonoBehaviour {
 			Time.timeScale = 1;
 			Player_Movement.canMove = true;
 			if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
-				Timer.StartTimer(1f);
+				if (Coins.coinsCollected > 0) {
+					Timer.StartTimer(1f);
+				}
 			}
 			else {
 				Timer.StartTimer(2f);

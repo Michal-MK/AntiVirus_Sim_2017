@@ -11,27 +11,22 @@ public class Profile : MonoBehaviour {
 
 	public static GameObject profileRepresenation;
 	public static GameObject authentication;
-	private static Text profile_name;
 
-	[RuntimeInitializeOnLoadMethod()]
-	private static void Start() {
-		try {
-			profile_name = GameObject.Find("Profile_Name").GetComponent<Text>();
-		}
-		catch {
-			print("Attempted to set an object reference, game will not behave properly.");
-		}
-	}
-
-	public Profile CurrentProfile {
+	public static Profile_Data getCurrentProfile {
 		get {
-			_currProfile = createdProfiles[0];
-			return this;
+			return _currProfile;
 		}
 	}
 
-	public string profileName {
-		get { return _currProfile.getProfileName; }
+	public static string profileName {
+		get {
+			if (_currProfile != null) {
+				return _currProfile.getProfileName;
+			}
+			else {
+				return "Not selected!";
+			}
+		}
 	}
 
 	private static Profile_Data[] createdProfiles {
@@ -61,7 +56,7 @@ public class Profile : MonoBehaviour {
 		}
 	}
 
-	public static Profile_Data SelectProfile(string  p_name) {
+	public static Profile_Data SelectProfile(string p_name) {
 		BinaryFormatter bf = new BinaryFormatter();
 		using (FileStream fs = File.OpenRead(profilesFolder + p_name)) {
 			Profile_Data data = (Profile_Data)bf.Deserialize(fs);
@@ -73,6 +68,8 @@ public class Profile : MonoBehaviour {
 	public static void RequestProfiles() {
 		profileRepresenation = (GameObject)Resources.Load("Profiles");
 		authentication = (GameObject)Resources.Load("Authentication");
+		Text profile_name = GameObject.Find("Profile_Name").GetComponent<Text>();
+		MainMenu_Holder holder = FindObjectOfType<MainMenu_Holder>();
 
 		Profile_Data[] pfs = createdProfiles;
 		if (pfs.Length == 0) {
@@ -82,27 +79,39 @@ public class Profile : MonoBehaviour {
 			in_field.onEndEdit.AddListener(delegate {
 				Control.currProfile = new Profile().Create(in_field.text);
 				Destroy(auth);
-				profile_name.text = in_field.text;
+				profile_name.text = "Current profile: " + in_field.text;
 			});
 		}
 		else {
+
 			ProfileRepresentation_Holder g = Instantiate(profileRepresenation, GameObject.Find("Canvas").transform).GetComponent<ProfileRepresentation_Holder>();
 
 			for (int i = 0; i < pfs.Length; i++) {
 				g.profileNames[i].text = pfs[i].getProfileName;
+
+				if (!string.IsNullOrEmpty(pfs[i].getProfileName)) {
+					EventSystem.current.SetSelectedGameObject(g.buttons[i].gameObject);
+				}
+
 				g.buttons[i].onClick.AddListener(delegate {
 					Destroy(g.gameObject);
-					profile_name.text += g.profileNames[i-1].text;
+					profile_name.text = "Current profile: " + g.profileNames[i - 1].text;
 					Control.currProfile = SelectProfile(g.profileNames[i - 1].text + ".gp");
-					EventSystem.current.SetSelectedGameObject(GameObject.Find("startGame"));
+					holder.startGame.interactable = true;
+					EventSystem.current.SetSelectedGameObject(holder.startGame.gameObject);
+					foreach (Button b in holder.getButtons) {
+						b.interactable = true;
+					}
 				});
 			}
 
 			foreach (Button b in g.buttons) {
-				if(b.transform.GetChild(0).GetComponent<Text>().text == "Button") {
+				if (b.transform.GetChild(0).GetComponent<Text>().text == "Button") {
 					Destroy(b.gameObject);
 				}
 			}
+
+			DisableMenuInteraction(holder);
 		}
 	}
 
@@ -111,6 +120,13 @@ public class Profile : MonoBehaviour {
 			ch = '\0';
 		}
 		return ch;
+	}
+
+	private static void DisableMenuInteraction(MainMenu_Holder holder) {
+		holder.startGame.interactable = false;
+		foreach (Button b in holder.getButtons) {
+			b.interactable = false;
+		}
 	}
 }
 

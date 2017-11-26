@@ -28,7 +28,6 @@ public class MazeEscape : MonoBehaviour {
 		if(OnMazeEscape != null) {
 			OnMazeEscape();
 		}
-		Maze.inMaze = false;
 
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		Zoom.canZoom = true;

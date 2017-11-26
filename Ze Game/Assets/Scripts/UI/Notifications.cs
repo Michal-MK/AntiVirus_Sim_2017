@@ -20,14 +20,14 @@ public class Notifications : MonoBehaviour {
 		_canvas = canvas;
 	}
 
-	public static void Warn<T>(string msg, T value, Action<T> action) {
+	public static void Warn<T>(string msg, T value, Action<T> confirmation, Action returnBack) {
 		GameObject w = Instantiate(_warningPrefabStatic, _canvas, false);
 		Button ok = w.transform.Find("Ok").GetComponent<Button>();
 		Button back = w.transform.Find("Back").GetComponent<Button>();
 		Text message = w.transform.Find("Warning").GetComponent<Text>();
 		message.text = msg;
 
-		ok.onClick.AddListener(delegate { Destroy(w); action.Invoke(value); });
+		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); returnBack.Invoke(); });
 		back.onClick.AddListener(delegate { Destroy(w); });
 	}
 
@@ -40,14 +40,14 @@ public class Notifications : MonoBehaviour {
 		ok.onClick.AddListener(delegate { Destroy(w);  });
 	}
 
-	public static void Confirm<T>(string msg, T value, Action<T> action) {
+	public static void Confirm<T>(string msg, T value, Action<T> confirmation, Action returnBack) {
 		GameObject w = Instantiate(_confirmationPrefabStatic, _canvas, false);
 		Button ok = w.transform.Find("Ok").GetComponent<Button>();
 		Button back = w.transform.Find("Back").GetComponent<Button>();
 		Text message = w.transform.Find("Confirmation").GetComponent<Text>();
 		message.text = msg;
 
-		ok.onClick.AddListener(delegate { Destroy(w); action.Invoke(value); });
-		back.onClick.AddListener(delegate { Destroy(w); });
+		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); });
+		back.onClick.AddListener(delegate { Destroy(w); returnBack.Invoke(); });
 	}
 }

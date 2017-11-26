@@ -31,7 +31,7 @@ public class Guide : MonoBehaviour {
 
 	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
 		if(other.name == "Block") {
-			Recalculate(GameObject.Find("PressurePlate"), true);
+			Recalculate(GameObject.Find("Pressure_Plate"), true);
 		}
 	}
 

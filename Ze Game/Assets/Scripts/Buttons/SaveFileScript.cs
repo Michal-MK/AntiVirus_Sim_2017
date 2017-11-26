@@ -7,33 +7,21 @@ using UnityEngine.UI;
 public class SaveFileScript : MonoBehaviour {
 
 	public SaveData associatedData;
-
+	public SaveFile saveFile;
 	public GameObject save;
-	public RawImage rawImage;
 
 	public void DeleteFile() {
-		string savePath = "";
-		string imgPath = "";
-		string[] saveName = save.name.Split('.', '\\');
 
-		for (int i = 0; i < saveName.Length; i++) {
-			if (i <= saveName.Length - 3) {
-				savePath += saveName[i] + '\\';
-			}
-			else {
-				imgPath = savePath + "Resources\\" + saveName[i];
-				savePath += saveName[i];
-				break;
-			}
+		File.Delete(saveFile.data.core.fileLocation);
+		File.Delete(saveFile.data.core.imgFileLocation);
+
+		foreach (SaveData data in saveFile.saveHistory.saveHistory) {
+			File.Delete(data.core.imgFileLocation);
 		}
-
-		print(savePath + ".Kappa");
-		File.Delete(savePath + ".Kappa");
-		print(imgPath + ".png");
-		File.Delete(imgPath + ".png");
 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
+
 
 	public void LoadData() {
 		Control.script.loadManager.Load(associatedData);

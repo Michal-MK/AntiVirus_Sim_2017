@@ -49,7 +49,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 					Texture2D tex = new Texture2D(800, 600);
 					tex.LoadImage(img);
 					saveImg.texture = tex;
-
+					confirmDel.GetComponent<SaveFileScript>().saveFile = saveInfo;
 
 					try {
 						save.transform.Find("ShowHistory").GetComponent<DisplaySaveHistory>().selfHistory = saveInfo.saveHistory.saveHistory;

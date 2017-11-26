@@ -36,8 +36,11 @@ public class SaveManager : MonoBehaviour {
 		FileStream file;
 		BinaryFormatter formatter = new BinaryFormatter();
 
-		file = File.Create(Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa");
-		string imgPath = Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "D" + difficulty + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "Save-D" + difficulty + ".png";
+		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
+		string imgPath = Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "D" + difficulty + Path.DirectorySeparatorChar + "Resources" + Path.DirectorySeparatorChar + "Save-D" + difficulty + "_000.png";
+
+		file = File.Create(filePath);
+
 		SaveFile newSaveFile = new SaveFile {
 			saveHistory = new SaveHistory(),
 			data = new SaveData()
@@ -47,6 +50,8 @@ public class SaveManager : MonoBehaviour {
 		newSaveFile.data.core.time = 0;
 		newSaveFile.data.core.difficulty = difficulty;
 		newSaveFile.data.core.localAttempt = 0;
+		newSaveFile.data.core.fileLocation = filePath;
+		newSaveFile.data.core.imgFileLocation = imgPath;
 
 		try {
 			File.Copy(Application.streamingAssetsPath + Path.DirectorySeparatorChar + "NewGame.png", imgPath);
@@ -68,13 +73,16 @@ public class SaveManager : MonoBehaviour {
 		BinaryFormatter formatter = new BinaryFormatter();
 		SaveFile newSave = current;
 		FileStream file;
-		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
-		string imgFilePath = Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + (newSave.saveHistory.saveHistory.Count - 1).ToString("000") + ".png";
-		file = File.Open(filePath,FileMode.Open);
 
 		if (current.data.core.time != 0) {
 			newSave.saveHistory.saveHistory.Add(DeepCopy(current.data));
 		}
+
+		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
+		string imgFilePath = Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + (newSave.saveHistory.saveHistory.Count + 1).ToString("000") + ".png";
+		file = File.Open(filePath,FileMode.Open);
+
+
 		GameProgression.script.GetValues();
 
 		#region Player data
@@ -97,7 +105,7 @@ public class SaveManager : MonoBehaviour {
 		newSave.data.world.doneAvoidance = avoidance.performed;
 		newSave.data.world.bossSpawned = bossSpawned;
 
-		if (Maze.inMaze == false && Spike.spikesCollected >= 4) {
+		if (CameraMovement.script.inMaze == false && Spike.spikesCollected >= 4) {
 			newSave.data.world.postMazeDoorOpen = true;
 		}
 		else {
