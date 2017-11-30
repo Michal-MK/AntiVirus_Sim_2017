@@ -67,7 +67,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject);
+				OnNewTarget(gameObject,true);
 			}
 		}
 		if (stage == 1) {
@@ -79,7 +79,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject);
+				OnNewTarget(gameObject, true);
 			}
 		}
 		if (stage == 2) {
@@ -91,7 +91,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject);
+				OnNewTarget(gameObject, true);
 			}
 		}
 		if (stage == 3) {
@@ -115,7 +115,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject);
+				OnNewTarget(gameObject, true);
 			}
 		}
 		if (stage == 5) {
@@ -126,7 +126,7 @@ public class Spike : MonoBehaviour {
 	public void Hide() {
 		gameObject.SetActive(false);
 		if (OnNewTarget != null) {
-			OnNewTarget(null);
+			OnNewTarget(null, true);
 		}
 	}
 

@@ -73,7 +73,7 @@ public class PressurePlate : MonoBehaviour {
 				sound.Play();
 				spike.SetPosition();
 				if (OnNewTarget != null) {
-					OnNewTarget(spike.gameObject);
+					OnNewTarget(spike.gameObject,true);
 				}
 				BlockScript.pressurePlateTriggered = true;
 			}

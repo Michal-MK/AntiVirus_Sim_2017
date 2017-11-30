@@ -38,15 +38,15 @@ GameObject:
   - component: {fileID: 4582372541856632}
   - component: {fileID: 212655889289364446}
   - component: {fileID: 60310964015862514}
-  - component: {fileID: 114985444464108206}
   - component: {fileID: 50547677583285626}
+  - component: {fileID: 114985444464108206}
   m_Layer: 0
   m_Name: SpikeBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4172788380354730
 Transform:
   m_ObjectHideFlags: 1
@@ -66,14 +66,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1716937458873836}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -25.25, y: -9.09, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 486.1156, y: -2258.3586, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4172788380354730}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50547677583285626
 Rigidbody2D:
   serializedVersion: 4
@@ -83,7 +83,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 1716937458873836}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -135,8 +135,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15dbffd66cd700e4dbe07fdc9e68d673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikeLike: {fileID: 1846436797495276, guid: e4f0450ca464d2f47917b9fcc6989130, type: 2}
+  bulletPickup: {fileID: 1846436797495276, guid: e4f0450ca464d2f47917b9fcc6989130,
+    type: 2}
   rg: {fileID: 50547677583285626}
+  bulletSpeed: 20
+  bulletDuration: 1.5
 --- !u!198 &198154743620523464
 ParticleSystem:
   m_ObjectHideFlags: 1

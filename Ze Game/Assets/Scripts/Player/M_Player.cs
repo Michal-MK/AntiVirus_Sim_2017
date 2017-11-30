@@ -10,7 +10,7 @@ public delegate void PlayerDeath(M_Player sender);
 public class M_Player : MonoBehaviour {
 	#region PrefabReferences
 	public Rigidbody2D rg;
-	public GameObject face;
+	public SpriteRenderer face;
 	public PlayerAttack pAttack;
 	public Player_Movement pMovement;
 	private Sprite previous;
@@ -115,7 +115,7 @@ public class M_Player : MonoBehaviour {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
-			face.GetComponent<SpriteRenderer>().sprite = sad;
+			face.sprite = sad;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
 
@@ -143,27 +143,10 @@ public class M_Player : MonoBehaviour {
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			GameProgression.script.Progress();
-			face.GetComponent<SpriteRenderer>().sprite = happy;
-			PlayerAttack.bullets++;
-			if (gameObject.GetComponent<PlayerAttack>().visibleAlready == true) {
-				gameObject.GetComponent<PlayerAttack>().bulletCount.text = "x " + PlayerAttack.bullets;
-			}
-
-			if (Spike.spikesCollected == 5) {
-				string text;
-				if (pAttack.displayShootingInfo) {
-					text = "You found all the bullets.\n You can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\n The bullets are limited, don't lose them!";
-					pAttack.displayShootingInfo = false;
-				}
-				else {
-					text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
-				}
-				Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
-			}
-
+			face.sprite = happy;
 		}
 		if (col.name == "Coin") {
-			face.GetComponent<SpriteRenderer>().sprite = happy;
+			face.sprite = happy;
 			if (OnCoinPickup != null) {
 				OnCoinPickup(this, col.gameObject);
 			}
@@ -177,31 +160,15 @@ public class M_Player : MonoBehaviour {
 			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 
-		if (col.name == "Test") {
-			if (i % 2 == 0) {
-				print(i % 2 + " " + i);
-				pMovement.SetFlappyMode(true);
-				i++;
-			}
-			else {
-				print(i % 2 + " " + i);
-				pMovement.SetFlappyMode(false);
-				i++;
-			}
-		}
-
 		if (col.tag == "ArrowTrap") {
-			previous = face.GetComponent<SpriteRenderer>().sprite;
-			face.GetComponent<SpriteRenderer>().sprite = sad;
+			previous = face.sprite;
+			face.sprite = sad;
 		}
 	}
 
 	private void OnTriggerExit2D(Collider2D col) {
-		//if (col.transform.tag == "BG") {
-		//	CameraMovement.script.RaycastForRooms();
-		//}
 		if (col.tag == "ArrowTrap") {
-			face.GetComponent<SpriteRenderer>().sprite = previous;
+			face.sprite = previous;
 		}
 	}
 
@@ -218,14 +185,9 @@ public class M_Player : MonoBehaviour {
 		if (OnPlayerDeath != null) {
 			OnPlayerDeath(this);
 		}
-		else {
-			print("Not subscribed");
-		}
+
 		if (OnZoomModeSwitch != null) {
 			OnZoomModeSwitch(false);
-		}
-		else {
-			print("Not subscribed2");
 		}
 
 		Player_Movement.canMove = false;

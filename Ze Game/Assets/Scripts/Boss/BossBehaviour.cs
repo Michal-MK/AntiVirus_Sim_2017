@@ -438,12 +438,12 @@ public class BossBehaviour : MonoBehaviour {
 
 				yield return new WaitForSeconds(2);
 				Destroy(positioningCage.gameObject);
-				player.GetComponent<Player_Movement>().SetFlappyMode(true);
+				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovent.FLAPPY);
 				StartCoroutine(PipeGeneration());
 
 				yield return new WaitUntil(() => doneBouncing);
 
-				player.GetComponent<Player_Movement>().SetFlappyMode(false);
+				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovent.ARROW);
 				isAttacking = false;
 				doneBouncing = false;
 				Atk = StartCoroutine(LerpPos(gameObject, transform.position, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0)));
@@ -808,10 +808,7 @@ public class BossBehaviour : MonoBehaviour {
 
 					float dist = Vector3.Distance(transform.position, hit.point);
 					topRect.transform.localScale = new Vector3(1, dist / topRect.sizeDelta.y, 1);
-
 					topBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
-
-
 				}
 			}
 			foreach (RaycastHit2D hit in right) {
@@ -822,8 +819,6 @@ public class BossBehaviour : MonoBehaviour {
 					float dist = Vector3.Distance(transform.position, hit.point);
 					rightRect.transform.localScale = new Vector3(1, dist / rightRect.sizeDelta.y, 1);
 					rightBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
-
-
 				}
 			}
 			foreach (RaycastHit2D hit in down) {
@@ -833,11 +828,7 @@ public class BossBehaviour : MonoBehaviour {
 
 					float dist = Vector3.Distance(transform.position, hit.point);
 					bottomRect.transform.localScale = new Vector3(1, dist / bottomRect.sizeDelta.y, 1);
-
 					bottomBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
-
-
-
 				}
 			}
 			foreach (RaycastHit2D hit in left) {
@@ -847,15 +838,9 @@ public class BossBehaviour : MonoBehaviour {
 
 					float dist = Vector3.Distance(transform.position, hit.point);
 					leftRect.transform.localScale = new Vector3(1, dist / leftRect.sizeDelta.y, 1);
-
 					leftBrim.transform.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)hit.point - new Vector3(transform.position.x, transform.position.y, 0)));
-
-
 				}
 			}
 		}
 	}
 }
-
-
-

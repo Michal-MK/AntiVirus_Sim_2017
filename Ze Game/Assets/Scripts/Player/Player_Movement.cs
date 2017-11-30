@@ -118,16 +118,16 @@ public class Player_Movement : MonoBehaviour {
 	}
 
 	//Moving the character FlappyBird style
-	public void SetFlappyMode(bool enable) {
-		switch (enable) {
-			case true: {
+	public void SetMovementMode(PlayerMovent type) {
+		switch (type) {
+			case PlayerMovent.FLAPPY: {
 				print("Switching to flappy mode.");
 				rigidbody.gravityScale = flappyGravity;
 				rigidbody.drag = 0;
 				movementMode = PlayerMovent.FLAPPY;
 				return;
 			}
-			case false: {
+			case PlayerMovent.ARROW: {
 				print("Switching from flappy mode.");
 				rigidbody.gravityScale = 0;
 				rigidbody.drag = movementDrag;
@@ -164,3 +164,4 @@ public class Player_Movement : MonoBehaviour {
 		set { _canMove = value; }
 	}
 }
+

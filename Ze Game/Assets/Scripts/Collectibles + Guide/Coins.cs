@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coins : MonoBehaviour {
+public class Coins : MonoBehaviour, ICollectible {
 
 	public GameObject amount;
 	public RectTransform BG;
@@ -36,7 +36,7 @@ public class Coins : MonoBehaviour {
 		else if (data.player.coinsCollected <= 4) {
 			CoinBehavior(null, null);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject);
+				OnNewTarget(gameObject, true);
 			}
 		}
 	}

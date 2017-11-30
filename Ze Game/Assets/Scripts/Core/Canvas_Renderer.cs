@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Constants.Strings;
 
 public class Canvas_Renderer : MonoBehaviour {
 
@@ -103,7 +104,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	public void UpdateCounters(string name = null) {
 
-		if (name == "Coin") {
+		if (name == ConstantStrings.COIN) {
 			CoinC.text = "x " + Coins.coinsCollected;
 
 			if (Coins.coinsCollected == 5) {
@@ -111,13 +112,13 @@ public class Canvas_Renderer : MonoBehaviour {
 				CoinC.text = CoinC.text + " Completed!";
 			}
 		}
-		if (name == "Spike") {
+		if (name == ConstantStrings.SPIKE) {
 			SpikeC.text = "x " + (Spike.spikesCollected);
 		}
 
 		if (string.IsNullOrEmpty(name)) {
-			UpdateCounters("Spike");
-			UpdateCounters("Coin");
+			UpdateCounters(ConstantStrings.SPIKE);
+			UpdateCounters(ConstantStrings.COIN);
 		}
 	}
 	private void OnDestroy() {

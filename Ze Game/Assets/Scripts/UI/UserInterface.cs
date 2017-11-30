@@ -2,7 +2,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using WindowsInput;
 
 public class UserInterface : MonoBehaviour {
 	public static event PauseUnpause.Pause OnPauseChange;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Guide : MonoBehaviour {
 
-	public delegate void GuideTarget(GameObject target);
+	public delegate void GuideTarget(GameObject target, bool isImmovable);
 
 	public M_Player player;
 
@@ -25,8 +25,8 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
 		M_Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
-		Coins.OnNewTarget += Coins_OnNewTarget;
-		Spike.OnNewTarget += Spike_OnNewTarget;
+		Coins.OnNewTarget += Recalculate;
+		Spike.OnNewTarget += Recalculate;
 	}
 
 	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
@@ -213,7 +213,7 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 		M_Player.OnTargetableObjectCollision -= M_Player_OnTargetableObjectCollision;
-		Coins.OnNewTarget -= Coins_OnNewTarget;
-		Spike.OnNewTarget -= Spike_OnNewTarget;
+		Coins.OnNewTarget -= Recalculate;
+		Spike.OnNewTarget -= Recalculate;
 	}
 }
