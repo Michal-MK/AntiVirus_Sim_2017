@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WindowManager {
-	
+
 	/// <summary>
 	/// Stack of active windows, since windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
 	/// </summary>
@@ -39,7 +39,7 @@ public class WindowManager {
 				win.animator.SetTrigger("Show");
 			}
 		}
-		if(OnWindowOpen != null) {
+		if (OnWindowOpen != null) {
 			OnWindowOpen(win);
 		}
 	}
@@ -119,11 +119,17 @@ public class WindowManager {
 	public static void ToggleWindow(Window win) {
 		if (win.type == Window.WindowType.ACTIVATING) {
 			win.window.SetActive(!win.window.activeInHierarchy);
-			if (win.window.activeInHierarchy && OnWindowOpen != null) {
-				OnWindowOpen(win);
+			if (win.window.activeInHierarchy) {
+				activeWindows.Push(win);
+				if (OnWindowOpen != null) {
+					OnWindowOpen(win);
+				}
 			}
-			else if(OnWindowClose != null) {
-				OnWindowClose(win);
+			else {
+				activeWindows.Pop();
+				if (OnWindowClose != null) {
+					OnWindowClose(win);
+				}
 			}
 		}
 		else {
@@ -170,7 +176,6 @@ public class WindowManager {
 					w.animator.SetTrigger("Hide");
 				}
 				activeWindows.Remove(w);
-
 				break;
 			}
 		}
@@ -228,6 +233,7 @@ public class Window {
 		get { return _disableAfterMoving; }
 	}
 }
+
 public static class WindowExtensions {
 	public static void Remove(this Stack<Window> stack, Window element) {
 		Window[] wins = stack.ToArray();

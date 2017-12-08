@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Igor.Constants.Strings;
 
 public class BossBehaviour : MonoBehaviour {
 
@@ -21,8 +22,10 @@ public class BossBehaviour : MonoBehaviour {
 	public GameObject Brimstone;
 	public GameObject block;
 
-	public ObjectPooler poolOfEnemyProjectiles;
-	public ObjectPooler poolOfKillerBlocks;
+	private ObjectPool pool_EnemyProjectile;
+	private ObjectPool pool_KillerBlock;
+	//public ObjectPooler poolOfEnemyProjectiles;
+	//public ObjectPooler poolOfKillerBlocks;
 	public BossHealth hp;
 
 	public RectTransform self;
@@ -52,7 +55,7 @@ public class BossBehaviour : MonoBehaviour {
 	public Vector2 oldvec;
 	public Vector2 calculatedVec;
 
-	public GameObject Buttons;
+	public GameObject buttons;
 
 	#endregion
 
@@ -124,29 +127,31 @@ public class BossBehaviour : MonoBehaviour {
 
 
 	void Start() {
-		if(OnBossfightBegin != null) {
+		if (OnBossfightBegin != null) {
 			OnBossfightBegin(this);
 		}
 		playerSpeedMultiplier = 5;
 		Projectile.spawnedByAvoidance = false;
 		Projectile.spawnedByKillerWall = false;
 
-		BG = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
-		player = GameObject.FindGameObjectWithTag("Player");
-		poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
-		poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
-		Buttons = GameObject.Find("Buttons");
+		BG = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
+		player = GameObject.Find("Player");
+		//poolOfEnemyProjectiles = GameObject.Find("EnemyProjectileInaccurate Pooler").GetComponent<ObjectPooler>();
+		//poolOfKillerBlocks = GameObject.Find("KillerBlockBoss Pooler").GetComponent<ObjectPooler>();
+		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
+		pool_KillerBlock = new ObjectPool(Resources.Load(PrefabNames.ENEMY_KILLERBLOCK) as GameObject);
+		buttons = GameObject.Find("Buttons");
 
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 		rigid.freezeRotation = true;
 
-		attack1StartPos = BG.position + new Vector3(-BG.sizeDelta.x /2 + 40, - BG.sizeDelta.y / 2 + 40 );
+		attack1StartPos = BG.position + new Vector3(-BG.sizeDelta.x / 2 + 40, -BG.sizeDelta.y / 2 + 40);
 		attack2StartPos = new Vector3(-530, -70, 1);
 		attack3StartPos = new Vector3(-368, -70, 1);
 		attack4StartPos = BG.position;
 		attack5StartPos = (Vector2)BG.transform.position + BG.sizeDelta / 2 + new Vector2(-10, 0);
 		fullCircle = 2;
-			
+
 		StartCoroutine(InitialAttack());
 
 	}
@@ -163,7 +168,7 @@ public class BossBehaviour : MonoBehaviour {
 
 		bossSpawned = true;
 
-		Camera.main.transform.position = BG.transform.position + new Vector3(0,0,-10);
+		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 
 		print(Camera.main.transform.position);
 
@@ -267,7 +272,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(3);
 				Canvas_Renderer.script.InfoRenderer(null, "Don't forget about the zooming feature :]");
 				float waitTime = 1.1f;
-				
+
 
 				for (int i = 0; i <= fullCircle; i++) {
 					Debug.Log("Preforming " + (i + 1) + ". circle.");
@@ -287,7 +292,7 @@ public class BossBehaviour : MonoBehaviour {
 				}
 				//--//
 
-				
+
 
 				isAttacking = false;
 				Attack2 = false;
@@ -326,9 +331,11 @@ public class BossBehaviour : MonoBehaviour {
 				StartCoroutine(ChangeDir());
 				while (isAttacking) {
 
-					GameObject BlockL = poolOfKillerBlocks.GetPool();
+					//GameObject BlockL = poolOfKillerBlocks.GetPool();
+					GameObject BlockL = pool_KillerBlock.getNext;
 					BlockL.SetActive(true);
-					GameObject BlockR = poolOfKillerBlocks.GetPool();
+					//GameObject BlockR = poolOfKillerBlocks.GetPool();
+					GameObject BlockR = pool_KillerBlock.getNext;
 					BlockR.SetActive(true);
 
 					BlockL.transform.position = new Vector3(transform.position.x - self.sizeDelta.x / 2, transform.position.y, 1);
@@ -377,7 +384,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2f);
 				isAttacking = true;
 				Attack4 = true;
-				topBrim = Instantiate(Brimstone,transform);
+				topBrim = Instantiate(Brimstone, transform);
 				topBrim.transform.localPosition = Vector3.zero;
 
 				topBrim.name = "Top";
@@ -525,7 +532,8 @@ public class BossBehaviour : MonoBehaviour {
 			Vector3 target = GetPosInCage();
 
 			yield return new WaitForSeconds(waitTime);
-			GameObject bullet = poolOfEnemyProjectiles.GetPool();
+			//GameObject bullet = poolOfEnemyProjectiles.GetPool();
+			GameObject bullet = pool_EnemyProjectile.getNext;
 
 			bullet.GetComponent<Projectile>().byBoss = true;
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, target - gameObject.transform.position);
@@ -605,7 +613,7 @@ public class BossBehaviour : MonoBehaviour {
 
 			yield return new WaitForSeconds(NextPipeDelay);
 
-			
+
 			if (GoingDown == true) {
 				Atk = StartCoroutine(LerpPos(gameObject, new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y + (BG.sizeDelta.y / 2), 0), new Vector3(BG.transform.position.x + (BG.sizeDelta.x / 2) - 10, BG.transform.position.y - (BG.sizeDelta.y / 2), 0), false));
 				GoingDown = false;
@@ -621,7 +629,8 @@ public class BossBehaviour : MonoBehaviour {
 				float change = arriveTime - (Time.timeSinceLevelLoad - timeOnStart);
 
 				if ((transform.position.y > holeMid + 15 || transform.position.y < holeMid - 15) && Atk != null) {
-					GameObject shot = poolOfEnemyProjectiles.GetPool();
+					//GameObject shot = poolOfEnemyProjectiles.GetPool();
+					GameObject shot = pool_EnemyProjectile.getNext;
 					Projectile script = shot.GetComponent<Projectile>();
 					Projectile.projectileSpeed = distToPly / change;
 
@@ -783,7 +792,7 @@ public class BossBehaviour : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	private void FixedUpdate() {
 
 		if (Attack4 == true) {

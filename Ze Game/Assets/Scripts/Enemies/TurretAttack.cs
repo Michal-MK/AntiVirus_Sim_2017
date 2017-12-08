@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using Igor.Constants.Strings;
 
 public class TurretAttack : MonoBehaviour {
 
@@ -12,16 +12,17 @@ public class TurretAttack : MonoBehaviour {
 
 	public bool stop = false;
 
-	Vector3 playerpos;
-	ObjectPooler pooler;
-	Transform enemy;
-	Coroutine ChangeFireRate;
+	private Vector3 playerpos;
+	//private ObjectPooler pooler;
+	private ObjectPool pool_EnemyProjectile; 
+	private Transform enemy;
+	private Coroutine ChangeFireRate;
 
 	private void Start() {
-		pooler = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
+		//pooler = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
+		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
 		enemy = GameObject.Find("Enemies").transform;
 		playerpos = GameObject.FindGameObjectWithTag("Player").transform.position;
-
 		switch (Control.currDifficulty) {
 			case 0: {
 				turretSpawnRateStart = 1.6f;
@@ -79,7 +80,8 @@ public class TurretAttack : MonoBehaviour {
 			int diff = Control.currDifficulty;
 
 			if (diff <= 2) {
-				GameObject bullet = pooler.GetPool();
+				//GameObject bullet = pooler.GetPool();
+				GameObject bullet = pool_EnemyProjectile.getNext;
 				Vector3 rnd = RandomVec(diff);
 				bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
 				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
@@ -89,7 +91,8 @@ public class TurretAttack : MonoBehaviour {
 			else {
 				for (int i = 0; i < 2; i++) {
 
-					GameObject bullet = pooler.GetPool();
+					//GameObject bullet = pooler.GetPool();
+					GameObject bullet = pool_EnemyProjectile.getNext;
 					Vector3 rnd = RandomVec(diff);
 
 					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - (gameObject.transform.position)));

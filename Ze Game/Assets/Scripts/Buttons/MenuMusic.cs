@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MenuMusic : MonoBehaviour {
 	public AudioSource source;
+	public float transitionSpeedMult = 1;
 
 	public static MenuMusic script;
 	public bool isPlaying = false;
@@ -17,20 +18,11 @@ public class MenuMusic : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator PlayMuic() {
-		source.volume = 0f;
+	public IEnumerator PlayMusic() {
 		source.Play();
-		for (float f = 0; f <= 0.3f; f += Time.deltaTime) {
-			print(f);
-			if (f <= 0.2f) {
-				source.volume = f;
-				yield return null;
-			}
-			else {
-				source.volume = 0.2f;
-				isPlaying = true;
-				break;
-			}
+		for (float f = 0; f <= 1; f += Time.deltaTime * transitionSpeedMult) {
+			source.volume = f * 0.3f;
+			yield return null;
 		}
 	}
 
@@ -38,18 +30,12 @@ public class MenuMusic : MonoBehaviour {
 		StartCoroutine(StopMusic());
 	}
 
-	public IEnumerator StopMusic() {
-		for (float f = 0.2f; f >= -1; f -= CamFadeOut.CAM_FULLY_FADED_NORMAL * Time.unscaledDeltaTime * 0.075f) {
-			if (f > 0) {
-				source.volume = f;
-				yield return null;
-			}
-			else {
-				source.volume = 0;
-				source.Stop();
-				break;
-			}
+	private IEnumerator StopMusic() {
+		for (float f = 1; f >= 0; f -= Time.deltaTime * transitionSpeedMult) {
+			source.volume = f * 0.3f;
+			yield return null;
 		}
+		source.Stop();
 		isPlaying = false;
 	}
 
@@ -62,4 +48,3 @@ public class MenuMusic : MonoBehaviour {
 		}
 	}
 }
-

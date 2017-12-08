@@ -77,7 +77,7 @@ public class UserInterface : MonoBehaviour {
 		switch (_sceneMode) {
 			case UIScene.MAIN_MENU: {
 				if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0) {
-					EventSystem.current.SetSelectedGameObject(null);
+					EventSystem.current.gameObject.GetComponent<EventSystemManager>().TryDeselect();
 				}
 				if ((Input.GetAxisRaw("HorMovement") != 0 || Input.GetAxisRaw("VertMovement") != 0) && EventSystem.current.currentSelectedGameObject == null) {
 					EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);	
@@ -102,7 +102,10 @@ public class UserInterface : MonoBehaviour {
 	private static void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
 		switch (scene.name) {
 			case "MainMenu": {
-				GameObject.Find("Profile_Name").GetComponent<Text>().text = "Selected profile: " + Profile.profileName;
+				Text t = GameObject.Find("Profile_Name").GetComponent<Text>();
+				if (Profile.getCurrentProfile != null) {
+					t.text = "Current profile: " + Profile.getCurrentProfile.getProfileName;
+				}
 				return;
 			}
 

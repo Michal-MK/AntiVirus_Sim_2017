@@ -71,7 +71,7 @@ public class M_Player : MonoBehaviour {
 
 	private IEnumerator DelayIntro() {
 		yield return new WaitForSeconds(1);
-		GameProgression.script.Progress();
+		MapData.script.Progress();
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
@@ -106,9 +106,8 @@ public class M_Player : MonoBehaviour {
 			GameOver();
 		}
 	}
-	private int i = 0;
-	private void OnTriggerEnter2D(Collider2D col) {
 
+	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.tag == "Enemy") {
 			print(col.gameObject.name);
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
@@ -142,7 +141,7 @@ public class M_Player : MonoBehaviour {
 				OnSpikePickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
-			GameProgression.script.Progress();
+			MapData.script.Progress();
 			face.sprite = happy;
 		}
 		if (col.name == "Coin") {
@@ -195,7 +194,7 @@ public class M_Player : MonoBehaviour {
 		Timer.PauseTimer();
 		Time.timeScale = 0;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA, 1f);
-		MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
+		MusicHandler.script.FadeMusic();
 		gameProgression = -1;
 		gameOver = true;
 

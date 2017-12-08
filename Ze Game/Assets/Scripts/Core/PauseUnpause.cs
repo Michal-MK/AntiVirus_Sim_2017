@@ -16,6 +16,11 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void Awake() {
 		UserInterface.OnPauseChange += UserInterface_OnPauseChange;
+		Timer.OnTimerPause += Timer_OnTimerPause;
+	}
+
+	private void Timer_OnTimerPause(bool state) {
+		_isPaused = state;
 	}
 
 	private void UserInterface_OnPauseChange(bool state) {

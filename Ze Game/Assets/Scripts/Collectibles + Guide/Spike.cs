@@ -43,7 +43,7 @@ public class Spike : MonoBehaviour {
 		}
 
 		M_Player.gameProgression++;
-		GameProgression.script.Progress();
+		MapData.script.Progress();
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {

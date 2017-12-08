@@ -27,7 +27,7 @@ public class MazeEntrance : MonoBehaviour {
 				entered = true;
 				M_Player.gameProgression = 3;
 				StartCoroutine(TransToPos());
-				MusicHandler.script.MusicTransition(MusicHandler.script.maze);
+				MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room_maze);
 			}
 		}
 	}

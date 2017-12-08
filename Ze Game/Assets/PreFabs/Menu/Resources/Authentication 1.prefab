@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 222786481173502878}
   - component: {fileID: 114462964203616484}
   - component: {fileID: 114552628705665256}
+  - component: {fileID: 114058310514916700}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -56,7 +57,7 @@ GameObject:
   - component: {fileID: 224160118938519942}
   - component: {fileID: 222957277006367206}
   m_Layer: 5
-  m_Name: Authentication
+  m_Name: Authentication 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,6 +171,23 @@ MonoBehaviour:
     If left empty, computer profile name will be used instead.
 
 '
+--- !u!114 &114058310514916700
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1131516997049220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e83e3aaae4eedf4b84331f85009e270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  start: {fileID: 0}
+  buttons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114357726195455578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -288,12 +306,12 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_CaretColor: {r: 1, g: 0, b: 0, a: 1}
-  m_CustomCaretColor: 1
+  m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 2
+  m_CaretWidth: 1
   m_ReadOnly: 0
 --- !u!114 &114877655084928226
 MonoBehaviour:

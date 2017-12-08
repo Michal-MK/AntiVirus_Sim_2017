@@ -75,11 +75,11 @@ public class SaveManager : MonoBehaviour {
 		FileStream file;
 
 		if (current.data.core.time != 0) {
-			newSave.saveHistory.saveHistory.Add(DeepCopy(current.data));
+			newSave.saveHistory.previousSaves.Add(DeepCopy(current.data));
 		}
 
 		string filePath = Application.dataPath + "/Saves/D" + difficulty + "/Save-D" + difficulty + ".Kappa";
-		string imgFilePath = Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + (newSave.saveHistory.saveHistory.Count + 1).ToString("000") + ".png";
+		string imgFilePath = Application.dataPath + "/Saves/D" + difficulty + "/Resources/Save-D" + difficulty + "_" + (newSave.saveHistory.previousSaves.Count + 1).ToString("000") + ".png";
 		file = File.Open(filePath,FileMode.Open);
 
 

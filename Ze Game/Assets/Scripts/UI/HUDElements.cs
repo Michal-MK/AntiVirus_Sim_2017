@@ -44,6 +44,7 @@ public class HUDElements : UserInterface {
 	private AttackType currentSelectedAtkType = AttackType.NOTHING;
 
 	private void Awake() {
+		print("Reassigning");
 		s_bombImg = bombImage;
 		s_bombAmount = bombAmount;
 		s_bulletImage = bulletImage;

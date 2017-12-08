@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Igor.Constants.Strings;
 
 public class EnemySpawner : MonoBehaviour {
 
@@ -53,12 +54,12 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
-		if (background.name == "Background_Start") {
+		if (background.name == BackgroundNames.BACKGROUND1_1) {
 			if (M_Player.gameProgression != 0 && !KBCycleRunning) {
 				//StartCoroutine(KBCycle());
 			}
 		}
-		if (background.name == "Background_room_1") {
+		if (background.name == BackgroundNames.BACKGROUND1_2) {
 			if (!isInvokingKillerWall) {
 				StartCoroutine(SpawnKillerWall(0.7f));
 			}
@@ -69,9 +70,9 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void OnEnable() {
-		killerblockBG = GameObject.Find("Background_Start").GetComponent<RectTransform>();
-		arrowtrapBG = GameObject.Find("Background_room_2a").GetComponent<RectTransform>();
-		killerWallBG = GameObject.Find("Background_room_1").GetComponent<RectTransform>();
+		killerblockBG = GameObject.Find(BackgroundNames.BACKGROUND1_1).GetComponent<RectTransform>();
+		arrowtrapBG = GameObject.Find(BackgroundNames.BACKGROUND1_3).GetComponent<RectTransform>();
+		killerWallBG = GameObject.Find(BackgroundNames.BACKGROUND1_2).GetComponent<RectTransform>();
 		enemy = GameObject.Find("Enemies").transform;
 	}
 
@@ -98,7 +99,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	public void SpawnKillerBlock() {
 
-		if(player == null) {
+		if (player == null) {
 			return;
 		}
 
@@ -180,7 +181,8 @@ public class EnemySpawner : MonoBehaviour {
 
 	public IEnumerator SpawnKillerWall(float spawnDelay) {
 		isInvokingKillerWall = true;
-		ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
+		//ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
+		ObjectPool pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE) as GameObject);
 		Projectile.spawnedByKillerWall = true;
 		int diff = Control.currDifficulty;
 
@@ -188,7 +190,8 @@ public class EnemySpawner : MonoBehaviour {
 			yield return new WaitForSeconds(spawnDelay);
 
 			if (diff == 0 || diff == 1) {
-				GameObject wallShot = Icicle.GetPool();
+				//GameObject wallShot = Icicle.GetPool();
+				GameObject wallShot = pool_Enemy_Icicle.getNext;
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(enemy);
@@ -197,7 +200,8 @@ public class EnemySpawner : MonoBehaviour {
 			}
 			if (diff == 3 || diff == 2) {
 				for (int i = 0; i < 2; i++) {
-					GameObject wallShot = Icicle.GetPool();
+					//GameObject wallShot = Icicle.GetPool();
+					GameObject wallShot = pool_Enemy_Icicle.getNext;
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(enemy);
@@ -207,7 +211,8 @@ public class EnemySpawner : MonoBehaviour {
 			}
 			if (diff == 4) {
 				for (int i = 0; i < 3; i++) {
-					GameObject wallShot = Icicle.GetPool();
+					//GameObject wallShot = Icicle.GetPool();
+					GameObject wallShot = pool_Enemy_Icicle.getNext;
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(enemy);

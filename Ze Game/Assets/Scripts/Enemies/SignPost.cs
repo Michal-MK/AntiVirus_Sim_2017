@@ -54,7 +54,7 @@ public class SignPost : MonoBehaviour {
 						if (OnAvoidanceBegin != null) {
 							OnAvoidanceBegin();
 						}
-						MusicHandler.script.PlayMusic(MusicHandler.script.avoidance);
+						MusicHandler.script.PlayMusic(MusicHandler.script.room1_3_avoidance);
 						StartCoroutine(Fade());
 						interacted = true;
 						gameObject.GetComponent<BoxCollider2D>().enabled = false;

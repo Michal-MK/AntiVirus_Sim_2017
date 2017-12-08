@@ -8,6 +8,8 @@ public class Timer : MonoBehaviour {
 
 	private Text Timer_text;
 
+	public static event PauseUnpause.Pause OnTimerPause;
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
@@ -36,10 +38,16 @@ public class Timer : MonoBehaviour {
 
 	public static void PauseTimer() {
 		_isRunning = false;
+		if(OnTimerPause != null) {
+			OnTimerPause(true);
+		}
 	}
 
 	public static void StartTimer(float flowMultiplier) {
 		_isRunning = true;
+		if (OnTimerPause != null) {
+			OnTimerPause(false);
+		}
 		timeFlowMultiplier = flowMultiplier;
 	}
 

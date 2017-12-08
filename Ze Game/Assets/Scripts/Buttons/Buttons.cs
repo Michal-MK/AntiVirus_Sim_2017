@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Igor.Constants.Strings;
 
 public class Buttons : MonoBehaviour {
 
@@ -22,7 +23,7 @@ public class Buttons : MonoBehaviour {
 	}
 
 	public void CreateProfile(string p_name) {
-		Control.currProfile = new Profile().Create(p_name);
+		Control.currProfile = Profile.Create(p_name);
 	}
 
 	public void Quit() {
@@ -35,13 +36,21 @@ public class Buttons : MonoBehaviour {
 
 	public void ToggleWindowActive(GameObject window) {
 		if (Profile.getCurrentProfile == null) {
-			Notifications.Confirm("You need to create a profile first", true, 
+			Notifications.Confirm("You need to create a profile first", true,
 				delegate { Profile.RequestProfiles(); },
 				delegate { FindObjectOfType<UserInterface>().ToggleMenuButtons(); }
 			);
 			return;
 		}
 		WindowManager.ToggleWindow(new Window(window, Window.WindowType.ACTIVATING));
+		WindowManager.OnWindowClose += WindowManager_OnWindowClose;
+	}
+
+	private void WindowManager_OnWindowClose(Window changed) {
+		if (changed.window.name == ObjNames.MENU_CHOOSE_DIFFICULTY) {
+			FindObjectOfType<UserInterface>().ToggleMenuButtons();
+		}
+		WindowManager.OnWindowClose -= WindowManager_OnWindowClose;
 	}
 
 	public void ToggleWindowAnim(GameObject window) {

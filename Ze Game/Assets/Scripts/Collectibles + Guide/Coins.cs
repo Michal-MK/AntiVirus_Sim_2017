@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coins : MonoBehaviour, ICollectible {
+public class Coins : MonoBehaviour {
 
 	public GameObject amount;
 	public RectTransform BG;
@@ -20,7 +20,7 @@ public class Coins : MonoBehaviour, ICollectible {
 
 	void Start() {
 		oldpos = transform.position;
-		scale = gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
+		scale = GetComponent<RectTransform>().sizeDelta.x / 2;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -55,7 +55,7 @@ public class Coins : MonoBehaviour, ICollectible {
 			else {
 				Timer.StartTimer(2f);
 			}
-			gameObject.transform.position = newpos;
+			transform.position = newpos;
 		}
 		if (coinsCollected == 5) {
 			if (Spike.spikesCollected == 0) {

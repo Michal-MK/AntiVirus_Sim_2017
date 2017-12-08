@@ -17,7 +17,7 @@ public class MazeEscape : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 			StartCoroutine(FromMazeTrans());
-			MusicHandler.script.MusicTransition(MusicHandler.script.room1);
+			MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room1_1);
 		}
 	}
 

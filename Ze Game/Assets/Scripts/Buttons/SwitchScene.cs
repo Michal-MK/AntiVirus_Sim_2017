@@ -4,16 +4,16 @@ using UnityEngine.SceneManagement;
 
 public class SwitchScene : MonoBehaviour {
 
-	private int sceneIndexHolder = 0;
+	private string sceneNameHolder;
 
-	public void SwitchTo(int Index) {
-		SceneManager.LoadScene(Index);
+	public void SwitchTo(string name) {
+		SceneManager.LoadScene(name);
 		if (CamFadeOut.script != null) {
 			CamFadeOut.script.anim.SetTrigger("UnDim");
 		}
 	}
 
-	public void DelayMenu(int i) {
+	public void DelayMenu(string sceneName) {
 		GameObject save = GameObject.Find("saveGame");
 		GameObject quit = GameObject.Find("quitToMenu");
 		GameObject rest = GameObject.Find("restartButton");
@@ -30,14 +30,14 @@ public class SwitchScene : MonoBehaviour {
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
-		sceneIndexHolder = i;
-		if (MusicHandler.script.sound.volume != 0) {
-			MusicHandler.script.StartCoroutine(MusicHandler.script.StopMusic());
+		sceneNameHolder = sceneName;
+		if (MusicHandler.script.musicPlayer.volume != 0) {
+			MusicHandler.script.FadeMusic();
 		}
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		SceneManager.LoadScene(sceneIndexHolder);
+		SceneManager.LoadScene(sceneNameHolder);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 }

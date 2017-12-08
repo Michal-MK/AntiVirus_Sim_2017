@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using Igor.Constants.Strings;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class CameraMovement : MonoBehaviour {
 	public RectTransform bg;
 	public RectTransform bossRoom;
 	public RectTransform player;
-	
+
 	private Vector3 cam_pos;
 	private Camera cam;
 	private float camWidht;
@@ -37,10 +38,10 @@ public class CameraMovement : MonoBehaviour {
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
 
-		if(script == null) {
+		if (script == null) {
 			script = this;
 		}
-		else if(script != this) {
+		else if (script != this) {
 			Destroy(gameObject);
 		}
 	}
@@ -80,7 +81,7 @@ public class CameraMovement : MonoBehaviour {
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		inBossRoom = data.world.bossSpawned;
 		if (data.world.bossSpawned) {
-			RectTransform bg = GameObject.Find("Background_room_Boss_1").GetComponent<RectTransform>();
+			RectTransform bg = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
 			Camera.main.transform.position = bg.position + new Vector3(0, 0, -10);
 			psA.transform.position = bg.position + new Vector3(0, bg.sizeDelta.y / 2, 0);
 			ParticleSystem.ShapeModule shape = psA.shape;
@@ -279,26 +280,18 @@ public class CameraMovement : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator LerpSize(float startSize, float finalSize, float smoothness, Vector3 pos = default(Vector3)) {
+	public IEnumerator LerpSize(float startSize, float finalSize, float lerpSpeedMult, Vector3 pos = default(Vector3)) {
 		doneMoving = false;
 		if (pos != default(Vector3)) {
-			print(pos);
-			gameObject.transform.position = pos;
+			transform.position = pos;
 			yield return new WaitForSeconds(0.5f);
 		}
-		for (float t = 0; t < 2; t += Time.deltaTime * smoothness) {
-
-			float newSize = Mathf.SmoothStep(startSize, finalSize, t);
-			Camera.main.orthographicSize = newSize;
-			if (t < 1) {
-				yield return null;
-			}
-			else {
-				Camera.main.orthographicSize = finalSize;
-				doneMoving = true;
-				break;
-			}
+		for (float t = 0; t < 1; t += Time.deltaTime * lerpSpeedMult) {
+			Camera.main.orthographicSize = Mathf.SmoothStep(startSize, finalSize, t);
+			yield return null;
 		}
+		Camera.main.orthographicSize = finalSize;
+		doneMoving = true;
 	}
 
 	public float camX {
@@ -342,7 +335,7 @@ public class CameraMovement : MonoBehaviour {
 	public void BossFightCam(int bossNo) {
 		inBossRoom = true;
 
-		bossRoom = GameObject.Find("Background_room_Boss_" + bossNo).GetComponent<RectTransform>();
+		bossRoom = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + bossNo).GetComponent<RectTransform>();
 
 		float bossX = bossRoom.position.x;
 		float bossY = bossRoom.position.y;
@@ -360,13 +353,6 @@ public class CameraMovement : MonoBehaviour {
 		main.startLifetime = 25;
 	}
 
-	private void OnDestroy() {
-		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
-		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
-		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
-	}
-
 	public void SetParticleLifetime(float time) {
 		ParticleSystem.ShapeModule shapeA = psA.shape;
 		psB.gameObject.SetActive(false);
@@ -375,6 +361,13 @@ public class CameraMovement : MonoBehaviour {
 		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
 		ParticleSystem.MainModule main = psA.main;
 		main.startLifetime = time;
+	}
+
+	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
+		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
+		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 }
 

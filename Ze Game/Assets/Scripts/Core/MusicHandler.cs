@@ -1,26 +1,20 @@
 using System.Collections;
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public class MusicHandler : MonoBehaviour {
+	public AudioSource musicPlayer;
 
-	public AudioSource sound;
-
-	public AudioClip room1;
-	public AudioClip room2;
-	public AudioClip avoidance;
-	public AudioClip maze;
-	public AudioClip boss;
+	public AudioClip room1_1;
+	public AudioClip room1_2;
+	public AudioClip room1_3_avoidance;
+	public AudioClip room_maze;
+	public AudioClip room_1_boss;
 	public AudioClip gameOver;
-
-	private bool avoid = false;
-	private bool lastClip = false;
-	public bool stopOnce = true;
-
-	Coroutine currentMusic;
 
 	public static MusicHandler script;
 
-	public bool isAnythingPlaying = false;
+	private bool _isAnythingPlaying = false;
 
 	private void Awake() {
 		if (script == null) {
@@ -35,153 +29,83 @@ public class MusicHandler : MonoBehaviour {
 		M_Player.OnRoomEnter += NewRoom;
 	}
 
+	#region EventHandling
 	private void NewRoom(RectTransform background, M_Player sender) {
-		if (background.name == "Background_room_1") {
-			MusicTransition(room2);
+		if (background.name == BackgroundNames.BACKGROUND1_2) {
+			TrasnsitionMusic(room1_2);
 		}
-		if (background.name == "Background_room_2a") {
-			MusicTransition(room1);
-		}
-	}
-
-	public void PlayMusic(AudioClip clip) {
-		isAnythingPlaying = true;
-		StartCoroutine(PlayClip(clip));
-	}
-
-	private IEnumerator PlayClip(AudioClip clip) {
-
-		avoid = true;
-		yield return new WaitForSecondsRealtime(0.1f);
-		float volume = sound.volume;
-		for (float f = volume; f > -1; f -= Time.unscaledDeltaTime) {
-			if (f > 0) {
-				sound.volume = f;
-				yield return null;
-			}
-			else {
-				sound.volume = 0;
-				sound.Stop();
-				continue;
-			}
-		}
-		sound.clip = clip;
-
-		sound.Play();
-		for (float f = 0; f < 2; f += Time.unscaledDeltaTime * 0.5f) {
-			if (f < 1) {
-				sound.volume = f;
-				yield return null;
-			}
-			else {
-				sound.volume = 1;
-				avoid = false;
-				break;
-			}
-		}
-	}
-
-	public void MusicTransition(AudioClip newClip) {
-		if (newClip != null) {
-			if (currentMusic != null) {
-				StopCoroutine(currentMusic);
-			}
-			currentMusic = StartCoroutine(Transition(newClip));
-		}
-		else {
-			if (!lastClip) {
-				StartCoroutine(StopMusic());
-				lastClip = true;
-			}
-		}
-	}
-	#region MusicTransition Code
-	private IEnumerator Transition(AudioClip newClip) {
-
-		print(newClip);
-		if (sound.clip == null) {
-			sound.clip = newClip;
-			StartCoroutine(StartMusic());
-			StopCoroutine(Transition(newClip));
-		}
-
-		else {
-			if (sound.clip != newClip) {
-				for (float f = 1; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
-					if (avoid) {
-						print("New sound playing: Avoidance" + sound.clip + " insted of the selected " + newClip);
-						avoid = false;
-						break;
-					}
-					if (f >= 0) {
-						sound.volume = f;
-						yield return null;
-					}
-					else {
-						sound.volume = 0;
-						sound.Stop();
-						if (newClip != null) {
-							sound.clip = newClip;
-							StartCoroutine(StartMusic());
-						}
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	private IEnumerator StartMusic() {
-		sound.volume = 0;
-		sound.Play();
-
-		for (float f = 0; f <= 2; f += Time.unscaledDeltaTime * 0.5f) {
-			if (f <= 1) {
-				sound.volume = f;
-				yield return null;
-			}
-			else {
-				sound.volume = 1;
-				StopAllCoroutines();
-				break;
-			}
+		if (background.name == BackgroundNames.BACKGROUND1_3) {
+			TrasnsitionMusic(room1_1);
 		}
 	}
 	#endregion
 
-	public IEnumerator FadeOutMusic() {
-		for (float f = sound.volume; f > 0; f -= CamFadeOut.CAM_FULLY_FADED_NORMAL * Time.unscaledDeltaTime * 0.5f) {
-			print(f);
-			sound.volume = f;
-			yield return null;
-		}
+	public void PlayMusic(AudioClip clip) {
+		_isAnythingPlaying = true;
+		StartCoroutine(_PlayMusic(clip));
 	}
 
-	public IEnumerator StopMusic() {
-		if (stopOnce) {
-			float soundVolume = sound.volume;
-			for (float f = soundVolume; f >= -1; f -= Time.unscaledDeltaTime * 0.5f) {
-
-				if (f > 0) {
-					sound.volume = f;
-					yield return null;
-				}
-				else {
-					sound.volume = 0;
-					stopOnce = false;
-					isAnythingPlaying = false;
-					break;
-				}
-			}
-		}
+	public void FadeMusic() {
+		StartCoroutine(_FadeMusic());
 	}
-	private void OnApplicationFocus(bool focus) {
-		if (focus == false) {
-			sound.Pause();
+
+	public void TrasnsitionMusic(AudioClip newClip) {
+		if (_isAnythingPlaying) {
+			StartCoroutine(_TrasnsitionMusic(newClip));
 		}
 		else {
-			sound.UnPause();
+			throw new System.Exception("Nothing to transition from!");
 		}
+	}
+
+	private IEnumerator _PlayMusic(AudioClip clip) {
+		musicPlayer.volume = 0;
+		musicPlayer.Play();
+		for (float f = 0; f < 1; f += Time.unscaledDeltaTime) {
+			musicPlayer.volume = f;
+			yield return null;
+		}
+		_isAnythingPlaying = true;
+	}
+
+	private IEnumerator _FadeMusic() {
+		for (float f = musicPlayer.volume; f > 0; f += Time.unscaledDeltaTime) {
+			musicPlayer.volume = f;
+			yield return null;
+		}
+		_isAnythingPlaying = false;
+	}
+
+	private IEnumerator _TrasnsitionMusic(AudioClip clip) {
+		float initialVolume = musicPlayer.volume;
+		for (float f = initialVolume; f >= 0; f -= Time.unscaledDeltaTime) {
+			musicPlayer.volume = f;
+			yield return null;
+		}
+		musicPlayer.volume = 0;
+		musicPlayer.Stop();
+
+		musicPlayer.clip = clip;
+		musicPlayer.Play();
+		for (float f = 0; f <= 1; f += Time.unscaledDeltaTime) {
+			musicPlayer.volume = f;
+			yield return null;
+		}
+		musicPlayer.volume = 1;
+		_isAnythingPlaying = true;
+	}
+
+	private void OnApplicationFocus(bool focus) {
+		if (focus == false) {
+			musicPlayer.Pause();
+		}
+		else {
+			musicPlayer.UnPause();
+		}
+	}
+
+	public bool isAnythingPlaying {
+		get { return _isAnythingPlaying; }
 	}
 
 	private void OnDestroy() {

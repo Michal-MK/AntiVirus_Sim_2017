@@ -11,7 +11,7 @@ public class SaveData {
 
 [System.Serializable]
 public class SaveHistory {
-	public List<SaveData> saveHistory = new List<SaveData>();
+	public List<SaveData> previousSaves = new List<SaveData>();
 }
 
 [System.Serializable]

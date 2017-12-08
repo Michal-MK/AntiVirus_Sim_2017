@@ -11,12 +11,12 @@ public class Guide : MonoBehaviour {
 	public GameObject Arrow;
 
 
-	private Vector3 destinationpos;
-	private Vector3 playerpos;
+	private Vector3 targetPosition;
+	private Vector3 playerPosition;
 	private GameObject pointArrow;
-	private  Transform GuideObj;
+	private Transform GuideObj;
 
-	public GameObject destinationGlobal;
+	private GameObject targetObj;
 
 	public Sprite guide;
 	public float r;
@@ -27,6 +27,7 @@ public class Guide : MonoBehaviour {
 		M_Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
 		Coins.OnNewTarget += Recalculate;
 		Spike.OnNewTarget += Recalculate;
+		Debug.LogWarning("Targeting function needs a rewrite");
 	}
 
 	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
@@ -66,14 +67,14 @@ public class Guide : MonoBehaviour {
 			return;
 		}
 
-		destinationGlobal = destination;
+		targetObj = destination;
 
 		Destroy(pointArrow);
 
-		destinationpos = new Vector3(destination.transform.position.x, destination.transform.position.y, 0);
-		playerpos = new Vector3(player.transform.position.x, player.transform.position.y, 0);
+		targetPosition = new Vector3(destination.transform.position.x, destination.transform.position.y, 0);
+		playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, 0);
 
-		pointArrow = Instantiate(Arrow, Vector3.down, Quaternion.FromToRotation(Vector3.up, (destinationpos - playerpos)));
+		pointArrow = Instantiate(Arrow, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - playerPosition)));
 		pointArrow.transform.SetParent(GuideObj);
 
 		gameObject.SetActive(true);
@@ -81,33 +82,32 @@ public class Guide : MonoBehaviour {
 
 	void Update() {
 		if (pointArrow != null && Timer.isRunning == true) {
-			Vector2 PlayToDestination = (Vector2)destinationGlobal.transform.position - (Vector2)player.transform.position;
-			Vector2 normVec = new Vector2(PlayToDestination.y, -PlayToDestination.x);
+			Vector2 playerMinusDestination = (Vector2)targetObj.transform.position - (Vector2)player.transform.position;
+			Vector2 playerMinusDestinationNormal = new Vector2(playerMinusDestination.y, -playerMinusDestination.x);
 
-			float a = normVec.x;
-			float b = normVec.y;
+			float a = playerMinusDestinationNormal.x;
+			float b = playerMinusDestinationNormal.y;
 			float m = player.transform.position.x;
 			float n = player.transform.position.y;
 			float c = -a * m - b * n;
-			if (Vector3.Distance(playerpos, destinationpos) > 10) {
-				r = Mathf.Clamp(Vector3.Distance(playerpos, destinationpos), 5, 10);
+
+			if (Vector3.Distance(playerPosition, targetPosition) > 10) {
+				r = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition), 5, 10);
 				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
 				sprt.sprite = guide;
 			}
-			else if (Vector3.Distance(playerpos, destinationpos) <= 10) {
+			else if (Vector3.Distance(playerPosition, targetPosition) <= 10) {
 				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
 				sprt.sprite = null;
 			}
+			Debug.DrawRay(new Vector3(m, n, 0), playerMinusDestination);
 
+			targetPosition = new Vector3(targetObj.transform.position.x, targetObj.transform.position.y, 0);
+			playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, 0);
 
-			Debug.DrawRay(new Vector3(m, n, 0), PlayToDestination);
+			pointArrow.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - playerPosition));
 
-			destinationpos = new Vector3(destinationGlobal.transform.position.x, destinationGlobal.transform.position.y, 0);
-			playerpos = new Vector3(player.transform.position.x, player.transform.position.y, 0);
-
-			pointArrow.transform.rotation = Quaternion.FromToRotation(Vector3.up, (destinationpos - playerpos));
-
-			if (destinationpos.x - m > 0) {
+			if (targetPosition.x - m > 0) {
 
 				float X = 1 / (2 * (a * a + b * b)) * (Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c)) - 2 * a * b * n - 2 * a * c + 2 * b * b * m);
 
@@ -123,14 +123,14 @@ public class Guide : MonoBehaviour {
 					return;
 				}
 				else {
-					if (destinationpos.y - n > 0) {
+					if (targetPosition.y - n > 0) {
 						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
-					else if (destinationpos.y - n < 0) {
+					else if (targetPosition.y - n < 0) {
 						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
 					else {
-						if (PlayToDestination.y > 0) {
+						if (playerMinusDestination.y > 0) {
 							Ycirc = r;
 						}
 						else {
@@ -144,7 +144,7 @@ public class Guide : MonoBehaviour {
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
 				}
 				else {
-					if (PlayToDestination.y > 0) {
+					if (playerMinusDestination.y > 0) {
 						Ycirc = r + n;
 					}
 					else {
@@ -153,16 +153,11 @@ public class Guide : MonoBehaviour {
 					X = m;
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
 				}
-
-
-
-
 			}
-			else if (destinationpos.x - m < 0) {
+			else if (targetPosition.x - m < 0) {
 				float X = 1 / (2 * (a * a + b * b)) *
 					(-Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c))
 					- 2 * a * b * n - 2 * a * c + 2 * b * b * m);
-
 
 				float Yline;
 				float Ycirc;
@@ -176,14 +171,14 @@ public class Guide : MonoBehaviour {
 					return;
 				}
 				else {
-					if (destinationpos.y - n > 0) {
+					if (targetPosition.y - n > 0) {
 						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
-					else if (destinationpos.y - n < 0) {
+					else if (targetPosition.y - n < 0) {
 						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
 					}
 					else {
-						if (PlayToDestination.y > 0) {
+						if (playerMinusDestination.y > 0) {
 							Ycirc = r;
 						}
 						else {
@@ -197,7 +192,7 @@ public class Guide : MonoBehaviour {
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
 				}
 				else {
-					if (PlayToDestination.y > 0) {
+					if (playerMinusDestination.y > 0) {
 						Ycirc = r + n;
 					}
 					else {
@@ -209,6 +204,7 @@ public class Guide : MonoBehaviour {
 			}
 		}
 	}
+
 	private void OnDestroy() {
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;

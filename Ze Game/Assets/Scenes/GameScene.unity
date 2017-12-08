@@ -493,11 +493,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!1 &28619283 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000010966619400, guid: d3415403ab05d3042a99c742008e1024,
-    type: 2}
-  m_PrefabInternal: {fileID: 616181933}
 --- !u!224 &39695053 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224000011293349190, guid: 282439eccf794294ebc14354c67d6dd6,
@@ -2159,11 +2154,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 278386316}
---- !u!1 &279922301 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000012175528086, guid: b25f88e6da2c5d94ca00b7b2ee542789,
-    type: 2}
-  m_PrefabInternal: {fileID: 368950897}
 --- !u!1 &285850890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,7 +2196,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1574297776}
   Arrow: {fileID: 1000013425309908, guid: d7fb5f85ea74ca14992c59e71c82a839, type: 2}
-  destinationGlobal: {fileID: 0}
   guide: {fileID: 21300000, guid: 591f5d1f26e73d946adfc5d22cd59738, type: 3}
   r: 0
 --- !u!1 &286267347
@@ -5955,15 +5944,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d8f9564feb0c74698aa252c3ece83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: {fileID: 323271130}
-  room1: {fileID: 8300000, guid: 2eecc632efa77a747b1d705ed973d140, type: 3}
-  room2: {fileID: 8300000, guid: f79c32d590e0faa4ca0275251e37ec4d, type: 3}
-  avoidance: {fileID: 8300000, guid: 580504e21262c054ba5129152544d9f5, type: 3}
-  maze: {fileID: 8300000, guid: 1a99042e6834ee34e895bf9e05001c8d, type: 3}
-  boss: {fileID: 8300000, guid: 96e9e58733a19b942aed31ff5f910219, type: 3}
+  musicPlayer: {fileID: 323271130}
+  room1_1: {fileID: 8300000, guid: 2eecc632efa77a747b1d705ed973d140, type: 3}
+  room1_2: {fileID: 8300000, guid: f79c32d590e0faa4ca0275251e37ec4d, type: 3}
+  room1_3_avoidance: {fileID: 8300000, guid: 580504e21262c054ba5129152544d9f5, type: 3}
+  room_maze: {fileID: 8300000, guid: 1a99042e6834ee34e895bf9e05001c8d, type: 3}
+  room_1_boss: {fileID: 8300000, guid: 96e9e58733a19b942aed31ff5f910219, type: 3}
   gameOver: {fileID: 8300000, guid: 645c25025200b6e4f90862540489ae25, type: 3}
-  stopOnce: 1
-  isAnythingPlaying: 0
 --- !u!82 &323271130
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6063,7 +6050,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6409,7 +6396,7 @@ GameObject:
   - component: {fileID: 377954050}
   - component: {fileID: 377954052}
   m_Layer: 1
-  m_Name: Background_room_1
+  m_Name: Background1_2
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6777,7 +6764,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 399954885}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.2, y: -14.9, z: 0}
+  m_LocalPosition: {x: -100, y: -56, z: 0}
   m_LocalScale: {x: 0.4, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 1051639321}
@@ -7529,7 +7516,7 @@ GameObject:
   - component: {fileID: 510032460}
   - component: {fileID: 510032461}
   m_Layer: 0
-  m_Name: MazeBackground
+  m_Name: Background1_Maze
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7788,13 +7775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f9ec1aef6e50e14e8527076a0440d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doors:
-  - {fileID: 279922301}
-  - {fileID: 1773387055}
-  - {fileID: 28619283}
-  - {fileID: 1600895128}
-  - {fileID: 1513029093}
-  - {fileID: 1568708679}
   block: {fileID: 62052346}
   spike: {fileID: 399954889}
   playerPos: {x: 0, y: 0, z: 0}
@@ -12142,7 +12122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 841935691}
   m_Layer: 0
-  m_Name: Bounds_room2b
+  m_Name: Bounds1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12272,14 +12252,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1961390455}
-        m_MethodName: DelayMenu
-        m_Mode: 3
+        m_MethodName: SwitchTo
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 6
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: SaveHistory
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -12735,7 +12715,7 @@ Transform:
   - {fileID: 85159806}
   - {fileID: 1279025841}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &970033710
 MonoBehaviour:
@@ -12939,7 +12919,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1014731412}
   m_Layer: 0
-  m_Name: Bounds_room1
+  m_Name: Bounds1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13109,6 +13089,7 @@ Transform:
   m_Children:
   - {fileID: 399954888}
   - {fileID: 804709453}
+  - {fileID: 1690499144}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13128,7 +13109,7 @@ GameObject:
   - component: {fileID: 1096861446}
   - component: {fileID: 1096861447}
   m_Layer: 0
-  m_Name: Background_room_Boss_1
+  m_Name: Background_Boss_
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13644,7 +13625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1208453561}
   m_Layer: 0
-  m_Name: Bounds_Start
+  m_Name: Bounds1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13939,6 +13920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1daf0b4db6d330542aa6b3ff62248410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doors: []
 --- !u!1 &1313335004
 GameObject:
   m_ObjectHideFlags: 0
@@ -14538,7 +14520,7 @@ GameObject:
   - component: {fileID: 1397492960}
   - component: {fileID: 1397492961}
   m_Layer: 0
-  m_Name: Background_room_2a
+  m_Name: Background1_3
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14906,7 +14888,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1454456506 stripped
 Transform:
@@ -15406,7 +15388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1489460989}
   m_Layer: 0
-  m_Name: Bounds_Boss
+  m_Name: Bounds_Boss_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15454,7 +15436,7 @@ GameObject:
   - component: {fileID: 1490796339}
   - component: {fileID: 1490796341}
   m_Layer: 1
-  m_Name: Background_Start
+  m_Name: Background1_1
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15545,11 +15527,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 192, y: 108}
   m_EdgeRadius: 0
---- !u!1 &1513029093 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000010966619400, guid: d3415403ab05d3042a99c742008e1024,
-    type: 2}
-  m_PrefabInternal: {fileID: 81025339}
 --- !u!1001 &1516723270
 Prefab:
   m_ObjectHideFlags: 0
@@ -15935,11 +15912,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d69f378c68b483445ab7682aecb01848, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1568708679 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000010966619400, guid: d3415403ab05d3042a99c742008e1024,
-    type: 2}
-  m_PrefabInternal: {fileID: 1679128333}
 --- !u!1 &1574297770
 GameObject:
   m_ObjectHideFlags: 0
@@ -16832,16 +16804,16 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1690499141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 1051639321}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97.9, y: -56.5}
+  m_AnchoredPosition: {x: -98, y: -56}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1698452727
@@ -20399,11 +20371,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!1 &1773387055 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000012175528086, guid: b25f88e6da2c5d94ca00b7b2ee542789,
-    type: 2}
-  m_PrefabInternal: {fileID: 238156082}
 --- !u!1 &1781750123
 GameObject:
   m_ObjectHideFlags: 0
@@ -23832,7 +23799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1839453864}
   m_Layer: 0
-  m_Name: Bounds_room2a
+  m_Name: Bounds1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27965,14 +27932,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1961390455}
-        m_MethodName: DelayMenu
-        m_Mode: 3
+        m_MethodName: SwitchTo
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -28062,7 +28029,7 @@ GameObject:
   - component: {fileID: 1968499502}
   - component: {fileID: 1968499504}
   m_Layer: 0
-  m_Name: Background_room_2b
+  m_Name: Background1_4
   m_TagString: BG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

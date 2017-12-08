@@ -42,9 +42,6 @@ public class DisplayScoreList : MonoBehaviour {
 		StartCoroutine(RetrieveData());
 	}
 
-
-
-
 	public IEnumerator RetrieveData() {
 		string[] values;
 

@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Igor.Constants.Strings;
 
 public class Credits : MonoBehaviour {
 	public AudioSource source;
@@ -48,7 +48,7 @@ public class Credits : MonoBehaviour {
 				yield return null;
 			}
 			else {
-				SceneManager.LoadScene(0);
+				SceneManager.LoadScene(SceneNames.MENU_SCENE);
 				break;
 			}
 		}

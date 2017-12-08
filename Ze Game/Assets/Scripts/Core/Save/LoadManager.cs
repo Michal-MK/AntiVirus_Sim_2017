@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
+using Igor.Constants.Strings;
 
 public class LoadManager {
 
@@ -50,14 +51,14 @@ public class LoadManager {
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 
 	private void OnSceneFinishedLoading(SaveData loadedData) {
 		if (loadedData.world.doneAvoidance) {
 			GameObject.Find("SignPost Avoidance").SetActive(false);
-			MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+			MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 		}
 		Camera.main.orthographicSize = loadedData.core.camSize;
 		Canvas_Renderer.script.InfoRenderer(null, loadedData.shownHints.currentlyDisplayedSideInfo);
@@ -65,19 +66,19 @@ public class LoadManager {
 
 		switch (loadedData.player.currentBGName) {
 			case "Background_Start": {
-				MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+				MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 				break;
 			}
 			case "Background_room_2b": {
-				MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+				MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 				break;
 			}
 			case "Background_room_Boss_1": {
-				MusicHandler.script.PlayMusic(MusicHandler.script.boss);
+				MusicHandler.script.PlayMusic(MusicHandler.script.room_1_boss);
 				break;
 			}
 			case "MazeBG": {
-				MusicHandler.script.PlayMusic(MusicHandler.script.maze);
+				MusicHandler.script.PlayMusic(MusicHandler.script.room_maze);
 				break;
 			}
 			default: {

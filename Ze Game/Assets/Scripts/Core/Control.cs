@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.IO;
+using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using Igor.Constants.Strings;
 
 public class Control : MonoBehaviour {
 
@@ -86,7 +87,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
-		MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+		MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 		SceneManager.sceneLoaded -= NewGameSceneLoaded;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
@@ -101,11 +102,11 @@ public class Control : MonoBehaviour {
 
 	private void TransitionToNewGame() {
 		CamFadeOut.OnCamFullyFaded -= TransitionToNewGame;
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
 	}
 
 	public void Restart() {
-		MusicHandler.script.StartCoroutine(MusicHandler.script.FadeOutMusic());
+		MusicHandler.script.FadeMusic();
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += RestartTransition;
 	}
@@ -121,24 +122,24 @@ public class Control : MonoBehaviour {
 		Timer.ResetTimer();
 		Time.timeScale = 1;
 		CamFadeOut.OnCamFullyFaded -= RestartTransition;
-		SceneManager.LoadScene("GameScene");
+		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
 	}
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
-		if (scene.name == "GameScene") {
+		if (scene.name == SceneNames.GAME1_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.GAME;
 			CamFadeOut.script.anim.speed = 0.5f;
 			if (MusicHandler.script.isAnythingPlaying == false) {
-				MusicHandler.script.PlayMusic(MusicHandler.script.room1);
+				MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 			}
 		}
-		else if(scene.name == "MainMenu") {
+		else if(scene.name == SceneNames.MENU_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;
 			if (!MenuMusic.script.isPlaying) {
-				MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMuic());
+				MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMusic());
 			}
 		}
-		else if(scene.name == "SaveHistory") {
+		else if(scene.name == SceneNames.SAVES_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.SAVES;
 		}
 		else{

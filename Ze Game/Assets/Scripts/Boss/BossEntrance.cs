@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public class BossEntrance : MonoBehaviour {
 
@@ -23,14 +24,14 @@ public class BossEntrance : MonoBehaviour {
 	}
 
 	private void Start() {
-		HPHolder = GameObject.Find("BossHealthPlaceHolder");
+		HPHolder = GameObject.Find(Boss.BOSS_HEALTH_PLACEHOLDER);
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 
 			if (PlayerAttack.bombs > 0 && PlayerAttack.bullets == 5) {
-				MusicHandler.script.MusicTransition(MusicHandler.script.boss);
+				MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room_1_boss);
 				GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 				spawnedBoss.name = "Boss";
 				GameObject health = Instantiate(bossHP,HPHolder.transform.position,Quaternion.identity,HPHolder.transform);
@@ -59,8 +60,8 @@ public class BossEntrance : MonoBehaviour {
 	public void SpawnBossOnLoad() {
 		GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 		spawnedBoss.name = "Boss";
-		HPHolder = GameObject.Find("BossHealthPlaceHolder");
-		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find("BossHealthPlaceHolder").transform);
+		HPHolder = GameObject.Find(Boss.BOSS_HEALTH_PLACEHOLDER);
+		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, GameObject.Find(Boss.BOSS_HEALTH_PLACEHOLDER).transform);
 		health.name = "BossHealth";
 	}
 

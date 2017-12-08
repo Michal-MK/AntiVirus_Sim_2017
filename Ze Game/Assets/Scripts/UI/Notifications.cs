@@ -11,13 +11,19 @@ public class Notifications : MonoBehaviour {
 	private static GameObject _notificationPrefabStatic;
 	private static GameObject _warningPrefabStatic;
 	private static GameObject _confirmationPrefabStatic;
-	private static Transform _canvas;
+	private static RectTransform _canvas;
 
-	private void Start() {
+	private void Awake() {
+		UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoad;
 		_notificationPrefabStatic = notificationPrefab;
 		_warningPrefabStatic = warningPrefab;
 		_confirmationPrefabStatic = confirmationPrefab;
-		_canvas = canvas;
+	}
+
+	private void OnSceneLoad(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) {
+		if (_canvas == null) {
+			_canvas = canvas;
+		}
 	}
 
 	public static void Warn<T>(string msg, T value, Action<T> confirmation, Action returnBack) {
@@ -27,8 +33,8 @@ public class Notifications : MonoBehaviour {
 		Text message = w.transform.Find("Warning").GetComponent<Text>();
 		message.text = msg;
 
-		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); returnBack.Invoke(); });
-		back.onClick.AddListener(delegate { Destroy(w); });
+		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); });
+		back.onClick.AddListener(delegate { Destroy(w); returnBack.Invoke(); });
 	}
 
 	public static void Notify<T>(string msg) {
@@ -37,7 +43,7 @@ public class Notifications : MonoBehaviour {
 		Text message = w.transform.Find("Notification").GetComponent<Text>();
 		message.text = msg;
 
-		ok.onClick.AddListener(delegate { Destroy(w);  });
+		ok.onClick.AddListener(delegate { Destroy(w); });
 	}
 
 	public static void Confirm<T>(string msg, T value, Action<T> confirmation, Action returnBack) {

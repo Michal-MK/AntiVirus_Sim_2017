@@ -3,9 +3,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Igor.Constants.Strings;
 
 public class DisplaySaveFiles : MonoBehaviour {
-	string dataPath;
 	string BGName;
 	public GameObject SaveObj;
 	public GameObject NoSaves;
@@ -14,16 +14,12 @@ public class DisplaySaveFiles : MonoBehaviour {
 
 	public static int selectedAttempt;
 
-	private void Awake() {
-		dataPath = Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar;
-	}
-
 	void Start() {
 		DisplaySaves();
 	}
 
 	public void DisplaySaves() {
-		DirectoryInfo dir = new DirectoryInfo(dataPath);
+		DirectoryInfo dir = new DirectoryInfo(Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar);
 		DirectoryInfo[] info = dir.GetDirectories();
 
 		foreach (DirectoryInfo saveDirectory in info) {
@@ -52,34 +48,34 @@ public class DisplaySaveFiles : MonoBehaviour {
 					confirmDel.GetComponent<SaveFileScript>().saveFile = saveInfo;
 
 					try {
-						save.transform.Find("ShowHistory").GetComponent<DisplaySaveHistory>().selfHistory = saveInfo.saveHistory.saveHistory;
+						save.transform.Find("ShowHistory").GetComponent<DisplaySaveHistory>().selfHistory = saveInfo.saveHistory.previousSaves;
 					}
 					catch {
 						print("Failed to test");
 					}
 
 					switch (saveInfo.data.player.currentBGName) {
-						case "Background_Start": {
+						case BackgroundNames.BACKGROUND1_1: {
 							BGName = "Electical Hall";
 							break;
 						}
-						case "Background_room_1": {
+						case BackgroundNames.BACKGROUND1_2: {
 							BGName = "Icy Plains";
 							break;
 						}
-						case "Background_room_2a": {
+						case BackgroundNames.BACKGROUND1_3: {
 							BGName = "Danger Zone";
 							break;
 						}
-						case "Background_room_2b": {
+						case BackgroundNames.BACKGROUND1_4: {
 							BGName = "Peaceful Corner";
 							break;
 						}
-						case "Background_room_Boss_1": {
+						case BackgroundNames.BACKGROUND_BOSS_ + "1": {
 							BGName = "Boss Area";
 							break;
 						}
-						case "MazeBG": {
+						case BackgroundNames.BACKGROUND1_MAZE: {
 							BGName = "Labirinthian";
 							break;
 						}
@@ -102,15 +98,13 @@ public class DisplaySaveFiles : MonoBehaviour {
 																	"Time: 00:00:00 minutes";
 
 					}
-					deleteSave.onClick.AddListener
-						(
+					deleteSave.onClick.AddListener(
 						delegate {
 							EventSystem.current.SetSelectedGameObject(cancelDel.gameObject);
 							showHistory.interactable = false;
 						}	
 					);
-					cancelDel.onClick.AddListener
-						(
+					cancelDel.onClick.AddListener(
 						delegate {
 							EventSystem.current.SetSelectedGameObject(deleteSave.gameObject);
 							showHistory.interactable = true;
@@ -119,7 +113,6 @@ public class DisplaySaveFiles : MonoBehaviour {
 				}
 			}
 			if (content.GetComponentsInChildren<RectTransform>().Length == 1) {
-
 				GameObject noSave = Instantiate(NoSaves, GameObject.Find("Canvas").transform);
 				noSave.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 			}

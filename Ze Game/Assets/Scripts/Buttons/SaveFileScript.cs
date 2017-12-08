@@ -1,8 +1,6 @@
 using System.IO;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class SaveFileScript : MonoBehaviour {
 
@@ -15,11 +13,10 @@ public class SaveFileScript : MonoBehaviour {
 		File.Delete(saveFile.data.core.fileLocation);
 		File.Delete(saveFile.data.core.imgFileLocation);
 
-		foreach (SaveData data in saveFile.saveHistory.saveHistory) {
+		foreach (SaveData data in saveFile.saveHistory.previousSaves) {
 			File.Delete(data.core.imgFileLocation);
 		}
-
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 

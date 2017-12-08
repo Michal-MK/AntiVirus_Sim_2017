@@ -27,29 +27,29 @@ public class CamFadeOut : MonoBehaviour {
 		}
 	}
 
-	[System.Obsolete("Use the function with enum instead!")]
-	public void PlayTransition(string name) {
-		switch (name) {
-			case "Dim": {
-				anim.Play("DimCamera");
-				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
-				break;
-			}
-			case "Trans": {
-				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
-					anim.Play("TransitionFromDim");
-					StartCoroutine(AnimState(CAM_FULLY_FADED_DIMMED));
-				}
-				else
-				{
-					anim.Play("CamTransition");
-					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
-				}
-				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
-				break;
-			}
-		}
-	}
+	//[System.Obsolete("Use the function with enum instead!")]
+	//public void PlayTransition(string name) {
+	//	switch (name) {
+	//		case "Dim": {
+	//			anim.Play("DimCamera");
+	//			gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
+	//			break;
+	//		}
+	//		case "Trans": {
+	//			if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
+	//				anim.Play("TransitionFromDim");
+	//				StartCoroutine(AnimState(CAM_FULLY_FADED_DIMMED));
+	//			}
+	//			else
+	//			{
+	//				anim.Play("CamTransition");
+	//				StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
+	//			}
+	//			gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
+	//			break;
+	//		}
+	//	}
+	//}
 
 	public void PlayTransition(CameraModeChanges changes, float speed) {
 		switch (changes) {
@@ -75,11 +75,11 @@ public class CamFadeOut : MonoBehaviour {
 			}
 		}
 	}
+
 	private IEnumerator AnimState(float delay) {
 		yield return new WaitForSecondsRealtime(delay);
 		if(OnCamFullyFaded != null) {
 			OnCamFullyFaded();
 		}
-
 	}
 }

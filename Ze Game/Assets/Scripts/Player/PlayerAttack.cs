@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using AttackTypes;
-using Constants.Strings;
+using Igor.Constants.Strings;
 
 namespace AttackTypes {
 	public enum AttackType {
@@ -110,7 +110,7 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			if (ammoType == AttackType.NOTHING) {
 				ammoType = SwitchAmmoType();
-				HUDElements.SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
+				HUDElements.SetVisibility(ammoType, true, Spike.spikesCollected);
 				visibleAlready = true;
 			}
 		}
@@ -165,7 +165,7 @@ public class PlayerAttack : MonoBehaviour {
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(Input.GetAxis("AimControllerX"), Input.GetAxis("AimControllerY")));
 		}
 		bullet.transform.position = transform.position - (bullet.transform.rotation * Vector2.down * 2);
-		bullet.name = ConstantStrings.BULLET;
+		bullet.name = ObjNames.BULLET;
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
@@ -177,7 +177,7 @@ public class PlayerAttack : MonoBehaviour {
 	public void FireBomb() {
 		GameObject firedBomb = Instantiate(bomb);
 		firedBomb.transform.position = transform.position + Vector3.down * 2.5f;
-		firedBomb.name = ConstantStrings.BOMB;
+		firedBomb.name = ObjNames.BOMB;
 		firedBomb.transform.parent = GameObject.Find("Collectibles").transform;
 
 		firedBomb.GetComponent<BombScript>().primed = true;
@@ -194,7 +194,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.name == ConstantStrings.FIRED_BULLET_NAME) {
+		if (col.name == ObjNames.FIRED_BULLET_NAME) {
 			Destroy(col.gameObject);
 			bullets++;
 			OnAmmoChanged(AttackType.BULLETS, bullets, true);
