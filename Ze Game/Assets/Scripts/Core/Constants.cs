@@ -15,6 +15,7 @@
 				public const string FIRED_BULLET_NAME = "FiredBullet";
 				public const string BULLET = "Bullet";
 				public const string BOMB = "Bomb";
+				public const string BOMB_PICKUP = "BombPickup";
 				public const string COIN = "Coin";
 				public const string SPIKE = "Spike";
 				public const string MENU_CHOOSE_DIFFICULTY = "Select Difficulty";
@@ -38,6 +39,10 @@
 				public const string ENEMY_PROJECTILE_INACCUARATE = "EnemyProjectile_Innaccuarate";
 				public const string ENEMY_PROJECTILE_ICICLE = "EnemyProjectile_Icicle";
 				public const string ENEMY_KILLERBLOCK = "Enemy_KillerBlockBoss";
+			}
+
+			public class EnemyNames {
+				public const string ENEMY_TURRET = "TurretAttack";
 			}
 		}
 	}

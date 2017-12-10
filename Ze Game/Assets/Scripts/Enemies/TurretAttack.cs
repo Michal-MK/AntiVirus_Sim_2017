@@ -20,7 +20,7 @@ public class TurretAttack : MonoBehaviour {
 
 	private void Start() {
 		//pooler = GameObject.Find("EnemyProjectile Pooler").GetComponent<ObjectPooler>();
-		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
+		pool_EnemyProjectile = new ObjectPool(projectile);
 		enemy = GameObject.Find("Enemies").transform;
 		playerpos = GameObject.FindGameObjectWithTag("Player").transform.position;
 		switch (Control.currDifficulty) {
@@ -73,33 +73,31 @@ public class TurretAttack : MonoBehaviour {
 		while (true) {
 			yield return new WaitForSeconds(spawnRate);
 			playerpos = GameObject.FindGameObjectWithTag("Player").transform.position;
-
-			Projectile.spawnedByAvoidance = true;
 			spawnRate = currSpawnRate;
 
 			int diff = Control.currDifficulty;
 
 			if (diff <= 2) {
 				//GameObject bullet = pooler.GetPool();
-				GameObject bullet = pool_EnemyProjectile.getNext;
+				Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
 				Vector3 rnd = RandomVec(diff);
 				bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - gameObject.transform.position));
 				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
 				bullet.transform.SetParent(enemy);
-				bullet.SetActive(true);
+				bullet.gameObject.SetActive(true);
+				bullet.Fire();
 			}
 			else {
 				for (int i = 0; i < 2; i++) {
 
 					//GameObject bullet = pooler.GetPool();
-					GameObject bullet = pool_EnemyProjectile.getNext;
+					Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
 					Vector3 rnd = RandomVec(diff);
-
 					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((playerpos + rnd) - (gameObject.transform.position)));
-
 					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
 					bullet.transform.SetParent(enemy);
-					bullet.SetActive(true);
+					bullet.gameObject.SetActive(true);
+					bullet.Fire();
 				}
 			}
 		}
@@ -122,7 +120,6 @@ public class TurretAttack : MonoBehaviour {
 
 	void OnDestroy() {
 		StopAllCoroutines();
-		Projectile.spawnedByAvoidance = false;
 		turretSpawnRateStart = originSpawnRate;
 	}
 }

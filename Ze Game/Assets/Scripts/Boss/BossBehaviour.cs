@@ -131,8 +131,6 @@ public class BossBehaviour : MonoBehaviour {
 			OnBossfightBegin(this);
 		}
 		playerSpeedMultiplier = 5;
-		Projectile.spawnedByAvoidance = false;
-		Projectile.spawnedByKillerWall = false;
 
 		BG = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
 		player = GameObject.Find("Player");
@@ -633,8 +631,6 @@ public class BossBehaviour : MonoBehaviour {
 					GameObject shot = pool_EnemyProjectile.getNext;
 					Projectile script = shot.GetComponent<Projectile>();
 					Projectile.projectileSpeed = distToPly / change;
-
-					script.disableCollisions = true;
 					shot.transform.position = transform.position;
 					shot.transform.rotation = Quaternion.Euler(0, 0, 270);
 					shot.SetActive(true);

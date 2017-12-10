@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-class SpikeBullet : MonoBehaviour {
+public class SpikeBullet : MonoBehaviour {
 
 	public GameObject bulletPickup;
 	public Rigidbody2D rg;

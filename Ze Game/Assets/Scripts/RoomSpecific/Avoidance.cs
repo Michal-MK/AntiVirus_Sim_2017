@@ -37,8 +37,6 @@ public class Avoidance : MonoBehaviour {
 		door1.SetActive(true);
 		StartCoroutine(HoldAvoidance());
 		SaveManager.canSave = false;
-		Projectile.spawnedByAvoidance = true;
-		Projectile.spawnedByKillerWall = false;
 		camMovement.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
@@ -48,7 +46,6 @@ public class Avoidance : MonoBehaviour {
 		spawner.DespawnAvoidance();
 		yield return new WaitForSeconds(5);
 		SaveManager.canSave = true;
-		Projectile.spawnedByAvoidance = false;
 		door1.SetActive(false);
 		spike.SetPosition();
 		camMovement.RaycastForRooms();

@@ -10,7 +10,15 @@ public class Timer : MonoBehaviour {
 
 	public static event PauseUnpause.Pause OnTimerPause;
 
+	public static Timer script;
+
 	private void Awake() {
+		if(script == null) {
+			script = this;
+		}
+		else if (script != this) {
+			Destroy(gameObject);
+		}
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
@@ -19,18 +27,14 @@ public class Timer : MonoBehaviour {
 		StartTimer(1f);
 	}
 
-	void Start() {
-		Timer_text = GameObject.Find("Timer_text").GetComponent<Text>();
+	private void Start() {
+		Timer_text = GetComponent<Text>();
 		Timer_text.gameObject.SetActive(false);
 	}
 
-	void Update() {
-
-		if (isRunning) {
-			Timer_text.gameObject.SetActive(true);
-
+	private void Update() {
+		if (_isRunning) {
 			_time += Time.deltaTime * timeFlowMultiplier;
-
 			Timer_text.text = "Time:\t" + getTimeFormated;
 		}
 	}
@@ -38,12 +42,13 @@ public class Timer : MonoBehaviour {
 
 	public static void PauseTimer() {
 		_isRunning = false;
-		if(OnTimerPause != null) {
+		if (OnTimerPause != null) {
 			OnTimerPause(true);
 		}
 	}
 
 	public static void StartTimer(float flowMultiplier) {
+		script.gameObject.SetActive(true);
 		_isRunning = true;
 		if (OnTimerPause != null) {
 			OnTimerPause(false);
@@ -77,6 +82,7 @@ public class Timer : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		script = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }

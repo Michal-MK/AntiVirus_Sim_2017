@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public delegate void BackgroundChanged(RectTransform background, M_Player sender);
 public delegate void CoinEvents(M_Player sender);
@@ -96,10 +97,9 @@ public class M_Player : MonoBehaviour {
 			}
 		}
 		if (collision.transform.tag == "Enemy") {
-			print("Collided");
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
-				collision.gameObject.GetComponent<Rigidbody2D>().velocity = collision.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
+				collision.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
 			collision.transform.parent = GameObject.Find("Collectibles").transform;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
@@ -111,7 +111,7 @@ public class M_Player : MonoBehaviour {
 		if (col.tag == "Enemy") {
 			print(col.gameObject.name);
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
-				col.gameObject.GetComponent<Rigidbody2D>().velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity / 10;
+				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
 			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
 			face.sprite = sad;
@@ -126,17 +126,17 @@ public class M_Player : MonoBehaviour {
 			currentBG_name = col.name;
 			CameraMovement.script.RaycastForRooms();
 
-			if (col.name == "Background_room_1") {
+			if (col.name == BackgroundNames.BACKGROUND1_2) {
 				if (gameProgression == 3) {
 					Canvas_Renderer.script.InfoRenderer(null, "Go down even further.");
 				}
 			}
-			if (col.name == "Background_room_Boss_1") {
+			if (col.name == BackgroundNames.BACKGROUND_BOSS_ + "1") {
 				gameProgression = 10;
 			}
 		}
 
-		if (col.tag == "Spike") {
+		if (col.tag == ObjNames.SPIKE) {
 			if (OnSpikePickup != null) {
 				OnSpikePickup(this, col.gameObject);
 			}
@@ -144,29 +144,29 @@ public class M_Player : MonoBehaviour {
 			MapData.script.Progress();
 			face.sprite = happy;
 		}
-		if (col.name == "Coin") {
+		if (col.name == ObjNames.COIN) {
 			face.sprite = happy;
 			if (OnCoinPickup != null) {
 				OnCoinPickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
-			Canvas_Renderer.script.UpdateCounters("Coin");
+			Canvas_Renderer.script.UpdateCounters(ObjNames.COIN);
 		}
 
-		if (col.name == "BombPickup") {
+		if (col.name == ObjNames.BOMB_PICKUP) {
 			PlayerAttack.bombs++;
 			Destroy(col.gameObject);
 			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 
-		if (col.tag == "ArrowTrap") {
+		if (col.tag == EnemyNames.ENEMY_TURRET) {
 			previous = face.sprite;
 			face.sprite = sad;
 		}
 	}
 
 	private void OnTriggerExit2D(Collider2D col) {
-		if (col.tag == "ArrowTrap") {
+		if (col.tag == EnemyNames.ENEMY_TURRET) {
 			face.sprite = previous;
 		}
 	}

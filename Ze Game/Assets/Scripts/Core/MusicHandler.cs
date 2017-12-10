@@ -14,7 +14,7 @@ public class MusicHandler : MonoBehaviour {
 
 	public static MusicHandler script;
 
-	private bool _isAnythingPlaying = false;
+	private bool _isPlaying = false;
 
 	private void Awake() {
 		if (script == null) {
@@ -31,6 +31,14 @@ public class MusicHandler : MonoBehaviour {
 
 	#region EventHandling
 	private void NewRoom(RectTransform background, M_Player sender) {
+		if(background.name == BackgroundNames.BACKGROUND1_1) {
+			if (!_isPlaying) {
+				PlayMusic(room1_1);
+			}
+			else {
+				TrasnsitionMusic(room1_1);
+			}
+		}
 		if (background.name == BackgroundNames.BACKGROUND1_2) {
 			TrasnsitionMusic(room1_2);
 		}
@@ -41,7 +49,7 @@ public class MusicHandler : MonoBehaviour {
 	#endregion
 
 	public void PlayMusic(AudioClip clip) {
-		_isAnythingPlaying = true;
+		_isPlaying = true;
 		StartCoroutine(_PlayMusic(clip));
 	}
 
@@ -50,7 +58,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public void TrasnsitionMusic(AudioClip newClip) {
-		if (_isAnythingPlaying) {
+		if (_isPlaying) {
 			StartCoroutine(_TrasnsitionMusic(newClip));
 		}
 		else {
@@ -59,13 +67,14 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private IEnumerator _PlayMusic(AudioClip clip) {
-		musicPlayer.volume = 0;
+		musicPlayer.clip = clip;
 		musicPlayer.Play();
+		musicPlayer.volume = 0;
 		for (float f = 0; f < 1; f += Time.unscaledDeltaTime) {
 			musicPlayer.volume = f;
 			yield return null;
 		}
-		_isAnythingPlaying = true;
+		_isPlaying = true;
 	}
 
 	private IEnumerator _FadeMusic() {
@@ -73,7 +82,7 @@ public class MusicHandler : MonoBehaviour {
 			musicPlayer.volume = f;
 			yield return null;
 		}
-		_isAnythingPlaying = false;
+		_isPlaying = false;
 	}
 
 	private IEnumerator _TrasnsitionMusic(AudioClip clip) {
@@ -82,6 +91,7 @@ public class MusicHandler : MonoBehaviour {
 			musicPlayer.volume = f;
 			yield return null;
 		}
+
 		musicPlayer.volume = 0;
 		musicPlayer.Stop();
 
@@ -92,7 +102,7 @@ public class MusicHandler : MonoBehaviour {
 			yield return null;
 		}
 		musicPlayer.volume = 1;
-		_isAnythingPlaying = true;
+		_isPlaying = true;
 	}
 
 	private void OnApplicationFocus(bool focus) {
@@ -105,7 +115,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public bool isAnythingPlaying {
-		get { return _isAnythingPlaying; }
+		get { return _isPlaying; }
 	}
 
 	private void OnDestroy() {
