@@ -163,15 +163,6 @@ public class CameraMovement : MonoBehaviour {
 		int i = 0;
 		bool vertical = true;
 		bool horizontal = true;
-		#region wtf is this thing
-		//GameObject[] BGarray = new GameObject[BackGroundS.Count];
-		//BGarray = BackGroundS.ToArray();
-		#endregion
-
-		//foreach (GameObject zones in loadedZones) {
-		//	Debug.Log (i + "  " + zones);
-		//	i++;
-		//} 
 
 		float xForAll = 0;
 		float yForAll = 0;
@@ -186,8 +177,8 @@ public class CameraMovement : MonoBehaviour {
 			if (backgroundObj.transform.position.y != yForAll) {
 				horizontal = false;
 			}
-
 		}
+
 		if (horizontal && vertical) {
 			horizontal = false;
 			vertical = false;

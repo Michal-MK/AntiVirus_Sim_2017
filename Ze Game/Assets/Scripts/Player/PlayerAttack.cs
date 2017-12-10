@@ -60,7 +60,6 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
 		}
-		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -204,6 +203,7 @@ public class PlayerAttack : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 	}
 }
 

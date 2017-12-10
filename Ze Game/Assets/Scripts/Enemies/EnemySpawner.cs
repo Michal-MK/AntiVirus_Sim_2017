@@ -8,14 +8,9 @@ public class EnemySpawner : MonoBehaviour {
 	#region Prefabs
 	public GameObject foundation;
 	public GameObject deathBlock;
-	public GameObject warningObj;
 	#endregion
 
 	public M_Player player;
-
-	public float timeKillerBlocksActive = 1.8f;
-	public float timeCycleIdle = 0.2f;
-	public float timeWarning = 1.5f;
 
 	private RectTransform killerblockBG;
 	private RectTransform arrowtrapBG;
@@ -54,11 +49,6 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
-		if (background.name == BackgroundNames.BACKGROUND1_1) {
-			if (M_Player.gameProgression != 0 && !KBCycleRunning) {
-				//StartCoroutine(KBCycle());
-			}
-		}
 		if (background.name == BackgroundNames.BACKGROUND1_2) {
 			if (!isInvokingKillerWall) {
 				StartCoroutine(SpawnKillerWall(0.7f));
@@ -80,15 +70,16 @@ public class EnemySpawner : MonoBehaviour {
 		Vector3 pos = new Vector3(arrowtrapBG.position.x, arrowtrapBG.position.y, 0);
 		float bgx = arrowtrapBG.sizeDelta.x / 2;
 		float bgy = arrowtrapBG.sizeDelta.y / 2;
+		Vector2[] positions = new Vector2[4] {
+			new Vector3(bgx - 10, bgy - 10, 0),
+			new Vector3(-bgx + 10, bgy - 10, 0),
+			new Vector3(bgx - 10, -bgy + 10, 0),
+			new Vector3(-bgx + 10, -bgy + 10, 0)
+		};
 		arrowTraps = new GameObject[4];
-
-		arrowTraps[0] = Instantiate(foundation, pos + new Vector3(bgx - 10, bgy - 10, 0), Quaternion.identity, enemy);
-
-		arrowTraps[1] = Instantiate(foundation, pos + new Vector3(-bgx + 10, bgy - 10, 0), Quaternion.identity, enemy);
-
-		arrowTraps[2] = Instantiate(foundation, pos + new Vector3(bgx - 10, -bgy + 10, 0), Quaternion.identity, enemy);
-
-		arrowTraps[3] = Instantiate(foundation, pos + new Vector3(-bgx + 10, -bgy + 10, 0), Quaternion.identity, enemy);
+		for (int i = 0; i < arrowTraps.Length; i++) {
+			arrowTraps[i] = Instantiate(foundation, pos + (Vector3)positions[i], Quaternion.identity, enemy);
+		}
 	}
 
 	public void DespawnAvoidance() {
@@ -98,7 +89,6 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public void SpawnKillerBlock() {
-
 		if (player == null) {
 			return;
 		}
@@ -106,132 +96,63 @@ public class EnemySpawner : MonoBehaviour {
 		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.currDifficulty));
 
 		for (int count = 0; count < totalBlocks; count++) {
-
 			scale = Random.Range(0.5f, 1f);
 
-			GameObject warn = Instantiate(warningObj);
 			GameObject block = Instantiate(deathBlock);
 
-			Vector3 pos = KBPositions();
-
-			block.transform.position = pos;
-
+			block.transform.position = -Vector2.one * 1000;
 			block.transform.localScale = new Vector3(scale, scale, 0);
-			warn.transform.localScale = new Vector3(scale / 2, scale / 2, 0);
-
 			block.name = "Killerblock";
-			warn.name = "Warning " + count;
-
 			block.transform.SetParent(enemy);
-			warn.transform.SetParent(enemy);
-
 			killerBlocks.Add(block.GetComponent<BoxCollider2D>());
-			warningSigns.Add(warn);
-
-		}
-		if (KBCycleRunning == false) {
-			StartCoroutine(KBCycle());
-		}
-	}
-
-	public IEnumerator KBCycle() {
-
-		KBCycleRunning = true;
-
-		while (true) {
-			for (int i = 0; i < killerBlocks.Count; i++) {
-				killerBlocks[i].enabled = false;
-				warningSigns[i].SetActive(false);
-				killerBlocks[i].gameObject.SetActive(true);
-			}
-
-			yield return new WaitForSeconds(0.2f);
-
-			for (int i = 0; i < killerBlocks.Count; i++) {
-				killerBlocks[i].enabled = true;
-			}
-			yield return new WaitForSeconds(timeKillerBlocksActive);
-
-			for (int i = 0; i < killerBlocks.Count; i++) {
-
-				killerBlocks[i].GetComponent<Animator>().SetTrigger("Despawn");
-				killerBlocks[i].enabled = false;
-			}
-			yield return new WaitForSeconds(timeCycleIdle);
-
-			for (int i = 0; i < warningSigns.Count; i++) {
-
-				killerBlocks[i].gameObject.SetActive(false);
-				Vector3 pos = KBPositions();
-				killerBlocks[i].transform.position = pos;
-				warningSigns[i].transform.position = pos;
-				warningSigns[i].SetActive(true);
-			}
-			yield return new WaitForSeconds(timeWarning);
-
-			if (M_Player.currentBG_name != killerblockBG.name) {
-				for (int i = 0; i < killerBlocks.Count; i++) {
-					killerBlocks[i].gameObject.SetActive(false);
-					KBCycleRunning = false;
-					StopCoroutine(KBCycle());
-				}
-			}
 		}
 	}
 
 	public IEnumerator SpawnKillerWall(float spawnDelay) {
 		isInvokingKillerWall = true;
-		//ObjectPooler Icicle = ICEPooler.GetComponent<ObjectPooler>();
 		ObjectPool pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE) as GameObject);
-		Projectile.spawnedByKillerWall = true;
 		int diff = Control.currDifficulty;
 
 		while (isInvokingKillerWall) {
 			yield return new WaitForSeconds(spawnDelay);
-
 			if (diff == 0 || diff == 1) {
-				//GameObject wallShot = Icicle.GetPool();
-				GameObject wallShot = pool_Enemy_Icicle.getNext;
+				Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
+				wallShot.selfRender.sprite = wallShot.Icicle;
+				wallShot.gameObject.tag = "Enemy";
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(enemy);
-				wallShot.SetActive(true);
-				KWProjectiles.Add(wallShot);
+				wallShot.gameObject.SetActive(true);
+				KWProjectiles.Add(wallShot.gameObject);
+				wallShot.Fire();
 			}
 			if (diff == 3 || diff == 2) {
 				for (int i = 0; i < 2; i++) {
-					//GameObject wallShot = Icicle.GetPool();
-					GameObject wallShot = pool_Enemy_Icicle.getNext;
+					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
+					wallShot.selfRender.sprite = wallShot.Icicle;
+					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(enemy);
-					wallShot.SetActive(true);
-					KWProjectiles.Add(wallShot);
+					wallShot.gameObject.SetActive(true);
+					KWProjectiles.Add(wallShot.gameObject);
+					wallShot.Fire();
 				}
 			}
 			if (diff == 4) {
 				for (int i = 0; i < 3; i++) {
-					//GameObject wallShot = Icicle.GetPool();
-					GameObject wallShot = pool_Enemy_Icicle.getNext;
+					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
+					wallShot.selfRender.sprite = wallShot.Icicle;
+					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(enemy);
-					wallShot.SetActive(true);
-					KWProjectiles.Add(wallShot);
+					wallShot.gameObject.SetActive(true);
+					KWProjectiles.Add(wallShot.gameObject);
+					wallShot.Fire();
 				}
 			}
 		}
-	}
-
-	public Vector3 KBPositions() {
-		killerblockpos = player.transform.position;
-		while (Vector2.Distance(player.transform.position, killerblockpos) < 12) {
-
-			float x = Random.Range(-killerblockBG.sizeDelta.x / 2 + scale, killerblockBG.sizeDelta.x / 2 - scale);
-			float y = Random.Range(-killerblockBG.sizeDelta.y / 2 + scale, killerblockBG.sizeDelta.y / 2 - scale);
-			killerblockpos = new Vector2(x, y);
-		}
-		return killerblockpos;
 	}
 
 	public Vector3 KWProjectilePositions() {

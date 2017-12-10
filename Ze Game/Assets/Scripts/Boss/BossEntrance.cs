@@ -42,7 +42,7 @@ public class BossEntrance : MonoBehaviour {
 				Control.script.saveManager.Save(Control.currDifficulty);
 				SaveManager.canSave = false;
 			}
-			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets < 5) {
+			if(PlayerAttack.bombs <= 0 || PlayerAttack.bullets <= 4) {
 				Canvas_Renderer.script.InfoRenderer("You are not a worthy opponent!\n"+
 													"Bullets: " + PlayerAttack.bullets +"/5\n"+
 													"Bombs: "+ PlayerAttack.bombs + "/1\n"+
@@ -50,11 +50,11 @@ public class BossEntrance : MonoBehaviour {
 													"MuHAHaHaa!!!", "Explore this location further");
 
 			}
-			//Debug.Log("Cheating my way to vicotry");
-			//Spike.spikesCollected = 5;
-			//PlayerAttack.bullets = 5;
-			//PlayerAttack.bombs = 1;
-			//Coins.coinsCollected = 5;
+			Debug.Log("Cheating my way to vicotry");
+			Spike.spikesCollected = 5;
+			PlayerAttack.bullets = 5;
+			PlayerAttack.bombs = 1;
+			Coins.coinsCollected = 5;
 		}
 	}
 	public void SpawnBossOnLoad() {

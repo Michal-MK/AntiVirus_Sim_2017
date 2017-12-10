@@ -1,4 +1,5 @@
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public class Coins : MonoBehaviour {
 
@@ -82,7 +83,7 @@ public class Coins : MonoBehaviour {
 		get { return _coinsCollected; }
 		set {
 			_coinsCollected = value;
-			Canvas_Renderer.script.UpdateCounters("Coin");
+			Canvas_Renderer.script.UpdateCounters(ObjNames.COIN);
 		}
 	}
 

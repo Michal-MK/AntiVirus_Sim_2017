@@ -20,7 +20,7 @@ class ObjectPool {
 					return g;
 				}
 			}
-			if (instantiatedObjects.Count >= limit) {
+			if (limit != -1 && instantiatedObjects.Count >= limit) {
 				return null;
 			}
 			else {

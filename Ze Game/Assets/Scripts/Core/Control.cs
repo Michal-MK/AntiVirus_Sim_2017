@@ -87,7 +87,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
-		MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
+		//MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 		SceneManager.sceneLoaded -= NewGameSceneLoaded;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
@@ -129,9 +129,9 @@ public class Control : MonoBehaviour {
 		if (scene.name == SceneNames.GAME1_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.GAME;
 			CamFadeOut.script.anim.speed = 0.5f;
-			if (MusicHandler.script.isAnythingPlaying == false) {
-				MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
-			}
+			//if (MusicHandler.script.isAnythingPlaying == false) {
+				//MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
+			//}
 		}
 		else if(scene.name == SceneNames.MENU_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;

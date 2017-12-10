@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class MapData : MonoBehaviour {
 
 	public GameObject[] doors;
-	public Door[] doorss;
 	public static MapData script;
 
 	private void Awake() {
@@ -13,8 +12,12 @@ public class MapData : MonoBehaviour {
 	}
 
 	private void Start() {
-		new Door(null, 1);
-		new Door(null, 2);
+		int order = 0;
+		for (int i = 0; i < doors.Length - 1; i += 2) {
+			new Door(doors[i], order);
+			new Door(doors[i + 1], order);
+			order++;
+		}
 	}
 
 	public void OpenDoor(int order) {
@@ -40,19 +43,20 @@ public class MapData : MonoBehaviour {
 	public void Progress() {
 		switch (M_Player.gameProgression) {
 			case 1: {
-				OpenDoor(1);
+				OpenDoor(0);
 				Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
-				return;
+				break;
 			}
 			case 2: {
-				OpenDoor(2);
+				OpenDoor(1);
 				Canvas_Renderer.script.DisplayDirection(Directions.TOP);
-				return;
+				break;
 			}
 			case 3: {
-				OpenDoor(3);
+				OpenDoor(2);
+				CloseDoor(0);
 				Canvas_Renderer.script.DisplayDirection(Directions.BOTTOM);
-				return;
+				break;
 			}
 		}
 		if (CameraMovement.script != null) {
@@ -72,11 +76,8 @@ public class Door {
 	private int openOrder_;
 
 	public Door(GameObject doorObj, int order) {
-		foreach (BoxCollider2D g in doorObj.GetComponentsInChildren<BoxCollider2D>()) {
-			if(g.name != "Door_VCenter" || g.name != "Door_HCenter") {
-				doorParts.Add(g.gameObject);
-			}
-		}
+		Transform t = doorObj.transform.GetChild(4);
+		doorParts.Add(t.gameObject);
 		openOrder_ = order;
 		doors.Add(this);
 		UnityEngine.SceneManagement.SceneManager.sceneLoaded += delegate { doors.Clear(); };

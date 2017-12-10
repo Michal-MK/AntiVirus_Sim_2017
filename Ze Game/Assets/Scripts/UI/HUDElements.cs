@@ -44,7 +44,6 @@ public class HUDElements : UserInterface {
 	private AttackType currentSelectedAtkType = AttackType.NOTHING;
 
 	private void Awake() {
-		print("Reassigning");
 		s_bombImg = bombImage;
 		s_bombAmount = bombAmount;
 		s_bulletImage = bulletImage;
@@ -59,7 +58,7 @@ public class HUDElements : UserInterface {
 
 	private void AmmoSwitch(AttackType type, int ammo, bool state = true) {
 		currentSelectedAtkType = type;
-		switch (type) {
+		switch (currentSelectedAtkType) {
 			case AttackType.NOTHING: {
 				Debug.Log("Doing Nothing");
 				return;

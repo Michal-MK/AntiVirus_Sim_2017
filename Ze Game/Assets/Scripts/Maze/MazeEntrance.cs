@@ -16,11 +16,11 @@ public class MazeEntrance : MonoBehaviour {
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
 
-			Debug.Log("Remove after");
-			M_Player.gameProgression = 3;
-			Spike.spikesCollected = 3;
-			Coins.coinsCollected = 5;
-			PlayerAttack.bullets = 3;
+			//Debug.Log("Remove after");
+			//M_Player.gameProgression = 3;
+			//Spike.spikesCollected = 3;
+			//Coins.coinsCollected = 5;
+			//PlayerAttack.bullets = 3;
 
 
 			if (Spike.spikesCollected == 3 && !entered) {
