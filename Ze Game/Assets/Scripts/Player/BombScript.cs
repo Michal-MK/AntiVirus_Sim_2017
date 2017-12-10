@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class BombScript : MonoBehaviour {
+
 	public CircleCollider2D col;
 	public Animator anim;
 	public GameObject exp;
@@ -33,6 +33,7 @@ public class BombScript : MonoBehaviour {
 	void Update() {
 
 		if (primed && !once) {
+			print("When ...?");
 			anim.enabled = true;
 			col.enabled = false;
 			once = false;
