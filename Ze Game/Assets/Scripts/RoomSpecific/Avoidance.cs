@@ -56,19 +56,19 @@ public class Avoidance : MonoBehaviour {
 
 	private IEnumerator TimeLeft() {
 		Text SideText = Canvas_Renderer.script.info_S;
-		int i = (int)avoidDuration - 1;
+		int timeLeft = (int)avoidDuration - 1;
 		bool show = false;
 
 		while (true) {
 			yield return new WaitForSeconds(1);
-			i--;
-			if (i <= 50) {
+			timeLeft--;
+			if (timeLeft <= 50) {
 				show = true;
 			}
 			if (show) {
-				SideText.text = string.Format("{0:00} seconds left!", i);
+				SideText.text = string.Format("{0:00} seconds left!", timeLeft);
 			}
-			if (i <= 0) {
+			if (timeLeft <= 0) {
 				StopCoroutine(TimeLeft());
 				break;
 			}

@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 95303067128770782}
   - component: {fileID: 114831510989746984}
   m_Layer: 0
-  m_Name: Killerblock
+  m_Name: killerblock
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

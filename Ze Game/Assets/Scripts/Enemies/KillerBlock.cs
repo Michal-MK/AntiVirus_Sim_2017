@@ -4,7 +4,6 @@ using System.Collections;
 public class KillerBlock : Enemy {
 	public GameObject killerBlock;
 	public GameObject warnSign;
-	private Animator warnSignAnim;
 	private Animator selfAnim;
 	private BoxCollider2D selfCol;
 	private M_Player player;
@@ -17,7 +16,6 @@ public class KillerBlock : Enemy {
 	private void Start() {
 		_type = EnemyType.TOUCH;
 		_is_Destroyable = false;
-		warnSignAnim = warnSign.GetComponent<Animator>();
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();
 		player = FindObjectOfType<M_Player>();

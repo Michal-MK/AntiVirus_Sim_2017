@@ -12,21 +12,14 @@ public class EnemySpawner : MonoBehaviour {
 
 	public M_Player player;
 
-	private RectTransform killerblockBG;
 	private RectTransform arrowtrapBG;
 	private RectTransform killerWallBG;
-
-	private Transform enemy;
 
 	public GameObject[] arrowTraps;
 	public GameObject ICEPooler;
 
-	public List<GameObject> warningSigns = new List<GameObject>();
-	private List<BoxCollider2D> killerBlocks = new List<BoxCollider2D>();
+	private List<GameObject> killerBlocks = new List<GameObject>();
 
-	private float scale;
-	private Vector2 killerblockpos;
-	private bool KBCycleRunning = false;
 	private bool isInvokingKillerWall = false;
 
 	public List<GameObject> KWProjectiles = new List<GameObject>();
@@ -60,10 +53,8 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void OnEnable() {
-		killerblockBG = GameObject.Find(BackgroundNames.BACKGROUND1_1).GetComponent<RectTransform>();
 		arrowtrapBG = GameObject.Find(BackgroundNames.BACKGROUND1_3).GetComponent<RectTransform>();
 		killerWallBG = GameObject.Find(BackgroundNames.BACKGROUND1_2).GetComponent<RectTransform>();
-		enemy = GameObject.Find("Enemies").transform;
 	}
 
 	public void SpawnAvoidance() {
@@ -78,7 +69,7 @@ public class EnemySpawner : MonoBehaviour {
 		};
 		arrowTraps = new GameObject[4];
 		for (int i = 0; i < arrowTraps.Length; i++) {
-			arrowTraps[i] = Instantiate(foundation, pos + (Vector3)positions[i], Quaternion.identity, enemy);
+			arrowTraps[i] = Instantiate(foundation, pos + (Vector3)positions[i], Quaternion.identity, transform);
 		}
 	}
 
@@ -96,15 +87,15 @@ public class EnemySpawner : MonoBehaviour {
 		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.currDifficulty));
 
 		for (int count = 0; count < totalBlocks; count++) {
-			scale = Random.Range(0.5f, 1f);
+			float scale = Random.Range(0.5f, 1f);
 
 			GameObject block = Instantiate(deathBlock);
 
 			block.transform.position = -Vector2.one * 1000;
 			block.transform.localScale = new Vector3(scale, scale, 0);
 			block.name = "Killerblock";
-			block.transform.SetParent(enemy);
-			killerBlocks.Add(block.GetComponent<BoxCollider2D>());
+			block.transform.SetParent(transform);
+			killerBlocks.Add(block);
 		}
 	}
 
@@ -121,7 +112,7 @@ public class EnemySpawner : MonoBehaviour {
 				wallShot.gameObject.tag = "Enemy";
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
-				wallShot.transform.SetParent(enemy);
+				wallShot.transform.SetParent(transform);
 				wallShot.gameObject.SetActive(true);
 				KWProjectiles.Add(wallShot.gameObject);
 				wallShot.Fire();
@@ -133,7 +124,7 @@ public class EnemySpawner : MonoBehaviour {
 					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
-					wallShot.transform.SetParent(enemy);
+					wallShot.transform.SetParent(transform);
 					wallShot.gameObject.SetActive(true);
 					KWProjectiles.Add(wallShot.gameObject);
 					wallShot.Fire();
@@ -146,7 +137,7 @@ public class EnemySpawner : MonoBehaviour {
 					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
-					wallShot.transform.SetParent(enemy);
+					wallShot.transform.SetParent(transform);
 					wallShot.gameObject.SetActive(true);
 					KWProjectiles.Add(wallShot.gameObject);
 					wallShot.Fire();
@@ -156,7 +147,8 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public Vector3 KWProjectilePositions() {
-		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2, Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2), 0);
+		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2,
+						   Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2));
 	}
 
 	private void OnDestroy() {
