@@ -6,6 +6,9 @@ public class HUDElements : UserInterface {
 	public delegate void HUDAttackUpdates(AttackType type, int amount, bool state);
 	public delegate void HUDCollectUpdates(Collectibles type, int amount);
 
+	public delegate void HUDAttackVisibility(AttackType type, bool state, int amount);
+	public delegate void HUDCollectibleVisibility(Collectibles type);
+
 	public Image bombImage;
 	public Text bombAmount;
 
@@ -54,6 +57,7 @@ public class HUDElements : UserInterface {
 		s_spikeSpr = spikeSpr;
 		s_bombSpr = bombSpr;
 		PlayerAttack.OnAmmoChanged += AmmoSwitch;
+		PlayerAttack.OnAmmoPickup += SetVisibility;
 	}
 
 	private void AmmoSwitch(AttackType type, int ammo, bool state = true) {

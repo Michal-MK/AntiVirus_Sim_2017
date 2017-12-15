@@ -7,10 +7,8 @@ public class BombScript : MonoBehaviour {
 	public Animator anim;
 	public GameObject exp;
 	public bool primed = false;
-	private bool once = true;
 
 	void Start() {
-
 		if (gameObject.name == "Bomb") {
 			anim.enabled = true;
 			col.enabled = false;
@@ -26,17 +24,7 @@ public class BombScript : MonoBehaviour {
 	private IEnumerator After() {
 		yield return new WaitForSeconds(1.5f);
 		exp.GetComponent<CircleCollider2D>().enabled = true;
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);
-	}
-
-	void Update() {
-
-		if (primed && !once) {
-			print("When ...?");
-			anim.enabled = true;
-			col.enabled = false;
-			once = false;
-		}
 	}
 }

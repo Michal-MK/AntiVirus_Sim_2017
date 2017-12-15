@@ -92,7 +92,7 @@ public class SaveManager : MonoBehaviour {
 		newSave.data.player.spikesCollected = Spike.spikesCollected;
 		newSave.data.player.coinsCollected = Coins.coinsCollected;
 		newSave.data.player.canZoom = Zoom.canZoom;
-		newSave.data.player.currentBGName = M_Player.currentBG_name;
+		newSave.data.player.currentBGName = M_Player.GetCurrentBackground().name;
 		#endregion
 
 		#region World data

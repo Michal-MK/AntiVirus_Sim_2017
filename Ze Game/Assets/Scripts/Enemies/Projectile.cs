@@ -7,7 +7,7 @@ public class Projectile : Enemy {
 	public float timeTillDestruct = -1;
 
 	private Rigidbody2D selfRigid;
-	public SpriteRenderer selfRender;
+	private SpriteRenderer selfRender;
 
 	public Sprite Solid;
 	public Sprite Icicle;
@@ -16,14 +16,17 @@ public class Projectile : Enemy {
 	public bool byBoss = false;
 
 	void OnEnable() {
-		selfRigid = gameObject.GetComponent<Rigidbody2D>();
-		if (byBoss) {
-			StartCoroutine(BossAttack());
-		}
+		selfRigid = GetComponent<Rigidbody2D>();
+		selfRender = GetComponent<SpriteRenderer>();
 	}
 
 	public void Fire() {
-		selfRigid.velocity = transform.up * -projectileSpeed;
+		if (byBoss) {
+			StartCoroutine(BossAttack());
+		}
+		else {
+			selfRigid.velocity = transform.up * -projectileSpeed;
+		}
 	}
 
 	private IEnumerator BossAttack() {
@@ -36,6 +39,9 @@ public class Projectile : Enemy {
 		gameObject.SetActive(false);
 	}
 
+	public void SetSprite(Sprite sprite) {
+		selfRender.sprite = sprite;
+	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.tag == "Wall" || col.tag == "Wall/Door") {

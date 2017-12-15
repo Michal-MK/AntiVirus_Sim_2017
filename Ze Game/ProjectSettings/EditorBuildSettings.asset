@@ -26,3 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: 373400ee26a87a34a81a3c430995c224
+  - enabled: 1
+    path: Assets/MiniGames/Ships/Ships.unity
+    guid: 8a1542e6df339444ea82a44ec44d52c4

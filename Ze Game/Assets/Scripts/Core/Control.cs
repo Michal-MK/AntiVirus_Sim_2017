@@ -80,14 +80,13 @@ public class Control : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
-		MenuMusic.script.StopMusicWrapper();
+		MenuMusic.script.StopMusic();
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
 		SceneManager.sceneLoaded += NewGameSceneLoaded;
 	}
 
 	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
-		//MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
 		SceneManager.sceneLoaded -= NewGameSceneLoaded;
 		Spike.spikesCollected = 0;
 		Coins.coinsCollected = 0;
@@ -136,7 +135,7 @@ public class Control : MonoBehaviour {
 		else if(scene.name == SceneNames.MENU_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;
 			if (!MenuMusic.script.isPlaying) {
-				MenuMusic.script.StartCoroutine(MenuMusic.script.PlayMusic());
+				MenuMusic.script.PlayMusic();
 			}
 		}
 		else if(scene.name == SceneNames.SAVES_SCENE) {

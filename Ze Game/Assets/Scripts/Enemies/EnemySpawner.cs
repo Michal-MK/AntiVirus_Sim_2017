@@ -108,7 +108,7 @@ public class EnemySpawner : MonoBehaviour {
 			yield return new WaitForSeconds(spawnDelay);
 			if (diff == 0 || diff == 1) {
 				Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-				wallShot.selfRender.sprite = wallShot.Icicle;
+				wallShot.SetSprite(wallShot.Icicle);
 				wallShot.gameObject.tag = "Enemy";
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
@@ -120,7 +120,7 @@ public class EnemySpawner : MonoBehaviour {
 			if (diff == 3 || diff == 2) {
 				for (int i = 0; i < 2; i++) {
 					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.selfRender.sprite = wallShot.Icicle;
+					wallShot.SetSprite(wallShot.Icicle);
 					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
@@ -133,7 +133,7 @@ public class EnemySpawner : MonoBehaviour {
 			if (diff == 4) {
 				for (int i = 0; i < 3; i++) {
 					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.selfRender.sprite = wallShot.Icicle;
+					wallShot.SetSprite(wallShot.Icicle);
 					wallShot.gameObject.tag = "Enemy";
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();

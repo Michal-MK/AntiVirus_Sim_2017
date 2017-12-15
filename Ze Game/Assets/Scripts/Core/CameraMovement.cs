@@ -98,7 +98,7 @@ public class CameraMovement : MonoBehaviour {
 	public void RaycastForRooms() {
 		BackGroundS.Clear();
 
-		bg = GameObject.Find(M_Player.currentBG_name).GetComponent<RectTransform>();
+		bg = M_Player.GetCurrentBackground();
 
 		currentBGY = bg.sizeDelta.y / 2;
 		currentBGX = bg.sizeDelta.x / 2;

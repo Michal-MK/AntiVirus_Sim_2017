@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 58092614758245306}
   - component: {fileID: 68689969460750928}
   m_Layer: 0
-  m_Name: EnemyProjectile_Innaccurate
+  m_Name: EnemyProjectile_Inaccurate
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

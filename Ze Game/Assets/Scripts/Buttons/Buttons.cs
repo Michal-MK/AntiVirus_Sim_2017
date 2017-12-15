@@ -6,7 +6,7 @@ public class Buttons : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
 		Control.script.StartNewGame(difficulty);
-		MenuMusic.script.StopMusicWrapper();
+		MenuMusic.script.StopMusic();
 	}
 
 	public void SaveGame(bool createNew) {
@@ -15,7 +15,7 @@ public class Buttons : MonoBehaviour {
 
 	public void LoadGame(Transform myParent) {
 		Control.script.loadManager.Load(myParent.name);
-		MenuMusic.script.StopMusicWrapper();
+		MenuMusic.script.StopMusic();
 	}
 
 	public void Restart() {

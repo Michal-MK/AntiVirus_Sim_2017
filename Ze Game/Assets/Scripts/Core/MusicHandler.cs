@@ -45,12 +45,19 @@ public class MusicHandler : MonoBehaviour {
 		if (background.name == BackgroundNames.BACKGROUND1_3) {
 			TrasnsitionMusic(room1_1);
 		}
+		if (background.name == BackgroundNames.BACKGROUND1_4) {
+			PlayMusic(room1_1);
+		}
 	}
 	#endregion
 
 	public void PlayMusic(AudioClip clip) {
-		_isPlaying = true;
-		StartCoroutine(_PlayMusic(clip));
+		if (!_isPlaying) {
+			StartCoroutine(_PlayMusic(clip));
+		}
+		else {
+			Debug.Log("Already Playing");
+		}
 	}
 
 	public void FadeMusic() {
@@ -70,7 +77,7 @@ public class MusicHandler : MonoBehaviour {
 		musicPlayer.clip = clip;
 		musicPlayer.Play();
 		musicPlayer.volume = 0;
-		for (float f = 0; f < 1; f += Time.unscaledDeltaTime) {
+		for (float f = 0; f < 1; f += Time.deltaTime) {
 			musicPlayer.volume = f;
 			yield return null;
 		}
@@ -78,7 +85,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private IEnumerator _FadeMusic() {
-		for (float f = musicPlayer.volume; f > 0; f += Time.unscaledDeltaTime) {
+		for (float f = musicPlayer.volume; f > 0; f -= Time.unscaledDeltaTime) {
 			musicPlayer.volume = f;
 			yield return null;
 		}

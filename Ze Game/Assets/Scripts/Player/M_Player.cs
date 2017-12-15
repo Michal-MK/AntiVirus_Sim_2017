@@ -18,7 +18,7 @@ public class M_Player : MonoBehaviour {
 	#endregion
 
 	public static int gameProgression;
-	public static string currentBG_name;
+	private static string currentBG_name;
 
 	public bool newGame = true;
 	public bool gameOver = false;
@@ -33,6 +33,7 @@ public class M_Player : MonoBehaviour {
 
 	public static event BackgroundChanged OnRoomEnter;
 	public static event PlayerColision OnSpikePickup;
+	public static event PlayerColision OnBombPickup;
 	public static event PlayerColision OnCoinPickup;
 	public static event PlayerColision OnTargetableObjectCollision;
 	public static event Zoom.Zooming OnZoomModeSwitch;
@@ -154,14 +155,19 @@ public class M_Player : MonoBehaviour {
 		}
 
 		if (col.name == ObjNames.BOMB_PICKUP) {
-			PlayerAttack.bombs++;
-			Destroy(col.gameObject);
+			if(OnBombPickup != null) {
+				OnBombPickup(this, col.gameObject);
+			}
 			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
 			previous = face.sprite;
 			face.sprite = sad;
+		}
+
+		if(col.name == "MiniGames") {
+			Igor.Minigames.MiniGame_Manager.LoadMinigame(Igor.Minigames.MiniGames.SHIPS);
 		}
 	}
 
@@ -199,6 +205,15 @@ public class M_Player : MonoBehaviour {
 		gameOver = true;
 
 		Destroy(GameObject.Find("Enemies"));
+	}
+
+	public static RectTransform GetCurrentBackground() {
+		if (!string.IsNullOrEmpty(currentBG_name)) {
+			return GameObject.Find(currentBG_name).GetComponent<RectTransform>(); 
+		}
+		else {
+			throw new System.Exception("No background assigned to player!");
+		}
 	}
 
 	private void OnDestroy() {

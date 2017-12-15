@@ -19,7 +19,7 @@ public class KillerBlock : Enemy {
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();
 		player = FindObjectOfType<M_Player>();
-		background = GameObject.Find(M_Player.currentBG_name).GetComponent<RectTransform>();
+		background = M_Player.GetCurrentBackground();
 		StartCoroutine(Cycle());
 	}
 

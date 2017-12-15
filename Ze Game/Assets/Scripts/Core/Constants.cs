@@ -36,7 +36,7 @@
 
 			public class PrefabNames {
 				public const string ENEMY_PROJECTILE_ACCURATE = "EnemyProjectile_Accurate";
-				public const string ENEMY_PROJECTILE_INACCUARATE = "EnemyProjectile_Innaccuarate";
+				public const string ENEMY_PROJECTILE_INACCUARATE = "EnemyProjectile_Inaccurate";
 				public const string ENEMY_PROJECTILE_ICICLE = "EnemyProjectile_Icicle";
 				public const string ENEMY_KILLERBLOCK = "Enemy_KillerBlockBoss";
 			}

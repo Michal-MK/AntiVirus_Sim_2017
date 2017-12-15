@@ -17,8 +17,12 @@ public class MenuMusic : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
+	public void PlayMusic() {
+		isPlaying = true;
+		StartCoroutine(_PlayMusic());
+	}
 
-	public IEnumerator PlayMusic() {
+	private IEnumerator _PlayMusic() {
 		source.Play();
 		for (float f = 0; f <= 1; f += Time.deltaTime * transitionSpeedMult) {
 			source.volume = f * 0.3f;
@@ -26,11 +30,11 @@ public class MenuMusic : MonoBehaviour {
 		}
 	}
 
-	public void StopMusicWrapper() {
-		StartCoroutine(StopMusic());
+	public void StopMusic() {
+		StartCoroutine(_StopMusic());
 	}
 
-	private IEnumerator StopMusic() {
+	private IEnumerator _StopMusic() {
 		for (float f = 1; f >= 0; f -= Time.deltaTime * transitionSpeedMult) {
 			source.volume = f * 0.3f;
 			yield return null;

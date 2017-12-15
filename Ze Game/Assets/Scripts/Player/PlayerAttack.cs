@@ -27,6 +27,7 @@ public class PlayerAttack : MonoBehaviour {
 	public static int bombs;
 
 	public static event HUDElements.HUDAttackUpdates OnAmmoChanged;
+	public static event HUDElements.HUDAttackVisibility OnAmmoPickup;
 
 	public SpriteRenderer face;
 	public SpriteRenderer hands;
@@ -36,11 +37,12 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite attacking;
 	public Sprite happy;
 
-	public float bombRechargeDelay;
+	public float bombRechargeDelay = 8f;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+		M_Player.OnBombPickup += M_Player_OnBombPickup;
 	}
 
 	#region EventImplementation
@@ -60,6 +62,12 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
 		}
+	}
+
+	private void M_Player_OnBombPickup(M_Player sender, GameObject other) {
+		bombs++;
+		Destroy(other);
+		OnAmmoPickup(AttackType.BOMBS, true, bombs);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -109,7 +117,8 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			if (ammoType == AttackType.NOTHING) {
 				ammoType = SwitchAmmoType();
-				HUDElements.SetVisibility(ammoType, true, Spike.spikesCollected);
+				HUDElements.SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
+				HUDElements.SetVisibility(AttackType.BOMBS, true, bombs);
 				visibleAlready = true;
 			}
 		}
@@ -150,6 +159,7 @@ public class PlayerAttack : MonoBehaviour {
 		}
 		else {
 			//Initial call will result into this
+			OnAmmoChanged(AttackType.BULLETS, bullets, true);
 			return AttackType.BULLETS;
 		}
 	}
@@ -204,6 +214,7 @@ public class PlayerAttack : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		M_Player.OnBombPickup -= M_Player_OnBombPickup;
 	}
 }
 
