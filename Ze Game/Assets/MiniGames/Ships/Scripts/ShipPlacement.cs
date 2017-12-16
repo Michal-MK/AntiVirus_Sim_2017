@@ -5,6 +5,7 @@ using Igor.Minigames.Ships;
 public class ShipPlacement : MonoBehaviour {
 	private bool _canPlace = false;
 	private List<Location> _places = new List<Location>();
+	private List<Location> _prevPlaces = new List<Location>();
 	public static ShipPlacement current;
 
 	public void StartChecking() {
@@ -12,19 +13,47 @@ public class ShipPlacement : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		bool temp = true;
 		Raycaster[] casters = GetComponentsInChildren<Raycaster>();
+
+		_prevPlaces.Clear();
+		foreach (Location place in _places) {
+			_prevPlaces.Add(place);
+		}
 		_places.Clear();
+		_canPlace = true;
+
 		foreach (Raycaster cast in casters) {
-			if (!cast.canPlace) {
-				temp = false;
+			if (cast.canPlace == false) {
+				_canPlace = false;
 			}
 			if (cast.getSelected != null) {
 				_places.Add(cast.getSelected);
 			}
+			else {
+				_canPlace = false;
+			}
 		}
-		_canPlace = temp;
+		ManageHighlight(_prevPlaces, _places);
 	}
+
+	private void ManageHighlight(List<Location> previous, List<Location> current) {
+		foreach (Location prevPlace in previous) {
+			if (prevPlace.isAvailable) {
+				prevPlace.LocationVisual.Unhighlight();
+			}
+		}
+		foreach (Location currPlace in current) {
+			if (_canPlace && currPlace.placedShip == ShipType.NONE) {
+				currPlace.LocationVisual.Highlight();
+				print("Hoghlighted " + currPlace.placedShip);
+			}
+			if (!_canPlace && currPlace.placedShip == ShipType.NONE) {
+				currPlace.LocationVisual.Occupied();
+			}
+		}
+
+	}
+
 
 	public bool canPlace {
 		get { return _canPlace; }

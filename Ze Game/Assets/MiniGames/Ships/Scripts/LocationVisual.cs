@@ -8,6 +8,7 @@ public class LocationVisual : MonoBehaviour {
 
 	public Sprite Triggered;
 	public Sprite Normal;
+	public Sprite Unavailable;
 
 	public Sprite SPR_submarine;
 	public Sprite SPR_cargo;
@@ -78,5 +79,9 @@ public class LocationVisual : MonoBehaviour {
 
 	public void Unhighlight() {
 		selfRender.sprite = Normal;
+	}
+
+	public void Occupied() {
+		selfRender.sprite = Unavailable;
 	}
 }

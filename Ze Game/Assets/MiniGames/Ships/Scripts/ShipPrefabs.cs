@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace Igor.Minigames.Ships {
 	public class ShipPrefabs : MonoBehaviour {

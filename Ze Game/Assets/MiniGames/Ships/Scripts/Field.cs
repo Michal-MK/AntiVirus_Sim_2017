@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Igor.Minigames.Ships {
 	[System.Serializable]
@@ -43,6 +42,14 @@ namespace Igor.Minigames.Ships {
 				return _locations[(int)final.x, (int)final.y];
 			}
 			return null;
+		}
+
+		public void ClearHighlights() {
+			foreach (Location location in _locations) {
+				if (location.placedShip == ShipType.NONE) {
+					location.LocationVisual.Unhighlight();
+				}
+			}
 		}
 
 		public Location[,] locations {

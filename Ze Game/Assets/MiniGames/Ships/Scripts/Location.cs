@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Igor.Minigames.Ships;
 using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
