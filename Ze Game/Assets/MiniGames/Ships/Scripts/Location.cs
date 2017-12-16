@@ -41,7 +41,7 @@ namespace Igor.Minigames.Ships {
 			Vector2 myLocation = new Vector2(_x, _y);
 			switch (direction) {
 				case Neighbors.TOP_LEFT: {
-					if (neighbors[-1, -1] != -Vector2.one) {
+					if (neighbors[0, 0] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[0, 0]);
 					}
 					else {
@@ -49,7 +49,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.TOP_MIDDLE: {
-					if (neighbors[0, -1] != -Vector2.one) {
+					if (neighbors[1, 0] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[1, 0]);
 					}
 					else {
@@ -57,7 +57,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.TOP_RIGHT: {
-					if (neighbors[1, -1] != -Vector2.one) {
+					if (neighbors[2, 0] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[2, 0]);
 					}
 					else {
@@ -65,7 +65,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.MIDDLE_LEFT: {
-					if (neighbors[-1, 0] != -Vector2.one) {
+					if (neighbors[0, 1] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[0, 1]);
 					}
 					else {
@@ -76,7 +76,7 @@ namespace Igor.Minigames.Ships {
 					return null;
 				}
 				case Neighbors.MIDDLE_RIGHT: {
-					if (neighbors[1, 0] != -Vector2.one) {
+					if (neighbors[2, 1] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[2, 1]);
 					}
 					else {
@@ -84,7 +84,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.BOTTOM_LEFT: {
-					if (neighbors[-1, 1] != -Vector2.one) {
+					if (neighbors[0, 2] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[0, 2]);
 					}
 					else {
@@ -92,7 +92,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.BOTTOM_MIDDLE: {
-					if (neighbors[0, 1] != -Vector2.one) {
+					if (neighbors[1, 2] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[1, 2]);
 					}
 					else {
@@ -100,7 +100,7 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 				case Neighbors.BOTTOM_RIGHT: {
-					if (neighbors[1, 1] != -Vector2.one) {
+					if (neighbors[2, 2] != -Vector2.one) {
 						return field.GetLocation(myLocation, neighbors[2, 2]);
 					}
 					else {
@@ -158,6 +158,25 @@ namespace Igor.Minigames.Ships {
 			}
 			else {
 				return false;
+			}
+		}
+
+		public void RemoveShip() {
+			if(_placedShip == ShipType.TOKEN) {
+				bool staysToken = false;
+				foreach (Location location in getNeighborsOnAxis) {
+					if(location.placedShip != ShipType.NONE && location.placedShip != ShipType.TOKEN) {
+						staysToken = true;
+					}
+				}
+				if (!staysToken) {
+					_placedShip = ShipType.NONE;
+					LocationVisual.Unhighlight();
+				}
+			}
+			else {
+				_placedShip = ShipType.NONE;
+				LocationVisual.Unhighlight();
 			}
 		}
 

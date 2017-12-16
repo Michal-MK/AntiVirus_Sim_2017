@@ -22,22 +22,35 @@ public class LocationVisual : MonoBehaviour {
 	/// only when you are actually pointing onto someting that can potentially be a ship.
 	/// </summary>
 	public void OnPointerClick() {
-		if (ShipPlacement.current != null && ShipPlacement.current.canPlace) {
-			bool success = true;
-			foreach (Location placeLoc in ShipPlacement.current.places) {
-				bool temp = placeLoc.PlaceShip(Ships_UI.selectedShip);
-				if (temp == false) {
-					success = false;
-				}
-			}
-			if (success) {
+		if (ShipsMain.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_PLACEMENT) {
+			if (ShipPlacement.current != null && ShipPlacement.current.canPlace) {
+				bool success = true;
 				foreach (Location placeLoc in ShipPlacement.current.places) {
-					placeLoc.LocationVisual.SetSprite(placeLoc.placedShip);
-					foreach (Location vis in placeLoc.getNeighborsOnAxis) {
-						if (vis.placedShip == ShipType.NONE) {
-							vis.PlaceShip(ShipType.TOKEN);
-							vis.LocationVisual.SetSprite(ShipType.TOKEN);
+					bool temp = placeLoc.PlaceShip(Ships_UI.selectedShip);
+					if (temp == false) {
+						success = false;
+					}
+				}
+				if (success) {
+					foreach (Location placeLoc in ShipPlacement.current.places) {
+						placeLoc.LocationVisual.SetSprite(placeLoc.placedShip);
+						foreach (Location vis in placeLoc.getNeighborsOnAxis) {
+							if (vis.placedShip == ShipType.NONE) {
+								vis.PlaceShip(ShipType.TOKEN);
+								vis.LocationVisual.SetSprite(ShipType.TOKEN);
+							}
 						}
+					}
+				}
+				Field.self.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
+			}
+		}
+		else if (ShipsMain.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
+			foreach (Ship ship in Field.self.getAllShips) {
+				foreach (Location location in ship.getLocation) {
+					if(location == this.location) {
+						ship.RemoveFromEditor();
+						return;
 					}
 				}
 			}

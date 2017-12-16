@@ -23,6 +23,15 @@ namespace Igor.Minigames.Ships {
 			_selectedShip = (ShipType)shipID;
 			shipVisual = prefabs.SpawnVisual(_selectedShip);
 			shipVisual.GetComponent<ShipPlacement>().StartChecking();
+			ShipsMain.cursorMode = CursorMode.SHIP_PLACEMENT;
+		}
+
+		public void DeleteMode() {
+			if (ShipsMain.cursorMode != CursorMode.SHIP_REMOVE) {
+				ShipsMain.cursorMode = CursorMode.SHIP_REMOVE;
+				shipVisual.GetComponent<ShipPlacement>().StopChecking();
+				shipVisual = null;
+			}
 		}
 
 		private void Update() {

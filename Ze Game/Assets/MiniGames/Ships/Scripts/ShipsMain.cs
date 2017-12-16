@@ -25,7 +25,8 @@ namespace Igor.Minigames.Ships {
 
 	public enum CursorMode {
 		SHIP_PLACEMENT,
-		SHIP_REMOVE
+		SHIP_REMOVE,
+		PLAY_MODE
 	}
 
 
@@ -37,6 +38,7 @@ namespace Igor.Minigames.Ships {
 		private Field field;
 
 		private ShipType type = ShipType.NONE;
+		private static CursorMode mode = CursorMode.SHIP_PLACEMENT;
 
 		void Start() {
 			Cursor.visible = true;
@@ -58,6 +60,11 @@ namespace Igor.Minigames.Ships {
 
 		public static Vector2 getDimensions {
 			get { return dimensions; }
+		}
+
+		public static CursorMode cursorMode {
+			get { return mode; }
+			set { mode = value; }
 		}
 	}
 }

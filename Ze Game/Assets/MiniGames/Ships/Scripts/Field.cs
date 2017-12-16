@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Igor.Minigames.Ships {
 	[System.Serializable]
 	public class Field {
 		public static Field self;
 		private Location[,] _locations;
+		private List<Ship> placedShips = new List<Ship>();
 
 		public Field(int x, int y) {
 			_locations = new Location[x, y];
@@ -54,6 +56,10 @@ namespace Igor.Minigames.Ships {
 
 		public Location[,] locations {
 			get { return _locations; }
+		}
+
+		public List<Ship> getAllShips {
+			get { return placedShips; }
 		}
 	}
 }

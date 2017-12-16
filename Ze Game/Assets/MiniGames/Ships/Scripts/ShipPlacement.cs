@@ -12,6 +12,11 @@ public class ShipPlacement : MonoBehaviour {
 		current = this;
 	}
 
+	public void StopChecking() {
+		current = null;
+		Destroy(gameObject);
+	}
+
 	private void FixedUpdate() {
 		Raycaster[] casters = GetComponentsInChildren<Raycaster>();
 
@@ -45,7 +50,7 @@ public class ShipPlacement : MonoBehaviour {
 		foreach (Location currPlace in current) {
 			if (_canPlace && currPlace.placedShip == ShipType.NONE) {
 				currPlace.LocationVisual.Highlight();
-				print("Hoghlighted " + currPlace.placedShip);
+				//print("Hoghlighted " + currPlace.placedShip);
 			}
 			if (!_canPlace && currPlace.placedShip == ShipType.NONE) {
 				currPlace.LocationVisual.Occupied();

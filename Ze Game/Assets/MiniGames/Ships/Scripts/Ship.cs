@@ -4,59 +4,25 @@ using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
 	public class Ship {
-		private Vector2 inArrayPosition;
-		private ShipType type;
+		private Location[] position;
+		private int hp;
 
-		public Ship(Vector2 position, ShipType type) {
-			inArrayPosition = position;
-			this.type = type;
-			Shape(type);
+		public Ship(Location[] position, ShipType type) {
+			this.position = position;
+			hp = (int)type;
 		}
-
-		public Location[] Shape(ShipType type) {
-			switch (type) {
-				case ShipType.SUBMARINE: {
-					if (isAvailable) {
-						return new Location[1] { Field.self.GetLocation(inArrayPosition) };
-					}
-					return null;
-				}
-				case ShipType.CARGO: {
-					if (isAvailable) {
-						
-					}
-					return null;
-				}
-				case ShipType.WAR: {
-
-					return null;
-				}
-				case ShipType.AIR: {
-
-					return null;
-				}
-				case ShipType.BATTLECRUSER: {
-
-					return null;
+		
+		public void RemoveFromEditor() {
+			foreach (Location location in position) {
+				location.RemoveShip();
+				foreach (Location neighbor in location.getNeighborsOnAxis) {
+					neighbor.RemoveShip();
 				}
 			}
-			return null;
 		}
 
-		private bool isAvailable {
-			get {
-				Location myLocation = Field.self.GetLocation(inArrayPosition);
-				if (myLocation.placedShip == ShipType.NONE) {
-					bool yes = true;
-					foreach (Location neighborLocation in myLocation.getNeighborsOnAxis) {
-						if (neighborLocation.placedShip != ShipType.NONE && neighborLocation.placedShip != ShipType.TOKEN) {
-							yes = false;
-						}
-					}
-					return yes;
-				}
-				return false;
-			}
+		public Location[] getLocation {
+			get { return position; }
 		}
 	}
 }
