@@ -8,8 +8,12 @@ namespace Igor.Minigames.Ships {
 		public GameObject airObj;
 		public GameObject battlecruiserObj;
 
+		public GameObject cargoObjRotated;
+		public GameObject warObjRotated;
+		public GameObject airObjRotated;
 
-		public GameObject SpawnVisual(ShipType type) {
+
+		public GameObject SpawnVisual(ShipType type, bool rotated = false) {
 			//Vector3 mouseOffset = Vector2.one * 10;
 			switch (type) {
 				case ShipType.NONE: {
@@ -19,13 +23,28 @@ namespace Igor.Minigames.Ships {
 					return Instantiate(submarineObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
 				}
 				case ShipType.CARGO: {
-					return Instantiate(cargoObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					if (!rotated) {
+						return Instantiate(cargoObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
+					else {
+						return Instantiate(cargoObjRotated, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
 				}
 				case ShipType.WAR: {
-					return Instantiate(warObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					if (!rotated) {
+						return Instantiate(warObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
+					else {
+						return Instantiate(warObjRotated, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
 				}
 				case ShipType.AIR: {
-					return Instantiate(airObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					if (!rotated) {
+						return Instantiate(airObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
+					else {
+						return Instantiate(airObjRotated, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);
+					}
 				}
 				case ShipType.BATTLECRUSER: {
 					return Instantiate(battlecruiserObj, Input.mousePosition/* + mouseOffset*/, Quaternion.identity);

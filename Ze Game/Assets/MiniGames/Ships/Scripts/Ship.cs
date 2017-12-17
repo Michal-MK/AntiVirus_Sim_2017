@@ -24,5 +24,14 @@ namespace Igor.Minigames.Ships {
 		public Location[] getLocation {
 			get { return position; }
 		}
+
+		/// <summary>
+		/// Damages the ship, returns true if the ship sunk
+		/// </summary>
+		/// <returns>Is the ship dead?</returns>
+		public bool Damage() {
+			hp--;
+			return hp == 0;
+		}
 	}
 }

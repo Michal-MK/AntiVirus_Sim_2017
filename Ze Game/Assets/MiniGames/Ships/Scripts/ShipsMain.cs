@@ -24,9 +24,10 @@ namespace Igor.Minigames.Ships {
 	}
 
 	public enum CursorMode {
+		NORMAL,
 		SHIP_PLACEMENT,
 		SHIP_REMOVE,
-		PLAY_MODE
+		ATTACK_MODE
 	}
 
 

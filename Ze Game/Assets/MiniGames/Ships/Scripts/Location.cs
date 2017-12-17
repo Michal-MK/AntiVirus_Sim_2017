@@ -3,10 +3,21 @@ using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
 	[System.Serializable]
+	public enum LocationState {
+		NORMAL,
+		HIT,
+		MISS,
+		SUNK,
+		HINT,
+		TARGET
+	}
+
+
 	public class Location {
 		private int _x;
 		private int _y;
 		private ShipType _placedShip = ShipType.NONE;
+		private LocationState _locationStatus = LocationState.NORMAL;
 		private Vector2[,] neighbors;
 		private LocationVisual attachedVisual;
 
@@ -184,8 +195,30 @@ namespace Igor.Minigames.Ships {
 			get { return _placedShip; }
 		}
 
+		public Ship getPlacedShip {
+			get {
+				foreach (Ship ship in Field.self.getAllShips) {
+					foreach (Location location in ship.getLocation) {
+						if(location == this) {
+							return ship;
+						}
+					}
+				}
+				throw new System.Exception("No Ship exits at this Field");
+			}
+		}
+
+		public LocationState locationState {
+			get { return _locationStatus; }
+			set { _locationStatus = value; }
+		}
+
 		public bool isAvailable {
 			get { return _placedShip == ShipType.NONE; }
+		}
+
+		public bool isToken {
+			get { return _placedShip == ShipType.TOKEN; }
 		}
 	}
 }

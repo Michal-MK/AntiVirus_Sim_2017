@@ -44,6 +44,10 @@
 			public class EnemyNames {
 				public const string ENEMY_TURRET = "TurretAttack";
 			}
+
+			public class InputNames {
+				public const string MOUSEWHEEL = "Mouse Scroll Wheel";
+			}
 		}
 	}
 }
