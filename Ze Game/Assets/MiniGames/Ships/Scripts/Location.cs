@@ -26,10 +26,10 @@ namespace Igor.Minigames.Ships {
 			_x = x;
 			_y = y;
 
-			if (x != 0 && y != 0 && x + 1 != ShipsMain.getDimensions.x && y + 1 != ShipsMain.getDimensions.y) {
+			if (x != 0 && y != 0 && x + 1 != Field.self.getDimensions.x && y + 1 != Field.self.getDimensions.y) {
 				neighbors = new Vector2[3, 3] {
 				{new Vector2(x-1,y-1), new Vector2(x,y-1), new Vector2(x+1,y-1) },
-				{new Vector2(x-1,y),   new Vector2(x,y),   new Vector2(x+1,y), },
+				{new Vector2(x-1,y),   new Vector2(x,y),   new Vector2(x+1,y),  },
 				{new Vector2(x-1,y+1), new Vector2(x,y+1), new Vector2(x+1,y+1) }
 				};
 			}
@@ -37,7 +37,7 @@ namespace Igor.Minigames.Ships {
 				neighbors = new Vector2[3, 3];
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
-						if (x + i >= 0 && x + i < ShipsMain.getDimensions.x && y + j >= 0 && y + j < ShipsMain.getDimensions.y) { //If we are in-bounds
+						if (x + i >= 0 && x + i < Field.self.getDimensions.x && y + j >= 0 && y + j < Field.self.getDimensions.y) { //If we are in-bounds
 							neighbors[i + 1, j + 1] = new Vector2(x + i, y + j);
 						}
 						else {
@@ -141,7 +141,7 @@ namespace Igor.Minigames.Ships {
 				Vector2[,] axes = new Vector2[2, 2] { { Vector2.up, Vector2.right }, { Vector2.down, Vector2.left } };
 				List<Location> locations = new List<Location>();
 				foreach (Vector2 vec in axes) {
-					if (Field.self.GetLocation(coordinates,vec) != null) {
+					if (Field.self.GetLocation(coordinates, vec) != null) {
 						locations.Add(Field.self.GetLocation(coordinates, vec));
 					}
 				}
@@ -173,10 +173,10 @@ namespace Igor.Minigames.Ships {
 		}
 
 		public void RemoveShip() {
-			if(_placedShip == ShipType.TOKEN) {
+			if (_placedShip == ShipType.TOKEN) {
 				bool staysToken = false;
 				foreach (Location location in getNeighborsOnAxis) {
-					if(location.placedShip != ShipType.NONE && location.placedShip != ShipType.TOKEN) {
+					if (location.placedShip != ShipType.NONE && location.placedShip != ShipType.TOKEN) {
 						staysToken = true;
 					}
 				}
@@ -199,7 +199,7 @@ namespace Igor.Minigames.Ships {
 			get {
 				foreach (Ship ship in Field.self.getAllShips) {
 					foreach (Location location in ship.getLocation) {
-						if(location == this) {
+						if (location == this) {
 							return ship;
 						}
 					}

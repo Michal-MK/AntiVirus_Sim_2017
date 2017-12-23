@@ -6,10 +6,6 @@ namespace Igor.Minigames.Ships {
 
 	public class Ships_UI : MonoBehaviour {
 		public ShipPrefabs prefabs;
-		public Texture2D attackCursor;
-		public Texture2D deleteCursor;
-
-
 		private static ShipType _selectedShip = ShipType.NONE;
 
 		private GameObject shipVisual;
@@ -18,7 +14,6 @@ namespace Igor.Minigames.Ships {
 		private static bool _isInAttackMode = false;
 
 		private Vector3 mouseOffset = new Vector3(20, -20, 10);
-		private Vector2 cursorOffset = new Vector2(300, 300);
 
 		public void SetSelectedShip(int shipID) {
 			Destroy(shipVisual);
@@ -26,16 +21,14 @@ namespace Igor.Minigames.Ships {
 			_isRotated = false;
 			shipVisual = prefabs.SpawnVisual(_selectedShip);
 			shipVisual.GetComponent<ShipPlacement>().StartChecking();
-			ShipsMain.cursorMode = CursorMode.SHIP_PLACEMENT;
-			Cursor.SetCursor(null, Vector2.zero, UnityEngine.CursorMode.Auto);
+			ShipsMain.script.cursorMode = CursorMode.SHIP_PLACEMENT;
 			_isInAttackMode = false;
 		}
 
 		public void DeleteMode() {
-			if (ShipsMain.cursorMode != CursorMode.SHIP_REMOVE) {
-				ShipsMain.cursorMode = CursorMode.SHIP_REMOVE;
+			if (ShipsMain.script.cursorMode != CursorMode.SHIP_REMOVE) {
+				ShipsMain.script.cursorMode = CursorMode.SHIP_REMOVE;
 				_isInAttackMode = false;
-				Cursor.SetCursor(deleteCursor, cursorOffset, UnityEngine.CursorMode.Auto);
 				if (shipVisual != null) {
 					shipVisual.GetComponent<ShipPlacement>().StopChecking();
 					shipVisual = null;
@@ -51,12 +44,10 @@ namespace Igor.Minigames.Ships {
 					shipVisual.GetComponent<ShipPlacement>().StopChecking();
 					Destroy(shipVisual);
 				}
-				Cursor.SetCursor(attackCursor, cursorOffset, UnityEngine.CursorMode.Auto);
-				ShipsMain.cursorMode = CursorMode.ATTACK_MODE;
+				ShipsMain.script.cursorMode = CursorMode.ATTACK_MODE;
 			}
 			else {
-				Cursor.SetCursor(null, Vector2.zero, UnityEngine.CursorMode.Auto);
-				ShipsMain.cursorMode = CursorMode.NORMAL;
+				ShipsMain.script.cursorMode = CursorMode.NORMAL;
 			}
 		}
 

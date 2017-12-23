@@ -33,7 +33,7 @@ public class LocationVisual : MonoBehaviour {
 	/// only when you are actually pointing onto someting that can potentially be a ship.
 	/// </summary>
 	public void OnPointerClick() {
-		if (ShipsMain.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_PLACEMENT) {
+		if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_PLACEMENT) {
 			if (ShipPlacement.current != null && ShipPlacement.current.canPlace) {
 				bool success = true;
 				foreach (Location placeLoc in ShipPlacement.current.places) {
@@ -56,7 +56,7 @@ public class LocationVisual : MonoBehaviour {
 				Field.self.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
 			}
 		}
-		else if (ShipsMain.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
+		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
 			foreach (Ship ship in Field.self.getAllShips) {
 				foreach (Location location in ship.getLocation) {
 					if (location == this.location) {
@@ -66,15 +66,17 @@ public class LocationVisual : MonoBehaviour {
 				}
 			}
 		}
-		else if (ShipsMain.cursorMode == Igor.Minigames.Ships.CursorMode.ATTACK_MODE) {
+		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.ATTACK_MODE) {
 			if (!location.isAvailable && !location.isToken) {
 				overlayRenderer.sprite = OVER_Hit;
+				SetSprite(location.placedShip);
 				lockOverlay = true;
 				bool sunk = location.getPlacedShip.Damage();
 				if (sunk) {
 					foreach (Location vis in location.getPlacedShip.getLocation) {
 						vis.LocationVisual.StartCoroutine(vis.LocationVisual.FadeOverlayTo(OVER_Sunk));
 					}
+					Field.self.ShipSunk(location.getPlacedShip);
 				}
 			}
 			else if (location.isToken || location.isAvailable) {
@@ -85,13 +87,13 @@ public class LocationVisual : MonoBehaviour {
 	}
 
 	private IEnumerator FadeOverlayTo(Sprite newSprite) {
-		for (int f = 255; f > 0; f--) {
-			overlayRenderer.color = new Color32(255, 255, 255, (byte)f);
+		for (int i = 255; i > 0; i--) {
+			overlayRenderer.color = new Color32(255, 255, 255, (byte)i);
 			yield return null;
 		}
 		overlayRenderer.sprite = newSprite;
-		for (int f = 0; f <= 255; f++) {
-			overlayRenderer.color = new Color32(255, 255, 255, (byte)f);
+		for (int i = 0; i <= 255; i++) {
+			overlayRenderer.color = new Color32(255, 255, 255, (byte)i);
 			yield return null;
 		}
 	}
@@ -136,6 +138,9 @@ public class LocationVisual : MonoBehaviour {
 				selfRender.sprite = SPR_occupied;
 				return;
 			}
+			default: {
+				throw new System.Exception("Shiptype not implemented");
+			}
 		}
 	}
 
@@ -143,8 +148,11 @@ public class LocationVisual : MonoBehaviour {
 		selfRender.sprite = Triggered;
 	}
 
-	public void Unhighlight() {
+	public void Unhighlight(bool preparingForGame = false) {
 		selfRender.sprite = Normal;
+		if (preparingForGame) {
+			//Do seomtihng special ??
+		}
 	}
 
 	public void Occupied() {
