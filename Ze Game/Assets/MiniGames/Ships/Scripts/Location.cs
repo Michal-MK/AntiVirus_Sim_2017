@@ -157,7 +157,7 @@ namespace Igor.Minigames.Ships {
 			}
 		}
 
-		public LocationVisual LocationVisual {
+		public LocationVisual locationVisual {
 			get { return attachedVisual; }
 			set { attachedVisual = value; }
 		}
@@ -182,12 +182,12 @@ namespace Igor.Minigames.Ships {
 				}
 				if (!staysToken) {
 					_placedShip = ShipType.NONE;
-					LocationVisual.Unhighlight();
+					locationVisual.Unhighlight();
 				}
 			}
 			else {
 				_placedShip = ShipType.NONE;
-				LocationVisual.Unhighlight();
+				locationVisual.Unhighlight();
 			}
 		}
 

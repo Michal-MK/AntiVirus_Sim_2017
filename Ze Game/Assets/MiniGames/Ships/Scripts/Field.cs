@@ -11,6 +11,7 @@ namespace Igor.Minigames.Ships {
 		private Vector2 _dimensions;
 
 		public Field(int x, int y) {
+			self = this;
 			_locations = new Location[x, y];
 			_dimensions = new Vector2(x, y);
 			for (int i = 0; i < x; i++) {
@@ -18,9 +19,10 @@ namespace Igor.Minigames.Ships {
 					_locations[i, j] = new Location(i, j);
 				}
 			}
-			self = this;
 		}
+
 		public Field(Vector2 vector) {
+			self = this;
 			int x = (int)vector.x;
 			int y = (int)vector.y;
 
@@ -31,7 +33,16 @@ namespace Igor.Minigames.Ships {
 					_locations[i, j] = new Location(i, j);
 				}
 			}
-			self = this;
+		}
+
+		public void Visualize(GameObject representation) {
+			foreach (Location loc in _locations) {
+				LocationVisual l = GameObject.Instantiate(representation, loc.coordinates, Quaternion.identity).GetComponent<LocationVisual>();
+				l.name = loc.coordinates.ToString();
+				loc.locationVisual = l;
+				l.location = loc;
+			}
+			Camera.main.transform.position = new Vector3(_dimensions.x / 2 - 0.5f, _dimensions.y / 2 - 0.5f, -10);
 		}
 
 		public Location GetLocation(Vector2 coordinates) {
@@ -53,7 +64,7 @@ namespace Igor.Minigames.Ships {
 		public void ClearHighlights() {
 			foreach (Location location in _locations) {
 				if (location.placedShip == ShipType.NONE) {
-					location.LocationVisual.Unhighlight();
+					location.locationVisual.Unhighlight();
 				}
 			}
 		}

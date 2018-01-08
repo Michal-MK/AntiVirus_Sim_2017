@@ -4,14 +4,20 @@ using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
 	public class Ship {
-		private Location[] position;
+		protected Location[] position;
 		private int hp;
+		private ShipType _type;
 
 		public Ship(Location[] position, ShipType type) {
 			this.position = position;
 			hp = (int)type;
+			_type = type;
 		}
-		
+
+		public Ship(ShipType type) {
+			_type = type;
+		}
+
 		public void RemoveFromEditor() {
 			foreach (Location location in position) {
 				location.RemoveShip();

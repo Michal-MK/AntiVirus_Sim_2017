@@ -44,16 +44,16 @@ public class ShipPlacement : MonoBehaviour {
 	private void ManageHighlight(List<Location> previous, List<Location> current) {
 		foreach (Location prevPlace in previous) {
 			if (prevPlace.isAvailable) {
-				prevPlace.LocationVisual.Unhighlight();
+				prevPlace.locationVisual.Unhighlight();
 			}
 		}
 		foreach (Location currPlace in current) {
 			if (_canPlace && currPlace.placedShip == ShipType.NONE) {
-				currPlace.LocationVisual.Highlight();
+				currPlace.locationVisual.Highlight();
 				//print("Hoghlighted " + currPlace.placedShip);
 			}
 			if (!_canPlace && currPlace.placedShip == ShipType.NONE) {
-				currPlace.LocationVisual.Occupied();
+				currPlace.locationVisual.Occupied();
 			}
 		}
 

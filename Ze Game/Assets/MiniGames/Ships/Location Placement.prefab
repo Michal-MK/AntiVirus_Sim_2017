@@ -21,10 +21,10 @@ GameObject:
   - component: {fileID: 4718948189313530}
   - component: {fileID: 212022951104484624}
   - component: {fileID: 61005661528036186}
-  - component: {fileID: 114812411009419088}
+  - component: {fileID: 114637706325606138}
   - component: {fileID: 114197914582561222}
   m_Layer: 0
-  m_Name: Location
+  m_Name: Location Placement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114812411009419088}
+        - m_Target: {fileID: 114637706325606138}
           m_MethodName: OnPointerClick
           m_Mode: 1
           m_Arguments:
@@ -131,7 +131,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114812411009419088}
+        - m_Target: {fileID: 114637706325606138}
           m_MethodName: OnPointerEnter
           m_Mode: 1
           m_Arguments:
@@ -148,7 +148,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114812411009419088}
+        - m_Target: {fileID: 114637706325606138}
           m_MethodName: OnPointerExit
           m_Mode: 1
           m_Arguments:
@@ -162,7 +162,7 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
---- !u!114 &114812411009419088
+--- !u!114 &114637706325606138
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1019681804399950}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93ff5828bf03c1145a4fa6614dcbf199, type: 3}
+  m_Script: {fileID: 11500000, guid: e780a71d5b06b8e49b2b02d4f52667c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   selfRender: {fileID: 212022951104484624}
@@ -188,8 +188,7 @@ MonoBehaviour:
   SPR_war: {fileID: 21300000, guid: 997ef603142308c45b3e30c051a160af, type: 3}
   SPR_air: {fileID: 21300000, guid: 1faec020bdec3aa44a6a237777baa9d5, type: 3}
   SPR_battleCruiser: {fileID: 21300000, guid: 3010946c66df82a47ad8304495be2255, type: 3}
-  SPR_custom: {fileID: 21300000, guid: 0bbd150f0099266488342668ceff9bfe, type: 3}
-  SPR_occupied: {fileID: 21300000, guid: 2f7902933a600f9408e6255ac2368819, type: 3}
+  SPR_occupied: {fileID: 21300000, guid: f65b74c16aff2114bb2e725c405c1714, type: 3}
 --- !u!212 &212022951104484624
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -222,7 +221,7 @@ SpriteRenderer:
   m_SortingLayerID: -1154571653
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7f9deee9ecd9ca844a7038bac6de151f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -230,7 +229,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!212 &212180041624157808
 SpriteRenderer:

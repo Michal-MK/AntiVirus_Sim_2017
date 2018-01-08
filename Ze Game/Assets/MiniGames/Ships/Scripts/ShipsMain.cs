@@ -20,7 +20,8 @@ namespace Igor.Minigames.Ships {
 		CARGO,
 		WAR,
 		AIR,
-		BATTLECRUSER
+		BATTLECRUSER,
+		CUSTOM
 	}
 
 	public enum CursorMode {
@@ -55,25 +56,14 @@ namespace Igor.Minigames.Ships {
 			Cursor.visible = true;
 			mode = CursorMode.NORMAL;
 			field = new Field(dimensionsPublic);
-			Visualize(field);
+			field.Visualize(locationObj);
 			gameOver = GameObject.Find("Canvas").transform.Find("Game_Over").gameObject;
-		}
-
-		private void Visualize(Field field) {
-			Location[,] locations = field.locations;
-			foreach (Location loc in locations) {
-				GameObject l = Instantiate(locationObj, loc.coordinates, Quaternion.identity);
-				l.name = loc.coordinates.ToString();
-				loc.LocationVisual = l.GetComponent<LocationVisual>();
-				l.GetComponent<LocationVisual>().location = loc;
-			}
-			Camera.main.transform.position = new Vector3(dimensionsPublic.x / 2 - 0.5f, dimensionsPublic.y / 2 - 0.5f, -10);
 		}
 
 		public void PrepareForGame() {
 			if (!gameStarted) {
 				foreach (Location location in field.locations) {
-					location.LocationVisual.Unhighlight();
+					location.locationVisual.Unhighlight();
 				}
 				gameStarted = true;
 			}

@@ -24,69 +24,20 @@ public class LocationVisual : MonoBehaviour {
 	public Sprite SPR_war;
 	public Sprite SPR_air;
 	public Sprite SPR_battleCruiser;
+	public Sprite SPR_custom;
 	public Sprite SPR_occupied;
 
-	private bool lockOverlay = false;
+	protected bool lockOverlay = false;
 
 	/// <summary>
 	/// Called automatically as an event, it is called on a gameobject, but it doesn't have to do anything with it, I just wanted to make clicking possible
 	/// only when you are actually pointing onto someting that can potentially be a ship.
 	/// </summary>
-	public void OnPointerClick() {
-		if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_PLACEMENT) {
-			if (ShipPlacement.current != null && ShipPlacement.current.canPlace) {
-				bool success = true;
-				foreach (Location placeLoc in ShipPlacement.current.places) {
-					bool temp = placeLoc.PlaceShip(Ships_UI.selectedShip);
-					if (temp == false) {
-						success = false;
-					}
-				}
-				if (success) {
-					foreach (Location placeLoc in ShipPlacement.current.places) {
-						placeLoc.LocationVisual.SetSprite(placeLoc.placedShip);
-						foreach (Location vis in placeLoc.getNeighborsOnAxis) {
-							if (vis.placedShip == ShipType.NONE) {
-								vis.PlaceShip(ShipType.TOKEN);
-								vis.LocationVisual.SetSprite(ShipType.TOKEN);
-							}
-						}
-					}
-				}
-				Field.self.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
-			}
-		}
-		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
-			foreach (Ship ship in Field.self.getAllShips) {
-				foreach (Location location in ship.getLocation) {
-					if (location == this.location) {
-						ship.RemoveFromEditor();
-						return;
-					}
-				}
-			}
-		}
-		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.ATTACK_MODE) {
-			if (!location.isAvailable && !location.isToken) {
-				overlayRenderer.sprite = OVER_Hit;
-				SetSprite(location.placedShip);
-				lockOverlay = true;
-				bool sunk = location.getPlacedShip.Damage();
-				if (sunk) {
-					foreach (Location vis in location.getPlacedShip.getLocation) {
-						vis.LocationVisual.StartCoroutine(vis.LocationVisual.FadeOverlayTo(OVER_Sunk));
-					}
-					Field.self.ShipSunk(location.getPlacedShip);
-				}
-			}
-			else if (location.isToken || location.isAvailable) {
-				overlayRenderer.sprite = OVER_Miss;
-				lockOverlay = true;
-			}
-		}
+	public virtual void OnPointerClick() {
+		print("Clicked on " + gameObject.name);
 	}
 
-	private IEnumerator FadeOverlayTo(Sprite newSprite) {
+	public IEnumerator FadeOverlayTo(Sprite newSprite) {
 		for (int i = 255; i > 0; i--) {
 			overlayRenderer.color = new Color32(255, 255, 255, (byte)i);
 			yield return null;
@@ -98,21 +49,15 @@ public class LocationVisual : MonoBehaviour {
 		}
 	}
 
-	public void OnPointerEnter() {
-		if (!lockOverlay) {
-			if (Ships_UI.isInAttackMode) {
-				overlayRenderer.sprite = OVER_Outline;
-			}
-		}
+	public virtual void OnPointerEnter() {
+
 	}
 
-	public void OnPointerExit() {
-		if (!lockOverlay) {
-			overlayRenderer.sprite = null;
-		}
+	public virtual void OnPointerExit() {
+
 	}
 
-	private void SetSprite(ShipType placedShip) {
+	public void SetSprite(ShipType placedShip) {
 		switch (placedShip) {
 			case ShipType.SUBMARINE: {
 				selfRender.sprite = SPR_submarine;
@@ -136,6 +81,14 @@ public class LocationVisual : MonoBehaviour {
 			}
 			case ShipType.TOKEN: {
 				selfRender.sprite = SPR_occupied;
+				return;
+			}
+			case ShipType.NONE: {
+				selfRender.sprite = null;
+				return;
+			}
+			case ShipType.CUSTOM: {
+				selfRender.sprite = SPR_custom;
 				return;
 			}
 			default: {
