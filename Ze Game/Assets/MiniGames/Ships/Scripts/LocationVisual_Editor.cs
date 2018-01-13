@@ -9,12 +9,14 @@ public class LocationVisual_Editor : LocationVisual {
 			case ShipsCreationMain.CursorMode.PART_PLACEMENT: {
 				SetSprite(ShipType.TOKEN);
 				ShipEdit.getCurrentShip.locations.Add(this.location);
+				ShipEdit.getCurrentShip.totalShipParts++;
 				return;
 			}
 			case ShipsCreationMain.CursorMode.PART_DELETION: {
 				if (location.coordinates != Vector2.one * 4) {
 					SetSprite(ShipType.NONE);
 					ShipEdit.getCurrentShip.locations.Remove(this.location);
+					ShipEdit.getCurrentShip.totalShipParts--;
 				}
 				return;
 			}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using Igor.Constants.Strings;
 
 namespace Igor.Minigames.Ships {
@@ -14,6 +15,15 @@ namespace Igor.Minigames.Ships {
 		private Vector3 mouseOffset = new Vector3(20, -20, 10);
 
 		private int currentRotation = 1;
+		private bool canRotateShip = true;
+
+		private Dictionary<ShipType, bool> allowRotationForShipType = new Dictionary<ShipType, bool> {
+			{ShipType.SUBMARINE,false },
+			{ShipType.CARGO, true },
+			{ShipType.WAR,true },
+			{ShipType.AIR,true },
+			{ShipType.BATTLECRUSER,false }
+		};
 
 		public void SetSelectedShip(int shipID) {
 			Destroy(shipVisual);
@@ -23,14 +33,24 @@ namespace Igor.Minigames.Ships {
 			ShipsMain.script.cursorMode = CursorMode.SHIP_PLACEMENT;
 			_isInAttackMode = false;
 			currentRotation = 1;
+			canRotateShip = allowRotationForShipType[_selectedShip];
 		}
 
-		public void SetSelectedShipCustom(GameObject custom) {
+		public void SetSelectedShipCustom(GameObject custom, bool canRotate) {
 			_selectedShip = ShipType.CUSTOM;
 			shipVisual = custom;
 			shipVisual.GetComponent<ShipPlacement>().StartChecking();
 			ShipsMain.script.cursorMode = CursorMode.SHIP_PLACEMENT;
 			_isInAttackMode = false;
+			canRotateShip = canRotate;
+		}
+
+		public void UnselectVisuals() {
+			Destroy(shipVisual);
+			shipVisual = null;
+			_selectedShip = ShipType.NONE;
+			ShipsMain.script.cursorMode = CursorMode.NORMAL;
+			Field.self.ClearHighlights();
 		}
 
 		public void DeleteMode() {
@@ -61,7 +81,7 @@ namespace Igor.Minigames.Ships {
 		private void Update() {
 			if (shipVisual != null) {
 				shipVisual.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition + mouseOffset);
-				if (Input.GetAxis(InputNames.MOUSEWHEEL) > 0) {
+				if (Input.GetAxis(InputNames.MOUSEWHEEL) > 0 && canRotateShip) {
 					switch (currentRotation) {
 						case 0: {
 							shipVisual.transform.rotation = Quaternion.Euler(0, 0, 0);

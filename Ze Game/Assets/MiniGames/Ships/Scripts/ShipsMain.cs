@@ -58,6 +58,9 @@ namespace Igor.Minigames.Ships {
 			field = new Field(dimensionsPublic);
 			field.Visualize(locationObj);
 			gameOver = GameObject.Find("Canvas").transform.Find("Game_Over").gameObject;
+			GeneratorData g = new GeneratorData();
+			LevelGenerator lg = new LevelGenerator(field, g);
+			lg.Generate();
 		}
 
 		public void PrepareForGame() {

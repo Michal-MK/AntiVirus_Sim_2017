@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
-	[System.Serializable]
+
 	public enum LocationState {
 		NORMAL,
 		HIT,
@@ -12,7 +12,7 @@ namespace Igor.Minigames.Ships {
 		TARGET
 	}
 
-
+	[System.Serializable]
 	public class Location {
 		private int _x;
 		private int _y;

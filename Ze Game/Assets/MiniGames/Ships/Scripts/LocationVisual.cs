@@ -84,7 +84,7 @@ public class LocationVisual : MonoBehaviour {
 				return;
 			}
 			case ShipType.NONE: {
-				selfRender.sprite = null;
+				selfRender.sprite = Normal;
 				return;
 			}
 			case ShipType.CUSTOM: {
@@ -92,7 +92,7 @@ public class LocationVisual : MonoBehaviour {
 				return;
 			}
 			default: {
-				throw new System.Exception("Shiptype not implemented");
+				throw new Exception("Shiptype not implemented");
 			}
 		}
 	}
@@ -107,6 +107,11 @@ public class LocationVisual : MonoBehaviour {
 			//Do seomtihng special ??
 		}
 	}
+
+	public void UpdateVisual() {
+		SetSprite(location.placedShip);
+	}
+
 
 	public void Occupied() {
 		selfRender.sprite = Unavailable;

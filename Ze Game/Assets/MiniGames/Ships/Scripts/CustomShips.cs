@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace Igor.Minigames.Ships {
 	public class CustomShips : MonoBehaviour {
@@ -13,6 +12,7 @@ namespace Igor.Minigames.Ships {
 		public GameObject preview;
 
 		private void Start() {
+			ui = GameObject.Find("Canvas").GetComponent<Ships_UI>();
 			DirectoryInfo d = new DirectoryInfo(Application.dataPath + Path.DirectorySeparatorChar + "Ships" + Path.DirectorySeparatorChar);
 			foreach (FileInfo f in d.GetFiles("*.txt")) {
 				CustomShipPreview customShipPrew = Instantiate(preview, scrollView).GetComponent<CustomShipPreview>();
@@ -31,7 +31,8 @@ namespace Igor.Minigames.Ships {
 							s[i, j] = str[j].ToString();
 						}
 					}
-					customShipPrew.file = s;
+					customShipPrew.file_grid = s;
+					customShipPrew.canRotate = canRotate;
 					customShipPrew.main_UI = this.ui;
 				}
 			}

@@ -25,7 +25,7 @@ public class WindowManager {
 	/// <summary>
 	/// Adds a new window to the stack
 	/// </summary>
-	/// <param name="win"></param>
+	/// <param name="win">New window</param>
 	public static void AddWindow(Window win) {
 		activeWindows.Push(win);
 		if (win.type == Window.WindowType.ACTIVATING) {

@@ -13,6 +13,11 @@ public class SwitchScene : MonoBehaviour {
 		}
 	}
 
+	public void SwitchToWithMusicStop(string name) {
+		SceneManager.LoadScene(name);
+		MenuMusic.script.StopMusic();
+	}
+
 	public void DelayMenu(string sceneName) {
 		GameObject save = GameObject.Find("saveGame");
 		GameObject quit = GameObject.Find("quitToMenu");

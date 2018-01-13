@@ -15,11 +15,9 @@ namespace Igor.Minigames.Ships {
 
 		public GameObject customsPrefab;
 
-
-		private bool spawnedCustomShipWindow = false;
 		private GameObject customs;
 
-		private Vector3[] currentCustomLocations;
+		private const int HALF_SHIP_CREATION_FIELD = 4;
 
 		public GameObject SpawnVisual(ShipType type, bool rotated = false) {
 			switch (type) {
@@ -42,32 +40,39 @@ namespace Igor.Minigames.Ships {
 					return Instantiate(battlecruiserObj, Input.mousePosition, Quaternion.identity);
 				}
 			}
-			throw new System.Exception("No Ship");
+			throw new System.Exception("No Ship what ??");
 		}
 
-		public GameObject SpawnCustomVisual(Vector3[] partLocations) {
+		public GameObject SpawnCustomVisual(string[,] parts) {
 			GameObject holder = new GameObject("Holder");
 			ShipPlacement place = holder.AddComponent<ShipPlacement>();
-			for (int i = 0; i < partLocations.Length; i++) {
-				Instantiate(simpleRaycastObj, partLocations[i] / 50 - new Vector3(17, 6.5f), Quaternion.identity, holder.transform);
+			for (int i = 0; i < 81; i++) {
+				int first = Mathf.FloorToInt(i / 9);
+				int second = i % 9;
+
+				string selected = parts[first, second];
+				if (selected == "#") {
+					Instantiate(simpleRaycastObj, new Vector3(second - HALF_SHIP_CREATION_FIELD, first - HALF_SHIP_CREATION_FIELD), Quaternion.identity, holder.transform);
+				}
 			}
 			holder.transform.position = Input.mousePosition;
-			currentCustomLocations = partLocations;
 			return holder;
 		}
 
 		public void SpawnCustomShipWindow() {
-			if (spawnedCustomShipWindow == false) {
+			if (customs == null) {
 				customs = Instantiate(customsPrefab, GameObject.Find("Canvas").transform);
 				customs.name = "Customs";
-				customs.GetComponent<CustomShips>().ship_UI = GameObject.Find("Canvas").GetComponent<Ships_UI>();
 			}
 			else {
-				Destroy(customs);
-				customs = null;
+				ClearCustomSpawnWindow();
+				SpawnCustomShipWindow();
 			}
-			spawnedCustomShipWindow = !spawnedCustomShipWindow;
+		}
 
+		public void ClearCustomSpawnWindow() {
+			Destroy(customs);
+			customs = null;
 		}
 	}
 }

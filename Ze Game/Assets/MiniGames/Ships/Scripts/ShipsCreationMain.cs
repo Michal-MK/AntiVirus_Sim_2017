@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 namespace Igor.Minigames.Ships {
 	public class ShipsCreationMain : MonoBehaviour {

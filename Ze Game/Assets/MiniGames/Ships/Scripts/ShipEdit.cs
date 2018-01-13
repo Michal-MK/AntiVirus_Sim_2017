@@ -5,6 +5,7 @@ namespace Igor.Minigames.Ships {
 	public class ShipEdit : Ship {
 
 		private static ShipEdit current;
+		private int totalParts = 1;
 
 		public List<Location> locations = new List<Location>();
 
@@ -49,6 +50,11 @@ namespace Igor.Minigames.Ships {
 
 		public static ShipEdit getCurrentShip {
 			get { return current; }
+		}
+
+		public int totalShipParts {
+			get { return totalParts; }
+			set { totalParts = value; }
 		}
 	}
 }
