@@ -35,17 +35,19 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// Spawns object that represent fields.
+		/// Spawns object that represent a field.
 		/// </summary>
-		/// <param name="representation"></param>
-		public void Visualize(GameObject representation) {
+		public GameObject[] Visualize(GameObject representation) {
+			List<GameObject> fields = new List<GameObject>();
 			foreach (Location loc in _locations) {
 				LocationVisual l = GameObject.Instantiate(representation, loc.coordinates, Quaternion.identity).GetComponent<LocationVisual>();
 				l.name = loc.coordinates.ToString();
 				loc.locationVisual = l;
 				l.location = loc;
+				fields.Add(l.gameObject);
 			}
-			Camera.main.transform.position = new Vector3(_dimensions.x / 2 - 0.5f, _dimensions.y / 2 - 0.5f, -10);
+			Camera.main.GetComponent<CameraAdjust>().Adjust();
+			return fields.ToArray();
 		}
 
 		public void UpdateVisuals() {
@@ -55,9 +57,8 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// Gets a location based on its location.
+		/// Gets a location based on where it is in the grid.
 		/// </summary>
-		/// <param name="coordinates"></param>
 		public Location GetLocation(Vector2 coordinates) {
 			if (coordinates.x >= 0 && coordinates.x < _dimensions.x && coordinates.y >= 0 && coordinates.y < _dimensions.y) {
 				return _locations[(int)coordinates.x, (int)coordinates.y];
@@ -66,10 +67,8 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// Gets a location based on its location, and offset from the current offset.
+		/// Gets a location based on known location, and offset.
 		/// </summary>
-		/// <param name="coordinates"></param>
-		/// <param name="offset"></param>
 		public Location GetLocation(Vector2 coordinates, Vector2 offset) {
 			Vector2 final = new Vector2(coordinates.x + offset.x, coordinates.y + offset.y);
 
@@ -87,21 +86,33 @@ namespace Igor.Minigames.Ships {
 			}
 		}
 
+		/// <summary>
+		/// Removes a ship from the game
+		/// </summary>
 		public void ShipSunk(Ship attackedShip) {
 			placedShips.Remove(attackedShip);
 			if (placedShips.Count == 0) {
-				ShipsMain.script.GameOver();
+				ShipsMain.singleplayer.GameOver();
 			}
 		}
 
+		/// <summary>
+		/// Get all location in the field
+		/// </summary>
 		public Location[,] locations {
 			get { return _locations; }
 		}
 
+		/// <summary>
+		/// Get all ships that placed on the field
+		/// </summary>
 		public List<Ship> getAllShips {
 			get { return placedShips; }
 		}
 
+		/// <summary>
+		/// Get the X and Y dimensions of the field
+		/// </summary>
 		public Vector2 getDimensions {
 			get { return _dimensions; }
 		}

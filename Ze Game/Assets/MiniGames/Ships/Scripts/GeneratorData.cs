@@ -10,20 +10,20 @@ namespace Igor.Minigames.Ships {
 		private int _airShips;
 		private int _battleCruisers;
 
+		/// <summary>
+		/// Default generator, makes 2x Sub, 2x Cargo, 2x War, 1x Air and 2x Cruiser
+		/// </summary>
 		public GeneratorData() {
 			_submarines = 2;
-			_cargoShips = 1;
+			_cargoShips = 2;
 			_warShips = 2;
 			_airShips = 1;
-			_battleCruisers = 20;
+			_battleCruisers = 2;
 		}
 
-		public GeneratorData(string filePath) {
-			using (StreamReader s = File.OpenText(filePath)) {
-				Debug.Log("HAha");
-;			}
-		}
-
+		/// <summary>
+		/// Custom generator specify how many of shiptype you want
+		/// </summary>
 		public GeneratorData(int submarines, int cargos, int wars, int airs, int cruisers) {
 			_submarines = submarines;
 			_cargoShips = cargos;
