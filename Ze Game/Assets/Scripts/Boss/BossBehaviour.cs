@@ -44,8 +44,6 @@ public class BossBehaviour : MonoBehaviour {
 	private float zRotation = 0;
 	private float rotationDelta = 0.1f;
 
-
-	public bool bossSpawned = false;
 	private bool initialDealy = true;
 	private bool doneBouncing = false;
 
@@ -76,9 +74,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	public BoxCollider2D[] spikeHitboxes = new BoxCollider2D[4];
 
-	public bool donePositioning = true;
-
-	public static float playerSpeedMultiplier = 5;
+	private static float playerSpeedMultiplier = 5;
 
 	private LerpFunctions lerps = new LerpFunctions();
 
@@ -98,7 +94,6 @@ public class BossBehaviour : MonoBehaviour {
 			OnBossfightBegin(this);
 		}
 		playerSpeedMultiplier = 5;
-
 		BG = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
@@ -128,8 +123,6 @@ public class BossBehaviour : MonoBehaviour {
 
 		yield return new WaitUntil(() => CameraMovement.doneMoving);
 
-		bossSpawned = true;
-
 		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 
 		print(Camera.main.transform.position);
@@ -138,7 +131,9 @@ public class BossBehaviour : MonoBehaviour {
 		yield return new WaitForSeconds(1);
 		//StartCoroutine(Attacks(ChooseAttack()));
 
-		StartCoroutine(Attacks(2));
+		int debugAttack = 2;
+		Debug.Log("DEBUG MODE only attack " + debugAttack);
+		StartCoroutine(Attacks(debugAttack));
 
 	}
 
@@ -218,7 +213,6 @@ public class BossBehaviour : MonoBehaviour {
 
 				//Actual Attack
 				playerSpeedMultiplier = 1;
-				Projectile.projectileSpeed = 15;
 
 				StartCoroutine(lerps.LerpPosition(positioningCage, positioningCage.transform.position, BG.transform.position, Time.deltaTime / 2));
 				yield return new WaitForSeconds(3);
@@ -364,6 +358,9 @@ public class BossBehaviour : MonoBehaviour {
 					transform.position,
 					BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0),
 					Time.deltaTime / 2));
+				if (Attack5) {
+
+				}
 				break;
 			}
 		}
@@ -446,6 +443,7 @@ public class BossBehaviour : MonoBehaviour {
 			bullet.transform.position = gameObject.transform.position;
 			bullets.Add(bullet.gameObject);
 			bullet.gameObject.SetActive(true);
+			bullet.projectileSpeed = 15;
 			bullet.Fire();
 			waitTime -= waitTime * 0.005f;
 		}
@@ -542,10 +540,10 @@ public class BossBehaviour : MonoBehaviour {
 
 				if ((transform.position.y > holeMid + 15 || transform.position.y < holeMid - 15) && currentAttack != null) {
 					Projectile shot = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
-					Projectile.projectileSpeed = playerDistance / change;
 					shot.transform.position = transform.position;
 					shot.transform.rotation = Quaternion.Euler(0, 0, 270);
 					shot.gameObject.SetActive(true);
+					shot.projectileSpeed = playerDistance / change;
 					shot.Fire();
 					shot.StartCoroutine(shot.SelfDestruct(change + 1.5f));
 				}
@@ -709,5 +707,10 @@ public class BossBehaviour : MonoBehaviour {
 				throw new System.Exception("No attack type " + selectedAttack + " implemented!");
 			}
 		}
+	}
+
+	public static float getPlayerSpeedMultiplier {
+		get { return playerSpeedMultiplier; }
+		private set { playerSpeedMultiplier = value; }
 	}
 }

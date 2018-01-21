@@ -2,19 +2,14 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour {
 
-	public RectTransform BGS;
-	public RectTransform BG1;
-	public RectTransform BG2a;
 	public Maze maze;
-	public RectTransform BG2b;
-
-	public Guide guide;
+	public bool guideTowardsSpike = true; // NIY
 
 	private static int _spikesCollected;
 	private int stage;
 
 	//Loading information
-	public bool displayArrowGuideInfo = true;
+	private bool _shownDirAfterPickup = false;
 
 	public static event Guide.GuideTarget OnNewTarget;
 
@@ -29,8 +24,8 @@ public class Spike : MonoBehaviour {
 
 		gameObject.SetActive(false);
 
-		if (displayArrowGuideInfo == true) {
-			displayArrowGuideInfo = false;
+		if (!_shownDirAfterPickup) {
+			_shownDirAfterPickup = true;
 			Canvas_Renderer.script.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 		}
 
@@ -41,15 +36,14 @@ public class Spike : MonoBehaviour {
 		if (spikesCollected == 4) {
 			maze.MazeEscape();
 		}
-
-		M_Player.gameProgression++;
-		MapData.script.Progress();
+		MapData.script.Progress(++M_Player.gameProgression);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		spikesCollected = data.player.spikesCollected;
 		gameObject.SetActive(data.world.spikeActive);
 		gameObject.transform.position = data.world.spikePos;
+		_shownDirAfterPickup = data.shownHints.shownDirectionsAfterSpikePickup;
 	}
 
 	public void SetPosition() {
@@ -59,9 +53,9 @@ public class Spike : MonoBehaviour {
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 
 		if (stage == 0) {
-
-			float x = BGS.position.x;
-			float y = BGS.position.y;
+			RectTransform room1BG = MapData.script.GetBackground(1);
+			float x = room1BG.position.x;
+			float y = room1BG.position.y;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
@@ -71,9 +65,9 @@ public class Spike : MonoBehaviour {
 			}
 		}
 		if (stage == 1) {
-
-			float x = Random.Range(BG1.position.x - BG1.sizeDelta.x / 2 + Xscale * 4, BG1.position.x);
-			float y = Random.Range(BG1.position.y - BG1.sizeDelta.y / 2 + Yscale * 4, BG1.position.y);
+			RectTransform roomIciclesBG = MapData.script.GetBackground(2);
+			float x = Random.Range(roomIciclesBG.position.x - roomIciclesBG.sizeDelta.x / 2 + Xscale * 4, roomIciclesBG.position.x);
+			float y = Random.Range(roomIciclesBG.position.y - roomIciclesBG.sizeDelta.y / 2 + Yscale * 4, roomIciclesBG.position.y);
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
@@ -83,9 +77,9 @@ public class Spike : MonoBehaviour {
 			}
 		}
 		if (stage == 2) {
-
-			float x = Random.Range(BG2a.position.x + (-BG2a.sizeDelta.x / 2) + Xscale, BG2a.position.x + (BG2a.sizeDelta.x / 2) - Xscale);
-			float y = Random.Range(BG2a.position.y + (-BG2a.sizeDelta.y / 2) + Yscale, BG2a.position.y + (BG2a.sizeDelta.y / 2) - Yscale);
+			RectTransform roomAvoidanceBG = MapData.script.GetBackground(3);
+			float x = Random.Range(roomAvoidanceBG.position.x + (-roomAvoidanceBG.sizeDelta.x / 2) + Xscale, roomAvoidanceBG.position.x + (roomAvoidanceBG.sizeDelta.x / 2) - Xscale);
+			float y = Random.Range(roomAvoidanceBG.position.y + (-roomAvoidanceBG.sizeDelta.y / 2) + Yscale, roomAvoidanceBG.position.y + (roomAvoidanceBG.sizeDelta.y / 2) - Yscale);
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);
@@ -107,9 +101,9 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(true);
 		}
 		if (stage == 4) {
-
-			float x = BG2b.transform.position.x - BG2b.sizeDelta.x / 2 + 20;
-			float y = BG2b.transform.position.y + BG2b.sizeDelta.y / 2 - 20;
+			RectTransform roomPreBossBG = MapData.script.GetBackground(3);
+			float x = roomPreBossBG.transform.position.x - roomPreBossBG.sizeDelta.x / 2 + 20;
+			float y = roomPreBossBG.transform.position.y + roomPreBossBG.sizeDelta.y / 2 - 20;
 			float z = 0f;
 
 			gameObject.transform.position = new Vector3(x, y, z);

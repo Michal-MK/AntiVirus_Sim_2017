@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224856694479853506}
   m_Layer: 0
-  m_Name: TopRight 1
+  m_Name: HorizontalPassageBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

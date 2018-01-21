@@ -8,11 +8,7 @@ using Igor.Constants.Strings;
 public class DisplaySaveFiles : MonoBehaviour {
 	string BGName;
 	public GameObject SaveObj;
-	public GameObject NoSaves;
-
 	public RectTransform content;
-
-	public static int selectedAttempt;
 
 	void Start() {
 		DisplaySaves();
@@ -21,12 +17,11 @@ public class DisplaySaveFiles : MonoBehaviour {
 	public void DisplaySaves() {
 		DirectoryInfo dir = new DirectoryInfo(Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar);
 		DirectoryInfo[] info = dir.GetDirectories();
-
 		foreach (DirectoryInfo saveDirectory in info) {
 
 			FileInfo[] saveFiles = saveDirectory.GetFiles("*.Kappa");
 			for (int i = 0; i < saveFiles.Length; i++) {
-
+				print(saveFiles.Length);
 				using (FileStream file = new FileStream(saveFiles[i].FullName, FileMode.Open)) {
 					BinaryFormatter br = new BinaryFormatter();
 
@@ -87,22 +82,22 @@ public class DisplaySaveFiles : MonoBehaviour {
 					}
 					if (saveInfo.data.core.time != 0) {
 						saveInfoText.text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
-																	"Loaction: " + BGName + "\n" + "Attempt " +
-																	"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)saveInfo.data.core.time / 60, saveInfo.data.core.time % 60, saveInfo.data.core.time.ToString().Remove(0, saveInfo.data.core.time.ToString().Length - 2)) + "\n" +
-																	"Spikes: " + saveInfo.data.player.spikesCollected + " Bullets: " + saveInfo.data.player.bullets + "\n" +
-																	"Coins: " + saveInfo.data.player.coinsCollected + " Bombs: " + saveInfo.data.player.bombs;
+											"Loaction: " + BGName + "\n" + "Attempt " +
+											"Time: " + string.Format("{0:00}:{1:00}.{2:00} {3}", (int)saveInfo.data.core.time / 60, saveInfo.data.core.time % 60, saveInfo.data.core.time.ToString().Remove(0, saveInfo.data.core.time.ToString().Length - 2), (int)saveInfo.data.core.time / 60 == 0 ? "seconds." : "minutes.") + "\n" +
+											"Spikes: " + saveInfo.data.player.spikesCollected + " Bullets: " + saveInfo.data.player.bullets + "\n" +
+											"Coins: " + saveInfo.data.player.coinsCollected + " Bombs: " + saveInfo.data.player.bombs;
 					}
 					else {
 						saveInfoText.text = "Difficulty: " + (saveInfo.data.core.difficulty + 1) + "\n" +
-																	"Loaction: " + BGName + "\n" +
-																	"Time: 00:00:00 minutes";
+											"Loaction: " + BGName + "\n" +
+											"Time: 00:00:00";
 
 					}
 					deleteSave.onClick.AddListener(
 						delegate {
 							EventSystem.current.SetSelectedGameObject(cancelDel.gameObject);
 							showHistory.interactable = false;
-						}	
+						}
 					);
 					cancelDel.onClick.AddListener(
 						delegate {
@@ -112,10 +107,17 @@ public class DisplaySaveFiles : MonoBehaviour {
 					);
 				}
 			}
-			if (content.GetComponentsInChildren<RectTransform>().Length == 1) {
-				GameObject noSave = Instantiate(NoSaves, GameObject.Find("Canvas").transform);
-				noSave.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-			}
+		}
+		if (content.GetComponentsInChildren<RectTransform>().Length <= 1) {
+			GameObject noSave = new GameObject();
+			noSave.transform.SetParent(content);
+			noSave.AddComponent<CanvasRenderer>();
+			Text t = noSave.AddComponent<Text>();
+			t.font = SaveObj.transform.Find("SaveInfo").GetComponent<Text>().font;
+			t.fontSize = 40;
+			t.color = Color.red;
+			t.alignment = TextAnchor.UpperCenter;
+			t.text = "No saves found, create a new game!";
 		}
 	}
 

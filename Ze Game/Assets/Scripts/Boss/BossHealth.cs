@@ -18,15 +18,12 @@ public class BossHealth : MonoBehaviour {
 	public GameObject ShieldR;
 	public GameObject ShieldB;
 	public GameObject ShieldL;
-	public bool stopEverything = false;
 
-	private bool t = false;
-	private bool r = false;
-	private bool b = false;
-	private bool l = false;
+	private bool topShieldUp = false;
+	private bool rightShieldUp = false;
+	private bool bottomShieldUp = false;
+	private bool leftShieldUp = false;
 	private bool once = true;
-
-	private bool stop = false;
 
 	void Start() {
 		if (GameObject.Find("BossHealth") != null) {
@@ -45,8 +42,7 @@ public class BossHealth : MonoBehaviour {
 
 	public void Collided(Collision2D it, GameObject with) {
 
-		if (it.transform.name == "Bullet") {
-			//print("With " + with.name);
+		if (it.transform.name == ObjNames.BULLET) {
 			it.gameObject.SetActive(false);
 			healthIndicator.value--;
 			RaiseShields(with.name.ToDirection());
@@ -55,13 +51,14 @@ public class BossHealth : MonoBehaviour {
 			}
 			behaviour.selfRender.sprite = behaviour.Invincible;
 		}
-		if (healthIndicator.value == 0 && !stop) {
+		if (healthIndicator.value == 0) {
+			Destroy(with);
 			StartCoroutine(Death());
 		}
-
 	}
+
 	public void CheckShields() {
-		if (t && r && b && l && once) {
+		if (topShieldUp && rightShieldUp && bottomShieldUp && leftShieldUp && once) {
 			Canvas_Renderer.script.InfoRenderer("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
@@ -73,43 +70,44 @@ public class BossHealth : MonoBehaviour {
 		switch (where) {
 			case Directions.TOP:
 			ShieldT.SetActive(true);
-			t = true;
+			topShieldUp = true;
 			break;
 
 			case Directions.RIGHT:
 			ShieldR.SetActive(true);
-			r = true;
+			rightShieldUp = true;
 			break;
 
 
 			case Directions.BOTTOM:
 			ShieldB.SetActive(true);
-			b = true;
+			bottomShieldUp = true;
 			break;
 
 			case Directions.LEFT:
 			ShieldL.SetActive(true);
-			l = true;
+			leftShieldUp = true;
 			break;
 		}
 	}
 
-
-
-
 	public IEnumerator Death() {
-
-		stopEverything = true;
-		stop = true;
 		GameObject boss = behaviour.gameObject;
-
-
 		boss.GetComponent<Animator>().StopPlayback();
 		boss.GetComponent<Animator>().enabled = false;
 		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		boss.transform.position = new Vector3(0, 0, 10);
 		behaviour.enabled = false;
 
+		M_Player.gameProgression = 10;
+
+		yield return new WaitForSeconds(3);
+
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 0.8f);
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+
+
+		/* Aternate Ending deprecated lul
 		Canvas_Renderer.script.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
 		FindObjectOfType<M_Player>().FloorComplete();
 		MusicHandler.script.TrasnsitionMusic(null);
@@ -118,5 +116,17 @@ public class BossHealth : MonoBehaviour {
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1);
 		yield return new WaitForSeconds(CamFadeOut.CAM_FULLY_FADED_NORMAL);
 		SceneManager.LoadScene(SceneNames.CREDITS_SCENE);
+		*/
+	}
+
+	private void CamFadeOut_OnCamFullyFaded() {
+		MapData.script.Progress(M_Player.gameProgression);
+		MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room1_1);
+
+		M_Player.player.transform.position = new Vector3(302, -124, 0);
+		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
+		CameraMovement.script.inBossRoom = false;
+		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
+		SaveManager.canSave = true;
 	}
 }

@@ -71,6 +71,7 @@ public class EnemySpawner : MonoBehaviour {
 		for (int i = 0; i < arrowTraps.Length; i++) {
 			arrowTraps[i] = Instantiate(foundation, pos + (Vector3)positions[i], Quaternion.identity, transform);
 		}
+		ClearKillerBlocks();
 	}
 
 	public void DespawnAvoidance() {
@@ -84,7 +85,7 @@ public class EnemySpawner : MonoBehaviour {
 			return;
 		}
 
-		int totalBlocks = ((Coins.coinsCollected + 5) * (1 + Control.currDifficulty));
+		int totalBlocks = ((Coin.coinsCollected + 5) * (1 + Control.currDifficulty));
 
 		for (int count = 0; count < totalBlocks; count++) {
 			float scale = Random.Range(0.5f, 1f);
@@ -96,6 +97,12 @@ public class EnemySpawner : MonoBehaviour {
 			block.name = "Killerblock";
 			block.transform.SetParent(transform);
 			killerBlocks.Add(block);
+		}
+	}
+
+	private void ClearKillerBlocks() {
+		foreach (GameObject g in killerBlocks) {
+			g.GetComponent<ElectricalBlock>().DespawnElBlock();
 		}
 	}
 
@@ -114,6 +121,7 @@ public class EnemySpawner : MonoBehaviour {
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(transform);
 				wallShot.gameObject.SetActive(true);
+				wallShot.projectileSpeed = 15f;
 				KWProjectiles.Add(wallShot.gameObject);
 				wallShot.Fire();
 			}
@@ -126,6 +134,7 @@ public class EnemySpawner : MonoBehaviour {
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(transform);
 					wallShot.gameObject.SetActive(true);
+					wallShot.projectileSpeed = 15f;
 					KWProjectiles.Add(wallShot.gameObject);
 					wallShot.Fire();
 				}
@@ -140,6 +149,7 @@ public class EnemySpawner : MonoBehaviour {
 					wallShot.transform.SetParent(transform);
 					wallShot.gameObject.SetActive(true);
 					KWProjectiles.Add(wallShot.gameObject);
+					wallShot.projectileSpeed = 15;
 					wallShot.Fire();
 				}
 			}

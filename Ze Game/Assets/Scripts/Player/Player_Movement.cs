@@ -22,6 +22,15 @@ public class Player_Movement : MonoBehaviour {
 	public float flappyForceScale = 35;
 	public bool canFlapAgain = true;
 
+	private void Awake() {
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		_canMove = true;
+		Time.timeScale = 1;
+	}
+
 	private void FixedUpdate() {
 		switch (movementMode) {
 			case PlayerMovent.ARROW: {
@@ -71,7 +80,7 @@ public class Player_Movement : MonoBehaviour {
 					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")));
 				}
 				else if (CameraMovement.script.inBossRoom) {
-					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
+					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * BossBehaviour.getPlayerSpeedMultiplier);
 				}
 				else if (CameraMovement.script.inMaze) {
 					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * Maze.getMazeSpeedMultiplier);
@@ -84,7 +93,7 @@ public class Player_Movement : MonoBehaviour {
 					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0));
 				}
 				else if (CameraMovement.script.inBossRoom) {
-					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * BossBehaviour.playerSpeedMultiplier);
+					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * BossBehaviour.getPlayerSpeedMultiplier);
 				}
 				else if (CameraMovement.script.inMaze) {
 					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * Maze.getMazeSpeedMultiplier);
@@ -96,7 +105,7 @@ public class Player_Movement : MonoBehaviour {
 					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")));
 				}
 				else if (CameraMovement.script.inBossRoom) {
-					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * BossBehaviour.playerSpeedMultiplier);
+					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * BossBehaviour.getPlayerSpeedMultiplier);
 				}
 				else if (CameraMovement.script.inMaze) {
 					rigidbody.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * Maze.getMazeSpeedMultiplier);
@@ -108,7 +117,7 @@ public class Player_Movement : MonoBehaviour {
 					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0));
 				}
 				else if (CameraMovement.script.inBossRoom) {
-					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * BossBehaviour.playerSpeedMultiplier);
+					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * BossBehaviour.getPlayerSpeedMultiplier);
 				}
 				else if (CameraMovement.script.inMaze) {
 					rigidbody.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * Maze.getMazeSpeedMultiplier);
@@ -162,6 +171,10 @@ public class Player_Movement : MonoBehaviour {
 	public static bool canMove {
 		get { return _canMove; }
 		set { _canMove = value; }
+	}
+
+	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
 

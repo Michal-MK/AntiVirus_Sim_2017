@@ -18,7 +18,7 @@ namespace Igor.Minigames.Ships {
 				CustomShipPreview customShipPrew = Instantiate(preview, scrollView).GetComponent<CustomShipPreview>();
 				using (StreamReader read = File.OpenText(f.FullName)) {
 					customShipPrew.transform.Find("Name").GetComponent<Text>().text = read.ReadLine();
-					int hp = int.Parse(read.ReadLine());
+					//int hp = int.Parse(read.ReadLine());
 					string boolean = read.ReadLine();
 					bool canRotate = false;
 					if(boolean == "true") {

@@ -4,7 +4,7 @@ public class UploadScore {
 
 	public UploadScore() {
 		int difficulty = Control.currDifficulty;
-		string playerName = Control.currProfile.getProfileName;
+		string playerName = "";
 
 		if (playerName == null || playerName == "") {
 			playerName = System.Environment.UserName;

@@ -1,0 +1,9 @@
+Guidearrow texture quality - fixed
+Audiobalance
+door 1-2 circuit middle ending visible dark on blue - fixed
+can save when in gameover - fixed
+saves are still ass - improved fixed ??
+quitting to main menu does't do a transition - fixed
+lodaing a save doesn't start the timer - fixed
+pausing in game doesn"t allow unpoausing for some reason - fixed
+menu buttons can still be glitched - fixed

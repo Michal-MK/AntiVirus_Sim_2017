@@ -23,20 +23,7 @@ public class HUDElements : UserInterface {
 	public Sprite spikeSpr;
 	public Sprite bombSpr;
 
-	private static Image s_bombImg;
-	private static Text s_bombAmount;
-
-	private static Image s_bulletImage;
-	private static Text s_bulletAmount;
-
-	private static Image s_currentlySelectedImg;
-
-	private static Text s_spikesAmount;
-	private static Text s_coinsAmount;
-
-	private static Sprite s_spikeSpr;
-	private static Sprite s_bombSpr;
-
+	public static HUDElements script;
 
 	public enum Collectibles {
 		COINS,
@@ -47,15 +34,9 @@ public class HUDElements : UserInterface {
 	private AttackType currentSelectedAtkType = AttackType.NOTHING;
 
 	private void Awake() {
-		s_bombImg = bombImage;
-		s_bombAmount = bombAmount;
-		s_bulletImage = bulletImage;
-		s_bulletAmount = bulletAmount;
-		s_currentlySelectedImg = currentlySelectedImg;
-		s_spikesAmount = spikesAmount;
-		s_coinsAmount = coinsAmount;
-		s_spikeSpr = spikeSpr;
-		s_bombSpr = bombSpr;
+		if(script == null) {
+			script = this;
+		}
 		PlayerAttack.OnAmmoChanged += AmmoSwitch;
 		PlayerAttack.OnAmmoPickup += SetVisibility;
 	}
@@ -82,41 +63,44 @@ public class HUDElements : UserInterface {
 		}
 	}
 
-	public static void SetVisibility(AttackType type, bool state, int amount) {
+	public void SetVisibility(AttackType type, bool state, int amount) {
 		switch (type) {
 			case AttackType.BULLETS: {
-				s_bulletImage.sprite = s_spikeSpr;
-				s_bulletImage.gameObject.SetActive(state);
-				s_bulletAmount.text = "x " + amount;
-				s_bulletAmount.gameObject.SetActive(state);
+				bulletImage.sprite = spikeSpr;
+				bulletImage.gameObject.SetActive(state);
+				bulletAmount.text = "x " + amount;
+				bulletAmount.gameObject.SetActive(state);
 				break;
 			}
 			case AttackType.BOMBS: {
-				s_bombImg.sprite = s_bombSpr;
-				s_bombImg.gameObject.SetActive(state);
-				s_bombAmount.text = "x " + amount;
-				s_bombAmount.gameObject.SetActive(state);
+				bombImage.sprite = bombSpr;
+				bombImage.gameObject.SetActive(state);
+				bombAmount.text = "x " + amount;
+				bombAmount.gameObject.SetActive(state);
 				break;
 			}
 		}
-		s_currentlySelectedImg.gameObject.SetActive(state);
+		currentlySelectedImg.gameObject.SetActive(state);
 	}
 
-	public static void SetVisibility(Collectibles type, bool state, int amount) {
+	public void SetVisibility(Collectibles type, bool state, int amount) {
 		switch (type) {
 			case Collectibles.COINS: {
-				s_coinsAmount.gameObject.SetActive(state);
+				coinsAmount.gameObject.SetActive(state);
 				return;
 			}
 			case Collectibles.BOMB: {
-				s_bombImg.gameObject.SetActive(state);
-				s_bombAmount.gameObject.SetActive(state);
+				bombAmount.gameObject.SetActive(state);
+				bombAmount.gameObject.SetActive(state);
 				break;
 			}
 			case Collectibles.SPIKES: {
-				s_spikesAmount.gameObject.SetActive(state);
+				spikesAmount.gameObject.SetActive(state);
 				break;
 			}
 		}
+	}
+	private void OnDestroy() {
+		script = null;
 	}
 }

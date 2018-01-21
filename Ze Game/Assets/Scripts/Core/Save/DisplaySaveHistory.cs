@@ -56,14 +56,14 @@ public class DisplaySaveHistory : MonoBehaviour {
 
 				if (s.core.time != 0) {
 					t.text = "Loaction: " + BGName + "\n" + "Attempt " +
-							"Time: " + string.Format("{0:00}:{1:00}.{2:00} minutes", (int)s.core.time / 60, s.core.time % 60, s.core.time.ToString().Remove(0, s.core.time.ToString().Length - 2)) + "\n" +
-							"Spikes: " + s.player.spikesCollected + " Bullets: " + s.player.bullets + "\n" +
-							"Coins: " + s.player.coinsCollected + " Bombs: " + s.player.bombs;
+							 "Time: " + string.Format("{0:00}:{1:00}.{2:00} {3}", (int)s.core.time / 60, s.core.time % 60, s.core.time.ToString().Remove(0, s.core.time.ToString().Length - 2), (int)s.core.time / 60 == 0 ? "seconds.":"minutes.") + "\n" +
+							 "Spikes: " + s.player.spikesCollected + " Bullets: " + s.player.bullets + "\n" +
+							 "Coins: " + s.player.coinsCollected + " Bombs: " + s.player.bombs;
 				}
 				else {
 					t.text = "Loaction: " + BGName + "\n" +
-							"Time: 00:00:00 minutes" + "\n" +
-							"New Game";
+							 "Time: 00:00:00" + "\n" +
+							 "New Game";
 				}
 				Texture2D tex = new Texture2D(800, 600);
 				bool success = tex.LoadImage(File.ReadAllBytes(s.core.imgFileLocation));
@@ -73,6 +73,17 @@ public class DisplaySaveHistory : MonoBehaviour {
 				else {
 					ri.texture = null;
 				}
+			}
+			if(selfHistory.Count <= 0) {
+				GameObject noHistory = new GameObject();
+				noHistory.transform.SetParent(content);
+				noHistory.AddComponent<CanvasRenderer>();
+				Text t = noHistory.AddComponent<Text>();
+				t.font = historyRep.transform.Find("SaveInfo").GetComponent<Text>().font;
+				t.fontSize = 40;
+				t.color = Color.red;
+				t.alignment = TextAnchor.UpperCenter;
+				t.text = "No save under this game yet!";
 			}
 			transform.GetComponentInChildren<Text>().text = "Hide History";
 			isDisplaying = true;

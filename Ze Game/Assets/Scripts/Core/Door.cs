@@ -2,42 +2,64 @@
 using UnityEngine;
 
 public class Door {
-	private static List<Door> doors = new List<Door>();
 	private List<GameObject> doorParts = new List<GameObject>();
 
-	private int openOrder_;
+	private RoomLink _doorBetweenXY;
 
-	public Door(GameObject doorObj, int order) {
+	private bool _isOpen = false;
+
+
+	public Door(GameObject doorObj, RoomLink connects) {
 		Transform t = doorObj.transform.GetChild(4);
 		doorParts.Add(t.gameObject);
-		openOrder_ = order;
-		doors.Add(this);
-		UnityEngine.SceneManagement.SceneManager.sceneLoaded += delegate { doors.Clear(); };
+		_doorBetweenXY = connects;
 	}
-
-	~Door() {
-		UnityEngine.SceneManagement.SceneManager.sceneLoaded -= delegate { doors.Clear(); };
-	}
-
-	public Door GetDoor(int atOrder) {
-		for (int i = 0; i < doors.Count; i++) {
-			if (doors[i].openOrder_ == atOrder) {
-				return doors[i];
-			}
-		}
-		throw new System.Exception("Door does not exist!");
-	}
-
-	public int getDoorOrder {
-		get { return openOrder_; }
+	
+	public RoomLink getRoomIndicies {
+		get { return _doorBetweenXY; }
 	}
 
 	public List<GameObject> getDoor {
 		get { return doorParts; }
 	}
 
-	public static Door[] getDoors {
-		get { return doors.ToArray(); }
+	public bool isDoorOpen {
+		get { return _isOpen; }
+		set { _isOpen = value; }
 	}
 }
+
+#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+public class RoomLink {
+
+	private string _from;
+	private string _to;
+
+	public RoomLink(int fromRoom, int toRoom) {
+		_from = fromRoom.ToString();
+		_to = toRoom.ToString();
+	}
+
+	public RoomLink(string fromRoom, string toRoom) {
+		_from = fromRoom;
+		_to = toRoom;
+	}
+
+	public string From {
+		get { return _from; }
+	}
+	public string To {
+		get { return _to; }
+	}
+
+	public static bool operator == (RoomLink a, RoomLink b) {
+		return a.From == b.From && a.To == b.To;
+	}
+	public static bool operator != (RoomLink a, RoomLink b) {
+		return a.From != b.From || a.To != b.To;
+	}
+}
+#pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 

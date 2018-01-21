@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Notifications : MonoBehaviour {
 	public GameObject notificationPrefab;
@@ -32,6 +33,7 @@ public class Notifications : MonoBehaviour {
 		Button back = w.transform.Find("Back").GetComponent<Button>();
 		Text message = w.transform.Find("Warning").GetComponent<Text>();
 		message.text = msg;
+		EventSystem.current.SetSelectedGameObject(ok.gameObject);
 
 		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); });
 		back.onClick.AddListener(delegate { Destroy(w); returnBack.Invoke(); });
@@ -42,6 +44,7 @@ public class Notifications : MonoBehaviour {
 		Button ok = w.transform.Find("Ok").GetComponent<Button>();
 		Text message = w.transform.Find("Notification").GetComponent<Text>();
 		message.text = msg;
+		EventSystem.current.SetSelectedGameObject(ok.gameObject);
 
 		ok.onClick.AddListener(delegate { Destroy(w); });
 	}
@@ -52,6 +55,7 @@ public class Notifications : MonoBehaviour {
 		Button back = w.transform.Find("Back").GetComponent<Button>();
 		Text message = w.transform.Find("Confirmation").GetComponent<Text>();
 		message.text = msg;
+		EventSystem.current.SetSelectedGameObject(ok.gameObject);
 
 		ok.onClick.AddListener(delegate { Destroy(w); confirmation.Invoke(value); });
 		back.onClick.AddListener(delegate { Destroy(w); returnBack.Invoke(); });

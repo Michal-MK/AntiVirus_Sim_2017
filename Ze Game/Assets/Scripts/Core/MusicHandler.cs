@@ -12,6 +12,8 @@ public class MusicHandler : MonoBehaviour {
 	public AudioClip room_1_boss;
 	public AudioClip gameOver;
 
+	private AudioClip current;
+
 	public static MusicHandler script;
 
 	private bool _isPlaying = false;
@@ -74,7 +76,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private IEnumerator _PlayMusic(AudioClip clip) {
-		musicPlayer.clip = clip;
+		musicPlayer.clip = current = clip;
 		musicPlayer.Play();
 		musicPlayer.volume = 0;
 		for (float f = 0; f < 1; f += Time.deltaTime) {
@@ -90,9 +92,15 @@ public class MusicHandler : MonoBehaviour {
 			yield return null;
 		}
 		_isPlaying = false;
+		current = null;
 	}
 
 	private IEnumerator _TrasnsitionMusic(AudioClip clip) {
+		if(clip == current) {
+			print("Transitioning to the same clip, skipping");
+			yield break;
+		}
+
 		float initialVolume = musicPlayer.volume;
 		for (float f = initialVolume; f >= 0; f -= Time.unscaledDeltaTime) {
 			musicPlayer.volume = f;
@@ -102,7 +110,7 @@ public class MusicHandler : MonoBehaviour {
 		musicPlayer.volume = 0;
 		musicPlayer.Stop();
 
-		musicPlayer.clip = clip;
+		musicPlayer.clip = current = clip;
 		musicPlayer.Play();
 		for (float f = 0; f <= 1; f += Time.unscaledDeltaTime) {
 			musicPlayer.volume = f;

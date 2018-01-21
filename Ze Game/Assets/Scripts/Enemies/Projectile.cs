@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Projectile : Enemy {
 
-	public static float projectileSpeed = 15;
+	private float _projectileSpeed = 15;
 	public float timeTillDestruct = -1;
 
 	private Rigidbody2D selfRigid;
@@ -25,13 +25,13 @@ public class Projectile : Enemy {
 			StartCoroutine(BossAttack());
 		}
 		else {
-			selfRigid.velocity = transform.up * -projectileSpeed;
+			selfRigid.velocity = transform.up * -_projectileSpeed;
 		}
 	}
 
 	private IEnumerator BossAttack() {
 		yield return new WaitForSeconds(1);
-		selfRigid.velocity = transform.up * -projectileSpeed;
+		selfRigid.velocity = transform.up * -_projectileSpeed;
 	}
 
 	public IEnumerator SelfDestruct(float timeTillDestruction) {
@@ -68,5 +68,10 @@ public class Projectile : Enemy {
 
 	void OnDisable() {
 		byBoss = false;
+	}
+
+	public float projectileSpeed {
+		get { return _projectileSpeed; }
+		set { _projectileSpeed = value; }
 	}
 }

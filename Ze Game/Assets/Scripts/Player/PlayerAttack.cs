@@ -23,8 +23,8 @@ public class PlayerAttack : MonoBehaviour {
 	public bool visibleAlready = false;
 	public bool displayShootingInfo = true;
 
-	public static int bullets;
-	public static int bombs;
+	private int _bullets;
+	private int _bombs;
 
 	public static event HUDElements.HUDAttackUpdates OnAmmoChanged;
 	public static event HUDElements.HUDAttackVisibility OnAmmoPickup;
@@ -47,9 +47,9 @@ public class PlayerAttack : MonoBehaviour {
 
 	#region EventImplementation
 	private void M_Player_OnSpikePickup(M_Player sender, GameObject other) {
-		bullets++;
+		_bullets++;
 		if (visibleAlready == true) {
-			OnAmmoChanged(AttackType.BULLETS, bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 		}
 		if (Spike.spikesCollected == 5) {
 			string text;
@@ -65,9 +65,9 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	private void M_Player_OnBombPickup(M_Player sender, GameObject other) {
-		bombs++;
+		_bombs++;
 		Destroy(other);
-		OnAmmoPickup(AttackType.BOMBS, true, bombs);
+		OnAmmoPickup(AttackType.BOMBS, true, _bombs);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -77,8 +77,8 @@ public class PlayerAttack : MonoBehaviour {
 		else {
 			displayShootingInfo = false;
 		}
-		bullets = data.player.bullets;
-		bombs = data.player.bombs;
+		_bullets = data.player.bullets;
+		_bombs = data.player.bombs;
 	}
 	#endregion
 
@@ -99,11 +99,11 @@ public class PlayerAttack : MonoBehaviour {
 				Timer.StartTimer(1f);
 			}
 			if (displayShootingInfo) {
-				if (bullets != 0) {
+				if (_bullets != 0) {
 					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
-														"Currently you have: " + bullets + " bullets.\n " +
+														"Currently you have: " + _bullets + " bullets.\n " +
 														"Don't lose them", null);
 					displayShootingInfo = false;
 				}
@@ -111,14 +111,14 @@ public class PlayerAttack : MonoBehaviour {
 					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
-														"Currently you have: " + bullets + " bullets.", null);
+														"Currently you have: " + _bullets + " bullets.", null);
 					displayShootingInfo = false;
 				}
 			}
 			if (ammoType == AttackType.NOTHING) {
 				ammoType = SwitchAmmoType();
-				HUDElements.SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
-				HUDElements.SetVisibility(AttackType.BOMBS, true, bombs);
+				HUDElements.script.SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
+				HUDElements.script.SetVisibility(AttackType.BOMBS, true, _bombs);
 				visibleAlready = true;
 			}
 		}
@@ -128,8 +128,8 @@ public class PlayerAttack : MonoBehaviour {
 
 		if (!PauseUnpause.isPaused && inFireMode) {
 			if (Input.GetButtonDown("Left Mouse Button") && ammoType == AttackType.BULLETS) {
-				if (bullets >= 1) {
-					print("Bullets remaining: " + (bullets - 1));
+				if (_bullets >= 1) {
+					print("Bullets remaining: " + (_bullets - 1));
 					FireSpike();
 				}
 				else {
@@ -137,7 +137,7 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 			if (Input.GetButtonDown("Left Mouse Button") && ammoType == AttackType.BOMBS) {
-				if (bombs > 0) {
+				if (_bombs > 0) {
 					FireBomb();
 					StartCoroutine(RefreshBombs());
 				}
@@ -150,16 +150,16 @@ public class PlayerAttack : MonoBehaviour {
 
 	private AttackType SwitchAmmoType() {
 		if (ammoType == AttackType.BULLETS) {
-			OnAmmoChanged(AttackType.BOMBS, bombs, true);
+			OnAmmoChanged(AttackType.BOMBS, _bombs, true);
 			return AttackType.BOMBS;
 		}
 		else if (ammoType == AttackType.BOMBS) {
-			OnAmmoChanged(AttackType.BULLETS, bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 			return AttackType.BULLETS;
 		}
 		else {
 			//Initial call will result into this
-			OnAmmoChanged(AttackType.BULLETS, bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 			return AttackType.BULLETS;
 		}
 	}
@@ -179,8 +179,8 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.SetActive(true);
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
-		bullets--;
-		OnAmmoChanged(AttackType.BULLETS, bullets, true);
+		_bullets--;
+		OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 	}
 
 	public void FireBomb() {
@@ -191,22 +191,22 @@ public class PlayerAttack : MonoBehaviour {
 
 		firedBomb.GetComponent<BombScript>().primed = true;
 
-		bombs--;
-		OnAmmoChanged(AttackType.BOMBS, bombs, true);
+		_bombs--;
+		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
 	}
 
 	public IEnumerator RefreshBombs() {
 		Canvas_Renderer.script.InfoRenderer(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSeconds(bombRechargeDelay);
-		bombs++;
-		OnAmmoChanged(AttackType.BOMBS, bombs, true);
+		_bombs++;
+		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.name == ObjNames.FIRED_BULLET_NAME) {
 			Destroy(col.gameObject);
-			bullets++;
-			OnAmmoChanged(AttackType.BULLETS, bullets, true);
+			_bullets++;
+			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 	}
@@ -215,6 +215,16 @@ public class PlayerAttack : MonoBehaviour {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 		M_Player.OnBombPickup -= M_Player_OnBombPickup;
+	}
+
+	public int bullets {
+		get { return _bullets; }
+		set { _bullets = value; }
+	}
+
+	public int bombs {
+		get { return _bombs; }
+		set { _bombs = value; }
 	}
 }
 

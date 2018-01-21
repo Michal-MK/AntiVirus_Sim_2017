@@ -33,7 +33,6 @@ public class CameraMovement : MonoBehaviour {
 	public static CameraMovement script;
 
 	private void Awake() {
-		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
@@ -78,27 +77,12 @@ public class CameraMovement : MonoBehaviour {
 		SetParticleLifetime(25);
 	}
 
-	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		inBossRoom = data.world.bossSpawned;
-		if (data.world.bossSpawned) {
-			RectTransform bg = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
-			Camera.main.transform.position = bg.position + new Vector3(0, 0, -10);
-			psA.transform.position = bg.position + new Vector3(0, bg.sizeDelta.y / 2, 0);
-			ParticleSystem.ShapeModule shape = psA.shape;
-			shape.radius = 108 * 2;
-			psB.gameObject.SetActive(false);
-			M_Player.gameProgression = 10;
-
-			Zoom.canZoom = false;
-		}
-	}
-
 	#endregion
 
 	public void RaycastForRooms() {
 		BackGroundS.Clear();
 
-		bg = M_Player.GetCurrentBackground();
+		bg = M_Player.player.GetCurrentBackground();
 
 		currentBGY = bg.sizeDelta.y / 2;
 		currentBGX = bg.sizeDelta.x / 2;
@@ -347,7 +331,7 @@ public class CameraMovement : MonoBehaviour {
 	public void SetParticleLifetime(float time) {
 		ParticleSystem.ShapeModule shapeA = psA.shape;
 		psB.gameObject.SetActive(false);
-
+		print("Hardocded values... ");
 		shapeA.radius = 108 * 2;
 		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
 		ParticleSystem.MainModule main = psA.main;
@@ -355,10 +339,11 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
 		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
+
+
 }
 

@@ -30,7 +30,7 @@ public class BlockScript : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (M_Player.GetCurrentBackground().name == BG.name) {
+		if (M_Player.player.GetCurrentBackground().name == BG.name) {
 			currentpos = transform.position;
 			dist = Vector3.Distance(player.transform.position, transform.position);
 

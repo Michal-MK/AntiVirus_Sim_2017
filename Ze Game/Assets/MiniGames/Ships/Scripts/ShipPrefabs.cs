@@ -45,7 +45,7 @@ namespace Igor.Minigames.Ships {
 
 		public GameObject SpawnCustomVisual(string[,] parts) {
 			GameObject holder = new GameObject("Holder");
-			ShipPlacement place = holder.AddComponent<ShipPlacement>();
+			holder.AddComponent<ShipPlacement>();
 			for (int i = 0; i < 81; i++) {
 				int first = Mathf.FloorToInt(i / 9);
 				int second = i % 9;

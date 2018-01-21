@@ -25,9 +25,8 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
 		M_Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
-		Coins.OnNewTarget += Recalculate;
+		Coin.OnNewTarget += Recalculate;
 		Spike.OnNewTarget += Recalculate;
-		Debug.LogWarning("Targeting function needs a rewrite");
 	}
 
 	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
@@ -46,7 +45,7 @@ public class Guide : MonoBehaviour {
 	}
 
 	private void M_Player_OnCoinPickup(M_Player sender, GameObject other) {
-		if (Coins.coinsCollected <= 4) {
+		if (Coin.coinsCollected <= 4) {
 			Recalculate(other, true);
 		}
 		else {
@@ -209,7 +208,7 @@ public class Guide : MonoBehaviour {
 		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
 		M_Player.OnTargetableObjectCollision -= M_Player_OnTargetableObjectCollision;
-		Coins.OnNewTarget -= Recalculate;
+		Coin.OnNewTarget -= Recalculate;
 		Spike.OnNewTarget -= Recalculate;
 	}
 }

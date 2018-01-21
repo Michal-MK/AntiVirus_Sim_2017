@@ -14,15 +14,15 @@ public class Control : MonoBehaviour {
 
 	public static int currAttempt = 0;
 	public static int currDifficulty = 0;
-	public static Profile_Data currProfile;
 
 	public delegate void Escape();
 	public static event Escape OnEscapePressed;
 
 	void Awake() {
 		if (script == null) {
+
 			script = this;
-			loadManager = new LoadManager();
+			script.loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
 		}
 		else if (script != this) {
@@ -36,36 +36,6 @@ public class Control : MonoBehaviour {
 
 		if (!Directory.Exists(Application.dataPath + "/Saves")) {
 			Directory.CreateDirectory(Application.dataPath + "/Saves");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D0")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D0");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D1")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D1");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D2")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D2");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D3")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D3");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D4")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D4");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D0/Resources")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D0/Resources");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D1/Resources")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D1/Resources");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D2/Resources")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D2/Resources");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D3/Resources")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D3/Resources");
-		}
-		if (!Directory.Exists(Application.dataPath + "/Saves/D4/Resources")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves/D4/Resources");
 		}
 		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
 			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
@@ -84,16 +54,14 @@ public class Control : MonoBehaviour {
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
 		SceneManager.sceneLoaded += NewGameSceneLoaded;
+
 	}
 
 	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
 		SceneManager.sceneLoaded -= NewGameSceneLoaded;
 		Spike.spikesCollected = 0;
-		Coins.coinsCollected = 0;
-		PlayerAttack.bombs = 0;
-		PlayerAttack.bullets = 0;
+		Coin.coinsCollected = 0;
 		M_Player.gameProgression = 0;
-		Projectile.projectileSpeed = 15;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
 		CamFadeOut.script.anim.speed = 0.75f;
@@ -113,11 +81,8 @@ public class Control : MonoBehaviour {
 	private void RestartTransition() {
 		Player_Movement.canMove = false;
 		Spike.spikesCollected = 0;
-		Coins.coinsCollected = 0;
-		PlayerAttack.bombs = 0;
-		PlayerAttack.bullets = 0;
+		Coin.coinsCollected = 0;
 		M_Player.gameProgression = 0;
-		Projectile.projectileSpeed = 15;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
 		CamFadeOut.OnCamFullyFaded -= RestartTransition;
@@ -128,20 +93,17 @@ public class Control : MonoBehaviour {
 		if (scene.name == SceneNames.GAME1_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.GAME;
 			CamFadeOut.script.anim.speed = 0.5f;
-			//if (MusicHandler.script.isAnythingPlaying == false) {
-				//MusicHandler.script.PlayMusic(MusicHandler.script.room1_1);
-			//}
 		}
-		else if(scene.name == SceneNames.MENU_SCENE) {
+		else if (scene.name == SceneNames.MENU_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;
 			if (!MenuMusic.script.isPlaying) {
 				MenuMusic.script.PlayMusic();
 			}
 		}
-		else if(scene.name == SceneNames.SAVES_SCENE) {
+		else if (scene.name == SceneNames.SAVES_SCENE) {
 			UserInterface.sceneMode = UserInterface.UIScene.SAVES;
 		}
-		else{
+		else {
 			UserInterface.sceneMode = UserInterface.UIScene.OTHER;
 		}
 
@@ -151,7 +113,7 @@ public class Control : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetButtonDown("Escape")) {
-			if(OnEscapePressed != null) {
+			if (OnEscapePressed != null) {
 				OnEscapePressed();
 			}
 		}
@@ -168,3 +130,37 @@ public class Control : MonoBehaviour {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
+
+/* List of Static variables
+ * Control: currAttempt, currDifficulty, currProfile, OnEscapePressed Control
+ * BossBehaviour: playerSpeedMultiplier, OnBossfightBegin
+ * Coins: coinsCollected, OnNewTarget
+ * Spike: spikesCollected, OnNewTarget
+ * CameraMovement: OnZoomModeSwitch, doneMoving, CameraMovement
+ * CamFadeOut: CamFadeOut, OnCamFullyFaded
+ * CanvasRenderer: CanvasRenderer
+ * MapData: MapData
+ * MusicHandler: MusicHandler
+ * PauseUnpause: canPause, isPaused
+ * LoadManager: OnSaveDataLoaded
+ * SaveManager: saveButton, canSave, current,
+ * SaveGameHelper: SaveGameHelper
+ * SoundFXHandler: SoundFXHandler
+ * Timer: time, isRunning, timeFlowMultiplier, OnTimerPause, Timer, 
+ * Zoom: canZoom
+ * SignPost: OnAvoidanceBegin
+ * M_Player: gameProgression, currentBG_name, M_Player, playerState, EVENTS
+ * Player_Movement: canMove
+ * PlayerAttack: OnAmmoChanged, OnAmmoPickup
+ * Profile: profilesFolder, currProfile, profileRepresentation, authentication, profileName, 
+ * BlockScript: pressurePlateTriggered
+ * Maze: mazeSpeedMultiplier
+ * MazeEntrance: OnMazeEnter
+ * MazeEscape: OnMazeEscape
+ * PressurePlate: OnNewTarget
+ * MenuMusic: MenuMusic
+ * HUDElements: HudElements
+ * Notifications: all the prefabs, canvas
+ * UserInterface: OnPauseChange, sceneMode, 
+ * WindowManager: activeWindows
+ */

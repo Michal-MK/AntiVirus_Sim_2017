@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace SaveData_Helper {
 	[System.Serializable]
@@ -25,6 +26,7 @@ namespace SaveData_Helper {
 		public bool shownAttempt;
 		public bool shownBlockInfo;
 		public bool shownAvoidanceInfo;
+		public bool shownDirectionsAfterSpikePickup;
 	}
 
 	[System.Serializable]
@@ -34,7 +36,7 @@ namespace SaveData_Helper {
 		public int spikesCollected;
 		public int bullets;
 		public int bombs;
-
+		public int gameProgression;
 		public bool canZoom;
 		public string currentBGName;
 	}
@@ -59,11 +61,13 @@ namespace SaveData_Helper {
 		public bool spikeActive;
 
 		public bool doneAvoidance;
-		public bool bossSpawned;
 
 		public int blockPushAttempt;
 		public bool pressurePlateTriggered;
 		public bool postMazeDoorOpen;
+
+		public bool boss1Killed;
+		public List<string> doorsOpen = new List<string>();
 	}
 
 	[System.Serializable]

@@ -19,10 +19,11 @@
 				public const string COIN = "Coin";
 				public const string SPIKE = "Spike";
 				public const string MENU_CHOOSE_DIFFICULTY = "Select Difficulty";
+				public const string AVOIDANCE_SIGN = "_SignPost Avoidance";
 			}
 
 			public class BackgroundNames {
-				public const string BACKGROUND1_1 = "Background1_1";
+				public const string BACKGROUND1_1 = "Background1_1 Start";
 				public const string BACKGROUND1_2 = "Background1_2";
 				public const string BACKGROUND1_3 = "Background1_3";
 				public const string BACKGROUND1_4 = "Background1_4";
@@ -35,10 +36,10 @@
 			}
 
 			public class PrefabNames {
-				public const string ENEMY_PROJECTILE_ACCURATE = "EnemyProjectile_Accurate";
-				public const string ENEMY_PROJECTILE_INACCUARATE = "EnemyProjectile_Inaccurate";
-				public const string ENEMY_PROJECTILE_ICICLE = "EnemyProjectile_Icicle";
-				public const string ENEMY_KILLERBLOCK = "Enemy_KillerBlockBoss";
+				public const string ENEMY_PROJECTILE_ACCURATE = "Emeies/EnemyProjectile_Accurate";
+				public const string ENEMY_PROJECTILE_INACCUARATE = "Enemies/EnemyProjectile_Inaccurate";
+				public const string ENEMY_PROJECTILE_ICICLE = "Enemies/EnemyProjectile_Icicle";
+				public const string ENEMY_KILLERBLOCK = "Enemies/Enemy_KillerBlockBoss";
 			}
 
 			public class EnemyNames {

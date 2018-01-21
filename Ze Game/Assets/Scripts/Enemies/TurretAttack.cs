@@ -85,6 +85,7 @@ public class TurretAttack : MonoBehaviour {
 				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
 				bullet.transform.SetParent(enemy);
 				bullet.gameObject.SetActive(true);
+				bullet.projectileSpeed = 15;
 				bullet.Fire();
 			}
 			else {
@@ -97,6 +98,7 @@ public class TurretAttack : MonoBehaviour {
 					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
 					bullet.transform.SetParent(enemy);
 					bullet.gameObject.SetActive(true);
+					bullet.projectileSpeed = 15;
 					bullet.Fire();
 				}
 			}

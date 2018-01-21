@@ -18,7 +18,7 @@ public class M_Player : MonoBehaviour {
 	#endregion
 
 	public static int gameProgression;
-	private static string currentBG_name;
+	private string currentBG_name;
 
 	public bool newGame = true;
 	public bool gameOver = false;
@@ -58,22 +58,25 @@ public class M_Player : MonoBehaviour {
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		transform.position = data.player.playerPos;
-		gameProgression = data.player.spikesCollected;
+		gameProgression = data.player.gameProgression;
 		attempts = data.core.localAttempt;
+		newGame = false;
 	}
 
 	void Start() {
 		Cursor.lockState = CursorLockMode.Confined;
-
-#if !UNITY_EDITOR
-		string name = Control.currProfile.getProfileName;
-#endif
+		currentBG_name = BackgroundNames.BACKGROUND1_1;
 		StartCoroutine(DelayIntro());
 	}
 
 	private IEnumerator DelayIntro() {
 		yield return new WaitForSeconds(1);
-		MapData.script.Progress();
+#if UNITY_EDITOR
+		if (SaveManager.current == null) {
+			UnityEditor.EditorApplication.isPlaying = false;
+		}
+#endif
+		MapData.script.Progress(0);
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
@@ -98,6 +101,7 @@ public class M_Player : MonoBehaviour {
 			}
 		}
 		if (collision.transform.tag == "Enemy") {
+			print(collision.transform.name);
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
@@ -114,7 +118,7 @@ public class M_Player : MonoBehaviour {
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
-			col.transform.SetParent(GameObject.Find("Collectibles").transform, false);
+			col.transform.parent.parent = null;
 			face.sprite = sad;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
@@ -132,9 +136,6 @@ public class M_Player : MonoBehaviour {
 					Canvas_Renderer.script.InfoRenderer(null, "Go down even further.");
 				}
 			}
-			if (col.name == BackgroundNames.BACKGROUND_BOSS_ + "1") {
-				gameProgression = 10;
-			}
 		}
 
 		if (col.tag == ObjNames.SPIKE) {
@@ -142,7 +143,7 @@ public class M_Player : MonoBehaviour {
 				OnSpikePickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
-			MapData.script.Progress();
+			MapData.script.Progress(gameProgression);
 			face.sprite = happy;
 		}
 		if (col.name == ObjNames.COIN) {
@@ -155,7 +156,7 @@ public class M_Player : MonoBehaviour {
 		}
 
 		if (col.name == ObjNames.BOMB_PICKUP) {
-			if(OnBombPickup != null) {
+			if (OnBombPickup != null) {
 				OnBombPickup(this, col.gameObject);
 			}
 			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
@@ -164,10 +165,6 @@ public class M_Player : MonoBehaviour {
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
 			previous = face.sprite;
 			face.sprite = sad;
-		}
-
-		if(col.name == "MiniGames") {
-			Igor.Minigames.MiniGame_Manager.LoadMinigame(Igor.Minigames.MiniGames.SHIPS);
 		}
 	}
 
@@ -182,7 +179,7 @@ public class M_Player : MonoBehaviour {
 		Cursor.visible = true;
 		Timer.PauseTimer();
 #if !UNITY_EDITOR
-		UploadScore score = new UploadScore();
+			UploadScore score = new UploadScore();
 #endif
 	}
 
@@ -195,6 +192,7 @@ public class M_Player : MonoBehaviour {
 			OnZoomModeSwitch(false);
 		}
 
+		Destroy(GameObject.Find("Enemies"));
 		Player_Movement.canMove = false;
 		Cursor.visible = true;
 		Timer.PauseTimer();
@@ -204,15 +202,20 @@ public class M_Player : MonoBehaviour {
 		gameProgression = -1;
 		gameOver = true;
 
-		Destroy(GameObject.Find("Enemies"));
 	}
 
-	public static RectTransform GetCurrentBackground() {
+	public RectTransform GetCurrentBackground() {
 		if (!string.IsNullOrEmpty(currentBG_name)) {
-			return GameObject.Find(currentBG_name).GetComponent<RectTransform>(); 
+			return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 		}
 		else {
-			throw new System.Exception("No background assigned to player!");
+			try {
+				currentBG_name = SaveManager.current.data.player.currentBGName;
+				return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
+			}
+			catch {
+				throw new System.Exception("No background assigned to player!");
+			}
 		}
 	}
 

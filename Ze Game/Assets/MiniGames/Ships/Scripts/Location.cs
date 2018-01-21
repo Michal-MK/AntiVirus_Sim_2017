@@ -77,7 +77,7 @@ namespace Igor.Minigames.Ships {
 		/// Gets the neighbouring cell of this cell in the spcified direction.
 		/// </summary>
 		public Location GetNeighbor(Field field, Neighbors direction) {
-			Vector2 myLocation = new Vector2(_x, _y);
+			//Vector2 myLocation = new Vector2(_x, _y);
 			switch (direction) {
 				case Neighbors.TOP_LEFT: {
 					if (neighbors[0, 0] != -Vector2.one) {

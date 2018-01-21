@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour {
 	public static Timer script;
 
 	private void Awake() {
-		if(script == null) {
+		if (script == null) {
 			script = this;
 		}
 		else if (script != this) {
@@ -25,11 +25,15 @@ public class Timer : MonoBehaviour {
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		_time = data.core.time;
 		StartTimer(1f);
+		Timer_text = GetComponent<Text>();
+		Timer_text.gameObject.SetActive(true);
 	}
 
 	private void Start() {
-		Timer_text = GetComponent<Text>();
-		Timer_text.gameObject.SetActive(false);
+		if (Timer_text == null) {
+			Timer_text = GetComponent<Text>();
+			Timer_text.gameObject.SetActive(false);
+		}
 	}
 
 	private void Update() {
@@ -43,7 +47,7 @@ public class Timer : MonoBehaviour {
 	public static void PauseTimer() {
 		_isRunning = false;
 		if (OnTimerPause != null) {
-			OnTimerPause(true);
+			OnTimerPause(true, false);
 		}
 	}
 
@@ -51,7 +55,7 @@ public class Timer : MonoBehaviour {
 		script.gameObject.SetActive(true);
 		_isRunning = true;
 		if (OnTimerPause != null) {
-			OnTimerPause(false);
+			OnTimerPause(false, false);
 		}
 		timeFlowMultiplier = flowMultiplier;
 	}

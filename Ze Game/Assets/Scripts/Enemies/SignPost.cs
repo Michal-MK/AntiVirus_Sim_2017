@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public class SignPost : MonoBehaviour {
 	public SpriteRenderer sign;
@@ -41,7 +42,7 @@ public class SignPost : MonoBehaviour {
 		if (awaitingInput && Input.GetButtonDown("Interact") && CamFadeOut.script.anim.GetCurrentAnimatorStateInfo(0).IsName("Wait")) {
 			if (!interacted) {
 				switch (gameObject.name) {
-					case "SignPost Avoidance": {
+					case ObjNames.AVOIDANCE_SIGN: {
 						if (OnAvoidanceBegin != null) {
 							OnAvoidanceBegin();
 						}
@@ -61,7 +62,7 @@ public class SignPost : MonoBehaviour {
 						break;
 					}
 					case "SignPost Maze": {
-						Canvas_Renderer.script.InfoRenderer("The coins are up to no use.", null);
+						Canvas_Renderer.script.InfoRenderer("The coins are up to no use. Yet", null);
 						break;
 					}
 					case "SignPost PreBoss": {

@@ -33,6 +33,12 @@ public class Canvas_Renderer : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		defaultColor = new Color32(255, 255, 255, 100);
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		Camera.main.orthographicSize = data.core.camSize;
+		Canvas_Renderer.script.InfoRenderer(null, data.shownHints.currentlyDisplayedSideInfo);
 	}
 
 	private void Start() {
@@ -41,7 +47,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	public void InfoRenderer(string displayedTextMain, string displayedTextSide, Color32? color = null) {
-		//If we are already displaying something =, wait for it to finish, and try again then.
+		//If we are already displaying something, wait for it to finish, and try again then.
 		if (isRunning) {
 			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide, color));
 			return;
@@ -105,9 +111,9 @@ public class Canvas_Renderer : MonoBehaviour {
 	public void UpdateCounters(string name = null) {
 
 		if (name == ObjNames.COIN) {
-			CoinC.text = "x " + Coins.coinsCollected;
+			CoinC.text = "x " + Coin.coinsCollected;
 
-			if (Coins.coinsCollected == 5) {
+			if (Coin.coinsCollected == 5) {
 				CoinC.transform.localPosition += new Vector3(50, 0, 0);
 				CoinC.text = CoinC.text + " Completed!";
 			}
@@ -123,6 +129,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 	private void OnDestroy() {
 		script = null;
+		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 }
 
