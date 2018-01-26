@@ -39,7 +39,7 @@ public class AdvanceInGame : MonoBehaviour {
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = pos;
 						M_Player.player.transform.position = pos;
-						StartCoroutine(FindObjectOfType<MazeEscape>().FromMazeTrans());
+						FindObjectOfType<MazeEscape>().FromMazeTrans();
 						return;
 					}
 					case 5: {
@@ -76,7 +76,7 @@ public class AdvanceInGame : MonoBehaviour {
 		MapData.script.OpenDoor(new RoomLink(5, 6));
 		yield return new WaitForSeconds(1);
 		Destroy(g);
-		yield return new WaitUntil(() => CameraMovement.doneMoving);
+		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
 	}
 }

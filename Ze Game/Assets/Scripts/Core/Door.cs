@@ -46,6 +46,16 @@ public class RoomLink {
 		_to = toRoom;
 	}
 
+	public RoomLink(int fromRoom, string toRoom) {
+		_from = fromRoom.ToString();
+		_to = toRoom;
+	}
+
+	public RoomLink(string fromRoom, int toRoom) {
+		_from = fromRoom;
+		_to = toRoom.ToString();
+	}
+
 	public string From {
 		get { return _from; }
 	}

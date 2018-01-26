@@ -33,22 +33,38 @@ public class MusicHandler : MonoBehaviour {
 
 	#region EventHandling
 	private void NewRoom(RectTransform background, M_Player sender) {
-		if(background.name == BackgroundNames.BACKGROUND1_1) {
+
+		if(background == MapData.script.GetBackground(1)) {
 			if (!_isPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
-				TrasnsitionMusic(room1_1);
+				TransitionMusic(room1_1);
 			}
 		}
-		if (background.name == BackgroundNames.BACKGROUND1_2) {
-			TrasnsitionMusic(room1_2);
+		else if (background == MapData.script.GetBackground(2)) {
+			if (!_isPlaying) {
+				PlayMusic(room1_2);
+			}
+			else {
+				TransitionMusic(room1_2);
+			}
 		}
-		if (background.name == BackgroundNames.BACKGROUND1_3) {
-			TrasnsitionMusic(room1_1);
+		else if (background == MapData.script.GetBackground(3)) {
+			if (!_isPlaying) {
+				PlayMusic(room1_1);
+			}
+			else {
+				TransitionMusic(room1_1);
+			}
 		}
-		if (background.name == BackgroundNames.BACKGROUND1_4) {
-			PlayMusic(room1_1);
+		else if (background == MapData.script.GetBackground(4)) {
+			if (!_isPlaying) {
+				PlayMusic(room1_1);
+			}
+			else {
+				TransitionMusic(room1_1);
+			}
 		}
 	}
 	#endregion
@@ -66,9 +82,9 @@ public class MusicHandler : MonoBehaviour {
 		StartCoroutine(_FadeMusic());
 	}
 
-	public void TrasnsitionMusic(AudioClip newClip) {
+	public void TransitionMusic(AudioClip newClip) {
 		if (_isPlaying) {
-			StartCoroutine(_TrasnsitionMusic(newClip));
+			StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
 			throw new System.Exception("Nothing to transition from!");
@@ -95,9 +111,9 @@ public class MusicHandler : MonoBehaviour {
 		current = null;
 	}
 
-	private IEnumerator _TrasnsitionMusic(AudioClip clip) {
+	private IEnumerator _TransitionMusic(AudioClip clip) {
 		if(clip == current) {
-			print("Transitioning to the same clip, skipping");
+			//print("Transitioning to the same clip, skipping");
 			yield break;
 		}
 

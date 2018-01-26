@@ -30,10 +30,8 @@ public class PlayerAttack : MonoBehaviour {
 	public static event HUDElements.HUDAttackVisibility OnAmmoPickup;
 
 	public SpriteRenderer face;
-	public SpriteRenderer hands;
+	public GameObject hands;
 
-	public Sprite handsShown;
-	public Sprite handsHidden;
 	public Sprite attacking;
 	public Sprite happy;
 
@@ -88,13 +86,13 @@ public class PlayerAttack : MonoBehaviour {
 
 			if (inFireMode) {
 				face.sprite = attacking;
-				hands.sprite = handsShown;
+				hands.SetActive(true);
 				Cursor.visible = true;
 				Timer.StartTimer(2f);
 			}
 			else {
 				face.sprite = happy;
-				hands.sprite = handsHidden;
+				hands.SetActive(false);
 				Cursor.visible = false;
 				Timer.StartTimer(1f);
 			}

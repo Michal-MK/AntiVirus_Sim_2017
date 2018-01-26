@@ -9,10 +9,18 @@ public class MapData : MonoBehaviour {
 	public RectTransform[] bossBackgrounds;
 	public RectTransform[] transitions;
 
+	public Light globalDirectionalLight;
+
 	public static MapData script;
 
 	private List<Door> _doors = new List<Door>();
 
+	private MapMode _mode = MapMode.LIGHT;
+
+	public enum MapMode {
+		LIGHT,
+		DARK
+	}
 
 	private bool boss1Killed = false;
 
@@ -22,9 +30,8 @@ public class MapData : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		Start();
 		GameObject.Find("_SignPost Avoidance").SetActive(!data.world.doneAvoidance);
-		GameObject.Find("_Blocker3").SetActive(data.world.postMazeDoorOpen);
+		GameObject.Find("_Blocker3").SetActive(!data.world.postMazeDoorOpen);
 		for (int i = 0; i < data.world.doorsOpen.Count; i++) {
 			string[] indicies = data.world.doorsOpen[i].Split(',');
 			OpenDoor(new RoomLink(indicies[0], indicies[1]));
@@ -38,6 +45,21 @@ public class MapData : MonoBehaviour {
 			string to = doorName[3];
 			_doors.Add(new Door(doors[i], new RoomLink(from, to)));
 			_doors.Add(new Door(doors[i + 1], new RoomLink(to, from)));
+		}
+	}
+
+	public void SwitchMapMode(MapMode mode) {
+		_mode = mode;
+		FindObjectOfType<EnemySpawner>().UpdatePrefabs(_mode);
+		switch (mode) {
+			case MapMode.LIGHT: {
+				globalDirectionalLight.intensity = .8f;
+				return;
+			}
+			case MapMode.DARK: {
+				globalDirectionalLight.intensity = .1f;
+				return;
+			}
 		}
 	}
 
@@ -124,7 +146,7 @@ public class MapData : MonoBehaviour {
 	}
 
 	public RectTransform GetBackgroundBoss(int room) {
-		return backgrounds[room - 1];
+		return bossBackgrounds[room - 1];
 	}
 
 	public RectTransform GetTransition(RoomLink link) {
@@ -152,5 +174,9 @@ public class MapData : MonoBehaviour {
 
 	public Door[] allDoors {
 		get { return _doors.ToArray(); }
+	}
+
+	public MapMode currentMapMode {
+		get { return _mode; }
 	}
 }

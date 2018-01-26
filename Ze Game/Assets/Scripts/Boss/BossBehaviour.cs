@@ -97,7 +97,7 @@ public class BossBehaviour : MonoBehaviour {
 		BG = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
-		pool_KillerBlock = new ObjectPool(Resources.Load(PrefabNames.ENEMY_KILLERBLOCK) as GameObject);
+		pool_KillerBlock = new ObjectPool(Resources.Load(PrefabNames.ENEMY_KILLERBLOCK_BOSS) as GameObject);
 		anim = GetComponent<Animator>();
 		rigid = gameObject.GetComponent<Rigidbody2D>();
 		rigid.freezeRotation = true;
@@ -121,7 +121,7 @@ public class BossBehaviour : MonoBehaviour {
 		selfRender.sprite = Invincible;
 
 
-		yield return new WaitUntil(() => CameraMovement.doneMoving);
+		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
 
 		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 
@@ -346,12 +346,12 @@ public class BossBehaviour : MonoBehaviour {
 
 				yield return new WaitForSeconds(2);
 				Destroy(positioningCage.gameObject);
-				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovent.FLAPPY);
+				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovement.FLAPPY);
 				StartCoroutine(PipeGeneration());
 
 				yield return new WaitUntil(() => doneBouncing);
 
-				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovent.ARROW);
+				player.GetComponent<Player_Movement>().SetMovementMode(Player_Movement.PlayerMovement.ARROW);
 				Attack5 = false;
 				doneBouncing = false;
 				StartCoroutine(lerps.LerpPosition(gameObject,

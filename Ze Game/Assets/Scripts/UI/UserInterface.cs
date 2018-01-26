@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Igor.Constants.Strings;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,8 +22,8 @@ public class UserInterface : MonoBehaviour {
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	public static void ListenForEscape() {
 		Control.OnEscapePressed += Control_OnEscapePressed;
-		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
 		_sceneMode = UIScene.MAIN_MENU;
+		//Debug.Log("REENABLE");
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
@@ -107,11 +108,14 @@ public class UserInterface : MonoBehaviour {
 
 	private static void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
 		switch (scene.name) {
-			case "MainMenu": {
+			case SceneNames.MENU_SCENE: {
 
 				return;
 			}
-
+			case SceneNames.GAME1_SCENE: {
+				M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
+				return;
+			}
 			default: {
 				return;
 			}

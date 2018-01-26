@@ -11,6 +11,7 @@ public class LaserField : MonoBehaviour {
 
 	private IEnumerator LaserAvoidance() {
 		while (M_Player.player.GetCurrentBackground() == MapData.script.GetBackground(5)) {
+			print("Hello");
 			float waitTime = Random.Range(.4f, 1.1f); //Hard .6,1  //walk .4,1.1
 			yield return new WaitForSeconds(waitTime);
 			int amountSpawned = Control.currDifficulty < 2 ? 1 : 2;

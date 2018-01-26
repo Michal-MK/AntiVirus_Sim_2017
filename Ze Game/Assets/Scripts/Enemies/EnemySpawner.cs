@@ -6,23 +6,22 @@ using Igor.Constants.Strings;
 public class EnemySpawner : MonoBehaviour {
 
 	#region Prefabs
-	public GameObject foundation;
+	public GameObject turretBase;
 	public GameObject deathBlock;
+	private ObjectPool pool_Enemy_Icicle;
 	#endregion
-
-	public M_Player player;
 
 	private RectTransform arrowtrapBG;
 	private RectTransform killerWallBG;
 
-	public GameObject[] arrowTraps;
-	public GameObject ICEPooler;
+	public TurretAttack[] turrets;
 
 	private List<GameObject> killerBlocks = new List<GameObject>();
 
 	private bool isInvokingKillerWall = false;
 
 	public List<GameObject> KWProjectiles = new List<GameObject>();
+
 
 	private void Awake() {
 		SignPost.OnAvoidanceBegin += SpawnAvoidance;
@@ -31,9 +30,15 @@ public class EnemySpawner : MonoBehaviour {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
+	private void Start() {
+		UpdatePrefabs(MapData.script.currentMapMode);
+	}
+
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
-			SpawnKillerBlock();
+		if (data.player.currentBGName == MapData.script.GetBackground(1).name) {
+			for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
+				SpawnKillerBlock();
+			}
 		}
 	}
 
@@ -67,23 +72,23 @@ public class EnemySpawner : MonoBehaviour {
 			new Vector3(bgx - 10, -bgy + 10, 0),
 			new Vector3(-bgx + 10, -bgy + 10, 0)
 		};
-		arrowTraps = new GameObject[4];
-		for (int i = 0; i < arrowTraps.Length; i++) {
-			arrowTraps[i] = Instantiate(foundation, pos + (Vector3)positions[i], Quaternion.identity, transform);
+		turrets = new TurretAttack[4];
+		for (int i = 0; i < turrets.Length; i++) {
+			turrets[i] = Instantiate(turretBase, pos + (Vector3)positions[i], Quaternion.identity, transform).GetComponent<TurretAttack>();
+			turrets[i].target = M_Player.player.gameObject;
+			turrets[i].useDefaultTiming = true;
+			turrets[i].applyRandomness = true;
 		}
 		ClearKillerBlocks();
 	}
 
 	public void DespawnAvoidance() {
-		foreach (GameObject deltrap in arrowTraps) {
-			Destroy(deltrap);
+		foreach (TurretAttack turret in turrets) {
+			Destroy(turret.gameObject);
 		}
 	}
 
 	public void SpawnKillerBlock() {
-		if (player == null) {
-			return;
-		}
 
 		int totalBlocks = ((Coin.coinsCollected + 5) * (1 + Control.currDifficulty));
 
@@ -93,7 +98,7 @@ public class EnemySpawner : MonoBehaviour {
 			GameObject block = Instantiate(deathBlock);
 
 			block.transform.position = -Vector2.one * 1000;
-			block.transform.localScale = new Vector3(scale, scale, 0);
+			block.transform.localScale = new Vector3(scale, scale, 1);
 			block.name = "Killerblock";
 			block.transform.SetParent(transform);
 			killerBlocks.Add(block);
@@ -108,7 +113,6 @@ public class EnemySpawner : MonoBehaviour {
 
 	public IEnumerator SpawnKillerWall(float spawnDelay) {
 		isInvokingKillerWall = true;
-		ObjectPool pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE) as GameObject);
 		int diff = Control.currDifficulty;
 
 		while (isInvokingKillerWall) {
@@ -159,6 +163,23 @@ public class EnemySpawner : MonoBehaviour {
 	public Vector3 KWProjectilePositions() {
 		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2,
 						   Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2));
+	}
+
+	public void UpdatePrefabs(MapData.MapMode mode) {
+		switch (mode) {
+			case MapData.MapMode.LIGHT: {
+				pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE) as GameObject);
+				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK) as GameObject;
+				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET) as GameObject;
+				return;
+			}
+			case MapData.MapMode.DARK: {
+				pool_Enemy_Icicle =  new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + "_Dark") as GameObject);
+				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK + "_Dark") as GameObject;
+				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET + "_Dark") as GameObject;
+				return;
+			}
+		}
 	}
 
 	private void OnDestroy() {

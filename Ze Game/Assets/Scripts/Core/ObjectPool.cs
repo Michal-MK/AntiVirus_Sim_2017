@@ -38,4 +38,13 @@ class ObjectPool {
 	public List<GameObject> getAllInstantiated {
 		get { return instantiatedObjects; }
 	}
+
+	public void SwitchEnemyIllumination(MapData.MapMode mode) {
+		if (mode == MapData.MapMode.DARK) {
+			pooledObject = Resources.Load("Enemies/" + pooledObject.name + "_Dark") as GameObject;
+		}
+		else {
+			pooledObject = Resources.Load("Enemies/" + pooledObject.name.Replace("_Dark", "")) as GameObject;
+		}
+	}
 }

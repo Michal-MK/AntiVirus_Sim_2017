@@ -3,10 +3,8 @@ using UnityEngine;
 using Igor.Constants.Strings;
 
 public delegate void BackgroundChanged(RectTransform background, M_Player sender);
-public delegate void CoinEvents(M_Player sender);
-public delegate void SpikeEvents(M_Player sender);
 public delegate void PlayerColision(M_Player sender, GameObject other);
-public delegate void PlayerDeath(M_Player sender);
+public delegate void SimplePlayerEvent(M_Player sender);
 
 public class M_Player : MonoBehaviour {
 	#region PrefabReferences
@@ -17,7 +15,7 @@ public class M_Player : MonoBehaviour {
 	private Sprite previous;
 	#endregion
 
-	public static int gameProgression;
+	private static int _gameProgression;
 	private string currentBG_name;
 
 	public bool newGame = true;
@@ -37,13 +35,15 @@ public class M_Player : MonoBehaviour {
 	public static event PlayerColision OnCoinPickup;
 	public static event PlayerColision OnTargetableObjectCollision;
 	public static event Zoom.Zooming OnZoomModeSwitch;
-	public static event PlayerDeath OnPlayerDeath;
+	public static event SimplePlayerEvent OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
 
 	public enum PlayerState {
 		NORMAL,
-		ATTACKING
+		ATTACKING,
+		INVERSE,
+		INVERSE_ATTACKING
 	}
 
 	private void Awake() {
@@ -72,7 +72,7 @@ public class M_Player : MonoBehaviour {
 	private IEnumerator DelayIntro() {
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR
-		if (SaveManager.current == null) {
+		if (!Control.script.allowTesting && SaveManager.current == null) {
 			UnityEditor.EditorApplication.isPlaying = false;
 		}
 #endif
@@ -86,7 +86,6 @@ public class M_Player : MonoBehaviour {
 
 			Control.currAttempt = attempts;
 		}
-
 		Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
 		Player_Movement.canMove = true;
 	}
@@ -206,6 +205,7 @@ public class M_Player : MonoBehaviour {
 
 	public RectTransform GetCurrentBackground() {
 		if (!string.IsNullOrEmpty(currentBG_name)) {
+			print(currentBG_name);
 			return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 		}
 		else {
@@ -214,12 +214,26 @@ public class M_Player : MonoBehaviour {
 				return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 			}
 			catch {
-				throw new System.Exception("No background assigned to player!");
+				if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "ZZ Debug Scene") {
+					return GameObject.Find("Background").GetComponent<RectTransform>();
+				}
+				else {
+					throw new System.Exception("No background assigned to player!");
+				}
 			}
 		}
 	}
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+	}
+
+	public static int gameProgression {
+		get { return _gameProgression; }
+		set {
+			_gameProgression = value;
+			print(gameProgression);
+
+		}
 	}
 }

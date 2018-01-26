@@ -5,25 +5,28 @@ using Igor.Constants.Strings;
 
 public class Canvas_Renderer : MonoBehaviour {
 
-	public Text info_S;
-	Animator Slide;
+	public Text slideInInfo;
+	private Animator slideAnim;
 
-	public Animator InfoPanel;
-	public Image InfoPanelImg;
-	public Text InfoPanelText;
+	public GameObject infoPanel;
+	private Animator infoPanel_anim;
+	private Text infoPanel_Text;
 
-	public Animator Spikec;
-	public Animator Coinc;
+	public Text coinCounter;
+	public Text spikeCounter;
 
-	public Text CoinC;
-	public Text SpikeC;
-
-	public GameObject[] directions = new GameObject[4];
+	private GameObject topDirectionArrows;
+	private GameObject rightDirectionArrows;
+	private GameObject bottomDirectionArrows;
+	private GameObject leftDirectionArrows;
 
 	public bool isRunning = false;
+
 	private string tempDisplayedText;
-	private Color32 defaultColor;
+
 	public static Canvas_Renderer script;
+
+	private Coroutine displayingInfoRoutine;
 
 	private void Awake() {
 		if (script == null) {
@@ -32,71 +35,92 @@ public class Canvas_Renderer : MonoBehaviour {
 		else if (script != this) {
 			Destroy(gameObject);
 		}
-		defaultColor = new Color32(255, 255, 255, 100);
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		Camera.main.orthographicSize = data.core.camSize;
-		Canvas_Renderer.script.InfoRenderer(null, data.shownHints.currentlyDisplayedSideInfo);
+		InfoRenderer(null, data.shownHints.currentlyDisplayedSideInfo);
 	}
 
 	private void Start() {
-		Slide = info_S.gameObject.GetComponent<Animator>();
-		defaultColor = InfoPanelImg.color;
+		slideAnim = slideInInfo.GetComponent<Animator>();
+		infoPanel_anim = infoPanel.GetComponent<Animator>();
+		infoPanel_Text = infoPanel.GetComponentInChildren<Text>();
+
+		Transform dirArrows = transform.Find("_DirectionArrows");
+		topDirectionArrows = dirArrows.Find("Up").gameObject;
+		rightDirectionArrows = dirArrows.Find("Right").gameObject;
+		bottomDirectionArrows = dirArrows.Find("Down").gameObject;
+		leftDirectionArrows = dirArrows.Find("Left").gameObject;
 	}
 
-	public void InfoRenderer(string displayedTextMain, string displayedTextSide, Color32? color = null) {
-		//If we are already displaying something, wait for it to finish, and try again then.
+	public void InfoRenderer(string displayedTextMain, string displayedTextSide) {
 		if (isRunning) {
-			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide, color));
+			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide));
 			return;
 		}
 
-		if (color != null) {
-			InfoPanelImg.color = (Color32)color;
-		}
-		else {
-			InfoPanelImg.color = defaultColor;
-		}
-
 		tempDisplayedText = displayedTextSide;
+
 		if (displayedTextMain != null) {
-			InfoPanelText.text = displayedTextMain;
-			InfoPanel.SetTrigger("Down");
+			StartCoroutine(ReplaceText(displayedTextMain));
+			infoPanel_anim.SetTrigger("Down");
 			isRunning = true;
 			Time.timeScale = 0;
+			displayingInfoRoutine = StartCoroutine(ResumeFromInfoPanel());
 		}
 		else if (displayedTextMain == null && displayedTextSide != null) {
 			StartCoroutine(SlideInfo(displayedTextSide));
 		}
 	}
 
-	private IEnumerator RetryLater(string main, string side, Color32? color = null) {
+	private IEnumerator RetryLater(string main, string slide) {
 		yield return new WaitWhile(() => isRunning == true);
-		InfoRenderer(main, side, color);
+		InfoRenderer(main, slide);
 	}
 
-	private void Update() {
-		if (isRunning && Input.GetButtonDown("Submit")) {
-			InfoPanel.SetTrigger("Up");
-			isRunning = false;
-			Time.timeScale = 1;
-			StartCoroutine(SlideInfo(tempDisplayedText));
-		}
+	private IEnumerator ResumeFromInfoPanel() {
+		yield return new WaitUntil(() => Input.GetButtonDown(InputNames.SUBMIT));
+		yield return null;
+		infoPanel_anim.SetTrigger("Up");
+		isRunning = false;
+		Time.timeScale = 1;
+		StartCoroutine(SlideInfo(tempDisplayedText));
+		StopCoroutine(displayingInfoRoutine);
+		displayingInfoRoutine = null;
 	}
+
 	private IEnumerator SlideInfo(string textToDisplay) {
-		if (!info_S.text.StartsWith("DEFAULT")) {
-			Slide.SetTrigger("SlideOut");
-		}
 		yield return new WaitForSeconds(1);
-		info_S.text = textToDisplay;
-		Slide.SetTrigger("SlideIn");
+		slideInInfo.text = textToDisplay;
+		slideAnim.SetTrigger("SlideIn");
 	}
 
+	private IEnumerator ReplaceText(string newText) {
+		yield return new WaitForSecondsRealtime(.15f);
+		infoPanel_Text.text = newText;
+	}
 
 	public void DisplayDirection(Directions dir) {
-		StartCoroutine(Pulse(directions[(int)dir]));
+		switch (dir) {
+			case Directions.TOP: {
+				StartCoroutine(Pulse(topDirectionArrows));
+				break;
+			}
+			case Directions.RIGHT: {
+				StartCoroutine(Pulse(rightDirectionArrows));
+				break;
+			}
+			case Directions.BOTTOM: {
+				StartCoroutine(Pulse(bottomDirectionArrows));
+				break;
+			}
+			case Directions.LEFT: {
+				StartCoroutine(Pulse(leftDirectionArrows));
+				break;
+			}
+		}
 	}
 
 	private IEnumerator Pulse(GameObject info) {
@@ -109,17 +133,16 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	public void UpdateCounters(string name = null) {
-
 		if (name == ObjNames.COIN) {
-			CoinC.text = "x " + Coin.coinsCollected;
+			coinCounter.text = "x " + Coin.coinsCollected;
 
 			if (Coin.coinsCollected == 5) {
-				CoinC.transform.localPosition += new Vector3(50, 0, 0);
-				CoinC.text = CoinC.text + " Completed!";
+				coinCounter.transform.localPosition += new Vector3(50, 0, 0);
+				coinCounter.text = coinCounter.text + " Completed!";
 			}
 		}
 		if (name == ObjNames.SPIKE) {
-			SpikeC.text = "x " + (Spike.spikesCollected);
+			spikeCounter.text = "x " + (Spike.spikesCollected);
 		}
 
 		if (string.IsNullOrEmpty(name)) {
@@ -129,7 +152,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 	private void OnDestroy() {
 		script = null;
-		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
 

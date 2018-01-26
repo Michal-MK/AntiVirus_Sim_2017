@@ -1,5 +1,6 @@
+Bugs:
+
 Guidearrow texture quality - fixed
-Audiobalance
 door 1-2 circuit middle ending visible dark on blue - fixed
 can save when in gameover - fixed
 saves are still ass - improved fixed ??
@@ -7,3 +8,19 @@ quitting to main menu does't do a transition - fixed
 lodaing a save doesn't start the timer - fixed
 pausing in game doesn"t allow unpoausing for some reason - fixed
 menu buttons can still be glitched - fixed
+
+maze antiSameSpot is not working - fixed ?
+InfoRenderer can spaz out on multiple things ot display at once - fixed
+Attack sprite eith hands is not rendering properly - fixed
+bottom particles pop on the screen as they spawn - fixed
+room 4 has snow music - fixed imo
+you don't get stopped on collision with mazeescape - fixed
+
+post maze door is open whhen it should not be after loading/restart - fixed
+zooming does't work - fixed
+Audiobalance
+
+
+Features:
+
+implement chase sequence with avoidance2 music

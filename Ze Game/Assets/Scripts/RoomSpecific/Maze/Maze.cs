@@ -11,7 +11,6 @@ public class Maze : MonoBehaviour {
 	public GameObject WallT;
 	public GameObject WallIDmg;
 	public GameObject WallTDmg;
-	public GameObject player;
 
 	public GameObject teleport;
 	public RectTransform mazeBackground;
@@ -38,6 +37,8 @@ public class Maze : MonoBehaviour {
 	private int Yposition = 0;
 	public bool run = true;
 	private GameObject chosenNeighbor;
+
+	public Vector2 playerEntrancePosition;
 
 	void Start() {
 
@@ -477,10 +478,9 @@ public class Maze : MonoBehaviour {
 
 
 	public void MazeEscape() {
-		Vector2 rndEdge = GetEdgeCell();
+		Vector2 rndEdge = GetEdgeCell(playerEntrancePosition);
 		teleport.transform.position = grid[(int)rndEdge.x, (int)rndEdge.y].transform.position;
 	}
-
 
 	public void MazeStopped() {
 		if (neighbors.Count == 0 && stack.Count <= 1) {

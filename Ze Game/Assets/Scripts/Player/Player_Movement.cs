@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Igor.Constants.Strings;
 
 public class Player_Movement : MonoBehaviour {
 
-	public enum PlayerMovent {
+	public enum PlayerMovement {
 		ARROW,
 		MOUSE,
-		FLAPPY
+		FLAPPY,
+		INVERT,
+		REVERT,
+		TELEPORT
 	}
 
-	private PlayerMovent movementMode = 0;
+	private PlayerMovement movementMode = 0;
+	private PlayerMovement movementModeModifier;
 
 	new public Rigidbody2D rigidbody;
 
@@ -33,11 +38,11 @@ public class Player_Movement : MonoBehaviour {
 
 	private void FixedUpdate() {
 		switch (movementMode) {
-			case PlayerMovent.ARROW: {
+			case PlayerMovement.ARROW: {
 				ArrowMove();
 				break;
 			}
-			case PlayerMovent.MOUSE: {
+			case PlayerMovement.MOUSE: {
 				Move();
 				throw new System.NotImplementedException();
 			}
@@ -45,13 +50,13 @@ public class Player_Movement : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (movementMode == PlayerMovent.FLAPPY) {
+		if (movementMode == PlayerMovement.FLAPPY) {
 			Flappy();
 		}
 	}
 
 	//Moving the Character using a Rigidbody 2D
-	public void Move() {
+	private void Move() {
 		if (_canMove) {
 			if (Input.GetAxis("Mouse X") > 0) {
 				rigidbody.AddForce(new Vector2(movementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
@@ -72,7 +77,7 @@ public class Player_Movement : MonoBehaviour {
 	}
 
 	//Moving the Character using a Keyboard
-	public void ArrowMove() {
+	private void ArrowMove() {
 
 		if (_canMove) {
 			if (Input.GetAxis("VertMovement") > 0) {
@@ -126,26 +131,7 @@ public class Player_Movement : MonoBehaviour {
 		}
 	}
 
-	//Moving the character FlappyBird style
-	public void SetMovementMode(PlayerMovent type) {
-		switch (type) {
-			case PlayerMovent.FLAPPY: {
-				print("Switching to flappy mode.");
-				rigidbody.gravityScale = flappyGravity;
-				rigidbody.drag = 0;
-				movementMode = PlayerMovent.FLAPPY;
-				return;
-			}
-			case PlayerMovent.ARROW: {
-				print("Switching from flappy mode.");
-				rigidbody.gravityScale = 0;
-				rigidbody.drag = movementDrag;
-				movementMode = PlayerMovent.ARROW;
-				return;
-			}
-		}
-	}
-
+	//Move character using clicks simirar to FlappyBird
 	private void Flappy() {
 		if (_canMove) {
 			if (Input.GetAxis("VertMovement") > 0.5f) {
@@ -161,16 +147,111 @@ public class Player_Movement : MonoBehaviour {
 			}
 		}
 	}
-
 	private IEnumerator FlapAgain() {
 		yield return new WaitUntil(() => Input.GetAxis("VertMovement") <= 0.5f);
 		canFlapAgain = true;
 	}
 
+	private IEnumerator Teleportation() {
+		SpriteRenderer[] tpNodes = transform.Find("_Teleportation").GetComponentsInChildren<SpriteRenderer>();
+		Sprite ready = tpNodes[0].sprite;
+		Sprite idle = tpNodes[1].sprite;
+		tpNodes[0].sprite = idle;
+		transform.Find("_Teleportation").gameObject.SetActive(true);
+
+		yield return null;
+		//Make it absoule and use 0.5 as triggering range to support controllers
+		while (movementMode == PlayerMovement.TELEPORT) {
+			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 || Input.GetAxis(InputNames.MOVEMENT_VERTICAL) != 0);
+			//print("Hor " + Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) + ", Vert " + Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
+
+			Directions choice = Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 ? DetermineDirection(true, Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) : DetermineDirection(false, Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
+
+			tpNodes[(int)choice].sprite = ready;
+			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) == 0 && Input.GetAxis(InputNames.MOVEMENT_VERTICAL) == 0);
+
+			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 || Input.GetAxis(InputNames.MOVEMENT_VERTICAL) != 0);
+			Directions secondaryChoice = Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 ? DetermineDirection(true, Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) : DetermineDirection(false, Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
+
+			if(choice == secondaryChoice) {
+				//Do something prettier
+				transform.position = tpNodes[(int)secondaryChoice].transform.position;
+			}
+			tpNodes[(int)choice].sprite = idle;
+			if (movementMode == PlayerMovement.TELEPORT) {
+				yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) == 0 && Input.GetAxis(InputNames.MOVEMENT_VERTICAL) == 0);
+			}
+		}
+		tpNodes[0].sprite = ready;
+		tpNodes[1].sprite = idle;
+		transform.Find("_Teleportation").gameObject.SetActive(false);
+	}
+
+
+	private Directions DetermineDirection(bool isHorizontal, float value) {
+		if (isHorizontal) {
+			return value > 0 ? Directions.RIGHT : Directions.LEFT;
+		}
+		else {
+			return value > 0 ? Directions.TOP : Directions.BOTTOM;
+		}
+	}
+
+	//Moving the character FlappyBird style
+	public void SetMovementMode(PlayerMovement type) {
+		switch (type) {
+			case PlayerMovement.FLAPPY: {
+				//print("Switching to flappy mode.");
+				rigidbody.gravityScale = flappyGravity;
+				rigidbody.drag = 0;
+				break;
+			}
+			case PlayerMovement.ARROW: {
+				print("Switching to arrow mode.");
+				rigidbody.gravityScale = 0;
+				rigidbody.drag = movementDrag;
+				break;
+			}
+			case PlayerMovement.INVERT: {
+				if (type != movementModeModifier) {
+					print("Inverting.");
+					movementSpeed = -movementSpeed;
+					movementModeModifier = type;
+				}
+				return;
+			}
+			case PlayerMovement.REVERT: {
+				if (movementModeModifier == PlayerMovement.INVERT) {
+					print("Reverting.");
+					movementSpeed = -movementSpeed;
+					movementModeModifier = type;
+				}
+				return;
+			}
+			case PlayerMovement.TELEPORT: {
+				StartCoroutine(Teleportation());
+				break;
+			}
+		}
+		if (movementMode == PlayerMovement.TELEPORT) {
+			StopCoroutine(Teleportation());
+		}
+		movementMode = type;
+	}
+
+
 
 	public static bool canMove {
 		get { return _canMove; }
 		set { _canMove = value; }
+	}
+
+	public PlayerMovement getCurrentMovementMode {
+		get { return movementMode; }
+	}
+
+	public PlayerMovement getCurrentMovementModifier {
+		get { return movementModeModifier; }
 	}
 
 	private void OnDestroy() {

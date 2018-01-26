@@ -121,7 +121,7 @@ public class BossHealth : MonoBehaviour {
 
 	private void CamFadeOut_OnCamFullyFaded() {
 		MapData.script.Progress(M_Player.gameProgression);
-		MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room1_1);
+		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
 		M_Player.player.transform.position = new Vector3(302, -124, 0);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;

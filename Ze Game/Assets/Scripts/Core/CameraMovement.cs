@@ -7,11 +7,9 @@ public class CameraMovement : MonoBehaviour {
 
 	public static event Zoom.Zooming OnZoomModeSwitch;
 
-	public RectTransform bg;
-	public RectTransform bossRoom;
-	public RectTransform player;
+	private RectTransform playerRect;
 
-	private Vector3 cam_pos;
+	private RectTransform bg;
 	private Camera cam;
 	private float camWidht;
 	private float camHeight;
@@ -24,10 +22,10 @@ public class CameraMovement : MonoBehaviour {
 	public bool inBossRoom = false;
 	public bool inMaze = false;
 
-	public ParticleSystem psA;
-	public ParticleSystem psB;
+	public ParticleSystem psAbove;
+	public ParticleSystem psBelow;
 
-	public static bool doneMoving = true;
+	private bool _doneMoving = true;
 	public const float defaultCamSize = 15;
 
 	public static CameraMovement script;
@@ -48,6 +46,8 @@ public class CameraMovement : MonoBehaviour {
 	void Start() {
 		Cursor.visible = false;
 		cam = GetComponent<Camera>();
+		playerRect = M_Player.player.GetComponent<RectTransform>();
+		bg = M_Player.player.GetCurrentBackground();
 		BackGroundS.Add(bg.gameObject);
 		camWidht = cam.aspect * cam.orthographicSize;
 		camHeight = cam.orthographicSize;
@@ -55,17 +55,17 @@ public class CameraMovement : MonoBehaviour {
 
 	#region Events
 	private void MazeEntrance_OnMazeEnter() {
-		psA.gameObject.SetActive(false);
-		psB.gameObject.SetActive(false);
+		psAbove.gameObject.SetActive(false);
+		psBelow.gameObject.SetActive(false);
 		inMaze = true;
 	}
 
 	private void MazeEscape_OnMazeEscape() {
-		ParticleSystem.ShapeModule shapeA = psA.shape;
-		ParticleSystem.ShapeModule shapeB = psB.shape;
+		ParticleSystem.ShapeModule shapeA = psAbove.shape;
+		ParticleSystem.ShapeModule shapeB = psBelow.shape;
 
-		psA.gameObject.SetActive(true);
-		psB.gameObject.SetActive(true);
+		psAbove.gameObject.SetActive(true);
+		psBelow.gameObject.SetActive(true);
 
 		shapeA.radius = cam.orthographicSize * 2;
 		shapeB.radius = cam.orthographicSize * 2;
@@ -74,7 +74,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
-		SetParticleLifetime(25);
+		BossFightCam(1);
 	}
 
 	#endregion
@@ -250,13 +250,12 @@ public class CameraMovement : MonoBehaviour {
 		camHeight = cam.orthographicSize;
 
 		if (!inBossRoom && !inMaze) {
-			cam_pos = new Vector3(camX, camY, -10);
-			gameObject.transform.position = cam_pos;
+			gameObject.transform.position = new Vector3(camX, camY, -10);
 		}
 	}
 
 	public IEnumerator LerpSize(float startSize, float finalSize, float lerpSpeedMult, Vector3 pos = default(Vector3)) {
-		doneMoving = false;
+		_doneMoving = false;
 		if (pos != default(Vector3)) {
 			transform.position = pos;
 			yield return new WaitForSeconds(0.5f);
@@ -266,43 +265,43 @@ public class CameraMovement : MonoBehaviour {
 			yield return null;
 		}
 		Camera.main.orthographicSize = finalSize;
-		doneMoving = true;
+		_doneMoving = true;
 	}
 
 	public float camX {
 		get {
-			if (player.position.x > currentBGX + middle.x - camWidht) {
+			if (playerRect.position.x > currentBGX + middle.x - camWidht) {
 
 				return currentBGX + middle.x - camWidht;
 
 			}
-			else if (player.position.x < -currentBGX + middle.x + camWidht) {
+			else if (playerRect.position.x < -currentBGX + middle.x + camWidht) {
 
 				return -currentBGX + middle.x + camWidht;
 
 			}
 			else {
 
-				return player.position.x;
+				return playerRect.position.x;
 			}
 		}
 	}
 
 	public float camY {
 		get {
-			if (player.position.y > currentBGY + middle.y - camHeight) {
+			if (playerRect.position.y > currentBGY + middle.y - camHeight) {
 
 				return currentBGY + middle.y - camHeight;
 
 			}
-			else if (player.position.y < -currentBGY + middle.y + camHeight) {
+			else if (playerRect.position.y < -currentBGY + middle.y + camHeight) {
 
 				return -currentBGY + middle.y + camHeight;
 
 			}
 			else {
 
-				return player.position.y;
+				return playerRect.position.y;
 			}
 		}
 	}
@@ -310,31 +309,25 @@ public class CameraMovement : MonoBehaviour {
 	public void BossFightCam(int bossNo) {
 		inBossRoom = true;
 
-		bossRoom = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + bossNo).GetComponent<RectTransform>();
+		RectTransform bossRoom = MapData.script.GetBackgroundBoss(bossNo);
 
 		float bossX = bossRoom.position.x;
 		float bossY = bossRoom.position.y;
 
-
-		player.position = new Vector3(bossX, bossY, 0);
+		playerRect.position = new Vector3(bossX, bossY, 0);
 		gameObject.transform.position = new Vector3(bossX, bossY, -10);
 		cam.orthographicSize = defaultCamSize;
-		ParticleSystem.ShapeModule shapeA = psA.shape;
-		psB.gameObject.SetActive(false);
 
-		shapeA.radius = 108 * 2;
-		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
-		ParticleSystem.MainModule main = psA.main;
-		main.startLifetime = 25;
+		SetParticleLifetime(25, bossRoom);
 	}
 
-	public void SetParticleLifetime(float time) {
-		ParticleSystem.ShapeModule shapeA = psA.shape;
-		psB.gameObject.SetActive(false);
+	public void SetParticleLifetime(float time, RectTransform bossRoom) {
+		ParticleSystem.ShapeModule shapeA = psAbove.shape;
+		psBelow.gameObject.SetActive(false);
 		print("Hardocded values... ");
 		shapeA.radius = 108 * 2;
-		psA.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
-		ParticleSystem.MainModule main = psA.main;
+		psAbove.transform.position = bossRoom.transform.position + new Vector3(0, bossRoom.sizeDelta.y / 2, 0);
+		ParticleSystem.MainModule main = psAbove.main;
 		main.startLifetime = time;
 	}
 
@@ -344,6 +337,9 @@ public class CameraMovement : MonoBehaviour {
 		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 
+	public bool isCamereDoneMoving {
+		get { return _doneMoving; }
+	}
 
 }
 

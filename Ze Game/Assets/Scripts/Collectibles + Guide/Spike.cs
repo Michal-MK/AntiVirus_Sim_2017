@@ -48,7 +48,6 @@ public class Spike : MonoBehaviour {
 
 	public void SetPosition() {
 		stage = M_Player.gameProgression;
-
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 
@@ -101,7 +100,7 @@ public class Spike : MonoBehaviour {
 			gameObject.SetActive(true);
 		}
 		if (stage == 4) {
-			RectTransform roomPreBossBG = MapData.script.GetBackground(3);
+			RectTransform roomPreBossBG = MapData.script.GetBackground(4);
 			float x = roomPreBossBG.transform.position.x - roomPreBossBG.sizeDelta.x / 2 + 20;
 			float y = roomPreBossBG.transform.position.y + roomPreBossBG.sizeDelta.y / 2 - 20;
 			float z = 0f;

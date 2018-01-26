@@ -46,12 +46,11 @@ public class BossEntrance : MonoBehaviour {
 
 	private void BossTransition() {
 		RectTransform bossBG = MapData.script.GetBackgroundBoss(1);
-		MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room_1_boss);
+		MusicHandler.script.TransitionMusic(MusicHandler.script.room_1_boss);
 		GameObject spawnedBoss = Instantiate(boss, new Vector3(-370, -70, 0), Quaternion.identity);
 		spawnedBoss.name = "Boss";
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, HPHolder.transform);
 		health.name = "BossHealth";
-		CameraMovement.script.BossFightCam(1);
 		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, bossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(bossBG.position.x, bossBG.position.y, -10)));
 		bossHP.SetActive(true);
 		SaveManager.canSave = false;

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class LightningManager : MonoBehaviour {
-	public Light light;
+	new public Light light;
 
 	public bool oscilate;
 	private float angle = 0;

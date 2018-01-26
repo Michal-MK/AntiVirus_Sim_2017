@@ -6,16 +6,16 @@ namespace Igor.Minigames.Ships {
 	public class Ship {
 		protected Location[] position;
 		private int hp;
-		private ShipType _type;
+		//private ShipType _type;
 
 		public Ship(Location[] position, ShipType type) {
 			this.position = position;
 			hp = (int)type;
-			_type = type;
+			//_type = type;
 		}
 
 		public Ship(ShipType type) {
-			_type = type;
+			//_type = type;
 		}
 
 		public void RemoveFromEditor() {

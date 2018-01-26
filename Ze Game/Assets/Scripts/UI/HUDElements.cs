@@ -102,5 +102,7 @@ public class HUDElements : UserInterface {
 	}
 	private void OnDestroy() {
 		script = null;
+		PlayerAttack.OnAmmoChanged -= AmmoSwitch;
+		PlayerAttack.OnAmmoPickup -= SetVisibility;
 	}
 }

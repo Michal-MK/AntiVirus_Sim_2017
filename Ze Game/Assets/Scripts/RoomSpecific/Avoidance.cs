@@ -4,15 +4,13 @@ using UnityEngine.UI;
 
 public class Avoidance : MonoBehaviour {
 
-	public CameraMovement camMovement;
-
 	public bool performed = false;
-	public RectTransform player;
-	public GameObject door1;
 	public EnemySpawner spawner;
 	public Spike spike;
+
 	public float avoidDuration = 60;
-	public bool displayAvoidInfo = true;
+
+	private bool displayAvoidInfo = true;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -34,10 +32,10 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	public void StartAvoidance() {
-		door1.SetActive(true);
+		MapData.script.CloseDoor(new RoomLink(2, 3));
 		StartCoroutine(HoldAvoidance());
 		SaveManager.canSave = false;
-		camMovement.RaycastForRooms();
+		CameraMovement.script.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
 
@@ -46,16 +44,16 @@ public class Avoidance : MonoBehaviour {
 		spawner.DespawnAvoidance();
 		yield return new WaitForSeconds(5);
 		SaveManager.canSave = true;
-		door1.SetActive(false);
+		MapData.script.OpenDoor(new RoomLink(2, 3));
 		spike.SetPosition();
-		camMovement.RaycastForRooms();
+		CameraMovement.script.RaycastForRooms();
 		Canvas_Renderer.script.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();
 	}
 
 	private IEnumerator TimeLeft() {
-		Text SideText = Canvas_Renderer.script.info_S;
+		Text SideText = Canvas_Renderer.script.slideInInfo;
 		int timeLeft = (int)avoidDuration - 1;
 		bool show = false;
 
@@ -78,5 +76,9 @@ public class Avoidance : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		SignPost.OnAvoidanceBegin -= SignPost_OnAvoidanceBegin;
+	}
+
+	public bool save_displayAvoidInfo {
+		get { return displayAvoidInfo; }
 	}
 }

@@ -19,17 +19,12 @@ public class SaveManager : MonoBehaviour {
 
 	public static SaveFile current;
 
-	private bool bossSpawned = false;
-
-
 	#region SaveModifiers
 	private Vector3 automaticSave_PreBoss1;
 	#endregion
 
 	private void Awake() {
-		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
 		saveButton_static = saveButton;
-
 		automaticSave_PreBoss1 = new Vector3(302, -130);
 	}
 
@@ -37,9 +32,6 @@ public class SaveManager : MonoBehaviour {
 		Control.script.saveManager = this;
 	}
 
-	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
-		bossSpawned = true;
-	}
 
 	public static void SaveNewGame(int difficulty) {
 		BinaryFormatter formatter = new BinaryFormatter();
@@ -120,10 +112,10 @@ public class SaveManager : MonoBehaviour {
 			#endregion
 
 			#region Hints data
-			newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.info_S.text;
+			newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.slideInInfo.text;
 			newSave.data.shownHints.shownAttempt = M_Player.player.newGame;
-			newSave.data.shownHints.shownAvoidanceInfo = avoidance.displayAvoidInfo;
-			newSave.data.shownHints.shownBlockInfo = block.showInfo;
+			newSave.data.shownHints.shownAvoidanceInfo = avoidance.save_displayAvoidInfo;
+			newSave.data.shownHints.shownBlockInfo = block.save_shownInfo;
 			newSave.data.shownHints.displayShootInfo = M_Player.player.pAttack.displayShootingInfo;
 			newSave.data.shownHints.shownDirectionsAfterSpikePickup = Spike.spikesCollected >= 1 ? true : false;
 			#endregion
@@ -147,10 +139,6 @@ public class SaveManager : MonoBehaviour {
 			yield return new WaitUntil(() => !saveButton.gameObject.activeInHierarchy);
 		}
 		ScreenCapture.CaptureScreenshot(imgFilePath);
-	}
-
-	private void OnDestroy() {
-		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
 	}
 
 	public static T DeepCopy<T>(T other) {

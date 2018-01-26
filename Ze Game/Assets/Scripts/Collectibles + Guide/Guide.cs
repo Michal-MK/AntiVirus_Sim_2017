@@ -5,21 +5,21 @@ public class Guide : MonoBehaviour {
 
 	public delegate void GuideTarget(GameObject target, bool isImmovable);
 
-	public M_Player player;
 
 	//Prefab
-	public GameObject Arrow;
+	public GameObject guidePrefab;
 
 
 	private Vector3 targetPosition;
 	private Vector3 playerPosition;
 	private GameObject pointArrow;
-	private Transform GuideObj;
+	private Transform guideTransform;
+	private RectTransform player;
 
 	private GameObject targetObj;
 
-	public Sprite guide;
-	public float r;
+	private Sprite guide;
+	private float radius;
 
 	private void Awake() {
 		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
@@ -36,7 +36,9 @@ public class Guide : MonoBehaviour {
 	}
 
 	void Start() {
-		GuideObj = GameObject.Find("Guide").transform;
+		guideTransform = GameObject.Find("Guide").transform;
+		player = M_Player.player.GetComponent<RectTransform>();
+		guide = guidePrefab.GetComponent<SpriteRenderer>().sprite;
 	}
 
 
@@ -45,6 +47,7 @@ public class Guide : MonoBehaviour {
 	}
 
 	private void M_Player_OnCoinPickup(M_Player sender, GameObject other) {
+		print("Hello");
 		if (Coin.coinsCollected <= 4) {
 			Recalculate(other, true);
 		}
@@ -71,27 +74,27 @@ public class Guide : MonoBehaviour {
 		Destroy(pointArrow);
 
 		targetPosition = new Vector3(destination.transform.position.x, destination.transform.position.y, 0);
-		playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, 0);
+		playerPosition = new Vector3(player.position.x, player.position.y, 0);
 
-		pointArrow = Instantiate(Arrow, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - playerPosition)));
-		pointArrow.transform.SetParent(GuideObj);
+		pointArrow = Instantiate(guidePrefab, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - playerPosition)));
+		pointArrow.transform.SetParent(guideTransform);
 
 		gameObject.SetActive(true);
 	}
 
 	void Update() {
 		if (pointArrow != null && Timer.isRunning == true) {
-			Vector2 playerMinusDestination = (Vector2)targetObj.transform.position - (Vector2)player.transform.position;
+			Vector2 playerMinusDestination = (Vector2)targetObj.transform.position - (Vector2)player.position;
 			Vector2 playerMinusDestinationNormal = new Vector2(playerMinusDestination.y, -playerMinusDestination.x);
 
 			float a = playerMinusDestinationNormal.x;
 			float b = playerMinusDestinationNormal.y;
-			float m = player.transform.position.x;
-			float n = player.transform.position.y;
+			float m = player.position.x;
+			float n = player.position.y;
 			float c = -a * m - b * n;
 
 			if (Vector3.Distance(playerPosition, targetPosition) > 10) {
-				r = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition), 5, 10);
+				radius = Mathf.Clamp(Vector3.Distance(playerPosition, targetPosition), 5, 10);
 				SpriteRenderer sprt = pointArrow.GetComponent<SpriteRenderer>();
 				sprt.sprite = guide;
 			}
@@ -102,13 +105,13 @@ public class Guide : MonoBehaviour {
 			Debug.DrawRay(new Vector3(m, n, 0), playerMinusDestination);
 
 			targetPosition = new Vector3(targetObj.transform.position.x, targetObj.transform.position.y, 0);
-			playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, 0);
+			playerPosition = new Vector3(player.position.x, player.position.y, 0);
 
 			pointArrow.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - playerPosition));
 
 			if (targetPosition.x - m > 0) {
 
-				float X = 1 / (2 * (a * a + b * b)) * (Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c)) - 2 * a * b * n - 2 * a * c + 2 * b * b * m);
+				float X = 1 / (2 * (a * a + b * b)) * (Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * radius * radius + 2 * b * c * n + c * c)) - 2 * a * b * n - 2 * a * c + 2 * b * b * m);
 
 				float Yline;
 				float Ycirc;
@@ -117,37 +120,37 @@ public class Guide : MonoBehaviour {
 
 				float kinda_r = Mathf.Sqrt(Mathf.Pow((X - m), 2) + Mathf.Pow((Yline - n), 2));
 
-				if (kinda_r > r - 0.1f && kinda_r < r + 0.1f) {
+				if (kinda_r > radius - 0.1f && kinda_r < radius + 0.1f) {
 					pointArrow.transform.position = new Vector3(X, Yline, 0);
 					return;
 				}
 				else {
 					if (targetPosition.y - n > 0) {
-						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
+						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(radius, 2) - Mathf.Pow(X, 2));
 					}
 					else if (targetPosition.y - n < 0) {
-						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
+						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(radius, 2) - Mathf.Pow(X, 2));
 					}
 					else {
 						if (playerMinusDestination.y > 0) {
-							Ycirc = r;
+							Ycirc = radius;
 						}
 						else {
-							Ycirc = -r;
+							Ycirc = -radius;
 						}
 					}
 				}
 				kinda_r = (Mathf.Pow((X - m), 2)) + (Mathf.Pow((Ycirc - n), 2));
 
-				if (kinda_r > Mathf.Pow(r, 2) - 0.1f && kinda_r < Mathf.Pow(r, 2) + 0.1f) {
+				if (kinda_r > Mathf.Pow(radius, 2) - 0.1f && kinda_r < Mathf.Pow(radius, 2) + 0.1f) {
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
 				}
 				else {
 					if (playerMinusDestination.y > 0) {
-						Ycirc = r + n;
+						Ycirc = radius + n;
 					}
 					else {
-						Ycirc = -r + n;
+						Ycirc = -radius + n;
 					}
 					X = m;
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
@@ -155,7 +158,7 @@ public class Guide : MonoBehaviour {
 			}
 			else if (targetPosition.x - m < 0) {
 				float X = 1 / (2 * (a * a + b * b)) *
-					(-Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * r * r + 2 * b * c * n + c * c))
+					(-Mathf.Sqrt(Mathf.Pow(2 * a * b * n + 2 * a * c - 2 * b * b * m, 2) - 4 * (a * a + b * b) * (b * b * m * m + b * b * n * n - b * b * radius * radius + 2 * b * c * n + c * c))
 					- 2 * a * b * n - 2 * a * c + 2 * b * b * m);
 
 				float Yline;
@@ -165,37 +168,37 @@ public class Guide : MonoBehaviour {
 
 				float kinda_r = Mathf.Sqrt(Mathf.Pow((X - m), 2) + Mathf.Pow((Yline - n), 2));
 
-				if (kinda_r > r - 0.1f && kinda_r < r + 0.1f) {
+				if (kinda_r > radius - 0.1f && kinda_r < radius + 0.1f) {
 					pointArrow.transform.position = new Vector3(X, Yline, 0);
 					return;
 				}
 				else {
 					if (targetPosition.y - n > 0) {
-						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
+						Ycirc = n + Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(radius, 2) - Mathf.Pow(X, 2));
 					}
 					else if (targetPosition.y - n < 0) {
-						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(r, 2) - Mathf.Pow(X, 2));
+						Ycirc = n - Mathf.Sqrt(-Mathf.Pow(m, 2) + 2 * m * X + Mathf.Pow(radius, 2) - Mathf.Pow(X, 2));
 					}
 					else {
 						if (playerMinusDestination.y > 0) {
-							Ycirc = r;
+							Ycirc = radius;
 						}
 						else {
-							Ycirc = -r;
+							Ycirc = -radius;
 						}
 					}
 				}
 				kinda_r = (Mathf.Pow((X - m), 2)) + (Mathf.Pow((Ycirc - n), 2));
 
-				if (kinda_r > Mathf.Pow(r, 2) - 0.1f && kinda_r < Mathf.Pow(r, 2) + 0.1f) {
+				if (kinda_r > Mathf.Pow(radius, 2) - 0.1f && kinda_r < Mathf.Pow(radius, 2) + 0.1f) {
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);
 				}
 				else {
 					if (playerMinusDestination.y > 0) {
-						Ycirc = r + n;
+						Ycirc = radius + n;
 					}
 					else {
-						Ycirc = -r + n;
+						Ycirc = -radius + n;
 					}
 					X = m;
 					pointArrow.transform.position = new Vector3(X, Ycirc, 0);

@@ -6,6 +6,8 @@ using Igor.Constants.Strings;
 
 public class Control : MonoBehaviour {
 
+	public bool allowTesting = false;
+
 	public static Control script;
 
 	public SaveManager saveManager;
@@ -27,7 +29,6 @@ public class Control : MonoBehaviour {
 		}
 		else if (script != this) {
 			if (script.loadManager == null) {
-				print("Somehow we lost a reference to the load manager...");
 				script.loadManager = new LoadManager();
 			}
 			Destroy(gameObject);
@@ -136,7 +137,7 @@ public class Control : MonoBehaviour {
  * BossBehaviour: playerSpeedMultiplier, OnBossfightBegin
  * Coins: coinsCollected, OnNewTarget
  * Spike: spikesCollected, OnNewTarget
- * CameraMovement: OnZoomModeSwitch, doneMoving, CameraMovement
+ * CameraMovement: OnZoomModeSwitch, CameraMovement
  * CamFadeOut: CamFadeOut, OnCamFullyFaded
  * CanvasRenderer: CanvasRenderer
  * MapData: MapData

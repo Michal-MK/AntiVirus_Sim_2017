@@ -39,8 +39,7 @@ public class ElectricalBlock : Enemy {
 			yield return new WaitForSeconds(timeCycleIdle);
 			killerBlock.SetActive(false);
 			Vector3 pos = KBPositions();
-			killerBlock.transform.position = pos;
-			warnSign.transform.position = pos;
+			killerBlock.transform.parent.position = pos;
 			warnSign.SetActive(true);
 			yield return new WaitForSeconds(timeWarning);
 		}

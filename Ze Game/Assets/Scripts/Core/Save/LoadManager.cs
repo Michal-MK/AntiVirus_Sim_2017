@@ -3,48 +3,47 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using Igor.Constants.Strings;
+using System.Collections;
 
 public class LoadManager {
 
 	public delegate void SaveState(SaveData data);
 	public static event SaveState OnSaveDataLoaded;
-	private SaveFile loadedData;
 
 	private SaveData save;
 
 	public void Load(string fileToLoad) {
 
 		BinaryFormatter bf = new BinaryFormatter();
+		SaveFile saveFile;
 		using (FileStream file = File.Open(fileToLoad, FileMode.Open)) {
-			loadedData = (SaveFile)bf.Deserialize(file);
+			saveFile = (SaveFile)bf.Deserialize(file);
+			save = saveFile.data;
 		}
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-		SaveManager.current = loadedData;
+		SaveManager.current = saveFile;
 	}
 
 	public void Load(SaveData saveToLoad) {
 		save = saveToLoad;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
-		SceneManager.sceneLoaded += SceneLoadedWithData;
-	}
-
-	private void SceneLoadedWithData(Scene scene, LoadSceneMode mode) {
-		if (OnSaveDataLoaded != null) {
-			OnSaveDataLoaded(save);
-		}
-		SceneManager.sceneLoaded -= SceneLoadedWithData;
-
+		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 	}
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {
-		if (OnSaveDataLoaded != null) {
-			OnSaveDataLoaded(loadedData.data);
-		}
+		Control.script.StartCoroutine(DelayLoad());
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+	}
+
+	private IEnumerator DelayLoad() {
+		yield return new WaitForEndOfFrame();
+		if (OnSaveDataLoaded != null) {
+			OnSaveDataLoaded(save);
+		}
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {

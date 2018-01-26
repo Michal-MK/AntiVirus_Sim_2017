@@ -21,7 +21,6 @@ public class DisplaySaveFiles : MonoBehaviour {
 
 			FileInfo[] saveFiles = saveDirectory.GetFiles("*.Kappa");
 			for (int i = 0; i < saveFiles.Length; i++) {
-				print(saveFiles.Length);
 				using (FileStream file = new FileStream(saveFiles[i].FullName, FileMode.Open)) {
 					BinaryFormatter br = new BinaryFormatter();
 

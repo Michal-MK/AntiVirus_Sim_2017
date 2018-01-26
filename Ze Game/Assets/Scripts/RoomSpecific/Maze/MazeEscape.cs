@@ -3,12 +3,8 @@ using UnityEngine;
 
 public class MazeEscape : MonoBehaviour {
 
-	public GameObject player;
-	public RectTransform BG;
 	public Spike spike;
 	public MazeEntrance entrance;
-
-	public bool pathOpen = false;
 
 	public GameObject wall;
 
@@ -16,56 +12,48 @@ public class MazeEscape : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == "Player") {
-			StartCoroutine(FromMazeTrans());
-			MusicHandler.script.TrasnsitionMusic(MusicHandler.script.room1_1);
+			FromMazeTrans();
+			MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 		}
 	}
 
-	public IEnumerator FromMazeTrans() {
-		M_Player.gameProgression++;
+	public void FromMazeTrans() {
 		entrance.gameObject.SetActive(false);
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
-		yield return new WaitForSeconds(1.5f);
-		if(OnMazeEscape != null) {
+		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
+		Player_Movement.canMove = false;
+	}
+
+	private void CamFadeOut_OnCamFullyFaded() {
+		RectTransform room3BG = MapData.script.GetBackground(4);
+
+		if (OnMazeEscape != null) {
 			OnMazeEscape();
 		}
 
 		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		Zoom.canZoom = true;
-		player.transform.position = new Vector3(BG.position.x, BG.position.y + BG.sizeDelta.y / 2 - 10, 0);
+		M_Player.player.transform.position = new Vector3(room3BG.position.x, room3BG.position.y + room3BG.sizeDelta.y / 2 - 10, 0);
 		Camera.main.orthographicSize = 25;
-		Camera.main.transform.position = player.transform.position;
-		player.transform.localScale = Vector3.one;
+		Camera.main.transform.position = M_Player.player.transform.position;
+		M_Player.player.transform.localScale = Vector3.one;
 		spike.SetPosition();
 		spike.transform.localScale = Vector3.one;
 		StartCoroutine(FadeWalls());
-		pathOpen = true;
-
+		Player_Movement.canMove = true;
 		SaveManager.canSave = true;
+		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 
 	private IEnumerator FadeWalls() {
 		SpriteRenderer wallSprite = wall.GetComponent<SpriteRenderer>();
-
 		Color32 newColor;
 
-		for (float f = 255; f >= -1; f -= 0.5f) {
-			if (Time.timeScale != 1) {
-				f = f + 0.5f;
-				yield return null;
-			}
-			else {
-				newColor = new Color32(255, 255, 255, (byte)f);
-				wallSprite.color = newColor;
-
-				if (f > 0) {
-					yield return null;
-				}
-				else if (f <= 0) {
-					wall.SetActive(false);
-					break;
-				}
-			}
+		for (float f = 255; f >= 0; f -= 0.5f) {
+			newColor = new Color32(255, 255, 255, (byte)f);
+			wallSprite.color = newColor;
+			yield return null;
 		}
+		wall.SetActive(false);
 	}
 }

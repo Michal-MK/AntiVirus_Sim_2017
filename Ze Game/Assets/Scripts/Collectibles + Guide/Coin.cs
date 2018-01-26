@@ -89,6 +89,5 @@ public class Coin : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		M_Player.OnCoinPickup -= CoinBehavior;
-
 	}
 }

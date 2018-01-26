@@ -76,4 +76,7 @@ public class Zoom : MonoBehaviour {
 			shapeB.radius = Camera.main.orthographicSize * 2 + 10;			
 		}
 	}
+	private void OnDestroy() {
+		M_Player.OnZoomModeSwitch += M_Player_OnZoomModeSwitch;
+	}
 }
