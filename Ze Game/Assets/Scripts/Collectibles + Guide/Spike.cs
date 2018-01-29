@@ -11,7 +11,7 @@ public class Spike : MonoBehaviour {
 	//Loading information
 	private bool _shownDirAfterPickup = false;
 
-	public static event Guide.GuideTarget OnNewTarget;
+	public static event Guide.GuideTargetStatic OnNewTarget;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -26,11 +26,11 @@ public class Spike : MonoBehaviour {
 
 		if (!_shownDirAfterPickup) {
 			_shownDirAfterPickup = true;
-			Canvas_Renderer.script.InfoRenderer("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+			Canvas_Renderer.script.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 		}
 
 		if (spikesCollected >= 0 || spikesCollected <= 4) {
-			Canvas_Renderer.script.UpdateCounters("Spike");
+			Canvas_Renderer.script.UpdateCounters();
 		}
 
 		if (spikesCollected == 4) {
@@ -60,7 +60,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject,true);
+				OnNewTarget(transform.position);
 			}
 		}
 		if (stage == 1) {
@@ -72,7 +72,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject, true);
+				OnNewTarget(transform.position);
 			}
 		}
 		if (stage == 2) {
@@ -84,7 +84,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject, true);
+				OnNewTarget(transform.position);
 			}
 		}
 		if (stage == 3) {
@@ -108,7 +108,7 @@ public class Spike : MonoBehaviour {
 			gameObject.transform.position = new Vector3(x, y, z);
 			gameObject.SetActive(true);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject, true);
+				OnNewTarget(transform.position);
 			}
 		}
 		if (stage == 5) {
@@ -119,7 +119,7 @@ public class Spike : MonoBehaviour {
 	public void Hide() {
 		gameObject.SetActive(false);
 		if (OnNewTarget != null) {
-			OnNewTarget(null, true);
+			OnNewTarget(default(Vector3));
 		}
 	}
 
@@ -127,7 +127,7 @@ public class Spike : MonoBehaviour {
 		get { return _spikesCollected; }
 		set {
 			_spikesCollected = value;
-			Canvas_Renderer.script.UpdateCounters("Spike");
+			Canvas_Renderer.script.UpdateCounters();
 		}
 	}
 

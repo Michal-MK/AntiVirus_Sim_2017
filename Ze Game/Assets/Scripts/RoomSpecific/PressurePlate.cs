@@ -18,7 +18,7 @@ public class PressurePlate : MonoBehaviour {
 	public int attempts = 0;
 	public bool alreadyTriggered = false;
 
-	public static event Guide.GuideTarget OnNewTarget;
+	public static event Guide.GuideTargetStatic OnNewTarget;
 
 	private AudioSource sound;
 	private SpriteRenderer selfSprite;
@@ -73,7 +73,7 @@ public class PressurePlate : MonoBehaviour {
 				sound.Play();
 				spike.SetPosition();
 				if (OnNewTarget != null) {
-					OnNewTarget(spike.gameObject,true);
+					OnNewTarget(spike.transform.position);
 				}
 				BlockScript.pressurePlateTriggered = true;
 			}
@@ -83,10 +83,10 @@ public class PressurePlate : MonoBehaviour {
 		if (col.name == "Block") {
 			attempts++;
 			if (attempts == 1) {
-				Canvas_Renderer.script.InfoRenderer("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
+				Canvas_Renderer.script.DisplayInfo("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
 			}
 			if (attempts == 2) {
-				Canvas_Renderer.script.InfoRenderer(null, "Aaand again... darn.");
+				Canvas_Renderer.script.DisplayInfo(null, "Aaand again... darn.");
 			}
 			if (attempts == 3) {
 				CreateBarrier();
@@ -99,7 +99,7 @@ public class PressurePlate : MonoBehaviour {
 		}
 	}
 	public void CreateBarrier() {
-		Canvas_Renderer.script.InfoRenderer(null, "Ok, let me help you a little.");
+		Canvas_Renderer.script.DisplayInfo(null, "Ok, let me help you a little.");
 		GameObject protection = Instantiate(wall, transform.position + new Vector3(10, 0, 0), Quaternion.identity, transform.parent);
 		protection.name = "Blocker";
 		protection.GetComponent<BoxCollider2D>().isTrigger = true;

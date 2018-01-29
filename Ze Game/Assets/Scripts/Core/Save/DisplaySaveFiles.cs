@@ -6,9 +6,10 @@ using UnityEngine.UI;
 using Igor.Constants.Strings;
 
 public class DisplaySaveFiles : MonoBehaviour {
-	string BGName;
 	public GameObject SaveObj;
 	public RectTransform content;
+
+	private string BGName;
 
 	void Start() {
 		DisplaySaves();

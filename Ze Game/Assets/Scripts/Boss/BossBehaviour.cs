@@ -86,6 +86,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	private Vector2 calculatedVec;
 
+	private BossHealth health;
 	#endregion
 
 
@@ -94,14 +95,13 @@ public class BossBehaviour : MonoBehaviour {
 			OnBossfightBegin(this);
 		}
 		playerSpeedMultiplier = 5;
-		BG = GameObject.Find(BackgroundNames.BACKGROUND_BOSS_ + "1").GetComponent<RectTransform>();
-		player = GameObject.FindGameObjectWithTag("Player");
+		BG = MapData.script.GetBackgroundBoss(1);
+		player = M_Player.player.gameObject;
 		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
 		pool_KillerBlock = new ObjectPool(Resources.Load(PrefabNames.ENEMY_KILLERBLOCK_BOSS) as GameObject);
 		anim = GetComponent<Animator>();
-		rigid = gameObject.GetComponent<Rigidbody2D>();
-		rigid.freezeRotation = true;
-
+		rigid = GetComponent<Rigidbody2D>();
+		health = spikeHitbox.GetComponent<BossHealth>();
 		attack1StartPos = BG.position + new Vector3(-BG.sizeDelta.x / 2 + 40, -BG.sizeDelta.y / 2 + 40);
 		attack2StartPos = new Vector3(-530, -70, 1);
 		attack3StartPos = new Vector3(-368, -70, 1);
@@ -114,27 +114,22 @@ public class BossBehaviour : MonoBehaviour {
 	}
 
 	private IEnumerator InitialAttack() {
-
 		for (int i = 0; i < spikeHitboxes.Length; i++) {
 			spikeHitboxes[i].enabled = false;
 		}
 		selfRender.sprite = Invincible;
 
-
 		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
 
 		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 
-		print(Camera.main.transform.position);
-
-		Canvas_Renderer.script.InfoRenderer("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
+		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
 		//StartCoroutine(Attacks(ChooseAttack()));
 
 		int debugAttack = 2;
 		Debug.Log("DEBUG MODE only attack " + debugAttack);
 		StartCoroutine(Attacks(debugAttack));
-
 	}
 
 	public IEnumerator InterPhase() {
@@ -142,7 +137,7 @@ public class BossBehaviour : MonoBehaviour {
 			spikeHitboxes[i].enabled = true;
 		}
 		selfRender.sprite = Damageable;
-		spikeHitbox.GetComponent<BossHealth>().CheckShields();
+		health.CheckShields();
 		int choice = ChooseAttack();
 		yield return new WaitForSeconds(5);
 		currentAttack = StartCoroutine(Attacks(choice));
@@ -157,7 +152,7 @@ public class BossBehaviour : MonoBehaviour {
 		int previous = attackNo;
 
 		while (previous == attackNo) {
-			attackNo = UnityEngine.Random.Range(2, 6);
+			attackNo = Random.Range(2, 6);
 		}
 		return attackNo;
 	}
@@ -171,6 +166,7 @@ public class BossBehaviour : MonoBehaviour {
 		switch (attack) {
 			//Bouncing Attack
 			case 1: {
+				throw new System.NotImplementedException();
 				anim.enabled = false;
 				rigid.isKinematic = false;
 				yield return new WaitForSeconds(3);
@@ -216,7 +212,7 @@ public class BossBehaviour : MonoBehaviour {
 
 				StartCoroutine(lerps.LerpPosition(positioningCage, positioningCage.transform.position, BG.transform.position, Time.deltaTime / 2));
 				yield return new WaitForSeconds(3);
-				Canvas_Renderer.script.InfoRenderer(null, "Don't forget about the zooming feature :]");
+				Canvas_Renderer.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
 
 				StartCoroutine(Caged(1.1f));
 				for (int i = 0; i <= totalCircles; i++) {
@@ -337,7 +333,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitForSeconds(2);
 				if (informOnce) {
 					informOnce = false;
-					Canvas_Renderer.script.InfoRenderer("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+					Canvas_Renderer.script.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 				}
 				StartCoroutine(lerps.LerpPosition(positioningCage,
 					positioningCage.transform.position,
@@ -449,8 +445,8 @@ public class BossBehaviour : MonoBehaviour {
 		}
 	}
 	public Vector3 GetPosInCage() {
-		float x = UnityEngine.Random.Range(positioningCage.transform.position.x - cageSize, positioningCage.transform.position.x + cageSize);
-		float y = UnityEngine.Random.Range(positioningCage.transform.position.y - cageSize, positioningCage.transform.position.y + cageSize);
+		float x = Random.Range(positioningCage.transform.position.x - cageSize, positioningCage.transform.position.x + cageSize);
+		float y = Random.Range(positioningCage.transform.position.y - cageSize, positioningCage.transform.position.y + cageSize);
 		return new Vector3(x, y, 1);
 	}
 	public void ClearBullets() {
@@ -471,7 +467,7 @@ public class BossBehaviour : MonoBehaviour {
 			anim.Play("SpeedUp");
 		}
 		while (Attack3) {
-			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 5));
+			yield return new WaitForSeconds(Random.Range(2, 5));
 			preformChange = true;
 		}
 	}
@@ -482,16 +478,19 @@ public class BossBehaviour : MonoBehaviour {
 	public IEnumerator VariedRotation() {
 		rotationDelta = 0.1f;
 		zRotation = 0;
+		//this is why the attack is broken!!! - but keep is on harder difficulties because it is fun lel
 		while (true) {
-			yield return new WaitForSeconds(UnityEngine.Random.Range(2, 4));
-			int choice = UnityEngine.Random.Range(0, 2);
+			yield return new WaitForSeconds(Random.Range(2, 4));
+			//int choice = UnityEngine.Random.Range(0, 2);
 
-			if (choice == 0) {
-				rotationDelta = UnityEngine.Random.Range(0.4f, 1f);
-			}
-			else {
-				rotationDelta = UnityEngine.Random.Range(-1f, -0.4f);
-			}
+			//if (choice == 0) {
+			//	rotationDelta = UnityEngine.Random.Range(0.4f, 1f);
+			//}
+			//else {
+			//	rotationDelta = UnityEngine.Random.Range(-1f, -0.4f);
+			//}
+
+			rotationDelta = Random.Range(0, 1) <= 0.5f ? Random.Range(0.4f, 1f) : Random.Range(-1, -0.4f); 
 		}
 	}
 	//
@@ -499,6 +498,7 @@ public class BossBehaviour : MonoBehaviour {
 
 	//Flappy bird like Attack Code
 	public IEnumerator PipeGeneration() {
+		print("Needs rewrite");
 
 		float pipeSpacing = 1f;
 		float playerDistance = Mathf.Abs(Mathf.Abs(player.transform.position.x) - Mathf.Abs(gameObject.transform.position.x));

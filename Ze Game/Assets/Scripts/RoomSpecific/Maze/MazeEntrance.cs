@@ -38,7 +38,7 @@ public class MazeEntrance : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
 
 		StartCoroutine(PreventPlayerIdle());
-		Canvas_Renderer.script.InfoRenderer("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
+		Canvas_Renderer.script.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
 
 		yield return new WaitWhile(() => Canvas_Renderer.script.isRunning);
 

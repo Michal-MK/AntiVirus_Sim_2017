@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour, IKillable {
+public class Enemy : MonoBehaviour {
+
 	public enum EnemyType {
 		TOUCH,
 		CLOSE_RANGE,

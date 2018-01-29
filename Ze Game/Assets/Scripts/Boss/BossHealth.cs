@@ -2,7 +2,6 @@ using Igor.Constants.Strings;
 using Igor.Conversions;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BossHealth : MonoBehaviour {
@@ -59,7 +58,7 @@ public class BossHealth : MonoBehaviour {
 
 	public void CheckShields() {
 		if (topShieldUp && rightShieldUp && bottomShieldUp && leftShieldUp && once) {
-			Canvas_Renderer.script.InfoRenderer("His shields are up ... but we got a bomb!\n " +
+			Canvas_Renderer.script.DisplayInfo("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;

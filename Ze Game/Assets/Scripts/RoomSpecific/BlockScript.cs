@@ -56,7 +56,7 @@ public class BlockScript : MonoBehaviour {
 			}
 
 			if (!shownInfo && dist < 10) {
-				Canvas_Renderer.script.InfoRenderer("Find the activator and put the block in front of you on it.", null);
+				Canvas_Renderer.script.DisplayInfo("Find the activator and put the block in front of you on it.", null);
 				shownInfo = true;
 			}
 		}

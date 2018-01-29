@@ -35,7 +35,7 @@ public class FollowScript : MonoBehaviour {
 		desired.Normalize();
 		float d = Vector3.Distance(target.position, transform.position);
 		if (d > 20) {
-			desired *= Map.MapFloat(d, 0, 50, 0, maxforce);
+			desired *= ValueMapping.MapFloat(d, 0, 50, 0, maxforce);
 			if(succtionForce == 1) {
 				succtionForce = DEFAULT_SUCCTION_FORCE * 0.5f;
 			}
@@ -45,7 +45,7 @@ public class FollowScript : MonoBehaviour {
 		}
 		else {
 			succtionForce /= succtionForce;
-			desired *= Map.MapFloat(d, 0, 50, 0, maxforce);
+			desired *= ValueMapping.MapFloat(d, 0, 50, 0, maxforce);
 		}
 		Vector3 steer = (desired - velocity) * steerModifier;
 		return steer * Time.fixedDeltaTime;

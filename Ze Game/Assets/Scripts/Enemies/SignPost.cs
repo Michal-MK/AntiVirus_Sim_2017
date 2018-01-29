@@ -17,23 +17,23 @@ public class SignPost : MonoBehaviour {
 				break;
 			}
 			case "SignPost Start": {
-				Canvas_Renderer.script.InfoRenderer("The virus can not be damaged while it is attacking.", null);
+				Canvas_Renderer.script.DisplayInfo("The virus can not be damaged while it is attacking.", null);
 				break;
 			}
 			case "SignPost Room 1": {
-				Canvas_Renderer.script.InfoRenderer("All the spikes you are collecting have a purpouse, hold on to them.", null);
+				Canvas_Renderer.script.DisplayInfo("All the spikes you are collecting have a purpouse, hold on to them.", null);
 				break;
 			}
 			case "SignPost PostAvoidance": {
-				Canvas_Renderer.script.InfoRenderer("Minions of the Virus are deadly, but you have to endure!", null);
+				Canvas_Renderer.script.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
 				break;
 			}
 			case "SignPost Maze": {
-				Canvas_Renderer.script.InfoRenderer("The coins are up to no use... yet", null);
+				Canvas_Renderer.script.DisplayInfo("The coins are up to no use... yet", null);
 				break;
 			}
 			case "SignPost PreBoss": {
-				Canvas_Renderer.script.InfoRenderer("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
+				Canvas_Renderer.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
 				break;
 			}
 		}

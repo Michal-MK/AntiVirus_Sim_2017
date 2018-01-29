@@ -40,7 +40,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		Camera.main.orthographicSize = data.core.camSize;
-		InfoRenderer(null, data.shownHints.currentlyDisplayedSideInfo);
+		DisplayInfo(null, data.shownHints.currentlyDisplayedSideInfo);
 	}
 
 	private void Start() {
@@ -55,7 +55,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		leftDirectionArrows = dirArrows.Find("Left").gameObject;
 	}
 
-	public void InfoRenderer(string displayedTextMain, string displayedTextSide) {
+	public void DisplayInfo(string displayedTextMain, string displayedTextSide) {
 		if (isRunning) {
 			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide));
 			return;
@@ -77,12 +77,12 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	private IEnumerator RetryLater(string main, string slide) {
 		yield return new WaitWhile(() => isRunning == true);
-		InfoRenderer(main, slide);
+		DisplayInfo(main, slide);
 	}
 
 	private IEnumerator ResumeFromInfoPanel() {
 		yield return new WaitUntil(() => Input.GetButtonDown(InputNames.SUBMIT));
-		yield return null;
+		yield return null; // So we don't run though them all at the same time.
 		infoPanel_anim.SetTrigger("Up");
 		isRunning = false;
 		Time.timeScale = 1;
@@ -132,24 +132,18 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 	}
 
-	public void UpdateCounters(string name = null) {
-		if (name == ObjNames.COIN) {
+	public void UpdateCounters() {
+		if (Coin.coinsCollected == 5) {
+			//what ??? hardcoded vaue
+			coinCounter.transform.localPosition += new Vector3(50, 0, 0);
+			coinCounter.text = coinCounter.text + " Completed!";
+		}
+		else {
 			coinCounter.text = "x " + Coin.coinsCollected;
-
-			if (Coin.coinsCollected == 5) {
-				coinCounter.transform.localPosition += new Vector3(50, 0, 0);
-				coinCounter.text = coinCounter.text + " Completed!";
-			}
 		}
-		if (name == ObjNames.SPIKE) {
-			spikeCounter.text = "x " + (Spike.spikesCollected);
-		}
-
-		if (string.IsNullOrEmpty(name)) {
-			UpdateCounters(ObjNames.SPIKE);
-			UpdateCounters(ObjNames.COIN);
-		}
+		spikeCounter.text = "x " + Spike.spikesCollected;
 	}
+
 	private void OnDestroy() {
 		script = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;

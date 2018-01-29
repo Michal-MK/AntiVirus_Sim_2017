@@ -22,7 +22,7 @@ public class LaserField : MonoBehaviour {
 				}
 			}
 		}
-		Canvas_Renderer.script.InfoRenderer(null, M_Player.player.GetCurrentBackground() == MapData.script.GetTransition(new RoomLink(5,6)) ?
+		Canvas_Renderer.script.DisplayInfo(null, M_Player.player.GetCurrentBackground() == MapData.script.GetTransition(new RoomLink(5,6)) ?
 			"That was insane! Are you alright ? You should probably save... but y know.." : "That was insane, but don't give up, I believe in you!");
 	}
 

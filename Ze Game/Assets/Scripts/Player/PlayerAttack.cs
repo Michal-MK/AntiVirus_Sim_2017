@@ -58,7 +58,7 @@ public class PlayerAttack : MonoBehaviour {
 			else {
 				text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
 			}
-			Canvas_Renderer.script.InfoRenderer(text, "Don't give up now.");
+			Canvas_Renderer.script.DisplayInfo(text, "Don't give up now.");
 		}
 	}
 
@@ -98,7 +98,7 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			if (displayShootingInfo) {
 				if (_bullets != 0) {
-					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n " +
+					Canvas_Renderer.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
 														"Currently you have: " + _bullets + " bullets.\n " +
@@ -106,7 +106,7 @@ public class PlayerAttack : MonoBehaviour {
 					displayShootingInfo = false;
 				}
 				else {
-					Canvas_Renderer.script.InfoRenderer("Wow, you figured out how to shoot ... ok.\n" +
+					Canvas_Renderer.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
 														"Currently you have: " + _bullets + " bullets.", null);
@@ -194,7 +194,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public IEnumerator RefreshBombs() {
-		Canvas_Renderer.script.InfoRenderer(null, "Wait for the bomb to regenerate!");
+		Canvas_Renderer.script.DisplayInfo(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSeconds(bombRechargeDelay);
 		_bombs++;
 		OnAmmoChanged(AttackType.BOMBS, _bombs, true);

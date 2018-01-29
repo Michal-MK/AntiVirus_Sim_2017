@@ -19,7 +19,7 @@ public class Avoidance : MonoBehaviour {
 
 	private void SignPost_OnAvoidanceBegin() {
 		if (displayAvoidInfo) {
-			Canvas_Renderer.script.InfoRenderer("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+			Canvas_Renderer.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
 												"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
 			displayAvoidInfo = false;
 		}
@@ -47,7 +47,7 @@ public class Avoidance : MonoBehaviour {
 		MapData.script.OpenDoor(new RoomLink(2, 3));
 		spike.SetPosition();
 		CameraMovement.script.RaycastForRooms();
-		Canvas_Renderer.script.InfoRenderer("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();
 	}

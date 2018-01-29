@@ -83,10 +83,8 @@ public class CameraMovement : MonoBehaviour {
 		BackGroundS.Clear();
 
 		bg = M_Player.player.GetCurrentBackground();
-
 		currentBGY = bg.sizeDelta.y / 2;
 		currentBGX = bg.sizeDelta.x / 2;
-
 
 		RaycastHit2D[] up = Physics2D.RaycastAll(new Vector2(bg.position.x, bg.position.y), Vector2.up, currentBGY + 10);
 		RaycastHit2D[] down = Physics2D.RaycastAll(new Vector2(bg.position.x, bg.position.y), Vector2.down, Mathf.Abs(-currentBGY - 10));
@@ -98,43 +96,18 @@ public class CameraMovement : MonoBehaviour {
 		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.left * 100, Color.red, 5);
 		//Debug.DrawRay(new Vector2(bg.position.x, bg.position.y), Vector2.right * 100, Color.yellow, 5);
 
+		foreach (RaycastHit2D[] array in new RaycastHit2D[4][] { up, right, down, left }) {
+			foreach (RaycastHit2D hit in array) {
+				if (hit.transform.gameObject.activeInHierarchy == true && hit.transform.tag == "Wall/Door" || hit.transform.tag == "Wall") {
+					break;
+				}
+				if (hit.transform.tag == "BG" && BackGroundS.Contains(hit.transform.gameObject) == false) {
+					GameObject hitObj = hit.transform.gameObject;
+					BackGroundS.Add(hitObj);
+				}
+			}
+		}
 
-		foreach (RaycastHit2D hits in up) {
-			if (hits.transform.gameObject.activeInHierarchy == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				break;
-			}
-			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-				GameObject hitObj = hits.transform.gameObject;
-				BackGroundS.Add(hitObj);
-			}
-		}
-		foreach (RaycastHit2D hits in down) {
-			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				break;
-			}
-			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-				GameObject hitObj = hits.transform.gameObject;
-				BackGroundS.Add(hitObj);
-			}
-		}
-		foreach (RaycastHit2D hits in left) {
-			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				break;
-			}
-			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-				GameObject hitObj = hits.transform.gameObject;
-				BackGroundS.Add(hitObj);
-			}
-		}
-		foreach (RaycastHit2D hits in right) {
-			if (hits.transform.gameObject.activeSelf == true && hits.transform.tag == "Wall/Door" || hits.transform.tag == "Wall") {
-				break;
-			}
-			if (hits.transform.tag == "BG" && BackGroundS.Contains(hits.transform.gameObject) == false) {
-				GameObject hitObj = hits.transform.gameObject;
-				BackGroundS.Add(hitObj);
-			}
-		}
 		if (BackGroundS.Count != 0) {
 			CalculateArea();
 		}
@@ -271,17 +244,12 @@ public class CameraMovement : MonoBehaviour {
 	public float camX {
 		get {
 			if (playerRect.position.x > currentBGX + middle.x - camWidht) {
-
 				return currentBGX + middle.x - camWidht;
-
 			}
 			else if (playerRect.position.x < -currentBGX + middle.x + camWidht) {
-
 				return -currentBGX + middle.x + camWidht;
-
 			}
 			else {
-
 				return playerRect.position.x;
 			}
 		}
@@ -290,17 +258,12 @@ public class CameraMovement : MonoBehaviour {
 	public float camY {
 		get {
 			if (playerRect.position.y > currentBGY + middle.y - camHeight) {
-
 				return currentBGY + middle.y - camHeight;
-
 			}
 			else if (playerRect.position.y < -currentBGY + middle.y + camHeight) {
-
 				return -currentBGY + middle.y + camHeight;
-
 			}
 			else {
-
 				return playerRect.position.y;
 			}
 		}

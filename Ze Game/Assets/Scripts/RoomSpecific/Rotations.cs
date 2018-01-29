@@ -6,8 +6,10 @@ public class Rotations : MonoBehaviour {
 	public float speed;
 	public bool isCouterCloclwise;
 	public float radius;
+	public bool useCustomSpacing = false;
 
-	private float increment;
+	public float customIncrement;
+	private float increment = 0;
 	private float angle = 0;
 
 	private Transform[] affectedObjects;
@@ -20,6 +22,9 @@ public class Rotations : MonoBehaviour {
 			affectedObjects[i] = affected[i].transform;
 		}
 		increment = 360 / affectedObjects.Length;
+		if (useCustomSpacing) {
+			increment = customIncrement;
+		}
 	}
 
 	// Update is called once per frame

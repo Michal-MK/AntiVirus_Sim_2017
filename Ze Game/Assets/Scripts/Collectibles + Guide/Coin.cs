@@ -11,7 +11,7 @@ public class Coin : MonoBehaviour {
 
 	private static int _coinsCollected = 0;
 
-	public static event Guide.GuideTarget OnNewTarget;
+	public static event Guide.GuideTargetStatic OnNewTarget;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -36,7 +36,7 @@ public class Coin : MonoBehaviour {
 		else if (data.player.coinsCollected <= 4) {
 			CoinBehavior(null, null);
 			if (OnNewTarget != null) {
-				OnNewTarget(gameObject, true);
+				OnNewTarget(gameObject.transform.position);
 			}
 		}
 	}
@@ -56,6 +56,9 @@ public class Coin : MonoBehaviour {
 				Timer.StartTimer(2f);
 			}
 			transform.position = newpos;
+			if(OnNewTarget != null) {
+				OnNewTarget(transform.position);
+			}
 		}
 		if (coinsCollected == 5) {
 			if (Spike.spikesCollected == 0) {
@@ -63,6 +66,7 @@ public class Coin : MonoBehaviour {
 				spike.SetPosition();
 			}
 		}
+		Canvas_Renderer.script.UpdateCounters();
 	}
 
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
@@ -82,7 +86,7 @@ public class Coin : MonoBehaviour {
 		get { return _coinsCollected; }
 		set {
 			_coinsCollected = value;
-			Canvas_Renderer.script.UpdateCounters(ObjNames.COIN);
+			Canvas_Renderer.script.UpdateCounters();
 		}
 	}
 

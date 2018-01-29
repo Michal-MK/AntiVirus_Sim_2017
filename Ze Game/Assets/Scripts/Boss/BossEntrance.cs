@@ -30,7 +30,7 @@ public class BossEntrance : MonoBehaviour {
 				usedIndicator.SetActive(true);
 			}
 			if (M_Player.player.pAttack.bombs <= 0 || M_Player.player.pAttack.bullets <= 4) {
-				Canvas_Renderer.script.InfoRenderer("You are not a worthy opponent!\n"+
+				Canvas_Renderer.script.DisplayInfo("You are not a worthy opponent!\n"+
 													"Bullets: " + M_Player.player.pAttack.bullets +"/5\n"+
 													"Bombs: "+ M_Player.player.pAttack.bombs + "/1\n"+
 													"Return to me once you have everyting... to meet your demise!\n" +

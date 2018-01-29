@@ -79,14 +79,14 @@ public class M_Player : MonoBehaviour {
 		MapData.script.Progress(0);
 		if (newGame) {
 			attempts++;
-			Canvas_Renderer.script.InfoRenderer("Welcome! \n" +
+			Canvas_Renderer.script.DisplayInfo("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n"
 												, null);
 
 			Control.currAttempt = attempts;
 		}
-		Canvas_Renderer.script.InfoRenderer(null, "Good luck & Have fun!");
+		Canvas_Renderer.script.DisplayInfo(null, "Good luck & Have fun!");
 		Player_Movement.canMove = true;
 	}
 
@@ -132,7 +132,7 @@ public class M_Player : MonoBehaviour {
 
 			if (col.name == BackgroundNames.BACKGROUND1_2) {
 				if (gameProgression == 3) {
-					Canvas_Renderer.script.InfoRenderer(null, "Go down even further.");
+					Canvas_Renderer.script.DisplayInfo(null, "Go down even further.");
 				}
 			}
 		}
@@ -151,14 +151,13 @@ public class M_Player : MonoBehaviour {
 				OnCoinPickup(this, col.gameObject);
 			}
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
-			Canvas_Renderer.script.UpdateCounters(ObjNames.COIN);
 		}
 
 		if (col.name == ObjNames.BOMB_PICKUP) {
 			if (OnBombPickup != null) {
 				OnBombPickup(this, col.gameObject);
 			}
-			Canvas_Renderer.script.InfoRenderer("You found a bomb, it will be useful later on.", null);
+			Canvas_Renderer.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
@@ -200,7 +199,6 @@ public class M_Player : MonoBehaviour {
 		MusicHandler.script.FadeMusic();
 		gameProgression = -1;
 		gameOver = true;
-
 	}
 
 	public RectTransform GetCurrentBackground() {
