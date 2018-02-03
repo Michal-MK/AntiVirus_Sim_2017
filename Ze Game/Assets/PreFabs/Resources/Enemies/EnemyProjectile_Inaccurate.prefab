@@ -26,8 +26,7 @@ GameObject:
   - component: {fileID: 58188430661934194}
   - component: {fileID: 58849555256677624}
   - component: {fileID: 58092614758245306}
-  - component: {fileID: 68689969460750928}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyProjectile_Inaccurate
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -127,47 +126,6 @@ CircleCollider2D:
   m_Offset: {x: 1.9, y: 1.5}
   serializedVersion: 2
   m_Radius: 0.2
---- !u!68 &68689969460750928
-EdgeCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012561099258}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -2.015461, y: 1.7402439}
-  - {x: -1.1089058, y: 1.4423256}
-  - {x: -0.050979614, y: 0.7272816}
-  - {x: 1.1729393, y: 1.4904404}
-  - {x: 1.9486198, y: 1.751833}
-  - {x: 2.1524467, y: 1.6302357}
-  - {x: 2.1462975, y: 1.3804035}
-  - {x: 1.9262657, y: 1.1717777}
-  - {x: 1.4188766, y: -0.02708435}
-  - {x: 1.0127144, y: -0.4400463}
-  - {x: 0.6487007, y: -0.6412239}
-  - {x: 0.5782013, y: -0.72123146}
-  - {x: 0.3779869, y: -1.2287292}
-  - {x: 0.14505768, y: -1.8861809}
-  - {x: 0.0005607605, y: -2.1149235}
-  - {x: -0.21619415, y: -1.7996178}
-  - {x: -0.3463745, y: -1.3824577}
-  - {x: -0.63459396, y: -0.689867}
-  - {x: -1.1878929, y: -0.32633018}
-  - {x: -1.5993118, y: 0.2114811}
-  - {x: -1.9180832, y: 1.0503578}
-  - {x: -2.128708, y: 1.311882}
-  - {x: -2.2216492, y: 1.4663658}
-  - {x: -2.1655655, y: 1.6867924}
-  - {x: -2.0319595, y: 1.7439327}
-  - {x: -2.0109863, y: 1.7402439}
 --- !u!114 &114000011878254912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -179,10 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d661e8e994cd664b95fd94a1706bfe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeTillDestruct: -1
-  Solid: {fileID: 21300000, guid: 08da859c6cd1d0f48a81c2a3de6e7f6f, type: 3}
-  Icicle: {fileID: 0}
-  Cracked: {fileID: 0}
+  selfDestructTimer: -1
   byBoss: 0
 --- !u!212 &212000011963600568
 SpriteRenderer:

@@ -5,7 +5,7 @@ public class SpikeBullet : MonoBehaviour {
 
 	public GameObject bulletPickup;
 	public Rigidbody2D rg;
-	public float bulletSpeed = 20;
+	public float bulletSpeed;
 	public float bulletDuration = 1.5f;
 
 	private void OnEnable() {

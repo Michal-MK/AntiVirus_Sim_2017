@@ -20,13 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4990014520257278}
   - component: {fileID: 212616163218789248}
-  - component: {fileID: 114299232621687542}
   - component: {fileID: 50206682827001928}
-  - component: {fileID: 58959777445739692}
-  - component: {fileID: 58442162774671776}
-  - component: {fileID: 58622778601164808}
-  - component: {fileID: 58955460739159828}
   - component: {fileID: 68022011326390006}
+  - component: {fileID: 114167992127803668}
   m_Layer: 13
   m_Name: EnemyProjectile_Icicle_Dark
   m_TagString: Enemy
@@ -70,7 +66,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1499416434724166}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.45, y: 4.69, z: 0}
+  m_LocalPosition: {x: 196.01532, y: -22.666677, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4836550621213074}
@@ -97,66 +93,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &58442162774671776
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1499416434724166}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -2}
-  serializedVersion: 2
-  m_Radius: 0.1
---- !u!58 &58622778601164808
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1499416434724166}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 1.9, y: 1.5}
-  serializedVersion: 2
-  m_Radius: 0.2
---- !u!58 &58955460739159828
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1499416434724166}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
---- !u!58 &58959777445739692
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1499416434724166}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -2, y: 1.5}
-  serializedVersion: 2
-  m_Radius: 0.2
 --- !u!68 &68022011326390006
 EdgeCollider2D:
   m_ObjectHideFlags: 1
@@ -230,7 +166,7 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114299232621687542
+--- !u!114 &114167992127803668
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -238,14 +174,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1499416434724166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d661e8e994cd664b95fd94a1706bfe3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d31d8fbca916f04d81464e2c866a54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeTillDestruct: -1
-  Solid: {fileID: 0}
-  Icicle: {fileID: 21300000, guid: 77d01bf58975c9242a437e4af1bfd60a, type: 3}
-  Cracked: {fileID: 21300000, guid: acdf885e191e6e341a66e4c06d70162a, type: 3}
+  selfDestructTimer: -1
   byBoss: 0
+  icicleSprite: {fileID: 21300000, guid: 77d01bf58975c9242a437e4af1bfd60a, type: 3}
+  crackedIcicleSprite: {fileID: 21300000, guid: acdf885e191e6e341a66e4c06d70162a,
+    type: 3}
+  emmitter: {fileID: 1665306902485176, guid: 7906187b0e32f3844a6faaf043b14b3d, type: 2}
 --- !u!212 &212616163218789248
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -66,7 +66,6 @@ public class Coin : MonoBehaviour {
 				spike.SetPosition();
 			}
 		}
-		Canvas_Renderer.script.UpdateCounters();
 	}
 
 	private Vector3 GenerateNewPos(Vector3 oldpos) {

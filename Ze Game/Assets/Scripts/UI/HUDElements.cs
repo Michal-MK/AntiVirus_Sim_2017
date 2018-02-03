@@ -23,8 +23,6 @@ public class HUDElements : UserInterface {
 	public Sprite spikeSpr;
 	public Sprite bombSpr;
 
-	public static HUDElements script;
-
 	public enum Collectibles {
 		COINS,
 		SPIKES,
@@ -33,12 +31,10 @@ public class HUDElements : UserInterface {
 
 	private AttackType currentSelectedAtkType = AttackType.NOTHING;
 
-	private void Awake() {
-		if(script == null) {
-			script = this;
-		}
+	protected override void Awake() {
 		PlayerAttack.OnAmmoChanged += AmmoSwitch;
 		PlayerAttack.OnAmmoPickup += SetVisibility;
+		base.Awake();
 	}
 
 	private void AmmoSwitch(AttackType type, int ammo, bool state = true) {
@@ -101,7 +97,6 @@ public class HUDElements : UserInterface {
 		}
 	}
 	private void OnDestroy() {
-		script = null;
 		PlayerAttack.OnAmmoChanged -= AmmoSwitch;
 		PlayerAttack.OnAmmoPickup -= SetVisibility;
 	}

@@ -11,7 +11,7 @@ public class BossDeathBlocks : MonoBehaviour {
 		}
 	}
 	private void OnCollisionEnter2D(Collision2D col) {
-		if(col.transform.tag == "BossWall") {
+		if(col.transform.tag == "Wall") {
 			self.velocity = Vector2.zero;
 			gameObject.SetActive(false);
 		}

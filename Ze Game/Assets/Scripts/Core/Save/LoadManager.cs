@@ -32,6 +32,11 @@ public class LoadManager {
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+
+		BinaryFormatter bf = new BinaryFormatter();
+		using (FileStream file = File.Open(saveToLoad.core.fileLocation, FileMode.Open)) {
+			SaveManager.current = (SaveFile)bf.Deserialize(file);
+		}
 	}
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {

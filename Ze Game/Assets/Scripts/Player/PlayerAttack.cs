@@ -115,8 +115,8 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			if (ammoType == AttackType.NOTHING) {
 				ammoType = SwitchAmmoType();
-				HUDElements.script.SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
-				HUDElements.script.SetVisibility(AttackType.BOMBS, true, _bombs);
+				FindObjectOfType<HUDElements>().SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
+				FindObjectOfType<HUDElements>().SetVisibility(AttackType.BOMBS, true, _bombs);
 				visibleAlready = true;
 			}
 		}
@@ -171,7 +171,7 @@ public class PlayerAttack : MonoBehaviour {
 		else {
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(Input.GetAxis("AimControllerX"), Input.GetAxis("AimControllerY")));
 		}
-		bullet.transform.position = transform.position - (bullet.transform.rotation * Vector2.down * 2);
+		bullet.transform.position = transform.position - (bullet.transform.rotation * Vector2.down * 2.5f);
 		bullet.name = ObjNames.BULLET;
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);

@@ -44,9 +44,7 @@ public class Avoidance : MonoBehaviour {
 		spawner.DespawnAvoidance();
 		yield return new WaitForSeconds(5);
 		SaveManager.canSave = true;
-		MapData.script.OpenDoor(new RoomLink(2, 3));
 		spike.SetPosition();
-		CameraMovement.script.RaycastForRooms();
 		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();

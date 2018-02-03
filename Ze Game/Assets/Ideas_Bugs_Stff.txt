@@ -18,9 +18,26 @@ you don't get stopped on collision with mazeescape - fixed
 
 post maze door is open whhen it should not be after loading/restart - fixed
 zooming does't work - fixed
-Audiobalance
+guiding to spike in room1 not working after collecting all coins
+ascape in gameover screen stil possible - fixed
 
+cpu looks too big on normal zoom - fixed
+turrets in avoidance are not random - fixed
+after avoidance don't open the room, spawn a spike in the upper half and let that trigger the opening - fixed
+guide is present in maze, might be a good idea in you could not see the maze in its entirety - not guiding - fixed
+firing bullets feels awkward - fixed
+spike size after maze not reset to normal - fixed
+cross on bosstp appears on tough rather than after defeating that boss - fixed
+flappy bird forces are fu*** - fixed
+boss avoid killerblocks is broken - fixed
+positioning cage is invisibel,lasers are fuck - fixed
+
+Audiobalance - testing in progress, failed, 
+post boss bugged - attempt
 
 Features:
 
 implement chase sequence with avoidance2 music
+bossbomb sound pickup and explosion are missing
+
+

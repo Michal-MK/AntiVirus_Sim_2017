@@ -51,9 +51,13 @@ public class MapData : MonoBehaviour {
 	public void SwitchMapMode(MapMode mode) {
 		_mode = mode;
 		FindObjectOfType<EnemySpawner>().UpdatePrefabs(_mode);
+		foreach (TurretAttack turret in FindObjectsOfType<TurretAttack>()) {
+			turret.SwapStance(mode);
+		}
 		switch (mode) {
 			case MapMode.LIGHT: {
 				globalDirectionalLight.intensity = .8f;
+
 				return;
 			}
 			case MapMode.DARK: {

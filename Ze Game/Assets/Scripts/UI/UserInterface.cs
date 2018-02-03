@@ -22,12 +22,13 @@ public class UserInterface : MonoBehaviour {
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	public static void ListenForEscape() {
 		Control.OnEscapePressed += Control_OnEscapePressed;
-		_sceneMode = UIScene.MAIN_MENU;
-		//Debug.Log("REENABLE");
-		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
-
+	protected virtual void Awake() {
+		SceneManager.sceneLoaded += OnSceneFinishedLoading;
+		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
+		_sceneMode = UIScene.MAIN_MENU;
+	}
 
 	private static void Control_OnEscapePressed() {
 		switch (_sceneMode) {
@@ -54,10 +55,7 @@ public class UserInterface : MonoBehaviour {
 				}
 				else {
 					if (OnPauseChange != null && M_Player.gameProgression != -1) {
-						OnPauseChange(!PauseUnpause.isPaused, false);
-					}
-					else {
-						OnPauseChange(!PauseUnpause.isPaused, true);
+						OnPauseChange(!PauseUnpause.isPaused);
 					}
 				}
 				return;
@@ -106,7 +104,7 @@ public class UserInterface : MonoBehaviour {
 		}
 	}
 
-	private static void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
+	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
 		switch (scene.name) {
 			case SceneNames.MENU_SCENE: {
 
@@ -139,11 +137,10 @@ public class UserInterface : MonoBehaviour {
 	#endregion
 
 	#region GameScene functions
-	private static void M_Player_OnPlayerDeath(M_Player sender) {
+	private void M_Player_OnPlayerDeath(M_Player sender) {
 		Animator gameOverAnim = GameObject.Find("GameOver").GetComponent<Animator>();
 		gameOverAnim.Play("GameOver");
-		OnPauseChange(true, true);
-		//M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
+		M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
 	}
 
 	#endregion

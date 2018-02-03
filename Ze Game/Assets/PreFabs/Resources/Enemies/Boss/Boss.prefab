@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224623542047276522}
   - component: {fileID: 212464462278276900}
   - component: {fileID: 114065069837793992}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SpikeHitbox
   m_TagString: BossHitbox
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 224752095533120120}
   - component: {fileID: 61107304101678578}
   - component: {fileID: 114049255101314606}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bottom
   m_TagString: SpikeDetectBoss
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4852339848914676}
   - component: {fileID: 212666129945393946}
   - component: {fileID: 60389340141470898}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 224116899104688762}
   - component: {fileID: 61715088155051088}
   - component: {fileID: 114686091041770436}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Right
   m_TagString: SpikeDetectBoss
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 224074268551374380}
   - component: {fileID: 61563149294310880}
   - component: {fileID: 114989457049443654}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top
   m_TagString: SpikeDetectBoss
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4602362913242916}
   - component: {fileID: 58366602538864036}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Boss Wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4600760546797722}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Shields
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4537813090853238}
   - component: {fileID: 212485807033743630}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Boss_InnerShield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 224502033984077408}
   - component: {fileID: 61354730097476912}
   - component: {fileID: 114311886074108772}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Left
   m_TagString: SpikeDetectBoss
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 4175769668675592}
   - component: {fileID: 212528159255113158}
   - component: {fileID: 60656559365964388}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 4237068848783018}
   - component: {fileID: 212551663299098572}
   - component: {fileID: 60867543777095402}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4783051408441854}
   - component: {fileID: 212586442816928828}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BossHeart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 212511614987337778}
   - component: {fileID: 198677409900108086}
   - component: {fileID: 199262200851433432}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 212434667446874130}
   - component: {fileID: 58022454346334672}
   - component: {fileID: 114324492497191120}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BossBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 4400495468247156}
   - component: {fileID: 212291479819945666}
   - component: {fileID: 60743301908736002}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,10 +418,10 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 0.12
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4c8667eb3a4a97f4884e7720164bc24b, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -932,7 +932,7 @@ MonoBehaviour:
   cageObj: {fileID: 1417625209806084, guid: e942a73ab2aa5074b8292467a4684bf4, type: 2}
   Brimstone: {fileID: 1719357061117604, guid: 14867d343e6db5a4dba13cfcf840ddfe, type: 2}
   selfRender: {fileID: 212434667446874130}
-  rigid: {fileID: 50303317565227100}
+  selfRigid: {fileID: 0}
   spikeHitbox: {fileID: 224623542047276522}
   spikeHitboxes:
   - {fileID: 61563149294310880}

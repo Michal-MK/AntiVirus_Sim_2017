@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using Igor.Constants.Strings;
 
-
 public class TurretAttack : MonoBehaviour {
 
 	public GameObject projectile;
@@ -19,9 +18,11 @@ public class TurretAttack : MonoBehaviour {
 	private ObjectPool pool_EnemyProjectile;
 	private Transform enemy;
 	private Coroutine ChangeFireRate;
+	private MapData.MapMode myStance;
 
 	private void Start() {
 		pool_EnemyProjectile = new ObjectPool(Resources.Load("Enemies/" + projectile.name + (MapData.script.currentMapMode == MapData.MapMode.LIGHT ? "" : "_Dark")) as GameObject);
+		myStance = MapData.script.currentMapMode;
 		enemy = GameObject.Find("Enemies").transform;
 		targetPos = target.transform.position;
 		if (useDefaultTiming) {
@@ -112,6 +113,33 @@ public class TurretAttack : MonoBehaviour {
 		}
 	}
 
+	public void SwapStance(MapData.MapMode stance) {
+		switch (stance) {
+			case MapData.MapMode.LIGHT: {
+				if (stance != myStance) {
+					GameObject g = Instantiate(Resources.Load<GameObject>(PrefabNames.ENEMY_TURRET), transform.position, transform.rotation, transform.parent);
+					g.transform.localScale = transform.localScale;
+					Destroy(g.GetComponent<TurretAttack>());
+					g.AddComponent(this);
+					Destroy(gameObject);
+
+				}
+				break;
+			}
+			case MapData.MapMode.DARK: {
+				if (stance != myStance) {
+					GameObject g = Instantiate(Resources.Load<GameObject>(PrefabNames.ENEMY_TURRET + "_Dark"), transform.position, transform.rotation, transform.parent);
+					g.transform.localScale = transform.localScale;
+					Destroy(g.GetComponent<TurretAttack>());
+					g.AddComponent(this);
+					Destroy(gameObject);
+
+				}
+				break;
+			}
+		}
+	}
+
 	public Vector3 RandomVec(int difficulty) {
 		float r = 0;
 		if (difficulty <= 2) {
@@ -132,3 +160,6 @@ public class TurretAttack : MonoBehaviour {
 		get { return currSpawnRate; }
 	}
 }
+
+
+

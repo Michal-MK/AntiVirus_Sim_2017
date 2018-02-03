@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
 
 public class PauseUnpause : MonoBehaviour {
-	public delegate void Pause(bool isPausing, bool death);
+	public delegate void Pause(bool isPausing);
 
 	private static bool _canPause = true;
 	private static bool _isPaused = false;
@@ -17,14 +16,39 @@ public class PauseUnpause : MonoBehaviour {
 	private void Awake() {
 		UserInterface.OnPauseChange += UserInterface_OnPauseChange;
 		Timer.OnTimerPause += Timer_OnTimerPause;
+		M_Player.OnPlayerDeath += Timer_OnPlayerDeath;
 	}
 
-	private void Timer_OnTimerPause(bool state, bool death) {
-		_isPaused = state;
+	private void Timer_OnPlayerDeath(M_Player sender) {
+		Cursor.visible = true;
+		restartButton.SetActive(true);
+		quitToMenu.SetActive(true);
+		loadButton.SetActive(true);
+		EventSystem.current.SetSelectedGameObject(loadButton);
+		Time.timeScale = 0;
+		Player_Movement.canMove = false;
+		_isPaused = true;
+		_canPause = false;
 	}
 
-	private void UserInterface_OnPauseChange(bool isPausing, bool isDeath) {
-		if (!isPausing) {
+	private void Timer_OnTimerPause(bool isPaused) {
+		_isPaused = isPaused;
+	}
+
+	private void UserInterface_OnPauseChange(bool isPausing) {
+		if (isPausing) {
+			Cursor.visible = true;
+			Timer.PauseTimer();
+			restartButton.SetActive(true);
+			quitToMenu.SetActive(true);
+			saveButton.SetActive(true);
+			EventSystem.current.SetSelectedGameObject(saveButton);
+			Time.timeScale = 0;
+			Player_Movement.canMove = false;
+			_isPaused = true;
+
+		}
+		else {
 			saveButton.GetComponentInChildren<Text>().text = "Save?";
 			saveButton.GetComponent<Button>().interactable = true;
 			saveButton.SetActive(false);
@@ -43,23 +67,6 @@ public class PauseUnpause : MonoBehaviour {
 			}
 			_isPaused = false;
 		}
-		else {
-			Cursor.visible = true;
-			Timer.PauseTimer();
-			restartButton.SetActive(true);
-			quitToMenu.SetActive(true);
-			if (isDeath) {
-				loadButton.SetActive(true);
-				EventSystem.current.SetSelectedGameObject(loadButton);
-			}
-			else {
-				saveButton.SetActive(true);
-				EventSystem.current.SetSelectedGameObject(saveButton);
-			}
-			Time.timeScale = 0;
-			Player_Movement.canMove = false;
-			_isPaused = true;
-		}
 	}
 
 	public static bool canPause {
@@ -74,6 +81,8 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void OnDestroy() {
 		UserInterface.OnPauseChange -= UserInterface_OnPauseChange;
+		Timer.OnTimerPause -= Timer_OnTimerPause;
+		M_Player.OnPlayerDeath -= Timer_OnPlayerDeath;
 	}
 }
 

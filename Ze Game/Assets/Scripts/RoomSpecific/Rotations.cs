@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Rotations : MonoBehaviour {
 
@@ -7,15 +7,18 @@ public class Rotations : MonoBehaviour {
 	public bool isCouterCloclwise;
 	public float radius;
 	public bool useCustomSpacing = false;
-
 	public float customIncrement;
+	public float angleOffset;
+	public bool useRandomSpeed = false;
+	public bool useRandomRotationDirection = false;
+
 	private float increment = 0;
 	private float angle = 0;
 
 	private Transform[] affectedObjects;
 
-	// Use this for initialization
 	void Start() {
+		angle += angleOffset;
 		Marker[] affected = GetComponentsInChildren<Marker>();
 		affectedObjects = new Transform[affected.Length];
 		for (int i = 0; i < affected.Length; i++) {
@@ -25,9 +28,14 @@ public class Rotations : MonoBehaviour {
 		if (useCustomSpacing) {
 			increment = customIncrement;
 		}
+		if (useRandomSpeed) {
+			StartCoroutine(AlterSpeed());
+		}
+		if (useRandomRotationDirection) {
+			StartCoroutine(AlterRotationDirection());
+		}
 	}
 
-	// Update is called once per frame
 	void FixedUpdate() {
 		foreach (Transform t in affectedObjects) {
 			float newX = radius * Mathf.Cos(Mathf.Deg2Rad * angle) + transform.position.x;
@@ -42,6 +50,20 @@ public class Rotations : MonoBehaviour {
 		}
 		else {
 			angle = (angle + speed) % 360;
+		}
+	}
+
+	private IEnumerator AlterSpeed() {
+		while (gameObject.activeSelf) {
+			yield return new WaitForSeconds(Random.Range(1, 5));
+			speed = Mathf.Clamp(Random.Range(speed / 4, speed * 2), 0.5f, 8);
+		}
+	}
+
+	private IEnumerator AlterRotationDirection() {
+		while (gameObject.activeSelf) {
+			yield return new WaitForSeconds(Random.Range(8, 15));
+			isCouterCloclwise = !isCouterCloclwise;
 		}
 	}
 }

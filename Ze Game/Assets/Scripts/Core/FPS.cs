@@ -11,7 +11,7 @@ public class FPS : MonoBehaviour {
 
 
 	void Update() {
-		if (quality == 6) {
+		if (quality == 6 || quality == 4) {
 			deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
 		}
 	}

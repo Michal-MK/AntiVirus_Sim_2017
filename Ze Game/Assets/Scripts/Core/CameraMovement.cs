@@ -98,7 +98,7 @@ public class CameraMovement : MonoBehaviour {
 
 		foreach (RaycastHit2D[] array in new RaycastHit2D[4][] { up, right, down, left }) {
 			foreach (RaycastHit2D hit in array) {
-				if (hit.transform.gameObject.activeInHierarchy == true && hit.transform.tag == "Wall/Door" || hit.transform.tag == "Wall") {
+				if (hit.transform.gameObject.activeInHierarchy == true && hit.transform.tag == "Wall") {
 					break;
 				}
 				if (hit.transform.tag == "BG" && BackGroundS.Contains(hit.transform.gameObject) == false) {
@@ -222,8 +222,8 @@ public class CameraMovement : MonoBehaviour {
 		camWidht = cam.aspect * cam.orthographicSize;
 		camHeight = cam.orthographicSize;
 
-		if (!inBossRoom && !inMaze) {
-			gameObject.transform.position = new Vector3(camX, camY, -10);
+		if (!inMaze) {
+			transform.position = new Vector3(camX, camY, -10);
 		}
 	}
 

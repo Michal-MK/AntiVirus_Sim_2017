@@ -5,20 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wall
-  - Canvas
   - BG
-  - Wall/Door
   - Enemy
   - ArrowTrap
   - Spike
   - Coin
   - BossHitbox
-  - SpikeBullet
-  - BossWall
-  - SpikeDetectBoss
   - Bombs
   - EnemyInactive
+  - Wall/Door
   - SaveButton
+  - SpikeBullet
+  - SpikeDetectBoss
   layers:
   - Default
   - TransparentFX
@@ -28,13 +26,13 @@ TagManager:
   - UI
   - 
   - 
-  - BossWalls
   - Walls
+  - Player
   - PlayerCollisions
   - Background
   - BackgroundElements
   - DarkModeEnemies
-  - 
+  - LightMoeEnemies
   - 
   - 
   - 

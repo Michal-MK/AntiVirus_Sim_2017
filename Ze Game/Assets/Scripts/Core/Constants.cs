@@ -1,4 +1,6 @@
-﻿namespace Igor {
+﻿using System.Collections.Generic;
+
+namespace Igor {
 	namespace Constants {
 		namespace Strings {
 			public class SceneNames {
@@ -39,7 +41,7 @@
 				public const string ENEMY_PROJECTILE_ACCURATE = "Emeies/EnemyProjectile_Accurate";
 				public const string ENEMY_PROJECTILE_INACCUARATE = "Enemies/EnemyProjectile_Inaccurate";
 				public const string ENEMY_PROJECTILE_ICICLE = "Enemies/EnemyProjectile_Icicle";
-				public const string ENEMY_KILLERBLOCK_BOSS = "Enemies/Enemy_KillerBlockBoss";
+				public const string ENEMY_KILLERBLOCK_BOSS = "Enemies/Boss/Enemy_KillerBlockBoss";
 				public const string ENEMY_KILLERBLOCK = "Enemies/KillerBlock";
 				public const string ENEMY_TURRET = "Enemies/Turret";
 			}
@@ -53,6 +55,22 @@
 				public const string SUBMIT = "Submit";
 				public const string MOVEMENT_HORIZONTAL = "HorMovement";
 				public const string MOVEMENT_VERTICAL = "VertMovement";
+			}
+
+			public class Tags {
+				public const string UNTAGGED = "Untagged";
+				public const string ENEMY = "Enemy";
+				public const string ENEMY_INACTIVE = "EnemyInactive";
+			}
+
+			public class Layers {
+				public const string WALLS = "Walls";
+				public const string PLAYER = "Player";
+				public const string PLAYER_COLLISIONS = "PlayerCollisions";
+				public const string BACKGROUNDS = "Background";
+				public const string BG_FEATURES = "BackgroundFeatures";
+				public const string DARK_ENEMIES = "DarkModeEnemies";
+				public const string LIGHT_ENEMIES = "LightModeEnemies";
 			}
 		}
 	}

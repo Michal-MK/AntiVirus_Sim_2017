@@ -19,7 +19,6 @@ public class M_Player : MonoBehaviour {
 	private string currentBG_name;
 
 	public bool newGame = true;
-	public bool gameOver = false;
 
 	private int attempts;
 
@@ -34,10 +33,11 @@ public class M_Player : MonoBehaviour {
 	public static event PlayerColision OnBombPickup;
 	public static event PlayerColision OnCoinPickup;
 	public static event PlayerColision OnTargetableObjectCollision;
-	public static event Zoom.Zooming OnZoomModeSwitch;
 	public static event SimplePlayerEvent OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
+
+	public bool isInvincible = false;
 
 	public enum PlayerState {
 		NORMAL,
@@ -73,10 +73,12 @@ public class M_Player : MonoBehaviour {
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR
 		if (!Control.script.allowTesting && SaveManager.current == null) {
+			print(!Control.script.allowTesting);
+			print(SaveManager.current);
 			UnityEditor.EditorApplication.isPlaying = false;
 		}
 #endif
-		MapData.script.Progress(0);
+		//MapData.script.Progress(0);
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.DisplayInfo("Welcome! \n" +
@@ -91,15 +93,12 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
-		if (collision.transform.name == "killerblock") {
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
-		}
 		if (collision.transform.name == "Block") {
 			if (!BlockScript.pressurePlateTriggered && OnTargetableObjectCollision != null) {
 				OnTargetableObjectCollision(this, collision.gameObject);
 			}
 		}
-		if (collision.transform.tag == "Enemy") {
+		if (collision.transform.tag == "Enemy" && isInvincible == false) {
 			print(collision.transform.name);
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -112,12 +111,12 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.tag == "Enemy") {
+		if (col.tag == "Enemy" && isInvincible == false) {
 			print(col.gameObject.name);
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
-			col.transform.parent.parent = null;
+			col.transform.SetParent(null);
 			face.sprite = sad;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
@@ -186,24 +185,16 @@ public class M_Player : MonoBehaviour {
 			OnPlayerDeath(this);
 		}
 
-		if (OnZoomModeSwitch != null) {
-			OnZoomModeSwitch(false);
-		}
-
+		Zoom.canZoom = false;
 		Destroy(GameObject.Find("Enemies"));
-		Player_Movement.canMove = false;
-		Cursor.visible = true;
-		Timer.PauseTimer();
-		Time.timeScale = 0;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.DIM_CAMERA, 1f);
 		MusicHandler.script.FadeMusic();
 		gameProgression = -1;
-		gameOver = true;
 	}
 
 	public RectTransform GetCurrentBackground() {
 		if (!string.IsNullOrEmpty(currentBG_name)) {
-			print(currentBG_name);
+			//print(currentBG_name);
 			return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 		}
 		else {

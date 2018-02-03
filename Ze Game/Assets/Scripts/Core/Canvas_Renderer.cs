@@ -133,15 +133,12 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	public void UpdateCounters() {
+		coinCounter.text = "x " + Coin.coinsCollected;
+		spikeCounter.text = "x " + Spike.spikesCollected;
+
 		if (Coin.coinsCollected == 5) {
-			//what ??? hardcoded vaue
-			coinCounter.transform.localPosition += new Vector3(50, 0, 0);
 			coinCounter.text = coinCounter.text + " Completed!";
 		}
-		else {
-			coinCounter.text = "x " + Coin.coinsCollected;
-		}
-		spikeCounter.text = "x " + Spike.spikesCollected;
 	}
 
 	private void OnDestroy() {

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class AdvanceInGame : MonoBehaviour {
 	public int currentStage = 0;
+	private int movementTypeCounter = 0;
+
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.F2)) {
 			if (currentStage < 10) {
@@ -35,7 +37,7 @@ public class AdvanceInGame : MonoBehaviour {
 					}
 					case 4: {
 						Vector3 pos = FindObjectOfType<MazeEntrance>().transform.position;
-						Destroy(FindObjectOfType<MazeEntrance>().gameObject);
+						FindObjectOfType<MazeEntrance>().gameObject.SetActive(false);
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = pos;
 						M_Player.player.transform.position = pos;
@@ -57,13 +59,14 @@ public class AdvanceInGame : MonoBehaviour {
 				}
 			}
 		}
-		if (Input.GetKeyDown(KeyCode.F1)) {
-			if (currentStage > 0) {
-				currentStage--;
-
-			}
+		if (Input.GetKeyDown(KeyCode.PageUp)) {
+			print("++++");
+			FindObjectOfType<Player_Movement>().SetMovementMode((Player_Movement.PlayerMovement)movementTypeCounter);
+			movementTypeCounter++;
+			movementTypeCounter = movementTypeCounter % 5;
 		}
 	}
+
 	private IEnumerator FirstBoss() {
 		M_Player.player.transform.position = FindObjectOfType<BossEntrance>().transform.position;
 		yield return new WaitForSeconds(3);

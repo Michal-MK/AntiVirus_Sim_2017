@@ -25,7 +25,7 @@ public class MenuMusic : MonoBehaviour {
 	private IEnumerator _PlayMusic() {
 		source.Play();
 		for (float f = 0; f <= 1; f += Time.deltaTime * transitionSpeedMult) {
-			source.volume = f * 0.3f;
+			source.volume = f;
 			yield return null;
 		}
 	}
@@ -36,7 +36,7 @@ public class MenuMusic : MonoBehaviour {
 
 	private IEnumerator _StopMusic() {
 		for (float f = 1; f >= 0; f -= Time.deltaTime * transitionSpeedMult) {
-			source.volume = f * 0.3f;
+			source.volume = f;
 			yield return null;
 		}
 		source.Stop();

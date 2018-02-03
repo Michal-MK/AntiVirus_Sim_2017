@@ -78,6 +78,7 @@ public class EnemySpawner : MonoBehaviour {
 			turrets[i].target = M_Player.player.gameObject;
 			turrets[i].useDefaultTiming = true;
 			turrets[i].applyRandomness = true;
+			turrets[i].randomnessMultiplier = 20;
 		}
 		ClearKillerBlocks();
 	}
@@ -119,8 +120,7 @@ public class EnemySpawner : MonoBehaviour {
 			yield return new WaitForSeconds(spawnDelay);
 			if (diff == 0 || diff == 1) {
 				Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-				wallShot.SetSprite(wallShot.Icicle);
-				wallShot.gameObject.tag = "Enemy";
+				wallShot.gameObject.tag = Tags.ENEMY;
 				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 				wallShot.transform.position = KWProjectilePositions();
 				wallShot.transform.SetParent(transform);
@@ -132,8 +132,7 @@ public class EnemySpawner : MonoBehaviour {
 			if (diff == 3 || diff == 2) {
 				for (int i = 0; i < 2; i++) {
 					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.SetSprite(wallShot.Icicle);
-					wallShot.gameObject.tag = "Enemy";
+					wallShot.gameObject.tag = Tags.ENEMY;
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(transform);
@@ -146,8 +145,7 @@ public class EnemySpawner : MonoBehaviour {
 			if (diff == 4) {
 				for (int i = 0; i < 3; i++) {
 					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.SetSprite(wallShot.Icicle);
-					wallShot.gameObject.tag = "Enemy";
+					wallShot.gameObject.tag = Tags.ENEMY;
 					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
 					wallShot.transform.position = KWProjectilePositions();
 					wallShot.transform.SetParent(transform);
@@ -174,7 +172,7 @@ public class EnemySpawner : MonoBehaviour {
 				return;
 			}
 			case MapData.MapMode.DARK: {
-				pool_Enemy_Icicle =  new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + "_Dark") as GameObject);
+				pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + "_Dark") as GameObject);
 				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK + "_Dark") as GameObject;
 				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET + "_Dark") as GameObject;
 				return;

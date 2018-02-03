@@ -6,11 +6,11 @@ public class Player_Movement : MonoBehaviour {
 
 	public enum PlayerMovement {
 		ARROW,
-		MOUSE,
 		FLAPPY,
 		INVERT,
 		REVERT,
-		TELEPORT
+		TELEPORT,
+		MOUSE,
 	}
 
 	private PlayerMovement movementMode = 0;
@@ -20,7 +20,7 @@ public class Player_Movement : MonoBehaviour {
 
 	private static bool _canMove = true;
 
-	public float movementSpeed = 500;
+	public float movementSpeed = 550;
 
 	public float flappyGravity = 8;
 	public float movementDrag = 30;
@@ -139,7 +139,7 @@ public class Player_Movement : MonoBehaviour {
 					rigidbody.velocity = new Vector2(0, flappyForceScale);
 					canFlapAgain = false;
 					StartCoroutine(FlapAgain());
-					print("Flapped");
+					//print("Flapped");
 				}
 			}
 			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
@@ -235,6 +235,7 @@ public class Player_Movement : MonoBehaviour {
 		}
 		if (movementMode == PlayerMovement.TELEPORT) {
 			StopCoroutine(Teleportation());
+			transform.Find("_Teleportation").gameObject.SetActive(false);
 		}
 		movementMode = type;
 	}

@@ -21,10 +21,9 @@ GameObject:
   - component: {fileID: 4546488044537900}
   - component: {fileID: 212642015324117944}
   - component: {fileID: 61289434903688898}
-  - component: {fileID: 95877818535151952}
   - component: {fileID: 50049594201529190}
-  - component: {fileID: 114737863138937042}
-  m_Layer: 0
+  - component: {fileID: 114787542746995794}
+  m_Layer: 10
   m_Name: Enemy_KillerBlockBoss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -89,24 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.6, y: 1.6}
   m_EdgeRadius: 0
---- !u!95 &95877818535151952
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1443292635872926}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2ff0992abd7c65b4595a2ad75bb8753b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114737863138937042
+--- !u!114 &114787542746995794
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -114,10 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1443292635872926}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d096fc0a80f687b4ab4b733bf0e557f2, type: 3}
+  m_Script: {fileID: 11500000, guid: db779bc2e55d92f4087d8f050d1c91be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  self: {fileID: 50049594201529190}
+  rg: {fileID: 50049594201529190}
+  movVelocity: {x: 0, y: 25}
+  destroy: 0
+  deactivate: 1
+  timedRemoval: 0
+  timeTillSelfDesctuct: 0
 --- !u!212 &212642015324117944
 SpriteRenderer:
   m_ObjectHideFlags: 1

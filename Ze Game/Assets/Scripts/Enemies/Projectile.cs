@@ -3,71 +3,66 @@ using System.Collections;
 
 public class Projectile : Enemy {
 
-	private float _projectileSpeed = 15;
-	public float timeTillDestruct = -1;
+	protected float _projectileSpeed = 15;
+	protected Rigidbody2D selfRigid;
+	protected SpriteRenderer selfRender;
 
-	private Rigidbody2D selfRigid;
-	private SpriteRenderer selfRender;
+	public float selfDestructTimer = -1;
 
-	public Sprite Solid;
-	public Sprite Icicle;
-	public Sprite Cracked;
-
-	public bool byBoss = false;
-
-	void OnEnable() {
+	protected virtual void OnEnable() {
 		selfRigid = GetComponent<Rigidbody2D>();
 		selfRender = GetComponent<SpriteRenderer>();
 	}
 
-	public void Fire() {
-		if (byBoss) {
-			StartCoroutine(BossAttack());
+	public void Fire(float delay = 0) {
+		if (delay != 0) {
+			StartCoroutine(DelayedFire(delay));
 		}
 		else {
 			selfRigid.velocity = transform.up * -_projectileSpeed;
 		}
 	}
 
-	private IEnumerator BossAttack() {
-		yield return new WaitForSeconds(1);
+	protected IEnumerator DelayedFire(float optionalDelay) {
+		yield return new WaitForSeconds(optionalDelay);
 		selfRigid.velocity = transform.up * -_projectileSpeed;
 	}
 
-	public IEnumerator SelfDestruct(float timeTillDestruction) {
+	public IEnumerator Deactivate(float timeTillDestruction) {
 		yield return new WaitForSeconds(timeTillDestruction);
 		gameObject.SetActive(false);
+	}
+
+	protected IEnumerator TimedDestruction(GameObject target, float seconds) {
+		yield return new WaitForSeconds(seconds);
+		Destroy(target);
 	}
 
 	public void SetSprite(Sprite sprite) {
 		selfRender.sprite = sprite;
 	}
 
-	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.tag == "Wall" || col.tag == "Wall/Door") {
-			gameObject.SetActive(false);
+	protected IEnumerator Fade() {
+		Color colour;
+		for (float f = 0; f < 1; f += Time.deltaTime) {
+			colour = new Color(1, 1, 1, 1 - f);
+			selfRender.color = colour;
+			yield return null;
 		}
-		if (col.name == "Blocker") {
-			gameObject.SetActive(false);
-		}
+		gameObject.SetActive(false);
+		selfRender.color = new Color(1, 1, 1, 1);
 	}
 
-	private void OnTriggerExit2D(Collider2D col) {
+	protected virtual void OnTriggerExit2D(Collider2D col) {
 		if (col.tag == "BG") {
 			gameObject.SetActive(false);
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D col) {
+	protected virtual void OnCollisionEnter2D(Collision2D col) {
 		if (col.transform.name == "Block") {
-			selfRender.sprite = Cracked;
-			gameObject.tag = "EnemyInactive";
-			StartCoroutine(SelfDestruct(2));
+			print("Collided with a block");
 		}
-	}
-
-	void OnDisable() {
-		byBoss = false;
 	}
 
 	public float projectileSpeed {

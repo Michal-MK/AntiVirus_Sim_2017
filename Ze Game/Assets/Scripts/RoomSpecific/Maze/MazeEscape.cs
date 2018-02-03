@@ -31,21 +31,19 @@ public class MazeEscape : MonoBehaviour {
 			OnMazeEscape();
 		}
 
-		Camera.main.GetComponent<CameraMovement>().inMaze = false;
 		Zoom.canZoom = true;
-		M_Player.player.transform.position = new Vector3(room3BG.position.x, room3BG.position.y + room3BG.sizeDelta.y / 2 - 10, 0);
+		M_Player.player.transform.position = entrance.transform.position;
 		Camera.main.orthographicSize = 25;
 		Camera.main.transform.position = M_Player.player.transform.position;
 		M_Player.player.transform.localScale = Vector3.one;
 		spike.SetPosition();
-		spike.transform.localScale = Vector3.one;
-		StartCoroutine(FadeWalls());
+		StartCoroutine(FadeWall());
 		Player_Movement.canMove = true;
 		SaveManager.canSave = true;
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 
-	private IEnumerator FadeWalls() {
+	private IEnumerator FadeWall() {
 		SpriteRenderer wallSprite = wall.GetComponent<SpriteRenderer>();
 		Color32 newColor;
 
