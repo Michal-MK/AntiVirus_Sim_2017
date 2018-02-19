@@ -25,8 +25,6 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		RectTransform room3BG = MapData.script.GetBackground(4);
-
 		if (OnMazeEscape != null) {
 			OnMazeEscape();
 		}

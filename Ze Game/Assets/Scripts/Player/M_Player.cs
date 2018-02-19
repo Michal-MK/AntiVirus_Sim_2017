@@ -27,17 +27,16 @@ public class M_Player : MonoBehaviour {
 	public Sprite sad;
 
 	public static M_Player player;
+	public bool isInvincible = false;
 
 	public static event BackgroundChanged OnRoomEnter;
 	public static event PlayerColision OnSpikePickup;
-	public static event PlayerColision OnBombPickup;
 	public static event PlayerColision OnCoinPickup;
 	public static event PlayerColision OnTargetableObjectCollision;
 	public static event SimplePlayerEvent OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
 
-	public bool isInvincible = false;
 
 	public enum PlayerState {
 		NORMAL,
@@ -61,24 +60,19 @@ public class M_Player : MonoBehaviour {
 		gameProgression = data.player.gameProgression;
 		attempts = data.core.localAttempt;
 		newGame = false;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 
-	void Start() {
+	private IEnumerator Start() {
 		Cursor.lockState = CursorLockMode.Confined;
 		currentBG_name = BackgroundNames.BACKGROUND1_1;
-		StartCoroutine(DelayIntro());
-	}
-
-	private IEnumerator DelayIntro() {
+		//print("Delay");
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR
 		if (!Control.script.allowTesting && SaveManager.current == null) {
-			print(!Control.script.allowTesting);
-			print(SaveManager.current);
 			UnityEditor.EditorApplication.isPlaying = false;
 		}
 #endif
-		//MapData.script.Progress(0);
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.DisplayInfo("Welcome! \n" +
@@ -140,7 +134,6 @@ public class M_Player : MonoBehaviour {
 			if (OnSpikePickup != null) {
 				OnSpikePickup(this, col.gameObject);
 			}
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			MapData.script.Progress(gameProgression);
 			face.sprite = happy;
 		}
@@ -149,14 +142,6 @@ public class M_Player : MonoBehaviour {
 			if (OnCoinPickup != null) {
 				OnCoinPickup(this, col.gameObject);
 			}
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
-		}
-
-		if (col.name == ObjNames.BOMB_PICKUP) {
-			if (OnBombPickup != null) {
-				OnBombPickup(this, col.gameObject);
-			}
-			Canvas_Renderer.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
@@ -169,15 +154,6 @@ public class M_Player : MonoBehaviour {
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
 			face.sprite = previous;
 		}
-	}
-
-	public void FloorComplete() {
-		Player_Movement.canMove = false;
-		Cursor.visible = true;
-		Timer.PauseTimer();
-#if !UNITY_EDITOR
-			UploadScore score = new UploadScore();
-#endif
 	}
 
 	public void GameOver() {
@@ -213,16 +189,11 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
-	private void OnDestroy() {
-		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-	}
-
 	public static int gameProgression {
 		get { return _gameProgression; }
 		set {
 			_gameProgression = value;
 			print(gameProgression);
-
 		}
 	}
 }

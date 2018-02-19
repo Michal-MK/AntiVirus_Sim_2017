@@ -60,6 +60,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &1534708896064602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4352684842763598}
+  - component: {fileID: 58431783815978556}
+  - component: {fileID: 114400981972043158}
+  m_Layer: 12
+  m_Name: Interaction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1580610372851030
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,8 +221,22 @@ Transform:
   - {fileID: 4079548408934478}
   - {fileID: 4995315558993118}
   - {fileID: 4773277316277306}
+  - {fileID: 4352684842763598}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4352684842763598
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534708896064602}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4306936879343984}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4408995184160160
 Transform:
@@ -314,6 +345,21 @@ Transform:
   m_Father: {fileID: 4306936879343984}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58431783815978556
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534708896064602}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 32
 --- !u!68 &68141806196701062
 EdgeCollider2D:
   m_ObjectHideFlags: 1
@@ -545,12 +591,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fdb15cc72a57a44782f4b6dd2b1a0f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lever_8_Avoidance: {fileID: 1593272682202254, guid: 906b046c8f1989840a8b458067d886c3,
+    type: 2}
   levers:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   redParticle: {fileID: 108053510609273332}
   greenParticle: {fileID: 108024788831653098}
+--- !u!114 &114400981972043158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534708896064602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 082f613eae7b631468e3f39c4ee2d827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerInteractionWith: {fileID: 0}
+  interactionInfo: {fileID: 0}
+  allowMultipleIntaractions: 1
+  fireBySendingMessage: 1
 --- !u!198 &198204012625471472
 ParticleSystem:
   m_ObjectHideFlags: 1

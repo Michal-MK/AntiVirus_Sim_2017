@@ -2,49 +2,33 @@
 using System.Collections;
 
 public class Lever : MonoBehaviour {
-	public Sprite ON;
-	public Sprite OFF;
-	public GameObject intercationIndicator;
+	public Sprite toggleOnSpr;
+	public Sprite toggleOffSpr;
+
+	public AudioClip toggleOn;
+	public AudioClip toggleOff;
 
 	private SpriteRenderer selfRender;
+	private AudioSource selfSound;
 
 	public delegate void LeverState(Lever sender, bool isOn);
 	public event LeverState OnLeverSwitch;
 
-	private bool awaitingInput = false;
-	private Coroutine routine;
 	private bool _isOn = false;
 
 	void Start() {
 		selfRender = GetComponent<SpriteRenderer>();
+		selfSound = GetComponent<AudioSource>();
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.transform.name == "Player") {
-			awaitingInput = true;
-			intercationIndicator.SetActive(true);
-			routine = StartCoroutine(Interaction());
+	public void Interact() {
+		_isOn = !_isOn;
+		if (OnLeverSwitch != null) {
+			OnLeverSwitch(this, _isOn);
 		}
-	}
-
-	private void OnTriggerExit2D(Collider2D collision) {
-		if (collision.transform.name == "Player") {
-			awaitingInput = false;
-			intercationIndicator.SetActive(false);
-			StopCoroutine(routine);
-		}
-	}
-
-	private IEnumerator Interaction() {
-		while (awaitingInput) {
-			yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
-			_isOn = !_isOn;
-			if (OnLeverSwitch != null) {
-				OnLeverSwitch(this, _isOn);
-			}
-			selfRender.sprite = _isOn ? ON : OFF;
-			yield return new WaitForSeconds(0.5f);
-		}
+		selfRender.sprite = _isOn ? toggleOnSpr : toggleOffSpr;
+		selfSound.clip = _isOn ? toggleOn : toggleOff;
+		selfSound.Play();
 	}
 
 	public bool isOn {

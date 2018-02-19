@@ -22,6 +22,7 @@ public static class LerpFunctions {
 		}
 		obj.transform.position = end;
 	}
+
 	public static IEnumerator SmoothStepPosition(GameObject obj, Vector3 start, Vector3 end, float stepFreq) {
 
 		float sX = start.x;
@@ -36,6 +37,7 @@ public static class LerpFunctions {
 			obj.transform.position = new Vector3(newX, newY, start.z);
 			yield return null;
 		}
+		obj.transform.position = end;
 	}
 }
 

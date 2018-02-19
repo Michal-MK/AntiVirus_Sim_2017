@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class TransitionTrigger : MonoBehaviour {
 
@@ -7,37 +6,29 @@ public class TransitionTrigger : MonoBehaviour {
 	public bool isPlayer = true;
 	public Player_Movement.PlayerMovement modeToApply;
 
-	public TransitionTrigger main;
+	private Player_Movement.PlayerMovement modeToRestore;
 
-	public TransitionTrigger[] exitingTriggers;
+	private void Start() {
+		if (isPlayer) {
+			reactToObject = M_Player.player.gameObject;
+		}
+	}
 
-	private bool isTriggered = false;
-
-	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.name == reactToObject.name) {
+	private void OnTriggerEnter2D(Collider2D c) {
+		if (c.name == reactToObject.name) {
 			if (isPlayer) {
-				if (!isTriggered && main == null) {
-					collision.GetComponent<M_Player>().pMovement.SetMovementMode(modeToApply);
-					isTriggered = true;
-					foreach (TransitionTrigger t in exitingTriggers) {
-						t.gameObject.SetActive(true);
-					}
-				}
+				modeToRestore = c.GetComponent<M_Player>().pMovement.getCurrentMovementMode;
+				c.GetComponent<M_Player>().pMovement.SetMovementMode(modeToApply);
 			}
 		}
 	}
 
-	private void OnTriggerExit2D(Collider2D collision) {
-		if (collision.name == reactToObject.name) {
+	private void OnTriggerExit2D(Collider2D c) {
+		if (c.name == reactToObject.name) {
 			if (isPlayer) {
-				if (!isTriggered) {
-					collision.GetComponent<M_Player>().pMovement.SetMovementMode(modeToApply);
-					main.isTriggered = false;
-					foreach (TransitionTrigger t in main.exitingTriggers) {
-						t.gameObject.SetActive(false);
-					}
-				}
+				c.GetComponent<M_Player>().pMovement.SetMovementMode(modeToRestore);
 			}
 		}
 	}
 }
+

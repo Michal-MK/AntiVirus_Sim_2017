@@ -18,7 +18,7 @@ you don't get stopped on collision with mazeescape - fixed
 
 post maze door is open whhen it should not be after loading/restart - fixed
 zooming does't work - fixed
-guiding to spike in room1 not working after collecting all coins
+guiding to spike in room1 not working after collecting all coins - fixed
 ascape in gameover screen stil possible - fixed
 
 cpu looks too big on normal zoom - fixed
@@ -32,12 +32,19 @@ flappy bird forces are fu*** - fixed
 boss avoid killerblocks is broken - fixed
 positioning cage is invisibel,lasers are fuck - fixed
 
+transition from room 2 to maze entrance room is glitched - fixed
 Audiobalance - testing in progress, failed, 
-post boss bugged - attempt
+post boss bugged - fixed kindof
 
 Features:
 
 implement chase sequence with avoidance2 music
-bossbomb sound pickup and explosion are missing
+bossbomb sound pickup and explosion are missing - fixed
 
 
+
+
+Ships:
+entering fire mode does not work
+populating ships should ask whther wou want to see the result of enter playmode afterwards
+ship visual sometimes does not place a ahip at the location, during random placement

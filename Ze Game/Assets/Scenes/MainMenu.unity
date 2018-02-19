@@ -342,6 +342,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStage: 0
+--- !u!114 &44646079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 44646077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafb5e8d74cbbef4d96a8b683289fcea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &54638322
 GameObject:
   m_ObjectHideFlags: 0
@@ -19197,7 +19208,7 @@ Prefab:
     - target: {fileID: 224083301300217196, guid: bc159a5f07ce0a2469ed8dfc1e3fc8ba,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224083301300217196, guid: bc159a5f07ce0a2469ed8dfc1e3fc8ba,
         type: 2}
@@ -22780,7 +22791,7 @@ RectTransform:
   - {fileID: 1564389984}
   - {fileID: 400022648}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -29649,7 +29660,7 @@ RectTransform:
   - {fileID: 828366259}
   - {fileID: 1557818244}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

@@ -116,6 +116,7 @@ public class Spike : MonoBehaviour {
 		set {
 			_spikesCollected = value;
 			Canvas_Renderer.script.UpdateCounters();
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 	}
 

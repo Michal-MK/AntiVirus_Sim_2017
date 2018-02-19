@@ -26,17 +26,17 @@ public class BossEntrance : MonoBehaviour {
 				CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1);
 				CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 				lockin = true;
-				//Control.script.saveManager.Save(Control.currDifficulty,true);
-				print("Saving is disabled");
+				Control.script.saveManager.Save(Control.currDifficulty, true);
+				//print("Saving is disabled");
 				Zoom.canZoom = false;
 				Player_Movement.canMove = false;
 			}
 			if (M_Player.player.pAttack.bombs <= 0 || M_Player.player.pAttack.bullets <= 4) {
 				Canvas_Renderer.script.DisplayInfo("You are not a worthy opponent!\n"+
-													"Bullets: " + M_Player.player.pAttack.bullets +"/5\n"+
-													"Bombs: "+ M_Player.player.pAttack.bombs + "/1\n"+
-													"Return to me once you have everyting... to meet your demise!\n" +
-													"MuHAHaHaa!!!", "Explore this location further.");
+												   "Bullets: " + M_Player.player.pAttack.bullets +"/5\n"+
+												   "Bombs: "+ M_Player.player.pAttack.bombs + "/1\n"+
+												   "Return to me once you have everyting... to meet your demise!\n" +
+												   "MuHAHaHaa!!!", "Explore this location further.");
 
 
 			}
@@ -52,6 +52,7 @@ public class BossEntrance : MonoBehaviour {
 		RectTransform bossBG = MapData.script.GetBackgroundBoss(1);
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room_1_boss);
 		GameObject spawnedBoss = Instantiate(boss, bossBG.transform.position - new Vector3(0, bossBG.sizeDelta.y / 3), Quaternion.identity);
+		spawnedBoss.GetComponentInChildren<BossHealth>().tpLocation = transform.position;
 		spawnedBoss.name = "Boss";
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, HPHolder.transform);
 		health.name = "BossHealth";

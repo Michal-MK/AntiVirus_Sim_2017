@@ -9,7 +9,6 @@ public class Control : MonoBehaviour {
 	public bool allowTesting = false;
 
 	public static Control script;
-
 	public SaveManager saveManager;
 	public LoadManager loadManager;
 	public MapData mapData;
@@ -20,26 +19,25 @@ public class Control : MonoBehaviour {
 	public delegate void Escape();
 	public static event Escape OnEscapePressed;
 
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+	private static void Init() {
+		if (!Directory.Exists(Application.dataPath + "/Saves")) {
+			Directory.CreateDirectory(Application.dataPath + "/Saves");
+		}
+		if (!Directory.Exists(Application.dataPath + Path.DirectorySeparatorChar + "Settings")) {
+			Directory.CreateDirectory(Application.dataPath + Path.DirectorySeparatorChar + "Settings");
+		}
+	}
+
 	void Awake() {
 		if (script == null) {
-
 			script = this;
 			script.loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
 		}
 		else if (script != this) {
-			if (script.loadManager == null) {
-				script.loadManager = new LoadManager();
-			}
 			Destroy(gameObject);
 			LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		}
-
-		if (!Directory.Exists(Application.dataPath + "/Saves")) {
-			Directory.CreateDirectory(Application.dataPath + "/Saves");
-		}
-		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles")) {
-			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "Profiles");
 		}
 		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}

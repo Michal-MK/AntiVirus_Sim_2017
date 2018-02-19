@@ -49,7 +49,7 @@ public class AdvanceInGame : MonoBehaviour {
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = pos + Vector3.down * 10;
 						M_Player.player.transform.position = pos + Vector3.down * 10;
-						FindObjectOfType<BombScript>().transform.position = pos + Vector3.down * 10;
+						GameObject.Find("BombPickup").transform.position = pos + Vector3.down * 10;
 						return;
 					}
 					case 6: {
@@ -79,7 +79,7 @@ public class AdvanceInGame : MonoBehaviour {
 		MapData.script.OpenDoor(new RoomLink(5, 6));
 		yield return new WaitForSeconds(1);
 		Destroy(g);
-		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
+		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
 	}
 }

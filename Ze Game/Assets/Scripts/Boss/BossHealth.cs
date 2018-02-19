@@ -10,13 +10,17 @@ public class BossHealth : MonoBehaviour {
 
 	//Prefab
 	public GameObject bossHealth;
+	public ParticleSystem deathParticles;
 
+	private ParticleSystem instantiatedParticles;
 	public Slider healthIndicator;
 
 	public GameObject ShieldT;
 	public GameObject ShieldR;
 	public GameObject ShieldB;
 	public GameObject ShieldL;
+
+	public Vector3 tpLocation;
 
 	private bool topShieldUp = false;
 	private bool rightShieldUp = false;
@@ -36,7 +40,9 @@ public class BossHealth : MonoBehaviour {
 			healthIndicator = healhtObj.GetComponent<Slider>();
 		}
 		healthIndicator.gameObject.SetActive(true);
-		healthIndicator.value = 5;
+		//healthIndicator.value = 5;
+		healthIndicator.value = 1;
+		print("Debug");
 	}
 
 	public void Collided(Collision2D it, GameObject with) {
@@ -91,41 +97,46 @@ public class BossHealth : MonoBehaviour {
 	}
 
 	public IEnumerator Death() {
-		GameObject boss = behaviour.gameObject;
-		boss.GetComponent<Animator>().StopPlayback();
-		boss.GetComponent<Animator>().enabled = false;
-		boss.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-		boss.transform.position = new Vector3(0, 0, 10);
-		behaviour.enabled = false;
-
 		M_Player.gameProgression = 10;
 
-		yield return new WaitForSeconds(3);
+		behaviour.selfAnim.enabled = false;
+		behaviour.selfRigid.velocity = Vector2.zero;
+		behaviour.enabled = false;
+		behaviour.StopAllCoroutines();
 
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 0.8f);
+		instantiatedParticles = Instantiate(deathParticles.gameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+		GetComponent<AudioSource>().Play();
+		yield return new WaitForSeconds(5);
+		foreach (SpriteRenderer sprR in transform.parent.GetComponentsInChildren<SpriteRenderer>()) {
+			for (float f = 0; f <= 1; f += 0.1f) {
+				sprR.color = new Color(1, 1, 1, 1 - f);
+				yield return null;
+			}
+		}
+		//print("Stopping emmission");
+		ParticleSystem.EmissionModule e = instantiatedParticles.emission;
+		e.enabled = false;
+		yield return new WaitForSeconds(1);
+		GetComponent<AudioSource>().loop = false;
+		yield return new WaitForSeconds(1);
+
+		//print("One s to destruction.");
+		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1.2f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
-
-
-		/* Aternate Ending deprecated lul
-		Canvas_Renderer.script.InfoRenderer("You did it! \n Your time has been saved to the leadreboard. \n Thank you for playing the game.", null);
-		FindObjectOfType<M_Player>().FloorComplete();
-		MusicHandler.script.TrasnsitionMusic(null);
-
-		yield return new WaitForSeconds(3);
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1);
-		yield return new WaitForSeconds(CamFadeOut.CAM_FULLY_FADED_NORMAL);
-		SceneManager.LoadScene(SceneNames.CREDITS_SCENE);
-		*/
+		Destroy(instantiatedParticles.gameObject);
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
 		MapData.script.Progress(M_Player.gameProgression);
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
-		M_Player.player.transform.position = new Vector3(302, -124, 0);
+		M_Player.player.transform.position = tpLocation + new Vector3(0, 10);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 		CameraMovement.script.inBossRoom = false;
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
 		SaveManager.canSave = true;
+		Destroy(transform.parent.gameObject);
+		Destroy(healthIndicator.gameObject);
+		Canvas_Renderer.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
 	}
 }

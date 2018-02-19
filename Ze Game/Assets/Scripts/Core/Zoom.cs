@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Zoom : MonoBehaviour {
 
-	public delegate void Zooming(bool allowed);
-
 	public Camera cam;
 	public ParticleSystem matrixA;
 	public ParticleSystem matrixB;

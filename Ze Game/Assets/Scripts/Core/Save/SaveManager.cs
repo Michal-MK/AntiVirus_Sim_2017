@@ -71,7 +71,10 @@ public class SaveManager : MonoBehaviour {
 	public void Save(int difficulty, bool isAutomatic) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		SaveFile newSave = current;
-
+		if (Control.script.allowTesting) {
+			print("No saving!");
+			return;
+		}
 		if (current.data.core.time != 0) {
 			newSave.saveHistory.previousSaves.Add(DeepCopy(current.data));
 		}

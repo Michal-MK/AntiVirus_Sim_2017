@@ -8,7 +8,8 @@ public class TurretAttack : MonoBehaviour {
 	public GameObject target;
 	public float turretSpawnRateStart;
 	public float turretSpawnRateEnd;
-	private float currSpawnRate;
+	public float spawnRateDelta;
+	private float currentSpawnRate;
 
 	public bool useDefaultTiming;
 	public bool applyRandomness;
@@ -17,7 +18,6 @@ public class TurretAttack : MonoBehaviour {
 	private Vector3 targetPos;
 	private ObjectPool pool_EnemyProjectile;
 	private Transform enemy;
-	private Coroutine ChangeFireRate;
 	private MapData.MapMode myStance;
 
 	private void Start() {
@@ -53,29 +53,18 @@ public class TurretAttack : MonoBehaviour {
 					break;
 				}
 			}
-			ChangeFireRate = StartCoroutine(CurrentSpawnRate(turretSpawnRateStart, turretSpawnRateEnd));
-			StartCoroutine(WaitForAttack(turretSpawnRateStart));
+			StartCoroutine(WaitForAttack());
 		}
 		else {
-			ChangeFireRate = StartCoroutine(CurrentSpawnRate(turretSpawnRateStart, turretSpawnRateEnd));
-			StartCoroutine(WaitForAttack(turretSpawnRateStart));
+			StartCoroutine(WaitForAttack());
 		}
 	}
 
-	private IEnumerator CurrentSpawnRate(float startSpeed, float endSpeed) {
-		for (float f = 0; f <= 1; f += Time.deltaTime * 0.03f) {
-			currSpawnRate = Mathf.Lerp(startSpeed, endSpeed, f);
-			yield return null;
-		}
-	}
+	private IEnumerator WaitForAttack() {
+		currentSpawnRate = turretSpawnRateStart;
 
-
-	private IEnumerator WaitForAttack(float spawnRate) {
 		while (true) {
-			yield return new WaitForSeconds(spawnRate);
 			targetPos = target.transform.position;
-			spawnRate = currSpawnRate;
-
 			int diff = Control.currDifficulty;
 
 			if (diff <= 2) {
@@ -110,6 +99,8 @@ public class TurretAttack : MonoBehaviour {
 					bullet.Fire();
 				}
 			}
+			currentSpawnRate = Mathf.Clamp(currentSpawnRate - spawnRateDelta, turretSpawnRateEnd, turretSpawnRateStart);
+			yield return new WaitForSeconds(currentSpawnRate);
 		}
 	}
 
@@ -157,7 +148,7 @@ public class TurretAttack : MonoBehaviour {
 	}
 
 	public float getCurrentSpawnRate {
-		get { return currSpawnRate; }
+		get { return currentSpawnRate; }
 	}
 }
 

@@ -8,19 +8,15 @@ public class EnemySpawner : MonoBehaviour {
 	#region Prefabs
 	public GameObject turretBase;
 	public GameObject deathBlock;
-	private ObjectPool pool_Enemy_Icicle;
+	public GameObject projectileWallPrefab;
+	private GameObject[] activeKillerWalls;
 	#endregion
 
 	private RectTransform arrowtrapBG;
-	private RectTransform killerWallBG;
 
 	public TurretAttack[] turrets;
 
 	private List<GameObject> killerBlocks = new List<GameObject>();
-
-	private bool isInvokingKillerWall = false;
-
-	public List<GameObject> KWProjectiles = new List<GameObject>();
 
 
 	private void Awake() {
@@ -47,19 +43,42 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
-		if (background.name == BackgroundNames.BACKGROUND1_2) {
-			if (!isInvokingKillerWall) {
-				StartCoroutine(SpawnKillerWall(0.7f));
+		if (background == MapData.script.GetBackground(2)) {
+			if (activeKillerWalls == null) {
+				activeKillerWalls = new GameObject[1];
+				ProjectileWall pWall = projectileWallPrefab.GetComponent<ProjectileWall>();
+				pWall.origin = Directions.RIGHT;
+				pWall.spawnInterval = 0.7f;
+				activeKillerWalls[0] = Instantiate(projectileWallPrefab, background);
+				activeKillerWalls[0].GetComponent<ProjectileWall>().SetProjecileType(Enemy.EnemyType.PROJECTILE_ICICLE);
 			}
 		}
-		else {
-			isInvokingKillerWall = false;
+		else if (background == MapData.script.GetBackground(9)) {
+			if (activeKillerWalls == null) {
+				activeKillerWalls = new GameObject[2];
+				ProjectileWall pWall = projectileWallPrefab.GetComponent<ProjectileWall>();
+
+				pWall.origin = Directions.TOP;
+				pWall.spawnInterval = 1f;
+				activeKillerWalls[0] = Instantiate(projectileWallPrefab, background);
+				activeKillerWalls[0].GetComponent<ProjectileWall>().SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
+
+				pWall.origin = Directions.BOTTOM;
+				pWall.spawnInterval = 1f;
+				activeKillerWalls[1] = Instantiate(projectileWallPrefab, background);
+				activeKillerWalls[1].GetComponent<ProjectileWall>().SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
+			}
+		}
+		else if (activeKillerWalls != null) {
+			foreach (GameObject wall in activeKillerWalls) {
+				Destroy(wall);
+			}
+			activeKillerWalls = null;
 		}
 	}
 
 	private void OnEnable() {
 		arrowtrapBG = GameObject.Find(BackgroundNames.BACKGROUND1_3).GetComponent<RectTransform>();
-		killerWallBG = GameObject.Find(BackgroundNames.BACKGROUND1_2).GetComponent<RectTransform>();
 	}
 
 	public void SpawnAvoidance() {
@@ -112,67 +131,15 @@ public class EnemySpawner : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator SpawnKillerWall(float spawnDelay) {
-		isInvokingKillerWall = true;
-		int diff = Control.currDifficulty;
-
-		while (isInvokingKillerWall) {
-			yield return new WaitForSeconds(spawnDelay);
-			if (diff == 0 || diff == 1) {
-				Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-				wallShot.gameObject.tag = Tags.ENEMY;
-				wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
-				wallShot.transform.position = KWProjectilePositions();
-				wallShot.transform.SetParent(transform);
-				wallShot.gameObject.SetActive(true);
-				wallShot.projectileSpeed = 15f;
-				KWProjectiles.Add(wallShot.gameObject);
-				wallShot.Fire();
-			}
-			if (diff == 3 || diff == 2) {
-				for (int i = 0; i < 2; i++) {
-					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.gameObject.tag = Tags.ENEMY;
-					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
-					wallShot.transform.position = KWProjectilePositions();
-					wallShot.transform.SetParent(transform);
-					wallShot.gameObject.SetActive(true);
-					wallShot.projectileSpeed = 15f;
-					KWProjectiles.Add(wallShot.gameObject);
-					wallShot.Fire();
-				}
-			}
-			if (diff == 4) {
-				for (int i = 0; i < 3; i++) {
-					Projectile wallShot = pool_Enemy_Icicle.getNext.GetComponent<Projectile>();
-					wallShot.gameObject.tag = Tags.ENEMY;
-					wallShot.transform.rotation = Quaternion.AngleAxis(90, Vector3.back);
-					wallShot.transform.position = KWProjectilePositions();
-					wallShot.transform.SetParent(transform);
-					wallShot.gameObject.SetActive(true);
-					KWProjectiles.Add(wallShot.gameObject);
-					wallShot.projectileSpeed = 15;
-					wallShot.Fire();
-				}
-			}
-		}
-	}
-
-	public Vector3 KWProjectilePositions() {
-		return new Vector3(killerWallBG.position.x - 5 + killerWallBG.sizeDelta.x / 2,
-						   Random.Range(killerWallBG.position.y - killerWallBG.sizeDelta.y / 2, killerWallBG.position.y + killerWallBG.sizeDelta.y / 2));
-	}
 
 	public void UpdatePrefabs(MapData.MapMode mode) {
 		switch (mode) {
 			case MapData.MapMode.LIGHT: {
-				pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE) as GameObject);
 				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK) as GameObject;
 				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET) as GameObject;
 				return;
 			}
 			case MapData.MapMode.DARK: {
-				pool_Enemy_Icicle = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + "_Dark") as GameObject);
 				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK + "_Dark") as GameObject;
 				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET + "_Dark") as GameObject;
 				return;

@@ -11,6 +11,7 @@ public class MusicHandler : MonoBehaviour {
 	public AudioClip room_maze;
 	public AudioClip room_1_boss;
 	public AudioClip gameOver;
+	public AudioClip darkWorld;
 
 	private AudioClip current;
 
@@ -87,7 +88,9 @@ public class MusicHandler : MonoBehaviour {
 			StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
-			throw new System.Exception("Nothing to transition from!");
+			StartCoroutine(_PlayMusic(newClip));
+			print("Nothing to transition from! Attempting to play normally");
+			//throw new System.Exception("Nothing to transition from!");
 		}
 	}
 

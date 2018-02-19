@@ -3,16 +3,23 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
-	public enum EnemyType {
+	public enum EnemyClass {
 		TOUCH,
 		CLOSE_RANGE,
 		LONG_RANGE,
 	}
 
+	public enum EnemyType {
+		KILLERBLOCK,
+		PROJECTILE_SIMPLE,
+		PROJECTILE_ACCURATE,
+		PROJECTILE_ICICLE,
+	}
+
 	protected bool _instantDeath = true;
 	protected bool _is_Destroyable = true;
 	protected float _damage = 1;
-	protected EnemyType _type;
+	protected EnemyClass _class;
 
 	public virtual void Kill() {
 		if (_is_Destroyable) {
@@ -39,8 +46,8 @@ public class Enemy : MonoBehaviour {
 		set { _damage = value; }
 	}
 
-	public EnemyType enemyType {
-		get { return _type; }
-		set { _type = value; }
+	public EnemyClass enemyClass {
+		get { return _class; }
+		set { _class = value; }
 	}
 }

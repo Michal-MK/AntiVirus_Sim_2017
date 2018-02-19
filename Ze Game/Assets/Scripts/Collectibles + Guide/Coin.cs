@@ -86,6 +86,7 @@ public class Coin : MonoBehaviour {
 		set {
 			_coinsCollected = value;
 			Canvas_Renderer.script.UpdateCounters();
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 		}
 	}
 

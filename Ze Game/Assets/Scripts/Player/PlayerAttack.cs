@@ -40,7 +40,6 @@ public class PlayerAttack : MonoBehaviour {
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
-		M_Player.OnBombPickup += M_Player_OnBombPickup;
 	}
 
 	#region EventImplementation
@@ -60,12 +59,6 @@ public class PlayerAttack : MonoBehaviour {
 			}
 			Canvas_Renderer.script.DisplayInfo(text, "Don't give up now.");
 		}
-	}
-
-	private void M_Player_OnBombPickup(M_Player sender, GameObject other) {
-		_bombs++;
-		Destroy(other);
-		OnAmmoPickup(AttackType.BOMBS, true, _bombs);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -127,7 +120,7 @@ public class PlayerAttack : MonoBehaviour {
 		if (!PauseUnpause.isPaused && inFireMode) {
 			if (Input.GetButtonDown("Left Mouse Button") && ammoType == AttackType.BULLETS) {
 				if (_bullets >= 1) {
-					print("Bullets remaining: " + (_bullets - 1));
+					//print("Bullets remaining: " + (_bullets - 1));
 					FireSpike();
 				}
 				else {
@@ -175,6 +168,7 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.name = ObjNames.BULLET;
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
+		bullet.GetComponent<SpikeBullet>().player = this;
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
 		_bullets--;
@@ -186,9 +180,6 @@ public class PlayerAttack : MonoBehaviour {
 		firedBomb.transform.position = transform.position + Vector3.down * 2.5f;
 		firedBomb.name = ObjNames.BOMB;
 		firedBomb.transform.parent = GameObject.Find("Collectibles").transform;
-
-		firedBomb.GetComponent<BombScript>().primed = true;
-
 		_bombs--;
 		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
 	}
@@ -200,9 +191,18 @@ public class PlayerAttack : MonoBehaviour {
 		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
 	}
 
-	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.name == ObjNames.FIRED_BULLET_NAME) {
-			Destroy(col.gameObject);
+	public void Collided(Transform collided) {
+		if(collided.name == ObjNames.BOMB_PICKUP) {
+			Destroy(collided.gameObject);
+			_bombs++;
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
+			print("temp sound");
+			OnAmmoPickup(AttackType.BOMBS, true, _bombs);
+			Canvas_Renderer.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
+		}
+
+		if (collided.name == ObjNames.BULLET_PICKUP) {
+			Destroy(collided.gameObject);
 			_bullets++;
 			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
@@ -212,7 +212,6 @@ public class PlayerAttack : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
-		M_Player.OnBombPickup -= M_Player_OnBombPickup;
 	}
 
 	public int bullets {

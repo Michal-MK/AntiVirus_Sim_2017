@@ -6,7 +6,7 @@ public class MazeEntrance : MonoBehaviour {
 	public Maze maze;
 	public Spike spike;
 
-	public float playerIdleTime = 10;
+	public float playerIdleTime = 6;
 
 	public static event Maze.MazeBehaviour OnMazeEnter;
 
@@ -34,8 +34,8 @@ public class MazeEntrance : MonoBehaviour {
 		Player_Movement.canMove = false;
 		CameraMovement.script.inMaze = true;
 
-		yield return new WaitUntil(() => !CameraMovement.script.isCamereDoneMoving);
-		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
+		yield return new WaitUntil(() => !CameraMovement.script.isCameraDoneMoving);
+		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
 
 		StartCoroutine(PreventPlayerIdle());
 		Canvas_Renderer.script.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");

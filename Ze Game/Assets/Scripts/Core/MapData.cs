@@ -74,6 +74,9 @@ public class MapData : MonoBehaviour {
 					g.SetActive(false);
 				}
 				d.isDoorOpen = true;
+				if (!includeOpposite) {
+					return;
+				}
 			}
 			if (includeOpposite) {
 				if (d.getRoomIndicies == new RoomLink(between.To, between.From)) {
@@ -81,9 +84,11 @@ public class MapData : MonoBehaviour {
 						g.SetActive(false);
 					}
 					d.isDoorOpen = true;
+					return;
 				}
 			}
 		}
+		throw new System.Exception("Door with indices " + between.From + " and " + between.To + " does not exist!");
 	}
 
 	public void CloseDoor(RoomLink between, bool includeOpposite = true) {
@@ -93,6 +98,9 @@ public class MapData : MonoBehaviour {
 					g.SetActive(true);
 				}
 				d.isDoorOpen = false;
+				if (!includeOpposite) {
+					return;
+				}
 			}
 			if (includeOpposite) {
 				if (d.getRoomIndicies == new RoomLink(between.To, between.From)) {
@@ -100,38 +108,41 @@ public class MapData : MonoBehaviour {
 						g.SetActive(true);
 					}
 					d.isDoorOpen = false;
+					return;
 				}
 			}
 		}
+		throw new System.Exception("Door with indices " + between.From + " and " + between.To + " does not exist!");
 	}
 
 	public void Progress(int progression, bool displayGuidance = true) {
 		switch (progression) {
 			case 1: {
-				OpenDoor(new RoomLink("1", "2"));
+				OpenDoor(new RoomLink(1, 2));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
 				}
 				break;
 			}
 			case 2: {
-				OpenDoor(new RoomLink("2", "3"));
+				OpenDoor(new RoomLink(2, 3));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.TOP);
 				}
 				break;
 			}
 			case 3: {
-				OpenDoor(new RoomLink("2", "4"));
-				CloseDoor(new RoomLink("1", "2"));
+				OpenDoor(new RoomLink(2, 4));
+				CloseDoor(new RoomLink(1, 2));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.BOTTOM);
 				}
 				break;
 			}
 			case 10: {
-				OpenDoor(new RoomLink("1", "2"));
-				OpenDoor(new RoomLink("4", "5"));
+				OpenDoor(new RoomLink(1, 2));
+				OpenDoor(new RoomLink(4, 5));
+				OpenDoor(new RoomLink(5, 6));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
 				}
@@ -159,7 +170,7 @@ public class MapData : MonoBehaviour {
 			string fromR = s[2];
 			string toR = s[3];
 
-			if((fromR == link.From && toR == link.To) || (fromR == link.To && toR == link.From)) {
+			if ((fromR == link.From && toR == link.To) || (fromR == link.To && toR == link.From)) {
 				return t;
 			}
 		}

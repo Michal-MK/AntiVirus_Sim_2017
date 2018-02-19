@@ -14,7 +14,7 @@ namespace Igor {
 			}
 
 			public class ObjNames {
-				public const string FIRED_BULLET_NAME = "FiredBullet";
+				public const string BULLET_PICKUP = "FiredBullet";
 				public const string BULLET = "Bullet";
 				public const string BOMB = "Bomb";
 				public const string BOMB_PICKUP = "BombPickup";

@@ -13,9 +13,9 @@ public class BossBehaviour : MonoBehaviour {
 	public GameObject Brimstone;
 
 	public SpriteRenderer selfRender;
-	private Animator selfAnim;
+	public Animator selfAnim;
 	public Rigidbody2D selfRigid;
-	public RectTransform spikeHitbox;
+	public RectTransform selfRect;
 
 	private GameObject player;
 	private RectTransform BG;
@@ -86,9 +86,7 @@ public class BossBehaviour : MonoBehaviour {
 		player = M_Player.player.gameObject;
 		pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
 		pool_KillerBlock = new ObjectPool(Resources.Load(PrefabNames.ENEMY_KILLERBLOCK_BOSS) as GameObject);
-		selfAnim = GetComponent<Animator>();
-		selfRigid = GetComponent<Rigidbody2D>();
-		health = spikeHitbox.GetComponent<BossHealth>();
+		health = GetComponentInChildren<BossHealth>();
 		attack1StartPos = BG.position;
 		attack2StartPos = new Vector3(-530, -70, 1);
 		attack3StartPos = BG.transform.position - new Vector3(0, BG.sizeDelta.y / 3);
@@ -107,7 +105,7 @@ public class BossBehaviour : MonoBehaviour {
 		}
 		selfRender.sprite = Invincible;
 
-		yield return new WaitUntil(() => CameraMovement.script.isCamereDoneMoving);
+		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
 
 		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 		Player_Movement.canMove = true;
@@ -115,11 +113,11 @@ public class BossBehaviour : MonoBehaviour {
 		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
 		yield return new WaitForSeconds(1);
 
-		//StartCoroutine(Attacks(ChooseAttack()));
+		StartCoroutine(Attacks(ChooseAttack()));
 		//1 bounce, 2 caged, 3 killerblocks, 4 laser, 5 flappy
-		int debugAttack = 5;
-		Debug.Log("DEBUG MODE first attack " + debugAttack);
-		StartCoroutine(Attacks(debugAttack));
+		//int debugAttack = 5;
+		//Debug.Log("DEBUG MODE first attack " + debugAttack);
+		//StartCoroutine(Attacks(debugAttack));
 	}
 
 	public IEnumerator InterPhase() {
@@ -200,7 +198,6 @@ public class BossBehaviour : MonoBehaviour {
 
 				//Actual Attack
 				playerSpeedMultiplier = 1;
-
 				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, BG.transform.position, Time.deltaTime / 2));
 				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, BG.transform.position, Time.deltaTime / 2));
 				positioningCage.destroy = true;
@@ -231,7 +228,6 @@ public class BossBehaviour : MonoBehaviour {
 				MoveScript positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity).GetComponent<MoveScript>();
 
 				yield return new WaitForSeconds(2);
-
 				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2));
 				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2));
 				positioningCage.destroy = true;
@@ -245,13 +241,13 @@ public class BossBehaviour : MonoBehaviour {
 
 					MoveScript BlockL = pool_KillerBlock.getNext.GetComponent<MoveScript>();
 					BlockL.gameObject.SetActive(true);
-					BlockL.transform.position = new Vector3(transform.position.x - spikeHitbox.sizeDelta.x / 2, transform.position.y, 1);
+					BlockL.transform.position = new Vector3(transform.position.x - selfRect.sizeDelta.x / 2, transform.position.y, 1);
 					BlockL.transform.localScale = new Vector3(3, 3, 1);
 					BlockL.Move();
 
 					MoveScript BlockR = pool_KillerBlock.getNext.GetComponent<MoveScript>();
 					BlockR.gameObject.SetActive(true);
-					BlockR.transform.position = new Vector3(transform.position.x + spikeHitbox.sizeDelta.x / 2, transform.position.y, 1);
+					BlockR.transform.position = new Vector3(transform.position.x + selfRect.sizeDelta.x / 2, transform.position.y, 1);
 					BlockR.transform.localScale = new Vector3(3, 3, 1);
 					BlockR.Move();
 
@@ -324,9 +320,9 @@ public class BossBehaviour : MonoBehaviour {
 				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2));
 				positioningCage.destroy = true;
 
-				yield return new WaitForSeconds(2);
-				Destroy(positioningCage.gameObject);
+				yield return new WaitForSeconds(2.5f);
 				M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.FLAPPY);
+				Destroy(positioningCage.gameObject);
 				StartCoroutine(PipeGeneration());
 
 				yield return new WaitUntil(() => doneBouncing);
@@ -347,7 +343,7 @@ public class BossBehaviour : MonoBehaviour {
 		while (Attack2) {
 			cageSize = cage.GetComponent<RectTransform>().sizeDelta.x / 2;
 			Vector3 target = GetPosInCage(cage);
-			print("New wait time: " + waitTime);
+			//print("New wait time: " + waitTime);
 			yield return new WaitForSeconds(waitTime);
 			Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, target - gameObject.transform.position);
@@ -386,8 +382,8 @@ public class BossBehaviour : MonoBehaviour {
 			RaycastHit2D right = Physics2D.Raycast(transform.position, Vector3.right, BG.sizeDelta.x, mask.value);
 			RaycastHit2D left = Physics2D.Raycast(transform.position, Vector3.left, BG.sizeDelta.x, mask.value);
 
-			float distR = Vector3.Distance(transform.position, new Vector3(right.point.x - spikeHitbox.sizeDelta.x / 2, transform.position.y));
-			float distL = Vector3.Distance(transform.position, new Vector3(left.point.x + spikeHitbox.sizeDelta.x / 2, transform.position.y));
+			float distR = Vector3.Distance(transform.position, new Vector3(right.point.x - selfRect.sizeDelta.x / 2, transform.position.y));
+			float distL = Vector3.Distance(transform.position, new Vector3(left.point.x + selfRect.sizeDelta.x / 2, transform.position.y));
 
 			yield return new WaitUntil(() => Mathf.Abs(selfAnim.GetFloat("Speed")) < 5);
 			AnimatorStateInfo state = selfAnim.GetCurrentAnimatorStateInfo(0);
@@ -416,7 +412,7 @@ public class BossBehaviour : MonoBehaviour {
 		while (true) {
 			yield return new WaitForSeconds(Random.Range(2, 4));
 			rotationDelta = Chance.Half() ? Random.Range(0.4f, 1f) : Random.Range(-1, -0.4f);
-			print(rotationDelta);
+			//print(rotationDelta);
 		}
 	}
 	//
@@ -486,7 +482,7 @@ public class BossBehaviour : MonoBehaviour {
 			RaycastHit2D down = Physics2D.Raycast(transform.position, transform.rotation * Vector3.down, BG.sizeDelta.x * 2, mask.value);
 			RaycastHit2D left = Physics2D.Raycast(transform.position, transform.rotation * Vector3.left, BG.sizeDelta.x * 2, mask.value);
 
-			print(up.transform.name);
+			//print(up.transform.name);
 
 			float distance;
 

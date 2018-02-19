@@ -55,6 +55,15 @@ public class Canvas_Renderer : MonoBehaviour {
 		leftDirectionArrows = dirArrows.Find("Left").gameObject;
 	}
 
+	public void DisplayInfoDelayed(string mainInfo, string secondaryInfo, float seconds) {
+		StartCoroutine(_Delay(mainInfo, secondaryInfo, seconds));
+	}
+
+	private IEnumerator _Delay(string mainInfo, string secondaryInfo, float seconds) {
+		yield return new WaitForSeconds(seconds);
+		DisplayInfo(mainInfo, secondaryInfo);
+	}
+
 	public void DisplayInfo(string displayedTextMain, string displayedTextSide) {
 		if (isRunning) {
 			StartCoroutine(RetryLater(displayedTextMain, displayedTextSide));
@@ -137,7 +146,7 @@ public class Canvas_Renderer : MonoBehaviour {
 		spikeCounter.text = "x " + Spike.spikesCollected;
 
 		if (Coin.coinsCollected == 5) {
-			coinCounter.text = coinCounter.text + " Completed!";
+			coinCounter.text = coinCounter.text + " Completed?";
 		}
 	}
 

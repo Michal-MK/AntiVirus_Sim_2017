@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Igor.Constants.Strings;
 
@@ -6,6 +7,8 @@ public class SignPost : MonoBehaviour {
 
 	public delegate void SignPostInteractions();
 	public static event SignPostInteractions OnAvoidanceBegin;
+
+	private List<SignPost> readPosts = new List<SignPost>();
 
 	private void Interact() {
 		switch (gameObject.name) {
@@ -16,28 +19,51 @@ public class SignPost : MonoBehaviour {
 				MusicHandler.script.TransitionMusic(MusicHandler.script.room1_3_avoidance);
 				break;
 			}
-			case "SignPost Start": {
+			case "_SignPost Start": {
 				Canvas_Renderer.script.DisplayInfo("The virus can not be damaged while it is attacking.", null);
 				break;
 			}
-			case "SignPost Room 1": {
+			case "_SignPost Room 1": {
 				Canvas_Renderer.script.DisplayInfo("All the spikes you are collecting have a purpouse, hold on to them.", null);
 				break;
 			}
-			case "SignPost PostAvoidance": {
+			case "_SignPost PostAvoidance": {
 				Canvas_Renderer.script.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
 				break;
 			}
-			case "SignPost Maze": {
+			case "_SignPost Maze": {
 				Canvas_Renderer.script.DisplayInfo("The coins are up to no use... yet", null);
 				break;
 			}
-			case "SignPost PreBoss": {
+			case "_SignPost PreBoss": {
 				Canvas_Renderer.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
+				break;
+			}
+			case "_SignPost LaserRoom": {
+				Canvas_Renderer.script.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
+																		  "This is the seventh sign, but you found only " + readPosts.Count + " dissapointed.", null);
+				if (readPosts.Count == 6) {
+					Coin.coinsCollected++;
+				}
+				break;
+			}
+			case "_SignPost TeleportationRoom": {
+				if (M_Player.player.pMovement.getCurrentMovementModifier == Player_Movement.PlayerMovement.INVERT) {
+					Canvas_Renderer.script.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
+				}
+				else {
+					Canvas_Renderer.script.DisplayInfo("!petssim ot tnaw ton od uoy dna ,tnemom yna ta raeppasid nac htap eht ,elbatsnu yrev si moor siht ni gninthgil ehT", null);
+				}
+				break;
+			}
+			case "_SignPost InvertingRoom": {
+				Canvas_Renderer.script.DisplayInfo("!desruc si moor sihT", null);
 				break;
 			}
 		}
 		StartCoroutine(Fade());
+		GetComponent<AudioSource>().Play();
+		readPosts.Add(this);
 	}
 
 	private IEnumerator Fade() {

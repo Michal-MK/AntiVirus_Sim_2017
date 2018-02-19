@@ -7,6 +7,7 @@ public class SpikeBullet : MonoBehaviour {
 	public Rigidbody2D rg;
 	public float bulletSpeed;
 	public float bulletDuration = 1.5f;
+	public PlayerAttack player;
 
 	private void OnEnable() {
 		rg.velocity = transform.up * bulletSpeed;
@@ -40,8 +41,8 @@ public class SpikeBullet : MonoBehaviour {
 		}
 		GameObject newspikeBullet = Instantiate(bulletPickup, impactPosition, transform.rotation);
 		newspikeBullet.transform.parent = GameObject.Find("Collectibles").transform;
-		newspikeBullet.transform.localScale = new Vector3(0.25f, 0.5f, 1);
 		newspikeBullet.name = "FiredBullet";
+		newspikeBullet.GetComponent<Collectible>().objectToCheckCollisionWith = player.transform;
 		Destroy(gameObject);
 	}
 }

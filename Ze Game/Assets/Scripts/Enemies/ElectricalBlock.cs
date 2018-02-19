@@ -15,7 +15,7 @@ public class ElectricalBlock : Enemy {
 	private bool despawn = false;
 
 	private void Start() {
-		_type = EnemyType.TOUCH;
+		_class = EnemyClass.TOUCH;
 		_is_Destroyable = false;
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();

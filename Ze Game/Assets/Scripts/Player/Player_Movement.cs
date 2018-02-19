@@ -23,12 +23,15 @@ public class Player_Movement : MonoBehaviour {
 	public float movementSpeed = 550;
 
 	public float flappyGravity = 8;
-	public float movementDrag = 30;
+	private float movementDrag = 30;
 	public float flappyForceScale = 35;
-	public bool canFlapAgain = true;
+	private bool canFlapAgain = true;
+
+	public AudioClip FX_Teleport;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
+		movementDrag = rigidbody.drag;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -43,7 +46,7 @@ public class Player_Movement : MonoBehaviour {
 				break;
 			}
 			case PlayerMovement.MOUSE: {
-				Move();
+				MouseMove();
 				throw new System.NotImplementedException();
 			}
 		}
@@ -53,10 +56,19 @@ public class Player_Movement : MonoBehaviour {
 		if (movementMode == PlayerMovement.FLAPPY) {
 			Flappy();
 		}
+		if (Input.GetKeyDown(KeyCode.I)) {
+			M_Player.player.isInvincible = !M_Player.player.isInvincible;
+			if (M_Player.player.isInvincible) {
+				Canvas_Renderer.script.DisplayInfo(null, "Invincibility Enabled");
+			}
+			else {
+				Canvas_Renderer.script.DisplayInfo(null, "Invincibility Disabled");
+			}
+		}
 	}
 
 	//Moving the Character using a Rigidbody 2D
-	private void Move() {
+	private void MouseMove() {
 		if (_canMove) {
 			if (Input.GetAxis("Mouse X") > 0) {
 				rigidbody.AddForce(new Vector2(movementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
@@ -157,29 +169,28 @@ public class Player_Movement : MonoBehaviour {
 		Sprite ready = tpNodes[0].sprite;
 		Sprite idle = tpNodes[1].sprite;
 		tpNodes[0].sprite = idle;
-		transform.Find("_Teleportation").gameObject.SetActive(true);
+		tpNodes[0].transform.parent.gameObject.SetActive(true);
 
-		yield return null;
-		//Make it absoule and use 0.5 as triggering range to support controllers
 		while (movementMode == PlayerMovement.TELEPORT) {
-			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 || Input.GetAxis(InputNames.MOVEMENT_VERTICAL) != 0);
-			//print("Hor " + Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) + ", Vert " + Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
+			yield return new WaitUntil(() => Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) > 0.5f || Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_VERTICAL)) > 0.5f);
 
 			Directions choice = Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 ? DetermineDirection(true, Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) : DetermineDirection(false, Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
 
 			tpNodes[(int)choice].sprite = ready;
-			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) == 0 && Input.GetAxis(InputNames.MOVEMENT_VERTICAL) == 0);
+			yield return new WaitUntil(() => Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) < 0.5f && Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_VERTICAL)) < 0.5f);
 
-			yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 || Input.GetAxis(InputNames.MOVEMENT_VERTICAL) != 0);
+			yield return new WaitUntil(() => Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) > 0.5f || Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_VERTICAL)) > 0.5f);
 			Directions secondaryChoice = Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0 ? DetermineDirection(true, Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) : DetermineDirection(false, Input.GetAxis(InputNames.MOVEMENT_VERTICAL));
 
-			if(choice == secondaryChoice) {
+			if (choice == secondaryChoice) {
 				//Do something prettier
+				GetComponent<AudioSource>().clip = FX_Teleport;
+				GetComponent<AudioSource>().Play();
 				transform.position = tpNodes[(int)secondaryChoice].transform.position;
 			}
 			tpNodes[(int)choice].sprite = idle;
 			if (movementMode == PlayerMovement.TELEPORT) {
-				yield return new WaitUntil(() => Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) == 0 && Input.GetAxis(InputNames.MOVEMENT_VERTICAL) == 0);
+				yield return new WaitUntil(() => Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL)) < 0.5f && Mathf.Abs(Input.GetAxis(InputNames.MOVEMENT_VERTICAL)) < 0.5f);
 			}
 		}
 		tpNodes[0].sprite = ready;
@@ -190,10 +201,20 @@ public class Player_Movement : MonoBehaviour {
 
 	private Directions DetermineDirection(bool isHorizontal, float value) {
 		if (isHorizontal) {
-			return value > 0 ? Directions.RIGHT : Directions.LEFT;
+			if (movementModeModifier != PlayerMovement.INVERT) {
+				return value > 0 ? Directions.RIGHT : Directions.LEFT;
+			}
+			else {
+				return value > 0 ? Directions.LEFT : Directions.RIGHT;
+			}
 		}
 		else {
-			return value > 0 ? Directions.TOP : Directions.BOTTOM;
+			if (movementModeModifier != PlayerMovement.INVERT) {
+				return value > 0 ? Directions.TOP : Directions.BOTTOM;
+			}
+			else {
+				return value > 0 ? Directions.BOTTOM : Directions.TOP;
+			}
 		}
 	}
 
@@ -229,11 +250,12 @@ public class Player_Movement : MonoBehaviour {
 				return;
 			}
 			case PlayerMovement.TELEPORT: {
+				movementMode = type;
 				StartCoroutine(Teleportation());
-				break;
+				return;
 			}
 		}
-		if (movementMode == PlayerMovement.TELEPORT) {
+		if (type != PlayerMovement.TELEPORT) {
 			StopCoroutine(Teleportation());
 			transform.Find("_Teleportation").gameObject.SetActive(false);
 		}

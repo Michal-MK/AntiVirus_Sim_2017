@@ -15,7 +15,7 @@ public class Interactable : MonoBehaviour {
 
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.tag == triggerInteractionWith.name) {
+		if (col.name == triggerInteractionWith.name) {
 			awaitingInput = true;
 			interactionInfo.SetActive(true);
 			routine = StartCoroutine(Interact());
@@ -26,7 +26,7 @@ public class Interactable : MonoBehaviour {
 	}
 
 	private void OnTriggerExit2D(Collider2D col) {
-		if (col.tag == triggerInteractionWith.name) {
+		if (col.name == triggerInteractionWith.name) {
 			awaitingInput = false;
 			interactionInfo.SetActive(false);
 			StopCoroutine(routine);
