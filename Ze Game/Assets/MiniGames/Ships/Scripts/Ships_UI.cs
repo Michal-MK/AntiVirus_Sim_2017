@@ -6,8 +6,15 @@ using Igor.Constants.Strings;
 namespace Igor.Minigames.Ships {
 
 	public class Ships_UI : MonoBehaviour {
+
+		public enum ViewingField {
+			PLAYER,
+			OPPONENT,
+		}
+
 		public ShipPrefabs prefabs;
 
+		private static ViewingField _currentField  = ViewingField.PLAYER;
 		private static ShipType _selectedShip = ShipType.NONE;
 		private static bool _isInAttackMode = false;
 
@@ -50,7 +57,8 @@ namespace Igor.Minigames.Ships {
 			shipVisual = null;
 			_selectedShip = ShipType.NONE;
 			ShipsMain.script.cursorMode = CursorMode.NORMAL;
-			Field.self.ClearHighlights();
+			//Possibly wont work with ai implementation
+			ShipsMain.singleplayer.getPlayerField.ClearHighlights();
 		}
 
 		public void DeleteMode() {
@@ -72,9 +80,19 @@ namespace Igor.Minigames.Ships {
 					Destroy(shipVisual);
 				}
 				ShipsMain.script.cursorMode = CursorMode.ATTACK_MODE;
+				ShipsMain.singleplayer.PrepareForGame();
 			}
 			else {
 				ShipsMain.script.cursorMode = CursorMode.NORMAL;
+			}
+		}
+
+		public void PopulateDefaults(int side) {
+			if((ViewingField)side == ViewingField.PLAYER) {
+				ShipsMain.singleplayer.getPlayerField.PopulateDefault();
+			}
+			else {
+				ShipsMain.singleplayer.getAiField.PopulateDefault();
 			}
 		}
 
@@ -106,6 +124,12 @@ namespace Igor.Minigames.Ships {
 					}
 				}
 			}
+			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) {
+				ShipsMain.singleplayer.getPlayerField.Show(_currentField);
+				ShipsMain.singleplayer.getAiField.Show(_currentField);
+				_currentField = getCurrentView == ViewingField.PLAYER ? ViewingField.OPPONENT : ViewingField.PLAYER;
+				print("Hello");
+			}
 		}
 
 		public static ShipType selectedShip {
@@ -114,6 +138,10 @@ namespace Igor.Minigames.Ships {
 
 		public static bool isInAttackMode {
 			get { return _isInAttackMode; }
+		}
+
+		public static ViewingField getCurrentView {
+			get { return _currentField; }
 		}
 	}
 }
