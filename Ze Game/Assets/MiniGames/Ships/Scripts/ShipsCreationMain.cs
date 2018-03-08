@@ -20,7 +20,7 @@ namespace Igor.Minigames.Ships {
 		void Start() {
 			script = this;
 			field = new Field(9, 9);
-			field.Visualize(gridVisual);
+			field.Visualize(gridVisual,Ships_UI.ViewingField.PLAYER);
 			field.locations[4, 4].locationVisual.SetSprite(ShipType.TOKEN);
 			_currentCreatedShip.locations.Add(field.locations[4, 4]);
 		}

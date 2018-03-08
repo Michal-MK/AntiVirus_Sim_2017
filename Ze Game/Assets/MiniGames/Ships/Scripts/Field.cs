@@ -1,27 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Igor.Minigames.Ships {
 	[System.Serializable]
 	public class Field {
-		public static Field self;
 		private Location[,] _locations;
 		private List<Ship> placedShips = new List<Ship>();
 		private Vector2 _dimensions;
+		private Ships_UI.ViewingField fieldOwner;
+		private Transform fieldParent;
+		private bool isCurrentlyMoving = false;
 
 		public Field(int width, int height) {
-			self = this;
 			_locations = new Location[width, height];
 			_dimensions = new Vector2(width, height);
 			for (int i = 0; i < width; i++) {
 				for (int j = 0; j < height; j++) {
-					_locations[i, j] = new Location(i, j);
+					_locations[i, j] = new Location(i, j, this);
 				}
 			}
 		}
 
 		public Field(Vector2 vector) {
-			self = this;
 			int x = (int)vector.x;
 			int y = (int)vector.y;
 
@@ -29,24 +30,34 @@ namespace Igor.Minigames.Ships {
 			_dimensions = vector;
 			for (int i = 0; i < x; i++) {
 				for (int j = 0; j < y; j++) {
-					_locations[i, j] = new Location(i, j);
+					_locations[i, j] = new Location(i, j, this);
 				}
 			}
+		}
+
+		public void PopulateDefault() {
+			GeneratorData g = new GeneratorData();
+			LevelGenerator lg = new LevelGenerator(ShipsMain.singleplayer.getPlayerField,ShipsMain.singleplayer.getAiField, g);
+			lg.Generate(this);
 		}
 
 		/// <summary>
 		/// Spawns object that represent a field.
 		/// </summary>
-		public GameObject[] Visualize(GameObject representation) {
+		public GameObject[] Visualize(GameObject representation, Ships_UI.ViewingField side) {
 			List<GameObject> fields = new List<GameObject>();
+			fieldParent = new GameObject("Field " + side.ToString()).transform;
+			fieldOwner = side;
 			foreach (Location loc in _locations) {
-				LocationVisual l = GameObject.Instantiate(representation, loc.coordinates, Quaternion.identity).GetComponent<LocationVisual>();
+				LocationVisual l = GameObject.Instantiate(representation, loc.coordinates, Quaternion.identity, fieldParent.transform).GetComponent<LocationVisual>();
 				l.name = loc.coordinates.ToString();
 				loc.locationVisual = l;
 				l.location = loc;
 				fields.Add(l.gameObject);
 			}
-			Camera.main.GetComponent<CameraAdjust>().Adjust();
+			if (side == Ships_UI.ViewingField.OPPONENT) {
+				fieldParent.transform.position = new Vector3(-_dimensions.x * 4, 0, 0);
+			}
 			return fields.ToArray();
 		}
 
@@ -56,6 +67,33 @@ namespace Igor.Minigames.Ships {
 			}
 		}
 
+		public void Show(Ships_UI.ViewingField layout) {
+			if (!isCurrentlyMoving) {
+				GameObject.Find("Canvas").GetComponent<Ships_UI>().StartCoroutine(Move(layout,FinishedMoving));
+			}
+			isCurrentlyMoving = true;
+		}
+
+		private IEnumerator Move(Ships_UI.ViewingField request, System.Action callback) {
+			if (request == fieldOwner) {
+				for (float f = 0; f < 1; f += Time.deltaTime * 2) {
+					fieldParent.transform.position = new Vector3(-_dimensions.x * 4 + _dimensions.x * 4 * f, 0, 0);
+					yield return null;
+				}
+				fieldParent.transform.position = Vector3.zero;
+			}
+			else {
+				for (float f = 0; f < 1; f += Time.deltaTime * 2) {
+					fieldParent.transform.position = new Vector3(0 - _dimensions.x * 4 * f, 0, 0);
+					yield return null;
+				}
+			}
+			callback();
+		}
+
+		public void FinishedMoving() {
+			isCurrentlyMoving = false;
+		}
 		/// <summary>
 		/// Gets a location based on where it is in the grid.
 		/// </summary>
@@ -94,6 +132,13 @@ namespace Igor.Minigames.Ships {
 			if (placedShips.Count == 0) {
 				ShipsMain.singleplayer.GameOver();
 			}
+		}
+
+		/// <summary>
+		/// Gets parent GameObject of this field
+		/// </summary>
+		public Transform getFieldParent {
+			get { return fieldParent; }
 		}
 
 		/// <summary>

@@ -40,8 +40,6 @@ namespace Igor.Minigames.Ships {
 		public Texture2D attackCursor;
 		public Texture2D deleteCursor;
 
-		private Field field;
-		private GameObject[] visual;
 
 		private static CursorMode mode = CursorMode.SHIP_PLACEMENT;
 		private Vector2 cursorOffset = new Vector2(300, 300);
@@ -51,18 +49,10 @@ namespace Igor.Minigames.Ships {
 
 		void Start() {
 			script = this;
-			singleplayer = new GameplayManagerSP();
+			singleplayer = new GameplayManagerSP(new Field(dimensionsPublic), new Field(dimensionsPublic));
 			mode = CursorMode.NORMAL;
-			field = new Field(dimensionsPublic);
-			visual = field.Visualize(locationObj);
-
 			Cursor.visible = true;
-		}
-
-		public void PopulateDefault() {
-			GeneratorData g = new GeneratorData();
-			LevelGenerator lg = new LevelGenerator(field, g);
-			lg.Generate();
+			Camera.main.GetComponent<CameraAdjust>().Adjust();
 		}
 
 		public void GenerateNew() {
@@ -76,17 +66,23 @@ namespace Igor.Minigames.Ships {
 			int.TryParse(yDimF.text, out yDim);
 
 			print(xDim + "  " + yDim);
-			if (xDim > 4 && yDim > 4 && xDim <= 20 && yDim <= 20) {
-				if (visual != null) {
-					foreach (GameObject g in visual) {
+			if (xDim >= 5 && yDim >= 5 && xDim <= 20 && yDim <= 20) {
+				if (singleplayer.fieldObjectsPlayer != null) {
+					foreach (GameObject g in singleplayer.fieldObjectsPlayer) {
 						Destroy(g);
 					}
-					visual = new GameObject[xDim * yDim];
+					singleplayer.fieldObjectsPlayer = new GameObject[xDim * yDim];
 				}
+				if (singleplayer.fieldObjectsAi != null) {
+					foreach (GameObject g in singleplayer.fieldObjectsAi) {
+						Destroy(g);
+					}
+					singleplayer.fieldObjectsAi = new GameObject[xDim * yDim];
+				}
+
 				dimensions = new Vector2(xDim, yDim);
 				mode = CursorMode.NORMAL;
-				field = new Field(dimensions);
-				visual = field.Visualize(locationObj);
+				singleplayer.RecreateField(dimensions,locationObj);
 			}
 			else {
 				print("Not a valid Input values between 5 and 20 inclusive");

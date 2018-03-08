@@ -25,15 +25,15 @@ public class LocationVisual_Game : LocationVisual {
 						}
 					}
 				}
-				Field.self.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
+				ShipsMain.singleplayer.getPlayerField.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
 			}
 		}
 		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
-			foreach (Ship ship in Field.self.getAllShips) {
+			foreach (Ship ship in ShipsMain.singleplayer.getPlayerField.getAllShips) {
 				foreach (Location location in ship.getLocation) {
 					if (location == this.location) {
 						ship.RemoveFromEditor();
-						Field.self.getAllShips.Remove(ship);
+						ShipsMain.singleplayer.getPlayerField.getAllShips.Remove(ship);
 						return;
 					}
 				}
@@ -49,7 +49,8 @@ public class LocationVisual_Game : LocationVisual {
 					foreach (Location vis in location.getPlacedShip.getLocation) {
 						vis.locationVisual.StartCoroutine(vis.locationVisual.FadeOverlayTo(OVER_Sunk));
 					}
-					Field.self.ShipSunk(location.getPlacedShip);
+					//Implementation with Ai needed
+					ShipsMain.singleplayer.getPlayerField.ShipSunk(location.getPlacedShip);
 				}
 			}
 			else if (location.isToken || location.isAvailable) {

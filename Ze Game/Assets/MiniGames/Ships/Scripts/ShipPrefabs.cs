@@ -8,11 +8,6 @@ namespace Igor.Minigames.Ships {
 		public GameObject airObj;
 		public GameObject battlecruiserObj;
 		public GameObject simpleRaycastObj;
-
-		public GameObject cargoObjRotated;
-		public GameObject warObjRotated;
-		public GameObject airObjRotated;
-
 		public GameObject customsPrefab;
 
 		private GameObject customs;

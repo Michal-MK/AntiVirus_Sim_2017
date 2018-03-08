@@ -23,7 +23,7 @@ public class Raycaster : MonoBehaviour {
 		}
 		if (_selected != null && hits.Length == 0) {
 			_selected = null;
-			Field.self.ClearHighlights();
+			ShipsMain.singleplayer.getPlayerField.ClearHighlights();
 		}
 	}
 

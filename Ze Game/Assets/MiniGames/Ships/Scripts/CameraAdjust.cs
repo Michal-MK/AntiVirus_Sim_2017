@@ -14,7 +14,7 @@ public class CameraAdjust : MonoBehaviour {
 		isAdjusted = false;
 
 		buttonWidthReference = GameObject.Find("_Submarine").GetComponent<RectTransform>();
-		cam.transform.position = new Vector3(Field.self.getDimensions.x / 2 - 0.5f, Field.self.getDimensions.y / 2 - 0.5f, -10);
+		cam.transform.position = new Vector3(ShipsMain.singleplayer.getPlayerField.getDimensions.x / 2 - 0.5f, ShipsMain.singleplayer.getPlayerField.getDimensions.y / 2 - 0.5f, -10);
 		cam.orthographicSize = 2;
 
 		Vector3 topRaycast = new Vector3(transform.position.x, cam.transform.position.y + cam.orthographicSize);
