@@ -13,12 +13,13 @@ namespace Igor.Minigames.Ships {
 
 		private void Start() {
 			ui = GameObject.Find("Canvas").GetComponent<Ships_UI>();
+
 			DirectoryInfo d = new DirectoryInfo(Application.dataPath + Path.DirectorySeparatorChar + "Ships" + Path.DirectorySeparatorChar);
 			foreach (FileInfo f in d.GetFiles("*.txt")) {
 				CustomShipPreview customShipPrew = Instantiate(preview, scrollView).GetComponent<CustomShipPreview>();
 				using (StreamReader read = File.OpenText(f.FullName)) {
 					customShipPrew.transform.Find("Name").GetComponent<Text>().text = read.ReadLine();
-					//int hp = int.Parse(read.ReadLine());
+					int hp = int.Parse(read.ReadLine());
 					string boolean = read.ReadLine();
 					bool canRotate = false;
 					if(boolean == "true") {
@@ -36,11 +37,6 @@ namespace Igor.Minigames.Ships {
 					customShipPrew.main_UI = this.ui;
 				}
 			}
-		}
-
-		public Ships_UI ship_UI {
-			get { return ui; }
-			set { ui = value; }
 		}
 	}
 }
