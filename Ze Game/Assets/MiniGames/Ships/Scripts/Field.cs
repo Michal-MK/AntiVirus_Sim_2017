@@ -75,7 +75,7 @@ namespace Igor.Minigames.Ships {
 		}
 
 		private IEnumerator Move(Ships_UI.ViewingField request, System.Action callback) {
-			if (request == fieldOwner) {
+			if (request != fieldOwner) {
 				for (float f = 0; f < 1; f += Time.deltaTime * 2) {
 					fieldParent.transform.position = new Vector3(-_dimensions.x * 4 + _dimensions.x * 4 * f, 0, 0);
 					yield return null;
