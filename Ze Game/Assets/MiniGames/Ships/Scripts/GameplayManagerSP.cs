@@ -4,7 +4,7 @@ using Igor.Minigames.Ships;
 
 public class GameplayManagerSP {
 
-	private GameObject gameOver;
+	private Ships_UI mainUI;
 	private bool gameStarted = false;
 
 	private Field player;
@@ -14,7 +14,7 @@ public class GameplayManagerSP {
 	private GameObject[] aiVisual;
 
 	public GameplayManagerSP(Field player, Field ai) {
-		gameOver = GameObject.Find("Canvas").transform.Find("Game_Over").gameObject;
+		mainUI = GameObject.Find("Canvas").GetComponent<Ships_UI>();
 		this.player = player;
 		this.ai = ai;
 		playerVisual = player.Visualize(ShipsMain.script.locationObj, Ships_UI.ViewingField.PLAYER);
@@ -42,7 +42,7 @@ public class GameplayManagerSP {
 	}
 
 	public void GameOver() {
-		gameOver.SetActive(true);
+		mainUI.refHolder.gameOverObj.SetActive(true);
 	}
 
 

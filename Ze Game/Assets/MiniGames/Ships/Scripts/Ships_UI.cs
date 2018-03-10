@@ -24,6 +24,8 @@ namespace Igor.Minigames.Ships {
 		private int currentRotation = 1;
 		private bool canRotateShip = true;
 
+		public UI_ReferenceHolder refHolder;
+
 		private Dictionary<ShipType, bool> allowRotationForShipType = new Dictionary<ShipType, bool> {
 			{ShipType.SUBMARINE,false },
 			{ShipType.CARGO, true },
@@ -31,6 +33,10 @@ namespace Igor.Minigames.Ships {
 			{ShipType.AIR,true },
 			{ShipType.BATTLECRUSER,false }
 		};
+
+		private void Start() {
+			refHolder = GetComponent<UI_ReferenceHolder>();
+		}
 
 		public void SetSelectedShip(int shipID) {
 			Destroy(shipVisual);
