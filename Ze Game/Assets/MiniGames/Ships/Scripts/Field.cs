@@ -37,7 +37,7 @@ namespace Igor.Minigames.Ships {
 
 		public void PopulateDefault() {
 			GeneratorData g = new GeneratorData();
-			LevelGenerator lg = new LevelGenerator(ShipsMain.singleplayer.getPlayerField,ShipsMain.singleplayer.getAiField, g);
+			LevelGenerator lg = new LevelGenerator(ShipsMain.singleplayer.getPlayerField, ShipsMain.singleplayer.getAiField, g);
 			lg.Generate(this);
 		}
 
@@ -69,12 +69,13 @@ namespace Igor.Minigames.Ships {
 
 		public void Show(Ships_UI.ViewingField layout) {
 			if (!isCurrentlyMoving) {
-				GameObject.Find("Canvas").GetComponent<Ships_UI>().StartCoroutine(Move(layout,FinishedMoving));
+				GameObject.Find("Canvas").GetComponent<Ships_UI>().StartCoroutine(Move(layout));
 			}
 			isCurrentlyMoving = true;
+			ShipsMain.ui.refHolder.currentField.text = layout == Ships_UI.ViewingField.PLAYER ? "Transitioning to Opponent field" : "Transitioning to Player field";
 		}
 
-		private IEnumerator Move(Ships_UI.ViewingField request, System.Action callback) {
+		private IEnumerator Move(Ships_UI.ViewingField request) {
 			if (request != fieldOwner) {
 				for (float f = 0; f < 1; f += Time.deltaTime * 2) {
 					fieldParent.transform.position = new Vector3(-_dimensions.x * 4 + _dimensions.x * 4 * f, 0, 0);
@@ -88,12 +89,15 @@ namespace Igor.Minigames.Ships {
 					yield return null;
 				}
 			}
-			callback();
+			isCurrentlyMoving = false;
+			if (request != Ships_UI.ViewingField.PLAYER) {
+				ShipsMain.ui.refHolder.currentField.text = "Your field";
+			}
+			else {
+				ShipsMain.ui.refHolder.currentField.text = "Opponents field";
+			}
 		}
 
-		public void FinishedMoving() {
-			isCurrentlyMoving = false;
-		}
 		/// <summary>
 		/// Gets a location based on where it is in the grid.
 		/// </summary>

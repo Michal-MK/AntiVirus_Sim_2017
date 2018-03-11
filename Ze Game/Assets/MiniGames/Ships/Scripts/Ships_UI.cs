@@ -36,6 +36,7 @@ namespace Igor.Minigames.Ships {
 
 		private void Start() {
 			refHolder = GetComponent<UI_ReferenceHolder>();
+			ShipsMain.ui = this;
 		}
 
 		public void SetSelectedShip(int shipID) {

@@ -46,6 +46,7 @@ namespace Igor.Minigames.Ships {
 
 		public static ShipsMain script;
 		public static GameplayManagerSP singleplayer;
+		public static Ships_UI ui;
 
 		void Start() {
 			script = this;
