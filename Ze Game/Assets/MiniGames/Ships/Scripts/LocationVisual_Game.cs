@@ -24,16 +24,17 @@ public class LocationVisual_Game : LocationVisual {
 							}
 						}
 					}
+					ShipsMain.singleplayer.getPlayerField.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
+					ShipsMain.singleplayer.getAiField.getGenerator.Generate(Ships_UI.selectedShip);
 				}
-				ShipsMain.singleplayer.getPlayerField.getAllShips.Add(new Ship(ShipPlacement.current.places, Ships_UI.selectedShip));
 			}
 		}
 		else if (ShipsMain.script.cursorMode == Igor.Minigames.Ships.CursorMode.SHIP_REMOVE) {
 			foreach (Ship ship in ShipsMain.singleplayer.getPlayerField.getAllShips) {
 				foreach (Location location in ship.getLocation) {
 					if (location == this.location) {
-						ship.RemoveFromEditor();
-						ShipsMain.singleplayer.getPlayerField.getAllShips.Remove(ship);
+						ShipsMain.singleplayer.getAiField.RemoveShip(ship.getType);
+						ShipsMain.singleplayer.getPlayerField.RemoveShip(ship);
 						return;
 					}
 				}

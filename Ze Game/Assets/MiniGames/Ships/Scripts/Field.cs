@@ -10,6 +10,7 @@ namespace Igor.Minigames.Ships {
 		private Vector2 _dimensions;
 		private Ships_UI.ViewingField fieldOwner;
 		private Transform fieldParent;
+		private LevelGenerator _generator;
 		private bool isCurrentlyMoving = false;
 
 		public Field(int width, int height) {
@@ -37,8 +38,8 @@ namespace Igor.Minigames.Ships {
 
 		public void PopulateDefault() {
 			GeneratorData g = new GeneratorData();
-			LevelGenerator lg = new LevelGenerator(ShipsMain.singleplayer.getPlayerField,ShipsMain.singleplayer.getAiField, g);
-			lg.Generate(this);
+			_generator = new LevelGenerator(ShipsMain.singleplayer.getPlayerField, ShipsMain.singleplayer.getAiField, g);
+			_generator.Generate(this);
 		}
 
 		/// <summary>
@@ -67,9 +68,29 @@ namespace Igor.Minigames.Ships {
 			}
 		}
 
+		public void RemoveShip(Ship ship) {
+			Field shipsField = null;
+			foreach (Location location in ship.getLocation) {
+				location.RemoveShip();
+				shipsField = location.getParentField;
+				foreach (Location neighbor in location.getNeighborsOnAxis) {
+					neighbor.RemoveShip();
+				}
+			}
+			shipsField.getAllShips.Remove(ship);
+		}
+
+		public void RemoveShip(ShipType type) {
+			foreach (Ship ship in getAllShips) {
+				if(ship.getType == type) {
+					RemoveShip(ship);
+				}
+			}
+		}
+
 		public void Show(Ships_UI.ViewingField layout) {
 			if (!isCurrentlyMoving) {
-				GameObject.Find("Canvas").GetComponent<Ships_UI>().StartCoroutine(Move(layout,FinishedMoving));
+				GameObject.Find("Canvas").GetComponent<Ships_UI>().StartCoroutine(Move(layout, FinishedMoving));
 			}
 			isCurrentlyMoving = true;
 		}
@@ -160,6 +181,22 @@ namespace Igor.Minigames.Ships {
 		/// </summary>
 		public Vector2 getDimensions {
 			get { return _dimensions; }
+		}
+
+		public Ships_UI.ViewingField getFieldSide {
+			get { return fieldOwner; }
+		}
+
+		public LevelGenerator getGenerator {
+			get {
+				if (_generator == null) {
+					_generator = new LevelGenerator(this);
+				}
+				else {
+
+				}
+				return _generator;
+			}
 		}
 	}
 }
