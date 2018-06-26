@@ -34,12 +34,11 @@ public class Control : MonoBehaviour {
 			script = this;
 			script.loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
+			SceneManager.sceneLoaded += OnSceneFinishedLoading;
 		}
 		else if (script != this) {
 			Destroy(gameObject);
-			LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		}
-		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {

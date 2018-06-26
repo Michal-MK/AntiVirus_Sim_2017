@@ -23,7 +23,7 @@ public class ElectricalBlock : Enemy {
 		StartCoroutine(Cycle());
 	}
 
-	public IEnumerator Cycle() {
+	private IEnumerator Cycle() {
 		while (!despawn) {
 			selfCol.enabled = false;
 			warnSign.SetActive(false);
@@ -38,7 +38,7 @@ public class ElectricalBlock : Enemy {
 
 			yield return new WaitForSeconds(timeCycleIdle);
 			killerBlock.SetActive(false);
-			Vector3 pos = KBPositions();
+			Vector3 pos = GetNewPosition();
 			killerBlock.transform.parent.position = pos;
 			warnSign.SetActive(true);
 			yield return new WaitForSeconds(timeWarning);
@@ -46,7 +46,7 @@ public class ElectricalBlock : Enemy {
 		Destroy(gameObject);
 	}
 
-	public Vector3 KBPositions() {
+	private Vector3 GetNewPosition() {
 		Vector3 killerblockpos = M_Player.player.transform.position;
 		while (Vector2.Distance(M_Player.player.transform.position, killerblockpos) < 12) {
 

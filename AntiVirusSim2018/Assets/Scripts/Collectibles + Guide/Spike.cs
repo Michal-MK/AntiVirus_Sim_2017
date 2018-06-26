@@ -73,10 +73,8 @@ public class Spike : MonoBehaviour {
 				break;
 			}
 			case 3: {
-				GameObject lastPos = maze.grid[maze.rowcollCount / 2, maze.rowcollCount / 2];
-
-				newX = lastPos.transform.position.x;
-				newY = lastPos.transform.position.y;
+				newX = maze.middleCell.position.x;
+				newY = maze.middleCell.position.y;
 				transform.localScale = Vector2.one * 3;
 				break;
 			}

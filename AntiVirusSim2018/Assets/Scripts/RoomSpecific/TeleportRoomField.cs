@@ -92,7 +92,6 @@ public class TeleportRoomField : MonoBehaviour {
 		Transform cells = transform.Find("Cells");
 		dangerWarnings = transform.Find("_DangerWarnings");
 
-		print(dangerWarnings);
 		for (int i = 0; i < fields.GetLength(0); i++) {
 			for (int j = 0; j < fields.GetLength(1); j++) {
 				fields[i, j] = cells.GetChild(counter);

@@ -55,11 +55,11 @@ public class MazeEntrance : MonoBehaviour {
 		}
 
 		CameraMovement.script.transform.position = new Vector3(maze.middleCell.position.x, maze.middleCell.position.y, -10);
-		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, maze.mazeDimension/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
+		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, maze.mazeSize/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
 
 		spike.SetPosition(false);
-		Vector2 rndEdge = maze.GetEdgeCell();
-		M_Player.player.transform.position = maze.grid[(int)rndEdge.x, (int)rndEdge.y].transform.position;
+		Vector2Int rndEdge = maze.GetEdgeCell();
+		M_Player.player.transform.position = maze.grid[rndEdge.x, rndEdge.y].transform.position;
 		M_Player.player.transform.localScale = new Vector3(2, 2, 0);
 		maze.playerEntrancePosition = rndEdge;
 

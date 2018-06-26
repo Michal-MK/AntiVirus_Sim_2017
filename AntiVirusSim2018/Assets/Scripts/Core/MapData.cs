@@ -13,16 +13,16 @@ public class MapData : MonoBehaviour {
 
 	public static MapData script;
 
-	private List<Door> _doors = new List<Door>();
+	private readonly List<Door> _doors = new List<Door>();
 
-	private MapMode _mode = MapMode.LIGHT;
+	public bool isBoss1Killed { get; } = false;
+	public MapMode currentMapMode { get; private set; } = MapMode.LIGHT;
+
 
 	public enum MapMode {
 		LIGHT,
 		DARK
 	}
-
-	private bool boss1Killed = false;
 
 	private void Awake() {
 		script = this;
@@ -49,10 +49,13 @@ public class MapData : MonoBehaviour {
 	}
 
 	public void SwitchMapMode(MapMode mode) {
-		_mode = mode;
-		FindObjectOfType<EnemySpawner>().UpdatePrefabs(_mode);
+		currentMapMode = mode;
+		FindObjectOfType<EnemySpawner>().UpdatePrefabs(currentMapMode);
 		foreach (TurretAttack turret in FindObjectsOfType<TurretAttack>()) {
 			turret.SwapStance(mode);
+		}
+		foreach (SignPost sign in FindObjectsOfType<SignPost>()) {
+			sign.MapStanceSwitch(mode);
 		}
 		switch (mode) {
 			case MapMode.LIGHT: {
@@ -183,15 +186,7 @@ public class MapData : MonoBehaviour {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 
-	public bool isBoss1Killed {
-		get { return boss1Killed; }
-	}
-
 	public Door[] allDoors {
 		get { return _doors.ToArray(); }
-	}
-
-	public MapMode currentMapMode {
-		get { return _mode; }
 	}
 }

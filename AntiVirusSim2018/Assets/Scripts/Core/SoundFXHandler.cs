@@ -34,7 +34,6 @@ public class SoundFXHandler : MonoBehaviour {
 		bool added = false;
 		foreach (AudioSource s in sources) {
 			if (s.clip == null) {
-				print("Added");
 				added = true;
 				s.clip = newClip;
 				s.Play();
@@ -43,7 +42,7 @@ public class SoundFXHandler : MonoBehaviour {
 			}
 		}
 		if (!added) {
-			print("Not Enough Sound players");
+			print("Not Enough Sound players to play " + newClip.name);
 		}
 
 	}
@@ -51,7 +50,6 @@ public class SoundFXHandler : MonoBehaviour {
 	public IEnumerator RemoveClipAfterFinish(AudioSource s) {
 		yield return new WaitUntil(() => !s.isPlaying);
 		s.clip = null;
-		print("Removed");
 	}
 
 	private void OnDestroy() {

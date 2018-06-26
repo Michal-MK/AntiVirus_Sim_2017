@@ -3,5 +3,5 @@ using UnityEngine;
 public class Cell : MonoBehaviour {
 	public int selfX;
 	public int selfY;
-	public bool neverVisitMeAgain = false;
+	public bool visited = false;
 }

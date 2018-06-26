@@ -8,7 +8,11 @@ public class SignPost : MonoBehaviour {
 	public delegate void SignPostInteractions();
 	public static event SignPostInteractions OnAvoidanceBegin;
 
-	private List<SignPost> readPosts = new List<SignPost>();
+	private static List<SignPost> readPosts = new List<SignPost>();
+
+
+	public Sprite signPostNormal;
+	public Sprite signPostDark;
 
 	private void Interact() {
 		switch (gameObject.name) {
@@ -64,6 +68,19 @@ public class SignPost : MonoBehaviour {
 		StartCoroutine(Fade());
 		GetComponent<AudioSource>().Play();
 		readPosts.Add(this);
+	}
+
+	public void MapStanceSwitch(MapData.MapMode mode) {
+		switch (mode) {
+			case MapData.MapMode.LIGHT: {
+				GetComponent<SpriteRenderer>().sprite = signPostNormal;
+				return;
+			}
+			case MapData.MapMode.DARK: {
+				GetComponent<SpriteRenderer>().sprite = signPostDark;
+				return;
+			}
+		}
 	}
 
 	private IEnumerator Fade() {

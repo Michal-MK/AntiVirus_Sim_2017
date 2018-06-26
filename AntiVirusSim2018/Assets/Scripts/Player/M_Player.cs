@@ -27,6 +27,7 @@ public class M_Player : MonoBehaviour {
 	public Sprite sad;
 
 	public static M_Player player;
+
 	public bool isInvincible = false;
 
 	public static event BackgroundChanged OnRoomEnter;
@@ -36,7 +37,6 @@ public class M_Player : MonoBehaviour {
 	public static event SimplePlayerEvent OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
-
 
 	public enum PlayerState {
 		NORMAL,
@@ -48,11 +48,11 @@ public class M_Player : MonoBehaviour {
 	private void Awake() {
 		if (player == null) {
 			player = this;
+			LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		}
 		else if (player != this) {
 			Destroy(gameObject);
 		}
-		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -66,20 +66,19 @@ public class M_Player : MonoBehaviour {
 	private IEnumerator Start() {
 		Cursor.lockState = CursorLockMode.Confined;
 		currentBG_name = BackgroundNames.BACKGROUND1_1;
-		//print("Delay");
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR
 		if (!Control.script.allowTesting && SaveManager.current == null) {
 			UnityEditor.EditorApplication.isPlaying = false;
 		}
 #endif
+
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.DisplayInfo("Welcome! \n" +
 												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n"
 												, null);
-
 			Control.currAttempt = attempts;
 		}
 		Canvas_Renderer.script.DisplayInfo(null, "Good luck & Have fun!");
@@ -106,7 +105,6 @@ public class M_Player : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.tag == "Enemy" && isInvincible == false) {
-			print(col.gameObject.name);
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
@@ -170,22 +168,10 @@ public class M_Player : MonoBehaviour {
 
 	public RectTransform GetCurrentBackground() {
 		if (!string.IsNullOrEmpty(currentBG_name)) {
-			//print(currentBG_name);
 			return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 		}
 		else {
-			try {
-				currentBG_name = SaveManager.current.data.player.currentBGName;
-				return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
-			}
-			catch {
-				if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "ZZ Debug Scene") {
-					return GameObject.Find("Background").GetComponent<RectTransform>();
-				}
-				else {
-					throw new System.Exception("No background assigned to player!");
-				}
-			}
+			throw new System.Exception("No background assigned to player!");
 		}
 	}
 
@@ -193,7 +179,7 @@ public class M_Player : MonoBehaviour {
 		get { return _gameProgression; }
 		set {
 			_gameProgression = value;
-			print(gameProgression);
+			print("Setting progession to " + gameProgression);
 		}
 	}
 }
