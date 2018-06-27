@@ -106,15 +106,8 @@ public class UserInterface : MonoBehaviour {
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
 		switch (scene.name) {
-			case SceneNames.MENU_SCENE: {
-
-				return;
-			}
 			case SceneNames.GAME1_SCENE: {
 				M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
-				return;
-			}
-			default: {
 				return;
 			}
 		}

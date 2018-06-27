@@ -175,6 +175,12 @@ public class M_Player : MonoBehaviour {
 		}
 	}
 
+
+	private void OnDestroy() {
+		player = null;
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+	}
+
 	public static int gameProgression {
 		get { return _gameProgression; }
 		set {

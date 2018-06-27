@@ -14,6 +14,7 @@ public class TurretAttack : MonoBehaviour {
 	public bool useDefaultTiming;
 	public bool applyRandomness;
 	public float randomnessMultiplier;
+	public float projectileLifeSpan = -1;
 
 	private Vector3 targetPos;
 	private ObjectPool pool_EnemyProjectile;
@@ -68,40 +69,35 @@ public class TurretAttack : MonoBehaviour {
 			int diff = Control.currDifficulty;
 
 			if (diff <= 2) {
-				Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
-				if (applyRandomness) {
-					Vector3 rnd = RandomVec(diff);
-					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((targetPos + rnd) - gameObject.transform.position));
-				}
-				else {
-					bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, (targetPos - gameObject.transform.position));
-				}
-				bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
-				bullet.transform.SetParent(enemy);
-				bullet.gameObject.SetActive(true);
-				bullet.projectileSpeed = 20;
-				bullet.Fire();
+				FireBullet();
 			}
 			else {
 				for (int i = 0; i < 2; i++) {
-					Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
-					if (applyRandomness) {
-						Vector3 rnd = RandomVec(diff);
-						bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((targetPos + rnd) - (gameObject.transform.position)));
-					}
-					else {
-						bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, (targetPos - gameObject.transform.position));
-					}
-					bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
-					bullet.transform.SetParent(enemy);
-					bullet.gameObject.SetActive(true);
-					bullet.projectileSpeed = 25;
-					bullet.Fire();
+					FireBullet();
 				}
 			}
 			currentSpawnRate = Mathf.Clamp(currentSpawnRate - spawnRateDelta, turretSpawnRateEnd, turretSpawnRateStart);
 			yield return new WaitForSeconds(currentSpawnRate);
 		}
+	}
+
+	private void FireBullet() {
+		Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
+		if (applyRandomness) {
+			Vector3 rnd = RandomVec(Control.currDifficulty);
+			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((targetPos + rnd) - gameObject.transform.position));
+		}
+		else {
+			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, (targetPos - gameObject.transform.position));
+		}
+		bullet.transform.position = gameObject.transform.position - (bullet.transform.rotation * new Vector3(0, 1, 0)) * 2;
+		bullet.transform.SetParent(enemy);
+		bullet.gameObject.SetActive(true);
+		bullet.projectileSpeed = 20;
+		if (projectileLifeSpan > 0) {
+			bullet.StartCoroutine(bullet.Deactivate(projectileLifeSpan));
+		}
+		bullet.Fire();
 	}
 
 	public void SwapStance(MapData.MapMode stance) {

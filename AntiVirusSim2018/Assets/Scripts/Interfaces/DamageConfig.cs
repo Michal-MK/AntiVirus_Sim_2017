@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class DamageConfig : MonoBehaviour {
+public class DamageConfig : MonoBehaviour {
 	public WeaponType damagedBy;
 
 	public bool deactivate;

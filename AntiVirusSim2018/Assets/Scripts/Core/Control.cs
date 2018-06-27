@@ -29,12 +29,13 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	void Awake() {
+	private void Awake() {
 		if (script == null) {
 			script = this;
 			script.loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
 			SceneManager.sceneLoaded += OnSceneFinishedLoading;
+			gameObject.name = "Active Game Control";
 		}
 		else if (script != this) {
 			Destroy(gameObject);
@@ -104,7 +105,6 @@ public class Control : MonoBehaviour {
 		else {
 			UserInterface.sceneMode = UserInterface.UIScene.OTHER;
 		}
-
 		Time.timeScale = 1;
 		WindowManager.ClearWindows();
 	}
@@ -124,6 +124,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		print("Destroyed instance " + gameObject.name);
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}

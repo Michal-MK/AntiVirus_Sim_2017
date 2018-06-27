@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public static class LerpFunctions {
 
-	public static IEnumerator LerpPosition(GameObject obj, Vector3 end, float stepFreq) {
+	public static IEnumerator LerpPosition(GameObject obj, Vector3 end, float stepFreq, Action finished) {
 
 		float sX = obj.transform.position.x;
 		float sY = obj.transform.position.y;
@@ -21,9 +22,12 @@ public static class LerpFunctions {
 			yield return null;
 		}
 		obj.transform.position = end;
+		if (finished != null) {
+			finished.Invoke();
+		}
 	}
 
-	public static IEnumerator SmoothStepPosition(GameObject obj, Vector3 start, Vector3 end, float stepFreq) {
+	public static IEnumerator SmoothStepPosition(GameObject obj, Vector3 start, Vector3 end, float stepFreq, Action finished) {
 
 		float sX = start.x;
 		float sY = start.y;
@@ -38,6 +42,9 @@ public static class LerpFunctions {
 			yield return null;
 		}
 		obj.transform.position = end;
+		if (finished != null) {
+			finished.Invoke();
+		}
 	}
 }
 

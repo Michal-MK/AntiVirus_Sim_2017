@@ -11,8 +11,6 @@ public class SoundFXHandler : MonoBehaviour {
 	public AudioClip CoinCollected;
 	public AudioClip ELShock;
 
-	private bool lastClip = false;
-
 	public static SoundFXHandler script;
 
 	private void Awake() {

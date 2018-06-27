@@ -16,7 +16,7 @@ public class Icicle : Projectile {
 			selfRender.sprite = crackedIcicleSprite;
 			gameObject.tag = Tags.ENEMY_INACTIVE;
 			StartCoroutine(Fade());
-			SpawnParticles(transform, 2);
+			SpawnParticles(2);
 			selfRigid.velocity /= 1.4f;
 			hitCount++;
 		}
@@ -27,10 +27,9 @@ public class Icicle : Projectile {
 		hitCount = 1;
 	}
 
-	private void SpawnParticles(Transform originalPlace, float time) {
+	private void SpawnParticles(float time) {
 		ParticleSystem ps = Instantiate(emmitter, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 		ps.Emit(Random.Range(8, 16) / hitCount);
-		Marker m = ps.gameObject.AddComponent<Marker>();
-		m.StartCoroutine(TimedDestruction(ps.gameObject, time));
+		SelfDestructIn(time);
 	}
 }

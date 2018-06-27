@@ -38,14 +38,10 @@ public class GameSettings : MonoBehaviour {
 			script = this;
 		}
 		else if (script != this) {
-			Destroy(script.gameObject);
+			DestroyImmediate(gameObject);
+			return;
 		}
-
 		Validate(File.OpenText(path));
-	}
-
-	// Use this for initialization
-	void Start() {
 	}
 
 	private void Validate(StreamReader sr) {

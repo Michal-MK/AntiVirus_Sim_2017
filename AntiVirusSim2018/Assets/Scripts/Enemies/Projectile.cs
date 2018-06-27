@@ -33,9 +33,8 @@ public class Projectile : Enemy {
 		gameObject.SetActive(false);
 	}
 
-	protected IEnumerator TimedDestruction(GameObject target, float seconds) {
-		yield return new WaitForSeconds(seconds);
-		Destroy(target);
+	public void SelfDestructIn(float seconds) {
+		Destroy(gameObject,seconds);
 	}
 
 	public void SetSprite(Sprite sprite) {
@@ -54,11 +53,7 @@ public class Projectile : Enemy {
 	}
 
 	protected virtual void OnTriggerExit2D(Collider2D col) {
-
 		if (col.tag == "BG") {
-			gameObject.SetActive(false);
-		}
-		if (col.transform.tag == "Wall") {
 			gameObject.SetActive(false);
 		}
 	}
@@ -67,7 +62,6 @@ public class Projectile : Enemy {
 		if (col.transform.name == "Block") {
 			print("Collided with a block");
 		}
-
 	}
 
 	public float projectileSpeed {

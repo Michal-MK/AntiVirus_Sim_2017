@@ -12,7 +12,7 @@ public class Rotations : MonoBehaviour {
 	public bool useRandomSpeed = false;
 	public bool useRandomRotationDirection = false;
 
-	private float increment = 0;
+	private float angleObjectOffset = 0;
 	private float angle = 0;
 
 	private Transform[] affectedObjects;
@@ -24,9 +24,9 @@ public class Rotations : MonoBehaviour {
 		for (int i = 0; i < affected.Length; i++) {
 			affectedObjects[i] = affected[i].transform;
 		}
-		increment = 360 / affectedObjects.Length;
+		angleObjectOffset = 360 / affectedObjects.Length;
 		if (useCustomSpacing) {
-			increment = customIncrement;
+			angleObjectOffset = customIncrement;
 		}
 		if (useRandomSpeed) {
 			StartCoroutine(AlterSpeed());
@@ -43,7 +43,7 @@ public class Rotations : MonoBehaviour {
 
 			t.position = new Vector3(newX, newY);
 
-			angle += increment;
+			angle += angleObjectOffset;
 		}
 		if (isCouterCloclwise) {
 			angle = (angle - speed) % 360;

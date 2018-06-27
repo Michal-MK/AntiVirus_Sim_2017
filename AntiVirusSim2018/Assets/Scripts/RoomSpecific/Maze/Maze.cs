@@ -23,7 +23,6 @@ public class Maze : MonoBehaviour {
 	private GameObject infoBoardMaze;
 
 	private Stack<GameObject> stack = new Stack<GameObject>();
-	private List<GameObject> nope = new List<GameObject>();
 
 	private int rowColCount;
 	private float cellWidth;
@@ -35,8 +34,6 @@ public class Maze : MonoBehaviour {
 	private GameObject chosenNeighbor;
 	private int xPos = 0;
 	private int yPos = 0;
-	public bool run = true;
-
 
 	private void Start() {
 		infoBoardMaze = gameObject.GetComponentInChildren<SignPost>().gameObject;
@@ -136,7 +133,7 @@ public class Maze : MonoBehaviour {
 		current = grid[0, 0];
 		stack.Push(current);
 
-		while (stack.Count > 0 && run == true) {
+		while (stack.Count > 0) {
 			chosenNeighbor = GetRandomNeighbor(xPos, yPos, ref current);
 
 			yield return null;
@@ -204,8 +201,8 @@ public class Maze : MonoBehaviour {
 		}
 
 		if (cells.Count == 0) {
-			if(stack.Count == 0) {
-				MazeStopped();
+			if (stack.Count == 0) {
+				FinalizeMazeGeneration();
 				return null;
 			}
 			Cell c = stack.Pop().GetComponent<Cell>();
@@ -213,7 +210,7 @@ public class Maze : MonoBehaviour {
 			xPos = c.selfX;
 			yPos = c.selfY;
 			newCurrent = oldCurrent;
-			return GetRandomNeighbor(xPos,yPos, ref newCurrent);
+			return GetRandomNeighbor(xPos, yPos, ref newCurrent);
 		}
 
 		int selectedIndex = Random.Range(0, cells.Count);
@@ -279,8 +276,7 @@ public class Maze : MonoBehaviour {
 		escapeTeleport.transform.position = grid[rndEdge.x, rndEdge.y].transform.position;
 	}
 
-	private void MazeStopped() {
-		run = false;
+	private void FinalizeMazeGeneration() {
 		StopAllCoroutines();
 		Vector2Int rndSignPos = GetEdgeCell();
 		infoBoardMaze.transform.position = grid[rndSignPos.x, rndSignPos.y].transform.position;

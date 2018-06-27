@@ -117,7 +117,7 @@ public class ProjectileWall : MonoBehaviour {
 			return new Vector3(background.position.x - 5 + (side == Directions.RIGHT ? width : -width), Random.Range(background.position.y - height, background.position.y + height));
 		}
 		else {
-			return new Vector3(Random.Range(background.position.x - width, background.position.x + width), background.position.y - 5 + (side == Directions.TOP ? height : -height));
+			return new Vector3(Random.Range(background.position.x - width, background.position.x + width), background.position.y + (side == Directions.TOP ? height : -height));
 		}
 	}
 }

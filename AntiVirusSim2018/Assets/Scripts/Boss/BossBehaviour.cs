@@ -153,7 +153,7 @@ public class BossBehaviour : MonoBehaviour {
 	//Attack handler
 	public IEnumerator Attacks(int attack) {
 		selfRender.sprite = Invincible;
-		StartCoroutine(LerpFunctions.LerpPosition(gameObject, GetStartingPosition(attack), Time.deltaTime / 2));
+		StartCoroutine(LerpFunctions.LerpPosition(gameObject, GetStartingPosition(attack), Time.deltaTime / 2, null));
 
 		switch (attack) {
 			//Bouncing Attack
@@ -198,8 +198,8 @@ public class BossBehaviour : MonoBehaviour {
 
 				//Actual Attack
 				playerSpeedMultiplier = 1;
-				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, BG.transform.position, Time.deltaTime / 2));
-				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, BG.transform.position, Time.deltaTime / 2));
+				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, BG.transform.position, Time.deltaTime / 2, null));
+				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, BG.transform.position, Time.deltaTime / 2, null));
 				positioningCage.destroy = true;
 				yield return new WaitForSeconds(3);
 				Canvas_Renderer.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
@@ -228,8 +228,8 @@ public class BossBehaviour : MonoBehaviour {
 				MoveScript positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity).GetComponent<MoveScript>();
 
 				yield return new WaitForSeconds(2);
-				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2));
-				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2));
+				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2, null));
+				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, gameObject.transform.position + new Vector3(0, 50, 0), Time.deltaTime / 2, null));
 				positioningCage.destroy = true;
 				yield return new WaitForSeconds(2);
 
@@ -316,8 +316,8 @@ public class BossBehaviour : MonoBehaviour {
 					informOnce = false;
 					Canvas_Renderer.script.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 				}
-				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2));
-				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2));
+				StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
+				StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, (Vector2)BG.transform.position - BG.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
 				positioningCage.destroy = true;
 
 				yield return new WaitForSeconds(2.5f);
@@ -330,7 +330,7 @@ public class BossBehaviour : MonoBehaviour {
 				M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.ARROW);
 				Attack5 = false;
 				doneBouncing = false;
-				StartCoroutine(LerpFunctions.LerpPosition(gameObject, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0), Time.deltaTime / 2));
+				StartCoroutine(LerpFunctions.LerpPosition(gameObject, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0), Time.deltaTime / 2, null));
 				break;
 			}
 		}
@@ -433,7 +433,7 @@ public class BossBehaviour : MonoBehaviour {
 			StartCoroutine(LerpFunctions.LerpPosition(gameObject,
 													  new Vector3(BG.position.x + (BG.sizeDelta.x / 4),
 													  downwardsMovement ? BG.position.y - (BG.sizeDelta.y / 2) : BG.position.y + (BG.sizeDelta.y / 2)),
-													  Time.deltaTime));
+													  Time.deltaTime, null));
 			downwardsMovement = !downwardsMovement;
 
 			float holeMid = Random.Range(-BG.sizeDelta.y / 2 + 20, BG.sizeDelta.y / 2 - 20);
