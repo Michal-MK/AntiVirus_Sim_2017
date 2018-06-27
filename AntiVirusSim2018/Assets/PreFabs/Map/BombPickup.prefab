@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212642480274769528}
   - component: {fileID: 58284222563253928}
   - component: {fileID: 114721915470191738}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BombPickup
   m_TagString: Bombs
   m_Icon: {fileID: 0}
@@ -81,9 +81,11 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -96,6 +98,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

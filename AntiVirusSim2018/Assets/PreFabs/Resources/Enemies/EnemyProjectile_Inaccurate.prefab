@@ -19,13 +19,14 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4000011155734834}
-  - component: {fileID: 212000011963600568}
-  - component: {fileID: 114000011878254912}
-  - component: {fileID: 50000013035227332}
-  - component: {fileID: 58762758558591280}
-  - component: {fileID: 58188430661934194}
-  - component: {fileID: 58849555256677624}
-  - component: {fileID: 58092614758245306}
+  - component: {fileID: 212954862659450822}
+  - component: {fileID: 114353763923948522}
+  - component: {fileID: 50867900491540564}
+  - component: {fileID: 58506497544790706}
+  - component: {fileID: 58292778044521530}
+  - component: {fileID: 58483876583428264}
+  - component: {fileID: 58266039577294022}
+  - component: {fileID: 68247506802382280}
   m_Layer: 14
   m_Name: EnemyProjectile_Inaccurate
   m_TagString: Enemy
@@ -40,13 +41,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012561099258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -8.133658, y: -9.019007, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50000013035227332
+--- !u!50 &50867900491540564
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
@@ -66,7 +67,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &58092614758245306
+--- !u!58 &58266039577294022
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -81,7 +82,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
---- !u!58 &58188430661934194
+--- !u!58 &58292778044521530
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -96,22 +97,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -2}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!58 &58762758558591280
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012561099258}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -2, y: 1.5}
-  serializedVersion: 2
-  m_Radius: 0.2
---- !u!58 &58849555256677624
+--- !u!58 &58483876583428264
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -126,7 +112,63 @@ CircleCollider2D:
   m_Offset: {x: 1.9, y: 1.5}
   serializedVersion: 2
   m_Radius: 0.2
---- !u!114 &114000011878254912
+--- !u!58 &58506497544790706
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -2, y: 1.5}
+  serializedVersion: 2
+  m_Radius: 0.2
+--- !u!68 &68247506802382280
+EdgeCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012561099258}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -2.015461, y: 1.7402439}
+  - {x: -1.1089058, y: 1.4423256}
+  - {x: -0.050979614, y: 0.7272816}
+  - {x: 1.1729393, y: 1.4904404}
+  - {x: 1.9486198, y: 1.751833}
+  - {x: 2.1524467, y: 1.6302357}
+  - {x: 2.1462975, y: 1.3804035}
+  - {x: 1.9262657, y: 1.1717777}
+  - {x: 1.4188766, y: -0.02708435}
+  - {x: 1.0127144, y: -0.4400463}
+  - {x: 0.6487007, y: -0.6412239}
+  - {x: 0.5782013, y: -0.72123146}
+  - {x: 0.3779869, y: -1.2287292}
+  - {x: 0.14505768, y: -1.8861809}
+  - {x: 0.0005607605, y: -2.1149235}
+  - {x: -0.21619415, y: -1.7996178}
+  - {x: -0.3463745, y: -1.3824577}
+  - {x: -0.63459396, y: -0.689867}
+  - {x: -1.1878929, y: -0.32633018}
+  - {x: -1.5993118, y: 0.2114811}
+  - {x: -1.9180832, y: 1.0503578}
+  - {x: -2.128708, y: 1.311882}
+  - {x: -2.2216492, y: 1.4663658}
+  - {x: -2.1655655, y: 1.6867924}
+  - {x: -2.0319595, y: 1.7439327}
+  - {x: -2.0109863, y: 1.7402439}
+--- !u!114 &114353763923948522
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -138,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selfDestructTimer: -1
---- !u!212 &212000011963600568
+--- !u!212 &212954862659450822
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

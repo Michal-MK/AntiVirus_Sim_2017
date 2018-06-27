@@ -134,7 +134,7 @@ public class BossHealth : MonoBehaviour {
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 		CameraMovement.script.inBossRoom = false;
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
-		SaveManager.canSave = true;
+		Control.script.saveManager.canSave = true;
 		Destroy(transform.parent.gameObject);
 		Destroy(healthIndicator.gameObject);
 		Canvas_Renderer.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);

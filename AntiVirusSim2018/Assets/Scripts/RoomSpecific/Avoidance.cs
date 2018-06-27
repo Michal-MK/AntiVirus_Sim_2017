@@ -10,7 +10,6 @@ public class Avoidance : MonoBehaviour {
 
 	public float avoidDuration = 60;
 
-	private bool displayAvoidInfo = true;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -18,23 +17,24 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	private void SignPost_OnAvoidanceBegin() {
-		if (displayAvoidInfo) {
+		if (!performed) {
 			Canvas_Renderer.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
 												"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
-			displayAvoidInfo = false;
+			StartAvoidance();
 		}
-		StartAvoidance();
+		else {
+			Canvas_Renderer.script.DisplayInfo(null, "Nope, not doing that thing again!");
+		}
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		displayAvoidInfo = data.shownHints.shownAvoidanceInfo;
 		performed = data.world.doneAvoidance;
 	}
 
 	public void StartAvoidance() {
 		MapData.script.CloseDoor(new RoomLink(2, 3));
 		StartCoroutine(HoldAvoidance());
-		SaveManager.canSave = false;
+		Control.script.saveManager.canSave = false;
 		CameraMovement.script.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
@@ -43,7 +43,7 @@ public class Avoidance : MonoBehaviour {
 		yield return new WaitForSeconds(avoidDuration - 5);
 		spawner.DespawnAvoidance();
 		yield return new WaitForSeconds(5);
-		SaveManager.canSave = true;
+		Control.script.saveManager.canSave = true;
 		spike.SetPosition();
 		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
@@ -74,9 +74,5 @@ public class Avoidance : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		SignPost.OnAvoidanceBegin -= SignPost_OnAvoidanceBegin;
-	}
-
-	public bool save_displayAvoidInfo {
-		get { return displayAvoidInfo; }
 	}
 }

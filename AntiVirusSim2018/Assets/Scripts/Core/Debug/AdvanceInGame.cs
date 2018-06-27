@@ -12,7 +12,7 @@ public class AdvanceInGame : MonoBehaviour {
 				switch (currentStage) {
 					case 1: {
 						for (int i = 0; i < 5; i++) {
-							FindObjectOfType<Coin>().CoinBehavior(M_Player.player, null);
+							FindObjectOfType<Coin>().OnCoinPickup(M_Player.player, null);
 						}
 						MapData.script.OpenDoor(new RoomLink(1, 2));
 						FindObjectOfType<Spike>().transform.position = MapData.script.doors[0].transform.position;

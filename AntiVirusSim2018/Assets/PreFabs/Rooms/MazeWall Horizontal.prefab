@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224976546181358672}
   - component: {fileID: 212736311104994436}
   - component: {fileID: 61427065108139170}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MazeWall Horizontal
   m_TagString: Wall
   m_Icon: {fileID: 0}

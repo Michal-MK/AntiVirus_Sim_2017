@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224245925010922224}
   - component: {fileID: 212301759125742990}
   - component: {fileID: 61453391326565102}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MazeWall Vertical Damaging
   m_TagString: Enemy
   m_Icon: {fileID: 0}

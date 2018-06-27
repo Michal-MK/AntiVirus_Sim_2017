@@ -56,7 +56,7 @@ public class BossEntrance : MonoBehaviour {
 		health.name = "BossHealth";
 		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, bossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(bossBG.position.x, bossBG.position.y, -10)));
 		bossHP.SetActive(true);
-		SaveManager.canSave = false;
+		Control.script.saveManager.canSave = false;
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 }

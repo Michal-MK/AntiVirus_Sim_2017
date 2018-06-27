@@ -128,7 +128,7 @@ public class M_Player : MonoBehaviour {
 			}
 		}
 
-		if (col.tag == ObjNames.SPIKE) {
+		if (col.name == ObjNames.SPIKE) {
 			if (OnSpikePickup != null) {
 				OnSpikePickup(this, col.gameObject);
 			}

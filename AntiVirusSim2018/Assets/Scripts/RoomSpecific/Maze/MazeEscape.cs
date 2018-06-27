@@ -37,7 +37,7 @@ public class MazeEscape : MonoBehaviour {
 		spike.SetPosition();
 		StartCoroutine(FadeWall());
 		Player_Movement.canMove = true;
-		SaveManager.canSave = true;
+		Control.script.saveManager.canSave = true;
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 

@@ -54,6 +54,7 @@ public class Projectile : Enemy {
 
 	protected virtual void OnTriggerExit2D(Collider2D col) {
 		if (col.tag == "BG") {
+			print("Exit");
 			gameObject.SetActive(false);
 		}
 	}

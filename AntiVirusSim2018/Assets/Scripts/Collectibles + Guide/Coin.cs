@@ -15,7 +15,7 @@ public class Coin : MonoBehaviour {
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnCoinPickup += CoinBehavior;
+		M_Player.OnCoinPickup += OnCoinPickup;
 	}
 
 	void Start() {
@@ -34,14 +34,14 @@ public class Coin : MonoBehaviour {
 			}
 		}
 		else if (data.player.coinsCollected <= 4) {
-			CoinBehavior(null, null);
+			OnCoinPickup(null, null);
 			if (OnNewTarget != null) {
 				OnNewTarget(gameObject.transform.position);
 			}
 		}
 	}
 
-	public void CoinBehavior(M_Player sender, GameObject coinObj) {
+	public void OnCoinPickup(M_Player sender, GameObject coinObj) {
 		if (sender != null) {
 			coinsCollected++;
 		}
@@ -92,6 +92,6 @@ public class Coin : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnCoinPickup -= CoinBehavior;
+		M_Player.OnCoinPickup -= OnCoinPickup;
 	}
 }

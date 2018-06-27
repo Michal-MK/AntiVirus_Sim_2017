@@ -65,7 +65,7 @@ public class MazeEntrance : MonoBehaviour {
 
 
 
-		SaveManager.canSave = false;
+		Control.script.saveManager.canSave = false;
 		Zoom.canZoom = false;
 		CamFadeOut.OnCamFullyFaded -= MazeTransition;
 

@@ -8,24 +8,20 @@ public class Spike : MonoBehaviour {
 	private static int _spikesCollected;
 	private int stage;
 
-	//Loading information
-	private bool _shownDirAfterPickup = false;
-
 	public static event Guide.GuideTargetStatic OnNewTarget;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+		M_Player.OnSpikePickup += OnSpikePickup;
 	}
 
-	private void M_Player_OnSpikePickup(M_Player sender, GameObject spikeObj) {
+	private void OnSpikePickup(M_Player sender, GameObject spikeObj) {
 
 		spikesCollected++;
 
 		gameObject.SetActive(false);
 
-		if (!_shownDirAfterPickup) {
-			_shownDirAfterPickup = true;
+		if (_spikesCollected == 1) {
 			Canvas_Renderer.script.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 		}
 		//Finished avoidance
@@ -44,7 +40,6 @@ public class Spike : MonoBehaviour {
 		spikesCollected = data.player.spikesCollected;
 		gameObject.SetActive(data.world.spikeActive);
 		gameObject.transform.position = data.world.spikePos;
-		_shownDirAfterPickup = data.shownHints.shownDirectionsAfterSpikePickup;
 	}
 
 	public void SetPosition(bool guideTowards = true) {
@@ -120,6 +115,6 @@ public class Spike : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		M_Player.OnSpikePickup -= OnSpikePickup;
 	}
 }

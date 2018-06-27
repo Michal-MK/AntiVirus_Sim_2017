@@ -38,10 +38,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ZZ Debug 2.unity
     guid: b0267b5bca4598d4ea38561fd81551d0
-  - enabled: 1
-    path: Assets/Scenes/ZZZ1.unity
-    guid: 631ddc85c9d334e4789d72533c5839ba
-  - enabled: 1
-    path: Assets/Scenes/ZZZ2.unity
-    guid: 326799c9aabd16148aa7a22bbecc8772
   m_configObjects: {}
