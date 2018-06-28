@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 45f289a817d822c4d8ad9461932f2bbb
+timeCreated: 1490520398
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 20
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Marquisette BTN
+  fontNames:
+  - Marquisette BTN
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 3
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

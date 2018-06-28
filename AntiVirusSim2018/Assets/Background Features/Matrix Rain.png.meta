@@ -1,0 +1,454 @@
+fileFormatVersion: 2
+guid: 66173a7f9de9ace4ab9fcbdf8c907b82
+timeCreated: 1491092375
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Matrix Rain_0
+    21300002: Matrix Rain_1
+    21300004: Matrix Rain_2
+    21300006: Matrix Rain_3
+    21300008: Matrix Rain_4
+    21300010: Matrix Rain_5
+    21300012: Matrix Rain_6
+    21300014: Matrix Rain_7
+    21300016: Matrix Rain_8
+    21300018: Matrix Rain_10
+    21300020: Matrix Rain_13
+    21300022: Matrix Rain_14
+    21300024: Matrix Rain_15
+    21300026: Matrix Rain_16
+    21300028: Matrix Rain_17
+    21300030: Matrix Rain_18
+    21300032: Matrix Rain_19
+    21300034: Matrix Rain_20
+    21300036: Matrix Rain_21
+    21300038: Matrix Rain_22
+    21300040: Matrix Rain_23
+    21300042: Matrix Rain_24
+    21300044: Matrix Rain_26
+    21300046: Matrix Rain_27
+    21300048: Matrix Rain_29
+    21300050: Matrix Rain_31
+    21300052: Matrix Rain_9
+    21300054: Matrix Rain_11
+    21300056: Matrix Rain_12
+    21300058: Matrix Rain_25
+    21300060: Matrix Rain_28
+    21300062: Matrix Rain_30
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Matrix Rain_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_1
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_2
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_3
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_4
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_5
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_6
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_7
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_8
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_9
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_10
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_11
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_12
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_13
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_14
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_15
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_16
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_17
+      rect:
+        serializedVersion: 2
+        x: 1224
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_18
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_19
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_20
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_21
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_22
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_23
+      rect:
+        serializedVersion: 2
+        x: 1656
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_24
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Matrix Rain_25
+      rect:
+        serializedVersion: 2
+        x: 1800
+        y: 0
+        width: 72.53846
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
