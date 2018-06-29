@@ -454,7 +454,12 @@ Prefab:
     - target: {fileID: 114797548684276754, guid: 0bce255e6149ff843a057dc20ed29e09,
         type: 2}
       propertyPath: type
-      value: 4
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114797548684276754, guid: 0bce255e6149ff843a057dc20ed29e09,
+        type: 2}
+      propertyPath: angleOffset
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0bce255e6149ff843a057dc20ed29e09, type: 2}

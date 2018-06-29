@@ -25,6 +25,14 @@ public class SoundFXHandler : MonoBehaviour {
 	void Start() {
 		foreach (AudioSource s in transform.GetComponentsInChildren<AudioSource>()) {
 			sources.Add(s);
+			s.volume = GameSettings.fxVolume;
+		}
+		GameSettings.script.OnFxVolumeChanged += UpdateFxVol;
+	}
+
+	private void UpdateFxVol(float newValue) {
+		foreach (AudioSource source in sources) {
+			source.volume = newValue;
 		}
 	}
 

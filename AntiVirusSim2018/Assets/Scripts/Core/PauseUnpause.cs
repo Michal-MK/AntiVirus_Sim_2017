@@ -5,13 +5,16 @@ using UnityEngine.EventSystems;
 public class PauseUnpause : MonoBehaviour {
 	public delegate void Pause(bool isPausing);
 
-	private static bool _canPause = true;
-	private static bool _isPaused = false;
-
 	public GameObject restartButton;
+	public GameObject settingsButton;
 	public GameObject quitToMenu;
 	public GameObject saveButton;
 	public GameObject loadButton;
+
+
+	public static bool canPause { get; set; } = true;
+	public static bool isPaused { get; private set; } = false;
+
 
 	private void Awake() {
 		UserInterface.OnPauseChange += UserInterface_OnPauseChange;
@@ -22,17 +25,18 @@ public class PauseUnpause : MonoBehaviour {
 	private void Timer_OnPlayerDeath(M_Player sender) {
 		Cursor.visible = true;
 		restartButton.SetActive(true);
+		settingsButton.SetActive(true);
 		quitToMenu.SetActive(true);
 		loadButton.SetActive(true);
 		EventSystem.current.SetSelectedGameObject(loadButton);
 		Time.timeScale = 0;
 		Player_Movement.canMove = false;
-		_isPaused = true;
-		_canPause = false;
+		isPaused = true;
+		canPause = false;
 	}
 
 	private void Timer_OnTimerPause(bool isPaused) {
-		_isPaused = isPaused;
+		PauseUnpause.isPaused = isPaused;
 	}
 
 	private void UserInterface_OnPauseChange(bool isPausing) {
@@ -40,12 +44,13 @@ public class PauseUnpause : MonoBehaviour {
 			Cursor.visible = true;
 			Timer.PauseTimer();
 			restartButton.SetActive(true);
+			settingsButton.SetActive(true);
 			quitToMenu.SetActive(true);
 			saveButton.SetActive(true);
 			EventSystem.current.SetSelectedGameObject(saveButton);
 			Time.timeScale = 0;
 			Player_Movement.canMove = false;
-			_isPaused = true;
+			isPaused = true;
 
 		}
 		else {
@@ -53,6 +58,7 @@ public class PauseUnpause : MonoBehaviour {
 			saveButton.GetComponent<Button>().interactable = true;
 			saveButton.SetActive(false);
 			restartButton.SetActive(false);
+			settingsButton.SetActive(false);
 			quitToMenu.SetActive(false);
 			Cursor.visible = false;
 			Time.timeScale = 1;
@@ -65,18 +71,8 @@ public class PauseUnpause : MonoBehaviour {
 			else {
 				Timer.StartTimer(2f);
 			}
-			_isPaused = false;
+			isPaused = false;
 		}
-	}
-
-	public static bool canPause {
-		get { return _canPause; }
-
-		set { _canPause = value; }
-	}
-
-	public static bool isPaused {
-		get { return _isPaused; }
 	}
 
 	private void OnDestroy() {

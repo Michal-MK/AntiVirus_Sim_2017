@@ -7,6 +7,7 @@ public class GameScene_Holder : MonoBehaviour {
 	public Button restart;
 	public Button quitToMenu;
 	public Button load;
+	public Button settings;
 
 	public Button[] getButtonsSave {
 		get { return new Button[] { save, restart, quitToMenu }; }

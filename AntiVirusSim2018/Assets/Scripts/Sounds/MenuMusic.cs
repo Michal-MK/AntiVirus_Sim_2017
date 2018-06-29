@@ -17,14 +17,25 @@ public class MenuMusic : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
+
+	private void Start() {
+		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
+	}
+
+
+	private void UpdateMusicVol(float newValue) {
+		source.volume = newValue;
+	}
+
 	public void PlayMusic() {
 		isPlaying = true;
+		GetComponent<AudioListener>().enabled = true;
 		StartCoroutine(_PlayMusic());
 	}
 
 	private IEnumerator _PlayMusic() {
 		source.Play();
-		for (float f = 0; f <= 1; f += Time.deltaTime * transitionSpeedMult) {
+		for (float f = 0; f <= GameSettings.audioVolume; f += Time.deltaTime * transitionSpeedMult) {
 			source.volume = f;
 			yield return null;
 		}
@@ -32,10 +43,11 @@ public class MenuMusic : MonoBehaviour {
 
 	public void StopMusic() {
 		StartCoroutine(_StopMusic());
+		GetComponent<AudioListener>().enabled = false;
 	}
 
 	private IEnumerator _StopMusic() {
-		for (float f = 1; f >= 0; f -= Time.deltaTime * transitionSpeedMult) {
+		for (float f = GameSettings.audioVolume; f >= 0; f -= Time.deltaTime * transitionSpeedMult) {
 			source.volume = f;
 			yield return null;
 		}
@@ -50,5 +62,10 @@ public class MenuMusic : MonoBehaviour {
 		else {
 			source.UnPause();
 		}
+	}
+
+
+	private void OnDestroy() {
+		GameSettings.script.OnMusicVolumeChanged -= UpdateMusicVol;
 	}
 }

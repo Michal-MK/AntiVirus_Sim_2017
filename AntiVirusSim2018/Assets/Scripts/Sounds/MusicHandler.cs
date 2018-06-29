@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Igor.Constants.Strings;
 
 public class MusicHandler : MonoBehaviour {
 	public AudioSource musicPlayer;
@@ -17,7 +16,7 @@ public class MusicHandler : MonoBehaviour {
 
 	public static MusicHandler script;
 
-	private bool _isPlaying = false;
+	public bool isAnythingPlaying { get; private set; } = false;
 
 	private void Awake() {
 		if (script == null) {
@@ -28,15 +27,20 @@ public class MusicHandler : MonoBehaviour {
 		}
 	}
 
+	private void UpdateMusicVol(float newValue) {
+		musicPlayer.volume = newValue;
+	}
+
 	private void Start() {
 		M_Player.OnRoomEnter += NewRoom;
+		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
 	}
 
 	#region EventHandling
 	private void NewRoom(RectTransform background, M_Player sender) {
 
 		if(background == MapData.script.GetBackground(1)) {
-			if (!_isPlaying) {
+			if (!isAnythingPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -44,7 +48,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(2)) {
-			if (!_isPlaying) {
+			if (!isAnythingPlaying) {
 				PlayMusic(room1_2);
 			}
 			else {
@@ -52,7 +56,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(3)) {
-			if (!_isPlaying) {
+			if (!isAnythingPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -60,7 +64,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(4)) {
-			if (!_isPlaying) {
+			if (!isAnythingPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -71,7 +75,7 @@ public class MusicHandler : MonoBehaviour {
 	#endregion
 
 	public void PlayMusic(AudioClip clip) {
-		if (!_isPlaying) {
+		if (!isAnythingPlaying) {
 			StartCoroutine(_PlayMusic(clip));
 		}
 		else {
@@ -84,7 +88,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public void TransitionMusic(AudioClip newClip) {
-		if (_isPlaying) {
+		if (isAnythingPlaying) {
 			StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
@@ -98,11 +102,12 @@ public class MusicHandler : MonoBehaviour {
 		musicPlayer.clip = current = clip;
 		musicPlayer.Play();
 		musicPlayer.volume = 0;
-		for (float f = 0; f < 1; f += Time.deltaTime) {
+		for (float f = 0; f < GameSettings.audioVolume; f += Time.deltaTime) {
 			musicPlayer.volume = f;
 			yield return null;
 		}
-		_isPlaying = true;
+		musicPlayer.volume = GameSettings.audioVolume;
+		isAnythingPlaying = true;
 	}
 
 	private IEnumerator _FadeMusic() {
@@ -110,7 +115,7 @@ public class MusicHandler : MonoBehaviour {
 			musicPlayer.volume = f;
 			yield return null;
 		}
-		_isPlaying = false;
+		isAnythingPlaying = false;
 		current = null;
 	}
 
@@ -131,12 +136,12 @@ public class MusicHandler : MonoBehaviour {
 
 		musicPlayer.clip = current = clip;
 		musicPlayer.Play();
-		for (float f = 0; f <= 1; f += Time.unscaledDeltaTime) {
+		for (float f = 0; f <= GameSettings.audioVolume; f += Time.unscaledDeltaTime) {
 			musicPlayer.volume = f;
 			yield return null;
 		}
-		musicPlayer.volume = 1;
-		_isPlaying = true;
+		musicPlayer.volume = GameSettings.audioVolume;
+		isAnythingPlaying = true;
 	}
 
 	private void OnApplicationFocus(bool focus) {
@@ -148,12 +153,10 @@ public class MusicHandler : MonoBehaviour {
 		}
 	}
 
-	public bool isAnythingPlaying {
-		get { return _isPlaying; }
-	}
 
 	private void OnDestroy() {
 		script = null;
 		M_Player.OnRoomEnter -= NewRoom;
+		GameSettings.script.OnMusicVolumeChanged -= UpdateMusicVol;
 	}
 }

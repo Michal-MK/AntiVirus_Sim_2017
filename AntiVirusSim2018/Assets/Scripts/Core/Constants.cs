@@ -72,6 +72,11 @@ namespace Igor {
 				public const string DARK_ENEMIES = "DarkModeEnemies";
 				public const string LIGHT_ENEMIES = "LightModeEnemies";
 			}
+
+			public class Settings {
+				public const string MUSIC_VOL = "music_audio";
+				public const string FX_VOL = "effect_audio";
+			}
 		}
 	}
 }

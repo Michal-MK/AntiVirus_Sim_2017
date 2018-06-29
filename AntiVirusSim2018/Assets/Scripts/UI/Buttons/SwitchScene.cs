@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Igor.Constants.Strings;
+using System;
 
 public class SwitchScene : MonoBehaviour {
 
@@ -32,10 +33,11 @@ public class SwitchScene : MonoBehaviour {
 		if (save != null) {
 			save.SetActive(false);
 		}
-		if(load != null) {
+		if (load != null) {
 			load.SetActive(false);
 		}
-		quit.transform.position = new Vector3(0,-200,10);
+
+		quit.transform.position = new Vector3(0, -200, 10);
 
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
