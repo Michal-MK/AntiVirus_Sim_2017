@@ -32,6 +32,14 @@ namespace Igor.Minigames.Ships {
 			_battleCruisers = cruisers;
 		}
 
+		/// <summary>
+		/// Creates a new generator with no predefined ships
+		/// </summary>
+		/// <returns></returns>
+		public static GeneratorData Nothing() {
+			return new GeneratorData(0, 0, 0, 0, 0);
+		}
+
 		public int getSubmarines { get { return _submarines; } }
 		public int getCargoShips { get { return _cargoShips; } }
 		public int getWarShips { get { return _warShips; } }

@@ -13,6 +13,8 @@ public class GameplayManagerSP {
 	private Field ai;
 	private GameObject[] aiVisual;
 
+	private bool _placeForAI = true;
+
 	public GameplayManagerSP(Field player, Field ai) {
 		mainUI = GameObject.Find("Canvas").GetComponent<Ships_UI>();
 		this.player = player;
@@ -62,5 +64,9 @@ public class GameplayManagerSP {
 	public GameObject[] fieldObjectsAi {
 		get { return aiVisual; }
 		set { aiVisual = value; }
+	}
+
+	public bool placeForAI {
+		get { return _placeForAI; }
 	}
 }

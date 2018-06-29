@@ -42,9 +42,11 @@ namespace Igor.Minigames.Ships {
 		private int airPlaced = 0;
 		private int cruiserPlaced = 0;
 
-
 		private int counter = 0;
 
+		/// <summary>
+		/// Cretes a default generator with both fields initialized and a generator config file
+		/// </summary>
 		public LevelGenerator(Field player, Field AI, GeneratorData config) {
 			this.playerField = player;
 			this.AIField = AI;
@@ -52,9 +54,22 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
+		/// Creates a specific generator for this field
+		/// </summary>
+		public LevelGenerator(Field self) {
+			if (self.getFieldSide == Ships_UI.ViewingField.PLAYER) {
+				playerField = self;
+			}
+			else {
+				AIField = self;
+			}
+			data = GeneratorData.Nothing();
+		}
+
+		/// <summary>
 		/// Places one of "type" onto the AI field
 		/// </summary>
-		public void Generate(ShipType type) {
+		public void Generate(ShipType type, Ships_UI.ViewingField viewingField = Ships_UI.ViewingField.OPPONENT) {
 			List<Location> freeLocations = GetAvailableLocations(AIField);
 			switch (type) {
 				case ShipType.SUBMARINE: {
@@ -62,6 +77,7 @@ namespace Igor.Minigames.Ships {
 					Location l = freeLocations[rnd];
 
 					PlaceSubmarine(l);
+					freeLocations.RemoveAll((Location loc) => !loc.isAvailable);
 					break;
 				}
 				case ShipType.CARGO: {
@@ -75,6 +91,7 @@ namespace Igor.Minigames.Ships {
 					int rndRot = UnityEngine.Random.Range(0, rotations.Length);
 
 					PlaceCargo(l, rotations[rndRot]);
+					freeLocations.RemoveAll((Location loc) => !loc.isAvailable);
 					break;
 				}
 				case ShipType.WAR: {
@@ -88,6 +105,7 @@ namespace Igor.Minigames.Ships {
 					int rndRot = UnityEngine.Random.Range(0, rotations.Length);
 
 					PlaceWar(l, rotations[rndRot]);
+					freeLocations.RemoveAll((Location loc) => !loc.isAvailable);
 					break;
 				}
 				case ShipType.AIR: {
@@ -101,6 +119,7 @@ namespace Igor.Minigames.Ships {
 					int rndRot = UnityEngine.Random.Range(0, rotations.Length);
 
 					PlaceAir(l, rotations[rndRot]);
+					freeLocations.RemoveAll((Location loc) => !loc.isAvailable);
 					break;
 				}
 				case ShipType.BATTLECRUSER: {
@@ -109,7 +128,8 @@ namespace Igor.Minigames.Ships {
 					while (!placed) {
 						int rnd = UnityEngine.Random.Range(0, freeLocations.Count);
 						Location l = freeLocations[rnd];
-						if (l.isAvailable && IsInValidCruiserLocation(l.coordinates)) {
+						Debug.Log(l.coordinates);
+						if (l.isAvailable && IsInValidCruiserLocation(viewingField == Ships_UI.ViewingField.PLAYER ? playerField : AIField, l.coordinates)) {
 							bool canPlace = true;
 							for (int i = 0; i < l.getNeighborsOnAxis.Length; i++) {
 								if (!l.getNeighborsOnAxis[i].isAvailable) {
@@ -120,11 +140,12 @@ namespace Igor.Minigames.Ships {
 								PlaceBattlecruier(l);
 								cruiserPlaced++;
 								freeLocations.RemoveAll((Location loc) => !loc.isAvailable);
+								break;
 							}
 						}
 						attempt++;
-						if (attempt < 100) {
-							throw new Exception("Could not place " + type.ToString() + "for AI");
+						if (attempt > 100) {
+							throw new Exception("Could not place " + type.ToString() + " for AI");
 						}
 					}
 					break;
@@ -144,7 +165,7 @@ namespace Igor.Minigames.Ships {
 			while (data.getCruisers != cruiserPlaced) {
 				int rnd = UnityEngine.Random.Range(0, freeLocations.Count);
 				Location selected = freeLocations[rnd];
-				if (selected.isAvailable && IsInValidCruiserLocation(selected.coordinates)) {
+				if (selected.isAvailable && IsInValidCruiserLocation(field, selected.coordinates)) {
 					bool canPlace = true;
 					for (int i = 0; i < selected.getNeighborsOnAxis.Length; i++) {
 						if (!selected.getNeighborsOnAxis[i].isAvailable) {
@@ -557,8 +578,8 @@ namespace Igor.Minigames.Ships {
 		/// <summary>
 		/// Is battlecruiser center placed one away from edges ?
 		/// </summary>
-		private bool IsInValidCruiserLocation(Vector2 location) {
-			return location.x >= 1 && location.y >= 1 && location.x < playerField.getDimensions.x - 1 && location.y < playerField.getDimensions.y - 1;
+		private bool IsInValidCruiserLocation(Field field, Vector2 location) {
+			return location.x >= 1 && location.y >= 1 && location.x < field.getDimensions.x - 1 && location.y < field.getDimensions.y - 1;
 		}
 
 		/// <summary>

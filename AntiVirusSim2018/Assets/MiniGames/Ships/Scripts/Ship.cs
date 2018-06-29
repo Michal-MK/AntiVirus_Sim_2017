@@ -21,15 +21,6 @@ namespace Igor.Minigames.Ships {
 			_type = type;
 		}
 
-		public void RemoveFromEditor() {
-			foreach (Location location in position) {
-				location.RemoveShip();
-				foreach (Location neighbor in location.getNeighborsOnAxis) {
-					neighbor.RemoveShip();
-				}
-			}
-		}
-
 		/// <summary>
 		/// Damages the ship, returns true if the ship sunk
 		/// </summary>
