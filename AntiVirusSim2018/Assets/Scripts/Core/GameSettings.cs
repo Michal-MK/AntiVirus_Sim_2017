@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using System.IO;
 using static Igor.Constants.Strings.Settings;
 
@@ -123,10 +122,8 @@ public class GameSettings : MonoBehaviour {
 		backButton = settingsJoiner.transform.Find("Panel/Controls/Return").GetComponent<Button>();
 		musicSlid.value = audioVolume;
 		fxSlid.value = fxVolume;
-
 		musicSlid.onValueChanged.AddListener(SilderValChange);
 		fxSlid.onValueChanged.AddListener(SilderValChange);
-
 		applyChanges.onClick.AddListener(SaveConfig);
 
 		if (fromGame) {
