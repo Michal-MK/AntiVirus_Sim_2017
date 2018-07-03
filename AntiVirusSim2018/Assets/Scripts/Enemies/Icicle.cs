@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Igor.Constants.Strings;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Icicle : Projectile {
 
@@ -7,18 +7,40 @@ public class Icicle : Projectile {
 	public Sprite crackedIcicleSprite;
 
 	public GameObject emmitter;
+	public GameObject darkModeLight;
 
 	private int hitCount = 1;
 
-	protected override void OnCollisionEnter2D(Collision2D col) {
-		base.OnCollisionEnter2D(col);
+	private void OnCollisionEnter2D(Collision2D col) {
 		if (col.transform.name == "Block") {
-			selfRender.sprite = crackedIcicleSprite;
-			gameObject.tag = Tags.ENEMY_INACTIVE;
-			StartCoroutine(Fade());
-			SpawnParticles(2);
-			selfRigid.velocity /= 1.4f;
-			hitCount++;
+			FadeSetup();
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D col) {
+		if (col.name == "Blocker") {
+			FadeSetup();
+		}
+	}
+
+	private void FadeSetup() {
+		selfRender.sprite = crackedIcicleSprite;
+		gameObject.tag = Igor.Constants.Strings.Tags.ENEMY_INACTIVE;
+		StartCoroutine(Fade());
+		SpawnParticles();
+		selfRigid.velocity /= 1.4f;
+		hitCount++;
+		StartCoroutine(Fade());
+	}
+
+	public override void MapModeSwitch(MapData.MapMode mode) {
+		base.MapModeSwitch(mode);
+		if (mode == MapData.MapMode.DARK) {
+			GameObject g = Instantiate(darkModeLight, transform);
+			g.transform.localPosition = new Vector3(-0.5f, -4.5f, -4);
+		}
+		else {
+			Destroy(transform.GetChild(0).gameObject);
 		}
 	}
 
@@ -27,9 +49,8 @@ public class Icicle : Projectile {
 		hitCount = 1;
 	}
 
-	private void SpawnParticles(float time) {
+	private void SpawnParticles() {
 		ParticleSystem ps = Instantiate(emmitter, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 		ps.Emit(Random.Range(8, 16) / hitCount);
-		SelfDestructIn(time);
 	}
 }

@@ -95,12 +95,12 @@ public class TurretAttack : MonoBehaviour {
 		bullet.gameObject.SetActive(true);
 		bullet.projectileSpeed = 20;
 		if (projectileLifeSpan > 0) {
-			bullet.StartCoroutine(bullet.Deactivate(projectileLifeSpan));
+			bullet.StartCoroutine(bullet.Kill(projectileLifeSpan));
 		}
 		bullet.Fire();
 	}
 
-	public void SwapStance(MapData.MapMode stance) {
+	public void MapStanceSwitch(MapData.MapMode stance) {
 		switch (stance) {
 			case MapData.MapMode.LIGHT: {
 				if (stance != myStance) {

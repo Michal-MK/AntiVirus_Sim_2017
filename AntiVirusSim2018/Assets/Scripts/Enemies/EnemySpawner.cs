@@ -28,6 +28,8 @@ public class EnemySpawner : MonoBehaviour {
 
 	private void Start() {
 		UpdatePrefabs(MapData.script.currentMapMode);
+		arrowtrapBG = MapData.script.GetBackground(3);
+
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -75,10 +77,6 @@ public class EnemySpawner : MonoBehaviour {
 			}
 			activeKillerWalls = null;
 		}
-	}
-
-	private void OnEnable() {
-		arrowtrapBG = GameObject.Find(BackgroundNames.BACKGROUND1_3).GetComponent<RectTransform>();
 	}
 
 	public void SpawnAvoidance() {

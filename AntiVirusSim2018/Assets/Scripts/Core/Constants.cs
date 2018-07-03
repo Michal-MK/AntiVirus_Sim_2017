@@ -25,12 +25,12 @@ namespace Igor {
 			}
 
 			public class BackgroundNames {
-				public const string BACKGROUND1_1 = "Background1_1 Start";
-				public const string BACKGROUND1_2 = "Background1_2";
-				public const string BACKGROUND1_3 = "Background1_3";
-				public const string BACKGROUND1_4 = "Background1_4";
-				public const string BACKGROUND1_MAZE = "Background1_Maze";
-				public const string BACKGROUND_BOSS_ = "Background_Boss_";
+				public const string BACKGROUND_1 = "Background_1";
+				public const string BACKGROUND_2 = "Background_2";
+				public const string BACKGROUND_3 = "Background_3";
+				public const string BACKGROUND_4 = "Background_4";
+				public const string BACKGROUND_MAZE = "Background1_Maze";
+				public const string BACKGROUND_BOSS_X = "Background_Boss_";
 			}
 
 			public class Boss {
@@ -57,12 +57,6 @@ namespace Igor {
 				public const string MOVEMENT_VERTICAL = "VertMovement";
 			}
 
-			public class Tags {
-				public const string UNTAGGED = "Untagged";
-				public const string ENEMY = "Enemy";
-				public const string ENEMY_INACTIVE = "EnemyInactive";
-			}
-
 			public class Layers {
 				public const string WALLS = "Walls";
 				public const string PLAYER = "Player";
@@ -73,9 +67,33 @@ namespace Igor {
 				public const string LIGHT_ENEMIES = "LightModeEnemies";
 			}
 
+			public class Tags {
+				public const string UNTAGGED = "Untagged";
+				public const string ENEMY = "Enemy";
+				public const string ENEMY_INACTIVE = "EnemyInactive";
+				public const string BACKGROUND = "BG";
+			}
+
 			public class Settings {
 				public const string MUSIC_VOL = "music_audio";
 				public const string FX_VOL = "effect_audio";
+			}
+		}
+
+		namespace Integers {
+			public class Layers {
+				public enum Layer {
+					DEFAULT,
+					UI = 5,
+					WALL = 8,
+					PLAYER,
+					PLAYER_COLLISIONS,
+					BACKGROUND,
+					BACKGROUND_ELEMENTS,
+					DARK_ENEMIES,
+					LIGHT_ENEMIES,
+					DAMAGE_COLLISION
+				}
 			}
 		}
 	}

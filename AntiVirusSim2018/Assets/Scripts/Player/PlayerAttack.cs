@@ -23,9 +23,6 @@ public class PlayerAttack : MonoBehaviour {
 	public bool visibleAlready = false;
 	public bool displayShootingInfo = true;
 
-	private int _bullets;
-	private int _bombs;
-
 	public static event HUDElements.HUDAttackUpdates OnAmmoChanged;
 	public static event HUDElements.HUDAttackVisibility OnAmmoPickup;
 
@@ -35,7 +32,9 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite attacking;
 	public Sprite happy;
 
-	public float bombRechargeDelay = 8f;
+	public float bombRechargeDelay { get; set; } = 8f;
+	public int bullets { get; set; } = 0;
+	public int bombs { get; set; } = 0;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -44,9 +43,9 @@ public class PlayerAttack : MonoBehaviour {
 
 	#region EventImplementation
 	private void M_Player_OnSpikePickup(M_Player sender, GameObject other) {
-		_bullets++;
+		bullets++;
 		if (visibleAlready == true) {
-			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, bullets, true);
 		}
 		if (Spike.spikesCollected == 5) {
 			string text;
@@ -68,8 +67,8 @@ public class PlayerAttack : MonoBehaviour {
 		else {
 			displayShootingInfo = false;
 		}
-		_bullets = data.player.bullets;
-		_bombs = data.player.bombs;
+		bullets = data.player.bullets;
+		bombs = data.player.bombs;
 	}
 	#endregion
 
@@ -90,11 +89,11 @@ public class PlayerAttack : MonoBehaviour {
 				Timer.StartTimer(1f);
 			}
 			if (displayShootingInfo) {
-				if (_bullets != 0) {
+				if (bullets != 0) {
 					Canvas_Renderer.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n" +
-														"Currently you have: " + _bullets + " bullets.\n " +
+														"Currently you have: " + bullets + " bullets.\n " +
 														"Don't lose them", null);
 					displayShootingInfo = false;
 				}
@@ -102,14 +101,14 @@ public class PlayerAttack : MonoBehaviour {
 					Canvas_Renderer.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n" +
 														"Use your mouse to aim.\n " +
 														"The bullets are limited and you HAVE to pick them up after you fire!\n " +
-														"Currently you have: " + _bullets + " bullets.", null);
+														"Currently you have: " + bullets + " bullets.", null);
 					displayShootingInfo = false;
 				}
 			}
 			if (ammoType == AttackType.NOTHING) {
 				ammoType = SwitchAmmoType();
 				FindObjectOfType<HUDElements>().SetVisibility(AttackType.BULLETS, true, Spike.spikesCollected);
-				FindObjectOfType<HUDElements>().SetVisibility(AttackType.BOMBS, true, _bombs);
+				FindObjectOfType<HUDElements>().SetVisibility(AttackType.BOMBS, true, bombs);
 				visibleAlready = true;
 			}
 		}
@@ -119,7 +118,7 @@ public class PlayerAttack : MonoBehaviour {
 
 		if (!PauseUnpause.isPaused && inFireMode) {
 			if (Input.GetButtonDown("Left Mouse Button") && ammoType == AttackType.BULLETS) {
-				if (_bullets >= 1) {
+				if (bullets >= 1) {
 					//print("Bullets remaining: " + (_bullets - 1));
 					FireSpike();
 				}
@@ -128,7 +127,7 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 			if (Input.GetButtonDown("Left Mouse Button") && ammoType == AttackType.BOMBS) {
-				if (_bombs > 0) {
+				if (bombs > 0) {
 					FireBomb();
 					StartCoroutine(RefreshBombs());
 				}
@@ -141,16 +140,16 @@ public class PlayerAttack : MonoBehaviour {
 
 	private AttackType SwitchAmmoType() {
 		if (ammoType == AttackType.BULLETS) {
-			OnAmmoChanged(AttackType.BOMBS, _bombs, true);
+			OnAmmoChanged(AttackType.BOMBS, bombs, true);
 			return AttackType.BOMBS;
 		}
 		else if (ammoType == AttackType.BOMBS) {
-			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, bullets, true);
 			return AttackType.BULLETS;
 		}
 		else {
 			//Initial call will result into this
-			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
+			OnAmmoChanged(AttackType.BULLETS, bullets, true);
 			return AttackType.BULLETS;
 		}
 	}
@@ -171,8 +170,8 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.GetComponent<SpikeBullet>().player = this;
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
-		_bullets--;
-		OnAmmoChanged(AttackType.BULLETS, _bullets, true);
+		bullets--;
+		OnAmmoChanged(AttackType.BULLETS, bullets, true);
 	}
 
 	public void FireBomb() {
@@ -180,31 +179,31 @@ public class PlayerAttack : MonoBehaviour {
 		firedBomb.transform.position = transform.position + Vector3.down * 2.5f;
 		firedBomb.name = ObjNames.BOMB;
 		firedBomb.transform.parent = GameObject.Find("Collectibles").transform;
-		_bombs--;
-		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
+		bombs--;
+		OnAmmoChanged(AttackType.BOMBS, bombs, true);
 	}
 
 	public IEnumerator RefreshBombs() {
 		Canvas_Renderer.script.DisplayInfo(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSeconds(bombRechargeDelay);
-		_bombs++;
-		OnAmmoChanged(AttackType.BOMBS, _bombs, true);
+		bombs++;
+		OnAmmoChanged(AttackType.BOMBS, bombs, true);
 	}
 
 	public void Collided(Transform collided) {
 		if(collided.name == ObjNames.BOMB_PICKUP) {
 			Destroy(collided.gameObject);
-			_bombs++;
+			bombs++;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			print("temp sound");
-			OnAmmoPickup(AttackType.BOMBS, true, _bombs);
+			OnAmmoPickup(AttackType.BOMBS, true, bombs);
 			Canvas_Renderer.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (collided.name == ObjNames.BULLET_PICKUP) {
 			Destroy(collided.gameObject);
-			_bullets++;
-			OnAmmoChanged(AttackType.BULLETS, _bullets, true);
+			bullets++;
+			OnAmmoChanged(AttackType.BULLETS, bullets, true);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 	}
@@ -212,16 +211,6 @@ public class PlayerAttack : MonoBehaviour {
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
-	}
-
-	public int bullets {
-		get { return _bullets; }
-		set { _bullets = value; }
-	}
-
-	public int bombs {
-		get { return _bombs; }
-		set { _bombs = value; }
 	}
 }
 

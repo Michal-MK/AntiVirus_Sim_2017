@@ -20,7 +20,7 @@ public class LoadManager {
 			saveFile = (SaveFile)bf.Deserialize(file);
 			save = saveFile.data;
 		}
-
+		CamFadeOut.registerMenuMusicVolumeFade = true;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;

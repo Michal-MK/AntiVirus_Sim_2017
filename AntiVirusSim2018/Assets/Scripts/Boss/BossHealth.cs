@@ -45,10 +45,10 @@ public class BossHealth : MonoBehaviour {
 		//print("Debug");
 	}
 
-	public void Collided(Collision2D it, GameObject with) {
+	public void Collided(GameObject it, GameObject with) {
 
-		if (it.transform.name == ObjNames.BULLET) {
-			it.gameObject.SetActive(false);
+		if (it.name == ObjNames.BULLET) {
+			it.SetActive(false);
 			healthIndicator.value--;
 			RaiseShields(with.name.ToDirection());
 			for (int i = 0; i < behaviour.spikeHitboxes.Length; i++) {

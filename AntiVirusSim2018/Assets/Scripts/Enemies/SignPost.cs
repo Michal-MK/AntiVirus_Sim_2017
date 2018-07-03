@@ -14,6 +14,8 @@ public class SignPost : MonoBehaviour {
 	public Sprite signPostNormal;
 	public Sprite signPostDark;
 
+	public AudioClip interactionSound;
+
 	private void Interact() {
 		switch (gameObject.name) {
 			case ObjNames.AVOIDANCE_SIGN: {
@@ -66,7 +68,7 @@ public class SignPost : MonoBehaviour {
 			}
 		}
 		StartCoroutine(Fade());
-		GetComponent<AudioSource>().Play();
+		SoundFXHandler.script.PlayFX(interactionSound);
 		readPosts.Add(this);
 	}
 

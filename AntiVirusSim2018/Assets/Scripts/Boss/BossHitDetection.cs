@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(DamageConfig))]
 public class BossHitDetection : MonoBehaviour, IDamageable {
 	public BossHealth hp;
@@ -12,7 +13,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 	}
 
 
-	public void Damaged(Collision2D by, WeaponType type) {
+	public void Damaged(GameObject by, WeaponType type) {
 		switch (type) {
 			case WeaponType.BULLET: {
 				hp.Collided(by, gameObject);
@@ -33,7 +34,12 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision) {
-		Damaged(collision, collision.gameObject.GetComponent<IWeaponType>().weaponType);
+
+	private void OnCollisionEnter2D(Collision2D col) {
+		if (col.gameObject.GetComponent<IWeaponType>() != null) {
+			Damaged(col.gameObject, col.gameObject.GetComponent<IWeaponType>().weaponType);
+		}
 	}
+
+
 }

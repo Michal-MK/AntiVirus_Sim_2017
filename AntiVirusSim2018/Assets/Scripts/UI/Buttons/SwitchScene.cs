@@ -28,8 +28,10 @@ public class SwitchScene : MonoBehaviour {
 		GameObject quit = GameObject.Find("quitToMenu");
 		GameObject rest = GameObject.Find("restartButton");
 		GameObject load = GameObject.Find("loadGame");
+		GameObject settings = GameObject.Find("settingsButton");
 
 		rest.SetActive(false);
+		settings.SetActive(false);
 		if (save != null) {
 			save.SetActive(false);
 		}
@@ -38,13 +40,10 @@ public class SwitchScene : MonoBehaviour {
 		}
 
 		quit.transform.position = new Vector3(0, -200, 10);
-
+		CamFadeOut.registerGameMusicVolumeFade = true;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		sceneNameHolder = SceneNames.MENU_SCENE;
-		if (MusicHandler.script.musicPlayer.volume != 0) {
-			MusicHandler.script.FadeMusic();
-		}
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {

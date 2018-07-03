@@ -10,44 +10,56 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public enum EnemyType {
-		KILLERBLOCK,
+		ELECTRIC_BLOCK,
+		KILLER_BLOCK,
 		PROJECTILE_SIMPLE,
 		PROJECTILE_ACCURATE,
 		PROJECTILE_ICICLE,
 	}
 
-	protected bool _instantDeath = true;
-	protected bool _is_Destroyable = true;
-	protected float _damage = 1;
-	protected EnemyClass _class;
+	public Material lightMat;
+	public Material darkMat;
+
+	protected bool instantKiller = true;
+	public bool isDestroyable { get; set; } = false;
+	public bool isPooled { get; set; } = false;
+	protected float damage { get; set; } = 1;
+	protected EnemyClass enemyClass { get; set; }
+	protected EnemyType enemyType { get; set; }
+
 
 	public virtual void Kill() {
-		if (_is_Destroyable) {
-			print("Destroying " + gameObject.name);
+		if (!isDestroyable) {
+			print("This enemy is unkillable");
+			return;
+		}
+		if (isPooled) {
+			//print("Deactivating " + gameObject.name);
+			gameObject.SetActive(false);
+		}
+		else {
+			//print("Destroying " + gameObject.name);
 			Destroy(gameObject);
+		}
+	}
+
+	public virtual IEnumerator Kill(float seconds) {
+		yield return new WaitForSeconds(seconds);
+		Kill();
+	}
+
+	public virtual void MapModeSwitch(MapData.MapMode mode) {
+		if (mode == MapData.MapMode.DARK) {
+			gameObject.layer = (int)Igor.Constants.Integers.Layers.Layer.DARK_ENEMIES;
+			gameObject.GetComponent<SpriteRenderer>().material = darkMat;
+		}
+		else {
+			gameObject.layer = (int)Igor.Constants.Integers.Layers.Layer.LIGHT_ENEMIES;
+			gameObject.GetComponent<SpriteRenderer>().material = lightMat;
 		}
 	}
 
 	public virtual void Damage(float amount) {
 		print("Damaged for " + amount + " points of damage.");
-	}
-
-	public virtual void DealDamage(float damage) {
-
-	}
-
-	public bool isDestroyable {
-		get { return _is_Destroyable; }
-		set { _is_Destroyable = value; }
-	}
-
-	public float damage {
-		get { return _damage; }
-		set { _damage = value; }
-	}
-
-	public EnemyClass enemyClass {
-		get { return _class; }
-		set { _class = value; }
 	}
 }

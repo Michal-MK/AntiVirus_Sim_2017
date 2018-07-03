@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour {
 
-	public Sprite Active;
-	public Sprite Inactive;
-	public AudioClip On;
-	public AudioClip Off;
+	public Sprite sprtActive;
+	public Sprite sprtInactive;
+	public AudioClip switchOn;
+	public AudioClip switchOff;
 
-	public RectTransform BG;
+	public RectTransform background;
 
 	public Spike spike;
 
@@ -20,7 +20,6 @@ public class PressurePlate : MonoBehaviour {
 
 	public static event Guide.GuideTargetStatic OnNewTarget;
 
-	private AudioSource sound;
 	private SpriteRenderer selfSprite;
 
 	private void Awake() {
@@ -28,7 +27,6 @@ public class PressurePlate : MonoBehaviour {
 	}
 
 	void Start() {
-		sound = GetComponent<AudioSource>();
 		selfSprite = GetComponent<SpriteRenderer>();
 		transform.position = GeneratePos();
 	}
@@ -52,13 +50,13 @@ public class PressurePlate : MonoBehaviour {
 
 		if (f < 0.5) {
 			while (Vector3.Distance(pos, newPos) < 10) {
-				newPos = new Vector3(pos.x, Random.Range(BG.sizeDelta.y / 2 - 10, pos.y + 10), 0);
+				newPos = new Vector3(pos.x, Random.Range(background.sizeDelta.y / 2 - 10, pos.y + 10), 0);
 			}
 			return newPos;
 		}
 		else {
 			while (Vector3.Distance(pos, newPos) < 10) {
-				newPos = new Vector3(pos.x, Random.Range(-BG.sizeDelta.y / 2 + 10, pos.y - 10), 0);
+				newPos = new Vector3(pos.x, Random.Range(-background.sizeDelta.y / 2 + 10, pos.y - 10), 0);
 			}
 			return newPos;
 		}
@@ -68,9 +66,8 @@ public class PressurePlate : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col) {
 		if (!alreadyTriggered) {
 			if (col.name == "Block") {
-				selfSprite.sprite = Active;
-				sound.clip = On;
-				sound.Play();
+				selfSprite.sprite = sprtActive;
+				SoundFXHandler.script.PlayFX(switchOn);
 				spike.SetPosition();
 				if (OnNewTarget != null) {
 					OnNewTarget(spike.transform.position);
@@ -91,9 +88,8 @@ public class PressurePlate : MonoBehaviour {
 			if (attempts == 3) {
 				CreateBarrier();
 			}
-			sound.clip = Off;
-			sound.Play();
-			selfSprite.sprite = Inactive;
+			SoundFXHandler.script.PlayFX(switchOff);
+			selfSprite.sprite = sprtInactive;
 			spike.Hide();
 			BlockScript.pressurePlateTriggered = false;
 		}
@@ -102,7 +98,6 @@ public class PressurePlate : MonoBehaviour {
 		Canvas_Renderer.script.DisplayInfo(null, "Ok, let me help you a little.");
 		GameObject protection = Instantiate(wall, transform.position + new Vector3(10, 0, 0), Quaternion.identity, transform.parent);
 		protection.name = "Blocker";
-		protection.GetComponent<BoxCollider2D>().isTrigger = true;
 		protection.transform.localScale = new Vector3(0.2f, 0.1f, 1);
 	}
 

@@ -49,11 +49,10 @@ public class Control : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
-		MenuMusic.script.StopMusic();
+		CamFadeOut.registerMenuMusicVolumeFade = true;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
 		SceneManager.sceneLoaded += NewGameSceneLoaded;
-
 	}
 
 	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
@@ -72,7 +71,7 @@ public class Control : MonoBehaviour {
 	}
 
 	public void Restart() {
-		MusicHandler.script.FadeMusic();
+		CamFadeOut.registerGameMusicVolumeFade = true;
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += RestartTransition;
 	}
@@ -136,7 +135,7 @@ public class Control : MonoBehaviour {
  * Coins: coinsCollected, OnNewTarget
  * Spike: spikesCollected, OnNewTarget
  * CameraMovement: OnZoomModeSwitch, CameraMovement
- * CamFadeOut: CamFadeOut, OnCamFullyFaded
+ * CamFadeOut: CamFadeOut, OnCamFullyFaded, registerGameMusicVolumeFade, registerMenuMusicVolumeFade
  * CanvasRenderer: CanvasRenderer
  * MapData: MapData
  * MusicHandler: MusicHandler
@@ -162,4 +161,5 @@ public class Control : MonoBehaviour {
  * Notifications: all the prefabs, canvas
  * UserInterface: OnPauseChange, sceneMode, 
  * WindowManager: activeWindows
+ * UICallbacks: source(private)
  */

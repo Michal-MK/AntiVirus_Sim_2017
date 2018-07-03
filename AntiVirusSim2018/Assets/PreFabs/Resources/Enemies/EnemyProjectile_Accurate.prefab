@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4130222434451634}
   - component: {fileID: 212194760972255630}
-  - component: {fileID: 114924257886046746}
   - component: {fileID: 50514467161006250}
   - component: {fileID: 68847931532739260}
+  - component: {fileID: 114458904351907668}
   m_Layer: 14
   m_Name: EnemyProjectile_Accurate
   m_TagString: Enemy
@@ -104,7 +104,7 @@ EdgeCollider2D:
   - {x: -2.1655655, y: 1.6867924}
   - {x: -2.0319595, y: 1.7439327}
   - {x: -2.0109863, y: 1.7402439}
---- !u!114 &114924257886046746
+--- !u!114 &114458904351907668
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -112,10 +112,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1881122224075760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d661e8e994cd664b95fd94a1706bfe3, type: 3}
+  m_Script: {fileID: 11500000, guid: 812769bfd1701d54e88111f0e29fbafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   selfDestructTimer: -1
+  lightMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  darkMat: {fileID: 2100000, guid: 187396736ec2c8840a2054316b256f08, type: 2}
+  darkModeLight: {fileID: 1821370478695006, guid: 7c6ab46aab5073842a0fd94a96e8b7b6,
+    type: 2}
 --- !u!212 &212194760972255630
 SpriteRenderer:
   m_ObjectHideFlags: 1

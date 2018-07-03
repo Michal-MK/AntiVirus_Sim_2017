@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SoundFXHandler : MonoBehaviour {
+public class SoundFXHandler : SoundBase {
 
 	private List<AudioSource> sources = new List<AudioSource>();
 
@@ -50,7 +50,12 @@ public class SoundFXHandler : MonoBehaviour {
 		if (!added) {
 			print("Not Enough Sound players to play " + newClip.name);
 		}
+	}
 
+	public void PlayFxChannel(int channel, AudioClip newClip) {
+		sources[channel].clip = newClip;
+		sources[channel].Play();
+		StartCoroutine(RemoveClipAfterFinish(sources[channel]));
 	}
 
 	public IEnumerator RemoveClipAfterFinish(AudioSource s) {

@@ -15,8 +15,8 @@ public class ElectricalBlock : Enemy {
 	private bool despawn = false;
 
 	private void Start() {
-		_class = EnemyClass.TOUCH;
-		_is_Destroyable = false;
+		enemyClass = EnemyClass.TOUCH;
+		isDestroyable = false;
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();
 		room1BG = MapData.script.GetBackground(1);

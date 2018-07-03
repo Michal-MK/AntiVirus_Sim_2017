@@ -50,27 +50,27 @@ public class DisplaySaveFiles : MonoBehaviour {
 					}
 
 					switch (saveInfo.data.player.currentBGName) {
-						case BackgroundNames.BACKGROUND1_1: {
+						case BackgroundNames.BACKGROUND_1: {
 							BGName = "Electical Hall";
 							break;
 						}
-						case BackgroundNames.BACKGROUND1_2: {
+						case BackgroundNames.BACKGROUND_2: {
 							BGName = "Icy Plains";
 							break;
 						}
-						case BackgroundNames.BACKGROUND1_3: {
+						case BackgroundNames.BACKGROUND_3: {
 							BGName = "Danger Zone";
 							break;
 						}
-						case BackgroundNames.BACKGROUND1_4: {
+						case BackgroundNames.BACKGROUND_4: {
 							BGName = "Peaceful Corner";
 							break;
 						}
-						case BackgroundNames.BACKGROUND_BOSS_ + "1": {
+						case BackgroundNames.BACKGROUND_BOSS_X + "1": {
 							BGName = "Boss Area";
 							break;
 						}
-						case BackgroundNames.BACKGROUND1_MAZE: {
+						case BackgroundNames.BACKGROUND_MAZE: {
 							BGName = "Labirinthian";
 							break;
 						}

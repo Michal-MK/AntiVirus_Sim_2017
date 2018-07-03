@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CamFadeOut : MonoBehaviour {
 	public Animator anim;
@@ -11,6 +13,9 @@ public class CamFadeOut : MonoBehaviour {
 	public delegate void CamFaded();
 
 	public static event CamFaded OnCamFullyFaded;
+
+	public static bool registerMenuMusicVolumeFade;
+	public static bool registerGameMusicVolumeFade;
 
 	public enum CameraModeChanges {
 		DIM_CAMERA,
@@ -30,10 +35,10 @@ public class CamFadeOut : MonoBehaviour {
 	/// <summary>
 	/// Transitions camera into deifferent mode.
 	/// </summary>
-	/// <param name="changes">Transition mode</param>
+	/// <param name="change">Transition mode</param>
 	/// <param name="speed">Animator speed</param>
-	public void PlayTransition(CameraModeChanges changes, float speed) {
-		switch (changes) {
+	public void PlayTransition(CameraModeChanges change, float speed) {
+		switch (change) {
 			case CameraModeChanges.DIM_CAMERA: {
 				anim.Play("DimCamera");
 				anim.speed = speed;
@@ -52,6 +57,14 @@ public class CamFadeOut : MonoBehaviour {
 					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
+				if (registerGameMusicVolumeFade) {
+					MusicHandler.script.MapAlphaToVolume(GetComponent<Image>());
+					registerGameMusicVolumeFade = false;
+				}
+				if (registerMenuMusicVolumeFade) {
+					MenuMusic.script.MapAlphaToVolume(GetComponent<Image>());
+					registerMenuMusicVolumeFade = false;
+				}
 				break;
 			}
 		}

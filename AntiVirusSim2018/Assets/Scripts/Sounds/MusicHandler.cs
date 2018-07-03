@@ -1,22 +1,22 @@
 using System.Collections;
 using UnityEngine;
 
-public class MusicHandler : MonoBehaviour {
-	public AudioSource musicPlayer;
+public class MusicHandler : SoundBase {
 
 	public AudioClip room1_1;
 	public AudioClip room1_2;
 	public AudioClip room1_3_avoidance;
 	public AudioClip room_maze;
 	public AudioClip room_1_boss;
-	public AudioClip gameOver;
 	public AudioClip darkWorld;
+
+	public AudioClip gameOver;
 
 	private AudioClip current;
 
 	public static MusicHandler script;
 
-	public bool isAnythingPlaying { get; private set; } = false;
+	private bool isPlaying { get { return source.isPlaying; } }
 
 	private void Awake() {
 		if (script == null) {
@@ -28,7 +28,7 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	private void UpdateMusicVol(float newValue) {
-		musicPlayer.volume = newValue;
+		source.volume = newValue;
 	}
 
 	private void Start() {
@@ -39,8 +39,8 @@ public class MusicHandler : MonoBehaviour {
 	#region EventHandling
 	private void NewRoom(RectTransform background, M_Player sender) {
 
-		if(background == MapData.script.GetBackground(1)) {
-			if (!isAnythingPlaying) {
+		if (background == MapData.script.GetBackground(1)) {
+			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -48,7 +48,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(2)) {
-			if (!isAnythingPlaying) {
+			if (!isPlaying) {
 				PlayMusic(room1_2);
 			}
 			else {
@@ -56,7 +56,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(3)) {
-			if (!isAnythingPlaying) {
+			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -64,7 +64,7 @@ public class MusicHandler : MonoBehaviour {
 			}
 		}
 		else if (background == MapData.script.GetBackground(4)) {
-			if (!isAnythingPlaying) {
+			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
 			else {
@@ -75,11 +75,8 @@ public class MusicHandler : MonoBehaviour {
 	#endregion
 
 	public void PlayMusic(AudioClip clip) {
-		if (!isAnythingPlaying) {
+		if (!isPlaying) {
 			StartCoroutine(_PlayMusic(clip));
-		}
-		else {
-			Debug.Log("Already Playing");
 		}
 	}
 
@@ -88,69 +85,56 @@ public class MusicHandler : MonoBehaviour {
 	}
 
 	public void TransitionMusic(AudioClip newClip) {
-		if (isAnythingPlaying) {
+		if (isPlaying) {
 			StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
 			StartCoroutine(_PlayMusic(newClip));
-			print("Nothing to transition from! Attempting to play normally");
-			//throw new System.Exception("Nothing to transition from!");
+			Canvas_Renderer.script.DisplayInfo("Nothing to transition from! Attempting to play normally", null);
 		}
 	}
 
 	private IEnumerator _PlayMusic(AudioClip clip) {
-		musicPlayer.clip = current = clip;
-		musicPlayer.Play();
-		musicPlayer.volume = 0;
-		for (float f = 0; f < GameSettings.audioVolume; f += Time.deltaTime) {
-			musicPlayer.volume = f;
+		source.clip = current = clip;
+		source.Play();
+		source.volume = 0;
+		for (float f = 0; f < GameSettings.audioVolume; f += Time.unscaledDeltaTime * 0.5f) {
+			source.volume = f;
 			yield return null;
 		}
-		musicPlayer.volume = GameSettings.audioVolume;
-		isAnythingPlaying = true;
+		source.volume = GameSettings.audioVolume;
 	}
 
 	private IEnumerator _FadeMusic() {
-		for (float f = musicPlayer.volume; f > 0; f -= Time.unscaledDeltaTime) {
-			musicPlayer.volume = f;
+		for (float f = source.volume; f > 0; f -= Time.unscaledDeltaTime * 0.5f) {
+			source.volume = f;
 			yield return null;
 		}
-		isAnythingPlaying = false;
 		current = null;
 	}
 
 	private IEnumerator _TransitionMusic(AudioClip clip) {
-		if(clip == current) {
+		if (clip == current) {
 			//print("Transitioning to the same clip, skipping");
 			yield break;
 		}
 
-		float initialVolume = musicPlayer.volume;
-		for (float f = initialVolume; f >= 0; f -= Time.unscaledDeltaTime) {
-			musicPlayer.volume = f;
+		float initialVolume = source.volume;
+		for (float f = initialVolume; f >= 0; f -= Time.unscaledDeltaTime * 0.5f) {
+			source.volume = f;
 			yield return null;
 		}
 
-		musicPlayer.volume = 0;
-		musicPlayer.Stop();
+		source.volume = 0;
+		source.Stop();
 
-		musicPlayer.clip = current = clip;
-		musicPlayer.Play();
-		for (float f = 0; f <= GameSettings.audioVolume; f += Time.unscaledDeltaTime) {
-			musicPlayer.volume = f;
+		source.clip = current = clip;
+		source.Play();
+		for (float f = 0; f <= GameSettings.audioVolume; f += Time.unscaledDeltaTime * 0.5f) {
+			source.volume = f;
 			yield return null;
 		}
-		musicPlayer.volume = GameSettings.audioVolume;
-		isAnythingPlaying = true;
-	}
-
-	private void OnApplicationFocus(bool focus) {
-		if (focus == false) {
-			musicPlayer.Pause();
-		}
-		else {
-			musicPlayer.UnPause();
-		}
+		source.volume = GameSettings.audioVolume;
 	}
 
 

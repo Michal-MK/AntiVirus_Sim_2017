@@ -21,7 +21,7 @@ public class AdvanceInGame : MonoBehaviour {
 					}
 					case 2: {
 						FindObjectOfType<BlockScript>().transform.position = FindObjectOfType<PressurePlate>().transform.position;
-						MapData.script.OpenDoor(new RoomLink(2.ToString(), 3.ToString()));
+						MapData.script.OpenDoor(new RoomLink(2, 3));
 						M_Player.player.transform.position = MapData.script.doors[2].transform.position;
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = M_Player.player.transform.position;

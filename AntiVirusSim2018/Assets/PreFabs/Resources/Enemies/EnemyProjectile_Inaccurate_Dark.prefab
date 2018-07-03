@@ -36,13 +36,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4031928824131140}
   - component: {fileID: 212853190516845832}
-  - component: {fileID: 114119206463984346}
   - component: {fileID: 50940268155103044}
   - component: {fileID: 58626530491018236}
   - component: {fileID: 58566835577698990}
   - component: {fileID: 58573715888516816}
   - component: {fileID: 58657283376031648}
   - component: {fileID: 68023555385699830}
+  - component: {fileID: 114179992830642124}
   m_Layer: 13
   m_Name: EnemyProjectile_Inaccurate_Dark
   m_TagString: Enemy
@@ -234,7 +234,7 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114119206463984346
+--- !u!114 &114179992830642124
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -242,14 +242,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1969564587011180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d661e8e994cd664b95fd94a1706bfe3, type: 3}
+  m_Script: {fileID: 11500000, guid: 812769bfd1701d54e88111f0e29fbafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeTillDestruct: -1
-  Solid: {fileID: 21300000, guid: 08da859c6cd1d0f48a81c2a3de6e7f6f, type: 3}
-  Icicle: {fileID: 0}
-  Cracked: {fileID: 0}
-  byBoss: 0
+  selfDestructTimer: -1
+  lightMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  darkMat: {fileID: 2100000, guid: 187396736ec2c8840a2054316b256f08, type: 2}
+  darkModeLight: {fileID: 1821370478695006}
 --- !u!212 &212853190516845832
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -259,9 +258,11 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 187396736ec2c8840a2054316b256f08, type: 2}
   m_StaticBatchInfo:
@@ -274,6 +275,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

@@ -36,17 +36,40 @@ transition from room 2 to maze entrance room is glitched - fixed
 Audiobalance - testing in progress, failed, 
 post boss bugged - fixed kindof
 
+
+
+
 saving is fuc**
-
-
 restarting does't reset block guadance arrow to pressure plate
 restarting dean't reset zooming bool
+
+
+
+
+current ammo type shown when spike is picked up --fixed but needs a rewrite
+
+recheck all audisources for invalid audio volume --fixed
+music is not transitioning , it is almost instant --fixed
+
+make the flippin wall fade a bit faster --done
+
+side text dissapeadr immediately instead of sliding offcreen --fixed
+
+bomb explosion removes hitbox, but the sprite for shield stays --fixed
+
+boss entrance warning signs have higher priority than player --fixed
+killerwalll doesn't update its sprites.... --fixed
+
+tp maze dissapears on first lever activation instead of second --Fixed
+lever interaction does't change sprite nor plays switch music --fixed
+quit to main menu settings button stays active --fixed
+
 
 Features:
 
 implement chase sequence with avoidance2 music
-bossbomb sound pickup and explosion are missing - fixed
-
+bossbomb sound pickup and explosion are missing - implemented
+onmaze exit change side text to something - changed
 
 
 

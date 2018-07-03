@@ -7,6 +7,7 @@ public delegate void PlayerColision(M_Player sender, GameObject other);
 public delegate void SimplePlayerEvent(M_Player sender);
 
 public class M_Player : MonoBehaviour {
+
 	#region PrefabReferences
 	public Rigidbody2D rg;
 	public SpriteRenderer face;
@@ -65,7 +66,7 @@ public class M_Player : MonoBehaviour {
 
 	private IEnumerator Start() {
 		Cursor.lockState = CursorLockMode.Confined;
-		currentBG_name = BackgroundNames.BACKGROUND1_1;
+		currentBG_name = BackgroundNames.BACKGROUND_1;
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR
 		if (!Control.script.allowTesting && SaveManager.current == null) {
@@ -121,7 +122,7 @@ public class M_Player : MonoBehaviour {
 			currentBG_name = col.name;
 			CameraMovement.script.RaycastForRooms();
 
-			if (col.name == BackgroundNames.BACKGROUND1_2) {
+			if (col.name == BackgroundNames.BACKGROUND_2) {
 				if (gameProgression == 3) {
 					Canvas_Renderer.script.DisplayInfo(null, "Go down even further.");
 				}

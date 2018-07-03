@@ -116,6 +116,7 @@ public class GameSettings : MonoBehaviour {
 	}
 
 	public void Attach(SettingsJoiner settingsJoiner, GameObject canvas) {
+
 		musicSlid = settingsJoiner.transform.Find("Panel/Controls/Music_Slid").GetComponent<Slider>();
 		fxSlid = settingsJoiner.transform.Find("Panel/Controls/FX_Slid").GetComponent<Slider>();
 		applyChanges = settingsJoiner.transform.Find("Panel/Controls/Apply_Changes").GetComponent<Button>();
@@ -128,12 +129,12 @@ public class GameSettings : MonoBehaviour {
 
 		if (fromGame) {
 			backButton.gameObject.SetActive(false);
-			applyChanges.onClick.AddListener(delegate { SaveConfig();  settingsJoiner.gameObject.SetActive(false); canvas.SetActive(true); });
+			applyChanges.onClick.AddListener(delegate { SaveConfig();  WindowManager.CloseMostRecent(); canvas.SetActive(true); });
 			fromGame = false;
 		}
 		else {
-			backButton.onClick.AddListener(delegate { settingsJoiner.gameObject.SetActive(false); canvas.SetActive(true); });
-			applyChanges.onClick.AddListener(delegate { SaveConfig(); settingsJoiner.gameObject.SetActive(false); canvas.SetActive(true); });
+			backButton.onClick.AddListener(delegate { WindowManager.CloseMostRecent(); canvas.SetActive(true); });
+			applyChanges.onClick.AddListener(delegate { SaveConfig(); WindowManager.CloseMostRecent(); canvas.SetActive(true); GameObject.Find("MenuGraphics").SetActive(true); });
 		}
 	}
 }

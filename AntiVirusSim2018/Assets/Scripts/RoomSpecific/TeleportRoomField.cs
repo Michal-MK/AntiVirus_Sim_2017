@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using Igor.Constants.Strings;
 
 public class TeleportRoomField : MonoBehaviour {
 	public GameObject test;
@@ -32,49 +30,24 @@ public class TeleportRoomField : MonoBehaviour {
 	}
 
 	private void L_OnLeverSwitch(Lever sender, bool isOn) {
-		switch (sender.name) {
-			case "Lever_9": {
-				if (relay.currentlyActiveLevers == 1) {
-					foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
-						render.color = new Color(1, 0.2f, 0.2f, 1);
-					}
-					print(pathFields.Count);
-					foreach (Transform t in pathFields) {
-						t.GetComponentInChildren<Animator>().Play("Alpha Pulse Sprite");
-					}
-				}
-				else {
-					foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
-						render.color = new Color(1, 1, 1, 0);
-					}
-					print(pathFields.Count);
-					foreach (Transform t in pathFields) {
-						t.GetChild(0).gameObject.SetActive(false);
-					}
-				}
-				break;
+		if (relay.currentlyActiveLevers == 0) {
+			foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
+				render.color = new Color(1, 0.2f, 0.2f, 1);
 			}
-			case "Lever_10": {
-				if (relay.currentlyActiveLevers == 1) {
-					foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
-						render.color = new Color(1, 0.2f, 0.2f, 1);
-					}
-					print(pathFields.Count);
-					foreach (Transform t in pathFields) {
-						t.GetComponentInChildren<Animator>().Play("Alpha Pulse Sprite");
-					}
-				}
-				else {
-					foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
-						render.color = new Color(1, 1, 1, 0);
-					}
-					print(pathFields.Count);
-					foreach (Transform t in pathFields) {
-						t.GetChild(0).gameObject.SetActive(false);
-					}
-				}
-				break;
+			print(pathFields.Count);
+			foreach (Transform t in pathFields) {
+				t.GetComponentInChildren<Animator>().Play("Alpha Pulse Sprite");
 			}
+		}
+		else if (relay.currentlyActiveLevers == 1) {
+			foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
+				render.color = new Color(1, 1, 1, 0);
+			}
+			print(pathFields.Count);
+			foreach (Transform t in pathFields) {
+				t.GetChild(0).gameObject.SetActive(false);
+			}
+			MapData.script.OpenDoor(new RoomLink(6, 8));
 		}
 		sender.OnLeverSwitch -= L_OnLeverSwitch;
 	}
@@ -84,6 +57,15 @@ public class TeleportRoomField : MonoBehaviour {
 			FillRoom();
 			print("Entering LEVER RELAY");
 			M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
+			M_Player.OnRoomEnter += OnTopRoomEnter;
+		}
+	}
+
+	private void OnTopRoomEnter(RectTransform background, M_Player sender) {
+		if(background == MapData.script.GetTransition(new RoomLink(7,9))) {
+			print("Entering Transition to top room");
+			MapData.script.GetBackground(10).parent.Find("Cherries_Apples").gameObject.SetActive(true);
+			M_Player.OnRoomEnter -= OnTopRoomEnter;
 		}
 	}
 
@@ -184,48 +166,48 @@ public class TeleportRoomField : MonoBehaviour {
 	}
 
 	private void SubTurn(int x, int y, int toX, int toY) {
-		Vector2 modified = -Vector2.one;
+		Vector2Int modified = new Vector2Int(-1, -1);
 		if (x > toX) {
 			if (y > toY) {
 				if (Chance.Half()) {
-					modified = new Vector2(x, y - 1);
+					modified = new Vector2Int(x, y - 1);
 				}
 				else {
-					modified = new Vector2(x - 1, y);
+					modified = new Vector2Int(x - 1, y);
 				}
 			}
 			else if (toY > y) {
 				if (Chance.Half()) {
-					modified = new Vector2(x, y + 1);
+					modified = new Vector2Int(x, y + 1);
 				}
 				else {
-					modified = new Vector2(x - 1, y);
+					modified = new Vector2Int(x - 1, y);
 				}
 			}
 		}
 		else if (toX > x) {
 			if (y > toY) {
 				if (Chance.Half()) {
-					modified = new Vector2(x, y - 1);
+					modified = new Vector2Int(x, y - 1);
 				}
 				else {
-					modified = new Vector2(x + 1, y);
+					modified = new Vector2Int(x + 1, y);
 				}
 			}
 			else if (toY > y) {
 				if (Chance.Half()) {
-					modified = new Vector2(x, y + 1);
+					modified = new Vector2Int(x, y + 1);
 				}
 				else {
-					modified = new Vector2(x + 1, y);
+					modified = new Vector2Int(x + 1, y);
 				}
 			}
 		}
 		if (modified != -Vector2.one) {
-			fields[(int)modified.x, (int)modified.y].tag = "Untagged";
-			pathFields.Add(fields[(int)modified.x, (int)modified.y]);
-			if (fields[(int)modified.x, (int)modified.y].childCount == 0) {
-				Instantiate(test, fields[(int)modified.x, (int)modified.y].position, Quaternion.identity, fields[(int)modified.x, (int)modified.y]);
+			fields[modified.x, modified.y].tag = "Untagged";
+			pathFields.Add(fields[modified.x, modified.y]);
+			if (fields[modified.x, modified.y].childCount == 0) {
+				Instantiate(test, fields[modified.x, modified.y].position, Quaternion.identity, fields[modified.x, modified.y]);
 			}
 		}
 	}

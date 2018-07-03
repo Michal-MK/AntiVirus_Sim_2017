@@ -61,57 +61,57 @@ public class UICallbacks : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
 	public void OnDeselect(BaseEventData eventData) {
 		if (onDeselect) {
-			print("OnDeselect");
+			//print("OnDeselect");
 			Action();
 		}
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
 		if (onPointerClick) {
-			print("OnPointerClick");
+			//print("OnPointerClick");
 			Action();
 		}
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
 		if (onPointerEnter) {
-			print("OnPointerEnter");
+			//print("OnPointerEnter");
 			Action();
 		}
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
 		if (onPointerExit) {
-			print("OnPointerExit");
+			//print("OnPointerExit");
 			Action();
 		}
 	}
 
+	#region Sound settings FX preview
+	private static AudioSource source;
+
 	private void FxSwitchOff() {
 		GetComponent<AudioSource>().loop = false;
 		GameSettings.script.OnFxVolumeChanged -= UpdateFxVol;
-		sources.Clear();
 	}
 
 
 	private void FxSwitchOn() {
-		GetComponent<AudioSource>().Play();
-		GetComponent<AudioSource>().loop = true;
+		source = GetComponent<AudioSource>();
+		if (!source.isPlaying) {
+			source.Play();
+			source.loop = true;
+		}
 	}
 
-	private List<AudioSource> sources = new List<AudioSource>();
 	private void AttachVolumeSlider() {
-		foreach (AudioSource s in transform.GetComponentsInChildren<AudioSource>()) {
-			sources.Add(s);
-			s.volume = GameSettings.fxVolume;
-		}
+		source = GetComponent<AudioSource>();
+		source.volume = GameSettings.fxVolume;
 		GameSettings.script.OnFxVolumeChanged += UpdateFxVol;
 	}
 
 	private void UpdateFxVol(float newValue) {
-		foreach (AudioSource source in sources) {
-			source.volume = newValue;
-			//TODO crashes
-		}
+		source.volume = newValue;
 	}
+	#endregion
 }

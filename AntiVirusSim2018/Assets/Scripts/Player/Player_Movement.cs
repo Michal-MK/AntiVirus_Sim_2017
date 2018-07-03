@@ -184,8 +184,7 @@ public class Player_Movement : MonoBehaviour {
 
 			if (choice == secondaryChoice) {
 				//Do something prettier
-				GetComponent<AudioSource>().clip = FX_Teleport;
-				GetComponent<AudioSource>().Play();
+				SoundFXHandler.script.PlayFX(FX_Teleport);
 				transform.position = tpNodes[(int)secondaryChoice].transform.position;
 			}
 			tpNodes[(int)choice].sprite = idle;

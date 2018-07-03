@@ -42,10 +42,11 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private IEnumerator FadeWall() {
+		Canvas_Renderer.script.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
 		SpriteRenderer wallSprite = wall.GetComponent<SpriteRenderer>();
 		Color32 newColor;
 
-		for (float f = 255; f >= 0; f -= 0.5f) {
+		for (float f = 255; f >= 0; f -= 0.8f) {
 			newColor = new Color32(255, 255, 255, (byte)f);
 			wallSprite.color = newColor;
 			yield return null;

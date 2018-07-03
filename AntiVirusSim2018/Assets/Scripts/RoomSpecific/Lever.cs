@@ -9,30 +9,22 @@ public class Lever : MonoBehaviour {
 	public AudioClip toggleOff;
 
 	private SpriteRenderer selfRender;
-	private AudioSource selfSound;
 
 	public delegate void LeverState(Lever sender, bool isOn);
 	public event LeverState OnLeverSwitch;
 
-	private bool _isOn = false;
+	public bool isOn { get; set; } = false;
 
 	void Start() {
 		selfRender = GetComponent<SpriteRenderer>();
-		selfSound = GetComponent<AudioSource>();
 	}
 
 	public void Interact() {
-		_isOn = !_isOn;
+		isOn = !isOn;
 		if (OnLeverSwitch != null) {
-			OnLeverSwitch(this, _isOn);
+			OnLeverSwitch(this, isOn);
 		}
-		selfRender.sprite = _isOn ? toggleOnSpr : toggleOffSpr;
-		selfSound.clip = _isOn ? toggleOn : toggleOff;
-		selfSound.Play();
-	}
-
-	public bool isOn {
-		get { return _isOn; }
-		set { _isOn = value; }
+		selfRender.sprite = isOn ? toggleOnSpr : toggleOffSpr;
+		SoundFXHandler.script.PlayFX(isOn ? toggleOn : toggleOff);
 	}
 }

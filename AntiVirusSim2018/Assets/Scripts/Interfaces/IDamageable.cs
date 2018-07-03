@@ -10,5 +10,5 @@ public enum WeaponType {
 interface IDamageable {
 	WeaponType damageType { get; set; }
 
-	void Damaged(Collision2D by, WeaponType type);
+	void Damaged(GameObject by, WeaponType type);
 }

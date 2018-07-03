@@ -101,6 +101,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	private IEnumerator SlideInfo(string textToDisplay) {
+		slideAnim.SetTrigger("SlideOut");
 		yield return new WaitForSeconds(1);
 		slideInInfo.text = textToDisplay;
 		slideAnim.SetTrigger("SlideIn");

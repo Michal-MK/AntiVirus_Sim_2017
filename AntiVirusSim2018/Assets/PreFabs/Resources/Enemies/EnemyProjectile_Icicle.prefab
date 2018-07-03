@@ -112,10 +112,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selfDestructTimer: -1
+  lightMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  darkMat: {fileID: 2100000, guid: 187396736ec2c8840a2054316b256f08, type: 2}
   icicleSprite: {fileID: 21300000, guid: 77d01bf58975c9242a437e4af1bfd60a, type: 3}
   crackedIcicleSprite: {fileID: 21300000, guid: acdf885e191e6e341a66e4c06d70162a,
     type: 3}
   emmitter: {fileID: 1698049743245032, guid: 0a6f69946c418dd4dbbb35ffbbaf63d7, type: 2}
+  darkModeLight: {fileID: 1719991158530034, guid: 3fe97ab6a30981c4f809ab02481bc1db,
+    type: 2}
 --- !u!212 &212775665156068710
 SpriteRenderer:
   m_ObjectHideFlags: 1

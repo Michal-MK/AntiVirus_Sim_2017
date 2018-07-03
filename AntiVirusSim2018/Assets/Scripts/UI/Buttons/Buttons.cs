@@ -6,7 +6,7 @@ public class Buttons : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
 		Control.script.StartNewGame(difficulty);
-		MenuMusic.script.StopMusic();
+		//MenuMusic.script.StopMusic();
 	}
 
 	public void SavePrompt() {
@@ -22,7 +22,6 @@ public class Buttons : MonoBehaviour {
 
 	public void LoadGame(Transform myParent) {
 		Control.script.loadManager.Load(myParent.name);
-		MenuMusic.script.StopMusic();
 	}
 
 	public void Restart() {
@@ -40,13 +39,6 @@ public class Buttons : MonoBehaviour {
 	public void ToggleWindowActive(GameObject window) {
 		WindowManager.ToggleWindow(new Window(window, Window.WindowType.ACTIVATING));
 	}
-
-	//private void WindowManager_OnWindowClose(Window changed) {
-	//	if (changed.window.name == ObjNames.MENU_CHOOSE_DIFFICULTY) {
-	//		FindObjectOfType<UserInterface>().ToggleMenuButtons();
-	//	}
-	//	WindowManager.OnWindowClose -= WindowManager_OnWindowClose;
-	//}
 
 	public void ToggleWindowAnim(GameObject window) {
 		WindowManager.ToggleWindow(new Window(window, Window.WindowType.MOVING));

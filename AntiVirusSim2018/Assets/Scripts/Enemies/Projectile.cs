@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Projectile : Enemy {
 
-	protected float _projectileSpeed = 15;
+	public float projectileSpeed { get; set; } = 15;
 	protected Rigidbody2D selfRigid;
 	protected SpriteRenderer selfRender;
-
-	public float selfDestructTimer = -1;
 
 	protected virtual void OnEnable() {
 		selfRigid = GetComponent<Rigidbody2D>();
@@ -19,27 +17,15 @@ public class Projectile : Enemy {
 			StartCoroutine(DelayedFire(delay));
 		}
 		else {
-			selfRigid.velocity = transform.up * -_projectileSpeed;
+			selfRigid.velocity = transform.up * -projectileSpeed;
 		}
 	}
 
-	protected IEnumerator DelayedFire(float optionalDelay) {
-		yield return new WaitForSeconds(optionalDelay);
-		selfRigid.velocity = transform.up * -_projectileSpeed;
+	private IEnumerator DelayedFire(float delay) {
+		yield return new WaitForSeconds(delay);
+		selfRigid.velocity = transform.up * -projectileSpeed;
 	}
 
-	public IEnumerator Deactivate(float timeTillDestruction) {
-		yield return new WaitForSeconds(timeTillDestruction);
-		gameObject.SetActive(false);
-	}
-
-	public void SelfDestructIn(float seconds) {
-		Destroy(gameObject,seconds);
-	}
-
-	public void SetSprite(Sprite sprite) {
-		selfRender.sprite = sprite;
-	}
 
 	protected IEnumerator Fade() {
 		Color colour;
@@ -48,25 +34,15 @@ public class Projectile : Enemy {
 			selfRender.color = colour;
 			yield return null;
 		}
-		gameObject.SetActive(false);
-		selfRender.color = new Color(1, 1, 1, 1);
+		Kill();
+		if (isPooled) {
+			selfRender.color = new Color(1, 1, 1, 1);
+		}
 	}
-
+	
 	protected virtual void OnTriggerExit2D(Collider2D col) {
-		if (col.tag == "BG") {
-			print("Exit");
-			gameObject.SetActive(false);
+		if (col.tag == Igor.Constants.Strings.Tags.BACKGROUND) {
+			Kill();
 		}
-	}
-
-	protected virtual void OnCollisionEnter2D(Collision2D col) {
-		if (col.transform.name == "Block") {
-			print("Collided with a block");
-		}
-	}
-
-	public float projectileSpeed {
-		get { return _projectileSpeed; }
-		set { _projectileSpeed = value; }
 	}
 }

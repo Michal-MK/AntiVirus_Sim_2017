@@ -38,6 +38,10 @@ public class BossEntrance : MonoBehaviour {
 												   "Return to me once you have everyting... to meet your demise!\n" +
 												   "MuHAHaHaa!!!", "Explore this location further.");
 			}
+
+			print("Debug");
+			M_Player.player.pAttack.bullets = 5;
+			M_Player.player.pAttack.bombs = 1;
 		}
 	}
 

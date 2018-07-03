@@ -450,7 +450,7 @@ public class BossBehaviour : MonoBehaviour {
 					shot.gameObject.SetActive(true);
 					shot.projectileSpeed = horizontalDistance / change;
 					shot.Fire();
-					shot.StartCoroutine(shot.Deactivate(arriveTime + 2));
+					shot.StartCoroutine(shot.Kill(arriveTime + 2));
 				}
 				yield return new WaitForSeconds(0.02f);
 			}

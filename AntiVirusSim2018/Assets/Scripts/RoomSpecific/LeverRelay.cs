@@ -91,9 +91,9 @@ public class LeverRelay : MonoBehaviour {
 	}
 
 	public void Interact() {
-		Canvas_Renderer.script.DisplayInfo("Upon inspection, I was able to figure out, that this device is not fully operational.", "New paths were opened");
+		Canvas_Renderer.script.DisplayInfo("Upon inspection, I was able to figure out, that this device is not fully operational.", "New path opened");
 		MapData.script.OpenDoor(new RoomLink(6, 7));
-		MapData.script.OpenDoor(new RoomLink(6, 8));
+		Canvas_Renderer.script.DisplayDirection(Directions.TOP);
 		CameraMovement.script.RaycastForRooms();
 	}
 

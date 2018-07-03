@@ -2,30 +2,15 @@
 using UnityEngine;
 
 public class Door {
-	private List<GameObject> doorParts = new List<GameObject>();
 
-	private RoomLink _doorBetweenXY;
-
-	private bool _isOpen = false;
-
+	public RoomLink getRoomIndicies { get; }
+	public List<GameObject> getDoor { get; } = new List<GameObject>();
+	public bool isDoorOpen { get; set; } = false;
 
 	public Door(GameObject doorObj, RoomLink connects) {
 		Transform t = doorObj.transform.GetChild(4);
-		doorParts.Add(t.gameObject);
-		_doorBetweenXY = connects;
-	}
-	
-	public RoomLink getRoomIndicies {
-		get { return _doorBetweenXY; }
-	}
-
-	public List<GameObject> getDoor {
-		get { return doorParts; }
-	}
-
-	public bool isDoorOpen {
-		get { return _isOpen; }
-		set { _isOpen = value; }
+		getDoor.Add(t.gameObject);
+		getRoomIndicies = connects;
 	}
 }
 
@@ -33,41 +18,20 @@ public class Door {
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 public class RoomLink {
 
-	private string _from;
-	private string _to;
+	public int from { get; }
+	public int to { get; }
+
 
 	public RoomLink(int fromRoom, int toRoom) {
-		_from = fromRoom.ToString();
-		_to = toRoom.ToString();
-	}
-
-	public RoomLink(string fromRoom, string toRoom) {
-		_from = fromRoom;
-		_to = toRoom;
-	}
-
-	public RoomLink(int fromRoom, string toRoom) {
-		_from = fromRoom.ToString();
-		_to = toRoom;
-	}
-
-	public RoomLink(string fromRoom, int toRoom) {
-		_from = fromRoom;
-		_to = toRoom.ToString();
-	}
-
-	public string From {
-		get { return _from; }
-	}
-	public string To {
-		get { return _to; }
+		from = fromRoom;
+		to = toRoom;
 	}
 
 	public static bool operator == (RoomLink a, RoomLink b) {
-		return a.From == b.From && a.To == b.To;
+		return a.from == b.from && a.to == b.to;
 	}
 	public static bool operator != (RoomLink a, RoomLink b) {
-		return a.From != b.From || a.To != b.To;
+		return a.from != b.from || a.to != b.to;
 	}
 }
 #pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()

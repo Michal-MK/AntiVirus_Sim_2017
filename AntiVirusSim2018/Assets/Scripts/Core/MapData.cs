@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class MapData : MonoBehaviour {
@@ -34,15 +33,15 @@ public class MapData : MonoBehaviour {
 		GameObject.Find("_Blocker3").SetActive(!data.world.postMazeDoorOpen);
 		for (int i = 0; i < data.world.doorsOpen.Count; i++) {
 			string[] indicies = data.world.doorsOpen[i].Split(',');
-			OpenDoor(new RoomLink(indicies[0], indicies[1]));
+			OpenDoor(new RoomLink(int.Parse(indicies[0]), int.Parse(indicies[1])));
 		}
 	}
 
 	private void Start() {
 		for (int i = 0; i < doors.Length - 1; i += 2) {
 			string[] doorName = doors[i].name.Split('_');
-			string from = doorName[2];
-			string to = doorName[3];
+			int from = int.Parse(doorName[2]);
+			int to = int.Parse(doorName[3]);
 			_doors.Add(new Door(doors[i], new RoomLink(from, to)));
 			_doors.Add(new Door(doors[i + 1], new RoomLink(to, from)));
 		}
@@ -52,11 +51,15 @@ public class MapData : MonoBehaviour {
 		currentMapMode = mode;
 		FindObjectOfType<EnemySpawner>().UpdatePrefabs(currentMapMode);
 		foreach (TurretAttack turret in FindObjectsOfType<TurretAttack>()) {
-			turret.SwapStance(mode);
+			turret.MapStanceSwitch(mode);
 		}
 		foreach (SignPost sign in FindObjectsOfType<SignPost>()) {
 			sign.MapStanceSwitch(mode);
 		}
+		foreach (ProjectileWall wall in FindObjectsOfType<ProjectileWall>()) {
+			wall.MapStanceSwitch(mode);
+		}
+
 		switch (mode) {
 			case MapMode.LIGHT: {
 				globalDirectionalLight.intensity = .8f;
@@ -82,7 +85,7 @@ public class MapData : MonoBehaviour {
 				}
 			}
 			if (includeOpposite) {
-				if (d.getRoomIndicies == new RoomLink(between.To, between.From)) {
+				if (d.getRoomIndicies == new RoomLink(between.to, between.from)) {
 					foreach (GameObject g in d.getDoor) {
 						g.SetActive(false);
 					}
@@ -91,7 +94,7 @@ public class MapData : MonoBehaviour {
 				}
 			}
 		}
-		throw new System.Exception("Door with indices " + between.From + " and " + between.To + " does not exist!");
+		throw new System.Exception("Door with indices " + between.from + " and " + between.to + " does not exist!");
 	}
 
 	public void CloseDoor(RoomLink between, bool includeOpposite = true) {
@@ -106,7 +109,7 @@ public class MapData : MonoBehaviour {
 				}
 			}
 			if (includeOpposite) {
-				if (d.getRoomIndicies == new RoomLink(between.To, between.From)) {
+				if (d.getRoomIndicies == new RoomLink(between.to, between.from)) {
 					foreach (GameObject g in d.getDoor) {
 						g.SetActive(true);
 					}
@@ -115,7 +118,7 @@ public class MapData : MonoBehaviour {
 				}
 			}
 		}
-		throw new System.Exception("Door with indices " + between.From + " and " + between.To + " does not exist!");
+		throw new System.Exception("Door with indices " + between.from + " and " + between.to + " does not exist!");
 	}
 
 	public void Progress(int progression, bool displayGuidance = true) {
@@ -170,10 +173,10 @@ public class MapData : MonoBehaviour {
 	public RectTransform GetTransition(RoomLink link) {
 		foreach (RectTransform t in transitions) {
 			string[] s = t.name.Split('_');
-			string fromR = s[2];
-			string toR = s[3];
+			int fromR = int.Parse(s[2]);
+			int toR = int.Parse(s[3]);
 
-			if ((fromR == link.From && toR == link.To) || (fromR == link.To && toR == link.From)) {
+			if ((fromR == link.from && toR == link.to) || (fromR == link.to && toR == link.from)) {
 				return t;
 			}
 		}
