@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace UnityEngine {
+﻿namespace UnityEngine {
 	public class Chance {
 		public static bool Half() {
 			return Random.value > 0.5f;

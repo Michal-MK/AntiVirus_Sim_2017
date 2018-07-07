@@ -63,7 +63,6 @@ public class MapData : MonoBehaviour {
 		switch (mode) {
 			case MapMode.LIGHT: {
 				globalDirectionalLight.intensity = .8f;
-
 				return;
 			}
 			case MapMode.DARK: {
@@ -74,48 +73,46 @@ public class MapData : MonoBehaviour {
 	}
 
 	public void OpenDoor(RoomLink between, bool includeOpposite = true) {
+		RoomLink opposite = new RoomLink(between.to, between.from);
+		int opened = 0;
 		foreach (Door d in _doors) {
 			if (d.getRoomIndicies == between) {
-				foreach (GameObject g in d.getDoor) {
-					g.SetActive(false);
-				}
-				d.isDoorOpen = true;
-				if (!includeOpposite) {
-					return;
-				}
+				d.Open();
+				opened++;
 			}
-			if (includeOpposite) {
-				if (d.getRoomIndicies == new RoomLink(between.to, between.from)) {
-					foreach (GameObject g in d.getDoor) {
-						g.SetActive(false);
-					}
-					d.isDoorOpen = true;
-					return;
-				}
+			if (includeOpposite && d.getRoomIndicies == opposite) {
+				d.Open();
+				opened++;
+			}
+			if(opened == 2) {
+				return;
+			}
+			else if (opened == 1 && !includeOpposite) {
+				return;
 			}
 		}
-		throw new System.Exception("Door with indices " + between.from + " and " + between.to + " does not exist!");
+		throw new System.Exception("Door with indices " + between.from + " and " + between.to + "(or reversed) does not exist!");
 	}
 
 	public void CloseDoor(RoomLink between, bool includeOpposite = true) {
+		RoomLink opposite = new RoomLink(between.to, between.from);
+		int opened = 0;
 		foreach (Door d in _doors) {
 			if (d.getRoomIndicies == between) {
-				foreach (GameObject g in d.getDoor) {
-					g.SetActive(true);
-				}
-				d.isDoorOpen = false;
-				if (!includeOpposite) {
-					return;
-				}
+				d.Open();
+				opened++;
 			}
 			if (includeOpposite) {
-				if (d.getRoomIndicies == new RoomLink(between.to, between.from)) {
-					foreach (GameObject g in d.getDoor) {
-						g.SetActive(true);
-					}
-					d.isDoorOpen = false;
-					return;
+				if (d.getRoomIndicies == opposite) {
+					d.Open();
+					opened++;
 				}
+			}
+			if(opened == 2) {
+				return;
+			}
+			else if (opened == 1 && !includeOpposite) {
+				return;
 			}
 		}
 		throw new System.Exception("Door with indices " + between.from + " and " + between.to + " does not exist!");
@@ -159,6 +156,7 @@ public class MapData : MonoBehaviour {
 			CameraMovement.script.RaycastForRooms();
 		}
 	}
+
 	/// <summary>
 	/// Returns a background for selected room
 	/// </summary>
@@ -189,7 +187,7 @@ public class MapData : MonoBehaviour {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 
-	public Door[] allDoors {
+	public Door[] getAllDoors {
 		get { return _doors.ToArray(); }
 	}
 }

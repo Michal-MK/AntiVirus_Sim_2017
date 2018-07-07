@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using AttackTypes;
 
 public class HUDElements : UserInterface {
-	public delegate void HUDAttackUpdates(AttackType type, int amount, bool state);
-	public delegate void HUDCollectUpdates(Collectibles type, int amount);
 
-	public delegate void HUDAttackVisibility(AttackType type, bool state, int amount);
-	public delegate void HUDCollectibleVisibility(Collectibles type);
+	public delegate void HUDAttackUpdates(AttackType type, int amount);
+	public delegate void HUDAttackVisibility(AttackType type, bool state);
 
 	public Image bombImage;
 	public Text bombAmount;
@@ -17,61 +14,52 @@ public class HUDElements : UserInterface {
 
 	public Image currentlySelectedImg;
 
-	public Text spikesAmount;
-	public Text coinsAmount;
+	private Sprite spikeSprt;
+	private Sprite bombSprt;
 
-	public Sprite spikeSpr;
-	public Sprite bombSpr;
-
-	public enum Collectibles {
+	public enum HudCollectibles {
 		COINS,
 		SPIKES,
 		BOMB
 	}
 
-	private AttackType currentSelectedAtkType = AttackType.NOTHING;
+	private AttackType currentSelectedAtkType;
 
 	protected override void Awake() {
 		PlayerAttack.OnAmmoChanged += AmmoSwitch;
 		PlayerAttack.OnAmmoPickup += SetVisibility;
+		spikeSprt = bulletImage.sprite;
+		bombSprt = bombImage.sprite;
 		base.Awake();
 	}
 
-	private void AmmoSwitch(AttackType type, int ammo, bool state = true) {
+	private void AmmoSwitch(AttackType type, int ammo) {
 		currentSelectedAtkType = type;
 		switch (currentSelectedAtkType) {
-			case AttackType.NOTHING: {
-				Debug.Log("Doing Nothing");
-				return;
-			}
 			case AttackType.BULLETS: {
-				currentlySelectedImg.sprite = spikeSpr;
+				currentlySelectedImg.sprite = spikeSprt;
 				bulletAmount.text = "x " + ammo;
-				currentlySelectedImg.transform.parent.gameObject.SetActive(state);
 				break;
 			}
 			case AttackType.BOMBS: {
-				currentlySelectedImg.sprite = bombSpr;
+				currentlySelectedImg.sprite = bombSprt;
 				bombAmount.text = "x " + ammo;
-				currentlySelectedImg.transform.parent.gameObject.SetActive(state);
 				break;
 			}
 		}
 	}
 
-	public void SetVisibility(AttackType type, bool state, int amount) {
+	public void SetVisibility(AttackType type, bool state) {
 		switch (type) {
 			case AttackType.BULLETS: {
-				bulletImage.sprite = spikeSpr;
+				bulletImage.sprite = spikeSprt;
 				bulletImage.gameObject.SetActive(state);
-				bulletAmount.text = "x " + amount;
 				bulletAmount.gameObject.SetActive(state);
 				break;
 			}
 			case AttackType.BOMBS: {
-				bombImage.sprite = bombSpr;
+				bombImage.sprite = bombSprt;
 				bombImage.gameObject.SetActive(state);
-				bombAmount.text = "x " + amount;
 				bombAmount.gameObject.SetActive(state);
 				break;
 			}
@@ -79,23 +67,6 @@ public class HUDElements : UserInterface {
 		currentlySelectedImg.gameObject.SetActive(state);
 	}
 
-	public void SetVisibility(Collectibles type, bool state, int amount) {
-		switch (type) {
-			case Collectibles.COINS: {
-				coinsAmount.gameObject.SetActive(state);
-				return;
-			}
-			case Collectibles.BOMB: {
-				bombAmount.gameObject.SetActive(state);
-				bombAmount.gameObject.SetActive(state);
-				break;
-			}
-			case Collectibles.SPIKES: {
-				spikesAmount.gameObject.SetActive(state);
-				break;
-			}
-		}
-	}
 	private void OnDestroy() {
 		PlayerAttack.OnAmmoChanged -= AmmoSwitch;
 		PlayerAttack.OnAmmoPickup -= SetVisibility;

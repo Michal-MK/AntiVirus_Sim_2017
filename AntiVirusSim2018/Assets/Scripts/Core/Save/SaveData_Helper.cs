@@ -21,8 +21,8 @@ namespace SaveData_Helper {
 	[System.Serializable]
 	public class DisplayedHints {
 		public string currentlyDisplayedSideInfo;
-		public bool displayShootInfo;
 		public bool shownBlockInfo;
+		public bool shootingIntro;
 	}
 
 	[System.Serializable]

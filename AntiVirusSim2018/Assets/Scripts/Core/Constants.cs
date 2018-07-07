@@ -55,6 +55,8 @@ namespace Igor {
 				public const string SUBMIT = "Submit";
 				public const string MOVEMENT_HORIZONTAL = "HorMovement";
 				public const string MOVEMENT_VERTICAL = "VertMovement";
+				public const string RMB = "Right Mouse Button";
+				public const string LMB = "Left Mouse Button";
 			}
 
 			public class Layers {

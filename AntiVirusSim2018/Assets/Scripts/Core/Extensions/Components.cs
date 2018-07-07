@@ -6,8 +6,9 @@ public static class Components {
 
 	public static T GetCopyOf<T>(this Component comp, T other) where T : Component {
 		Type type = comp.GetType();
-		if (type != other.GetType())
+		if (type != other.GetType()) { 
 			return null; // type mis-match
+		}
 		BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default/* | BindingFlags.DeclaredOnly*/;
 		PropertyInfo[] pinfos = type.GetProperties(flags);
 		foreach (var pinfo in pinfos) {

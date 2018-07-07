@@ -1,16 +1,12 @@
-﻿using Igor.Constants.Strings;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour {
 	public static event PauseUnpause.Pause OnPauseChange;
-	private static UIScene _sceneMode;
 
-	public static UIScene sceneMode {
-		set { _sceneMode = value; }
-	}
+	public static UIScene sceneMode { get; set; }
+	public MainMenuRefs mmReferences;
 
 	public enum UIScene {
 		MAIN_MENU,
@@ -19,33 +15,26 @@ public class UserInterface : MonoBehaviour {
 		OTHER
 	}
 
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-	public static void ListenForEscape() {
-		Control.OnEscapePressed += Control_OnEscapePressed;
-	}
-
 	protected virtual void Awake() {
-		SceneManager.sceneLoaded += OnSceneFinishedLoading;
 		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
-		_sceneMode = UIScene.MAIN_MENU;
+		Control.OnEscapePressed += Control_OnEscapePressed;
+		sceneMode = UIScene.MAIN_MENU;
 	}
 
-	private static void Control_OnEscapePressed() {
-		switch (_sceneMode) {
+	private void Control_OnEscapePressed() {
+		switch (sceneMode) {
 			case UIScene.MAIN_MENU: {
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
-					foreach (Button b in FindObjectOfType<MainMenu_Holder>().getButtons) {
-						b.interactable = true;
+					foreach (Button b in mmReferences.getButtons) {
+						b.interactable = !b.interactable;
 					}
 				}
 				return;
 			}
-
 			case UIScene.GAME: {
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
-
 					try {
 						EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);
 					}
@@ -60,26 +49,11 @@ public class UserInterface : MonoBehaviour {
 				}
 				return;
 			}
-
-			case UIScene.SAVES: {
-
-				return;
-			}
-
-			case UIScene.OTHER: {
-
-				return;
-			}
-
-			default: {
-
-				return;
-			}
 		}
 	}
 
 	private void Update() {
-		switch (_sceneMode) {
+		switch (sceneMode) {
 			case UIScene.MAIN_MENU: {
 				if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0) {
 					EventSystem.current.gameObject.GetComponent<EventSystemManager>().TryDeselect();
@@ -89,45 +63,8 @@ public class UserInterface : MonoBehaviour {
 				}
 				return;
 			}
-			case UIScene.GAME: {
-				return;
-			}
-			case UIScene.SAVES: {
-				return;
-			}
-			case UIScene.OTHER: {
-				return;
-			}
-			default: {
-				return;
-			}
 		}
 	}
-
-	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode args) {
-		switch (scene.name) {
-			case SceneNames.GAME1_SCENE: {
-				M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
-				return;
-			}
-		}
-	}
-
-	#region Menu Functions
-	public void Deactivate(Button button) {
-		button.interactable = false;
-	}
-
-	public void Activate(Button button) {
-		button.interactable = true;
-	}
-
-	public void ToggleMenuButtons() {
-		foreach (Button b in FindObjectOfType<MainMenu_Holder>().getButtons) {
-			b.interactable = !b.interactable;
-		}
-	}
-	#endregion
 
 	#region GameScene functions
 	private void M_Player_OnPlayerDeath(M_Player sender) {
@@ -135,6 +72,9 @@ public class UserInterface : MonoBehaviour {
 		gameOverAnim.Play("GameOver");
 		M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
 	}
-
 	#endregion
+
+	private void OnDestroy() {
+		Control.OnEscapePressed -= Control_OnEscapePressed;
+	}
 }

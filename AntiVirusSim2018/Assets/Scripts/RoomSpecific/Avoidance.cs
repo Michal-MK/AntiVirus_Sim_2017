@@ -51,7 +51,7 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	private IEnumerator TimeLeft() {
-		Text SideText = Canvas_Renderer.script.slideInInfo;
+		Text SideText = Canvas_Renderer.script.slideInText;
 		int timeLeft = (int)avoidDuration - 1;
 		bool show = false;
 

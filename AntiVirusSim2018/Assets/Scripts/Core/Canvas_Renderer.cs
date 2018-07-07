@@ -5,12 +5,14 @@ using Igor.Constants.Strings;
 
 public class Canvas_Renderer : MonoBehaviour {
 
-	public Text slideInInfo;
+	public static Canvas_Renderer script;
+
+	public Text slideInText;
 	private Animator slideAnim;
 
 	public GameObject infoPanel;
-	private Animator infoPanel_anim;
-	private Text infoPanel_Text;
+	private Animator infoPanelAnim;
+	private Text infoPanelText;
 
 	public Text coinCounter;
 	public Text spikeCounter;
@@ -23,8 +25,6 @@ public class Canvas_Renderer : MonoBehaviour {
 	public bool isRunning = false;
 
 	private string tempDisplayedText;
-
-	public static Canvas_Renderer script;
 
 	private Coroutine displayingInfoRoutine;
 
@@ -44,9 +44,9 @@ public class Canvas_Renderer : MonoBehaviour {
 	}
 
 	private void Start() {
-		slideAnim = slideInInfo.GetComponent<Animator>();
-		infoPanel_anim = infoPanel.GetComponent<Animator>();
-		infoPanel_Text = infoPanel.GetComponentInChildren<Text>();
+		slideAnim = slideInText.GetComponent<Animator>();
+		infoPanelAnim = infoPanel.GetComponent<Animator>();
+		infoPanelText = infoPanel.GetComponentInChildren<Text>();
 
 		Transform dirArrows = transform.Find("_DirectionArrows");
 		topDirectionArrows = dirArrows.Find("Up").gameObject;
@@ -74,7 +74,7 @@ public class Canvas_Renderer : MonoBehaviour {
 
 		if (displayedTextMain != null) {
 			StartCoroutine(ReplaceText(displayedTextMain));
-			infoPanel_anim.SetTrigger("Down");
+			infoPanelAnim.SetTrigger("Down");
 			isRunning = true;
 			Time.timeScale = 0;
 			displayingInfoRoutine = StartCoroutine(ResumeFromInfoPanel());
@@ -92,7 +92,7 @@ public class Canvas_Renderer : MonoBehaviour {
 	private IEnumerator ResumeFromInfoPanel() {
 		yield return new WaitUntil(() => Input.GetButtonDown(InputNames.SUBMIT));
 		yield return null; // So we don't run though them all at the same time.
-		infoPanel_anim.SetTrigger("Up");
+		infoPanelAnim.SetTrigger("Up");
 		isRunning = false;
 		Time.timeScale = 1;
 		StartCoroutine(SlideInfo(tempDisplayedText));
@@ -103,13 +103,13 @@ public class Canvas_Renderer : MonoBehaviour {
 	private IEnumerator SlideInfo(string textToDisplay) {
 		slideAnim.SetTrigger("SlideOut");
 		yield return new WaitForSeconds(1);
-		slideInInfo.text = textToDisplay;
+		slideInText.text = textToDisplay;
 		slideAnim.SetTrigger("SlideIn");
 	}
 
 	private IEnumerator ReplaceText(string newText) {
 		yield return new WaitForSecondsRealtime(.15f);
-		infoPanel_Text.text = newText;
+		infoPanelText.text = newText;
 	}
 
 	public void DisplayDirection(Directions dir) {

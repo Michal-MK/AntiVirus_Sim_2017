@@ -105,17 +105,17 @@ public class SaveManager : MonoBehaviour {
 			newSave.data.world.boss1Killed = MapData.script.isBoss1Killed;
 			newSave.data.world.postMazeDoorOpen = CameraMovement.script.inMaze == false && Spike.spikesCollected >= 4 ? true : false;
 			newSave.data.world.doorsOpen = new System.Collections.Generic.List<string>();
-			for (int i = 0; i < MapData.script.allDoors.Length; i++) {
-				if (MapData.script.allDoors[i].isDoorOpen) {
-					newSave.data.world.doorsOpen.Add(MapData.script.allDoors[i].getRoomIndicies.from + "," + MapData.script.allDoors[i].getRoomIndicies.to);
+			for (int i = 0; i < MapData.script.getAllDoors.Length; i++) {
+				if (MapData.script.getAllDoors[i].isDoorOpen) {
+					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].getRoomIndicies.from + "," + MapData.script.getAllDoors[i].getRoomIndicies.to);
 				}
 			}
 			#endregion
 
 			#region Hints data
-			newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.slideInInfo.text;
+			newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.slideInText.text;
 			newSave.data.shownHints.shownBlockInfo = block.save_shownInfo;
-			newSave.data.shownHints.displayShootInfo = M_Player.player.pAttack.displayShootingInfo;
+			newSave.data.shownHints.shootingIntro = M_Player.player.pAttack.attackModeIntro;
 			#endregion
 
 			#region Core data

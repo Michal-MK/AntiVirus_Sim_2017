@@ -5514,7 +5514,7 @@ GameObject:
   - component: {fileID: 230858688}
   - component: {fileID: 230858689}
   m_Layer: 5
-  m_Name: Time and Collected Things
+  m_Name: Time_&_Col_T
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5559,15 +5559,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a6d0580ac19084395e0493056efba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mmReferences: {fileID: 0}
   bombImage: {fileID: 775356180}
   bombAmount: {fileID: 253104295}
   bulletImage: {fileID: 146237083}
   bulletAmount: {fileID: 1745229818}
   currentlySelectedImg: {fileID: 230766122}
-  spikesAmount: {fileID: 1326466219}
-  coinsAmount: {fileID: 444506490}
-  spikeSpr: {fileID: 21300000, guid: 5e619b1d02628b140a69e07b7ee45d8d, type: 3}
-  bombSpr: {fileID: 21300000, guid: 1ae5987076bc36440b180933af372c4a, type: 3}
 --- !u!1 &236926297
 GameObject:
   m_ObjectHideFlags: 0
@@ -44506,12 +44503,11 @@ MonoBehaviour:
     type: 2}
   bomb: {fileID: 1519910914403654, guid: 7774c0840d4924b4fa1eaf67830e4c35, type: 2}
   inFireMode: 0
-  visibleAlready: 0
-  displayShootingInfo: 0
   face: {fileID: 278018626}
   hands: {fileID: 290321980}
   attacking: {fileID: 21300000, guid: 14cf2a57f1e664e44aab965709b6712e, type: 3}
   happy: {fileID: 21300000, guid: ecda8c94ad4f59f4d984b1c73c28f6ab, type: 3}
+  attackModeIntro: 0
 --- !u!95 &1574297780
 Animator:
   serializedVersion: 3
@@ -59390,7 +59386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e7135c47de5fc4fb23cf6cd519a001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slideInInfo: {fileID: 994226660}
+  slideInText: {fileID: 0}
   infoPanel: {fileID: 967240772}
   coinCounter: {fileID: 444506490}
   spikeCounter: {fileID: 1326466219}

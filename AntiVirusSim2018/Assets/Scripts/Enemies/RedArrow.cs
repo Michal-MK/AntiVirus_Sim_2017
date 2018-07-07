@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class RedArrow : Projectile {
+public class RedArrow : Projectile {
 
 	public GameObject darkModeLight;
 
