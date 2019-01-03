@@ -24,15 +24,15 @@ namespace Igor.Minigames.Ships {
 		private Field field;
 
 		private static Dictionary<Vector2, Vector2> indexToLocation = new Dictionary<Vector2, Vector2> {
-			{ new Vector2(0,0), new Vector2(-1, 1) },
-			{ new Vector2(1,0), new Vector2(0 , 1) },
-			{ new Vector2(2,0), new Vector2(1 , 1) },
-			{ new Vector2(0,1), new Vector2(-1, 0) },
-			{ new Vector2(1,1), new Vector2(0 , 0) },
-			{ new Vector2(2,1), new Vector2(1 , 0) },
-			{ new Vector2(0,2), new Vector2(-1,-1) },
-			{ new Vector2(1,2), new Vector2(0 ,-1) },
-			{ new Vector2(2,2), new Vector2(1 ,-1) },
+			{ new Vector2(0,0), new Vector2(-1 , 1) },
+			{ new Vector2(1,0), new Vector2( 0 , 1) },
+			{ new Vector2(2,0), new Vector2( 1 , 1) },
+			{ new Vector2(0,1), new Vector2(-1 , 0) },
+			{ new Vector2(1,1), new Vector2( 0 , 0) },
+			{ new Vector2(2,1), new Vector2( 1 , 0) },
+			{ new Vector2(0,2), new Vector2(-1 ,-1) },
+			{ new Vector2(1,2), new Vector2( 0 ,-1) },
+			{ new Vector2(2,2), new Vector2( 1 ,-1) },
 		};
 
 		public Location(int x, int y, Field relativeTo) {
@@ -77,7 +77,7 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// Gets the neighbouring cell of this cell in the spcified direction.
+		/// Gets the neighbouring cell of this cell in the specified direction.
 		/// </summary>
 		public Location GetNeighbor(Neighbors direction) {
 			switch (direction) {
@@ -210,7 +210,7 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// Remove a ship from this location according to its neighours
+		/// Remove a ship from this location according to its neighbours
 		/// </summary>
 		public void RemoveShip() {
 			if (_placedShip == ShipType.TOKEN) {
@@ -239,7 +239,7 @@ namespace Igor.Minigames.Ships {
 		}
 
 		/// <summary>
-		/// The actual ship object that registres this location as one if its "HP"
+		/// The actual ship object that registers this location as one if its "HP"
 		/// </summary>
 		public Ship getPlacedShip {
 			get {
