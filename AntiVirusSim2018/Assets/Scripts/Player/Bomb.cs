@@ -7,6 +7,8 @@ public class Bomb : MonoBehaviour, IWeaponType {
 	public bool checkColliders;
 
 	public WeaponType weaponType { get; set; } = WeaponType.BOMB;
+	public int damage { get; } = 1;
+
 
 	public AudioClip bombFuse;
 	public AudioClip bombExplosion;

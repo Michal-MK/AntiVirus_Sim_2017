@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class Avoidance : MonoBehaviour {
 
 	public float avoidDuration = 60;
 
+	private TurretAttack[] turrets;
+
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -19,8 +22,9 @@ public class Avoidance : MonoBehaviour {
 	private void SignPost_OnAvoidanceBegin() {
 		if (!performed) {
 			Canvas_Renderer.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
-												"You fell for my genious trap, now... DIE!", "Survive, You can zoom out using the Mousewheel");
+												"You fell for my genius trap, now... DIE!", "Survive, You can zoom out using the Mouse Wheel");
 			StartAvoidance();
+			turrets = spawner.SpawnAvoidance();
 		}
 		else {
 			Canvas_Renderer.script.DisplayInfo(null, "Nope, not doing that thing again!");
@@ -32,7 +36,7 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	public void StartAvoidance() {
-		MapData.script.CloseDoor(new RoomLink(2, 3));
+		MapData.script.CloseDoor(MapData.script.GetRoomLink(2, 3));
 		StartCoroutine(HoldAvoidance());
 		Control.script.saveManager.canSave = false;
 		CameraMovement.script.RaycastForRooms();
@@ -41,13 +45,20 @@ public class Avoidance : MonoBehaviour {
 
 	private IEnumerator HoldAvoidance() {
 		yield return new WaitForSeconds(avoidDuration - 5);
-		spawner.DespawnAvoidance();
+		foreach (TurretAttack turret in turrets) {
+			turret.Stop();
+		}
 		yield return new WaitForSeconds(5);
 		Control.script.saveManager.canSave = true;
 		spike.SetPosition();
 		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
 		StopAllCoroutines();
+		yield return new WaitForSeconds(10);
+		foreach (TurretAttack turret in turrets) {
+			turret.CleanUp();
+			Destroy(turret);
+		}
 	}
 
 	private IEnumerator TimeLeft() {

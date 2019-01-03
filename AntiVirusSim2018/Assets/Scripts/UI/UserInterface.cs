@@ -6,7 +6,6 @@ public class UserInterface : MonoBehaviour {
 	public static event PauseUnpause.Pause OnPauseChange;
 
 	public static UIScene sceneMode { get; set; }
-	public MainMenuRefs mmReferences;
 
 	public enum UIScene {
 		MAIN_MENU,
@@ -24,22 +23,21 @@ public class UserInterface : MonoBehaviour {
 	private void Control_OnEscapePressed() {
 		switch (sceneMode) {
 			case UIScene.MAIN_MENU: {
+				MainMenuRefs refs = GetComponent<MainMenuRefs>();
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
-					foreach (Button b in mmReferences.getButtons) {
+					foreach (Button b in refs.getAllButtons) {
 						b.interactable = !b.interactable;
 					}
+					EventSystem.current.SetSelectedGameObject(refs.startGame.gameObject);
 				}
 				return;
 			}
 			case UIScene.GAME: {
 				if (WindowManager.getWindowCount > 0) {
 					WindowManager.CloseMostRecent();
-					try {
-						EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);
-					}
-					catch {
-						print("No Buttons are selectable.");
+					if (PauseUnpause.isPaused) {
+						gameObject.SetActive(true);
 					}
 				}
 				else {

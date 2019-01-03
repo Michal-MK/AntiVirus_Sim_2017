@@ -21,12 +21,12 @@ public class BossEntrance : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == "Player" && !lockin) {
+		if (collision.tag == Tags.PLAYER && !lockin) {
 			if (M_Player.player.pAttack.bombs > 0 && M_Player.player.pAttack.bullets == 5) {
 				CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1);
 				CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 				lockin = true;
-				Control.script.saveManager.Save(Control.currDifficulty, true);
+				Control.script.saveManager.Save(true);
 				//print("Saving is disabled");
 				Zoom.canZoom = false;
 				Player_Movement.canMove = false;
@@ -35,7 +35,7 @@ public class BossEntrance : MonoBehaviour {
 				Canvas_Renderer.script.DisplayInfo("You are not a worthy opponent!\n"+
 												   "Bullets: " + M_Player.player.pAttack.bullets +"/5\n"+
 												   "Bombs: "+ M_Player.player.pAttack.bombs + "/1\n"+
-												   "Return to me once you have everyting... to meet your demise!\n" +
+												   "Return to me once you have everything... to meet your demise!\n" +
 												   "MuHAHaHaa!!!", "Explore this location further.");
 			}
 

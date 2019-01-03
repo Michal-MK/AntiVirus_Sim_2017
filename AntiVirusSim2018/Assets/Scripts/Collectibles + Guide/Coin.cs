@@ -71,7 +71,7 @@ public class Coin : MonoBehaviour {
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
 		Vector3 newpos = oldpos;
 		while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
-			RectTransform room1BG = MapData.script.GetBackground(1);
+			RectTransform room1BG = MapData.script.GetRoom(1).background;
 			float x = Random.Range(-room1BG.sizeDelta.x / 2 + scale, room1BG.sizeDelta.x / 2 - scale);
 			float y = Random.Range(-room1BG.sizeDelta.y / 2 + scale, room1BG.sizeDelta.y / 2 - scale);
 			float z = 0f;

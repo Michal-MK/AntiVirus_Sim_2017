@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Igor.Constants.Strings;
 
 public class TeleportRoomField : MonoBehaviour {
 	public GameObject test;
@@ -47,13 +48,13 @@ public class TeleportRoomField : MonoBehaviour {
 			foreach (Transform t in pathFields) {
 				t.GetChild(0).gameObject.SetActive(false);
 			}
-			MapData.script.OpenDoor(new RoomLink(6, 8));
+			MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 8));
 		}
 		sender.OnLeverSwitch -= L_OnLeverSwitch;
 	}
 
-	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
-		if (background == MapData.script.GetBackground(6)) {
+	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
+		if (background == MapData.script.GetRoom(6).background) {
 			FillRoom();
 			print("Entering LEVER RELAY");
 			M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
@@ -61,10 +62,10 @@ public class TeleportRoomField : MonoBehaviour {
 		}
 	}
 
-	private void OnTopRoomEnter(RectTransform background, M_Player sender) {
-		if(background == MapData.script.GetTransition(new RoomLink(7,9))) {
+	private void OnTopRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
+		if(background == MapData.script.GetTransition(MapData.script.GetRoomLink(7,9))) {
 			print("Entering Transition to top room");
-			MapData.script.GetBackground(10).parent.Find("Cherries_Apples").gameObject.SetActive(true);
+			MapData.script.GetRoom(10).background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
 			M_Player.OnRoomEnter -= OnTopRoomEnter;
 		}
 	}
@@ -136,7 +137,7 @@ public class TeleportRoomField : MonoBehaviour {
 		if (fields[currX, currY].childCount == 0) {
 			Instantiate(test, fields[currX, currY].position, Quaternion.identity, fields[currX, currY]);
 		}
-		fields[currX, currY].tag = "Untagged";
+		fields[currX, currY].tag = Tags.UNTAGGED;
 		pathFields.Add(fields[currX, currY]);
 		while (direction != Vector2.zero) {
 			int oldX = currX;
@@ -157,7 +158,7 @@ public class TeleportRoomField : MonoBehaviour {
 
 			SubTurn(oldX, oldY, currX, currY);
 			pathFields.Add(fields[currX, currY]);
-			fields[currX, currY].tag = "Untagged";
+			fields[currX, currY].tag = Tags.UNTAGGED;
 			if (fields[currX, currY].childCount == 0) {
 				Instantiate(test, fields[currX, currY].position, Quaternion.identity, fields[currX, currY]);
 			}
@@ -204,7 +205,7 @@ public class TeleportRoomField : MonoBehaviour {
 			}
 		}
 		if (modified != -Vector2.one) {
-			fields[modified.x, modified.y].tag = "Untagged";
+			fields[modified.x, modified.y].tag = Tags.UNTAGGED;
 			pathFields.Add(fields[modified.x, modified.y]);
 			if (fields[modified.x, modified.y].childCount == 0) {
 				Instantiate(test, fields[modified.x, modified.y].position, Quaternion.identity, fields[modified.x, modified.y]);

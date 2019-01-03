@@ -1,3 +1,4 @@
 ﻿interface IWeaponType {
-	WeaponType weaponType { get; set; }
+	WeaponType weaponType { get; }
+	int damage { get; }
 }

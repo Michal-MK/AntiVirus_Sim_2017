@@ -66,7 +66,7 @@ public class DisplaySaveFiles : MonoBehaviour {
 							BGName = "Peaceful Corner";
 							break;
 						}
-						case BackgroundNames.BACKGROUND_BOSS_X + "1": {
+						case BackgroundNames.BACKGROUND_BOSS_ + "1": {
 							BGName = "Boss Area";
 							break;
 						}

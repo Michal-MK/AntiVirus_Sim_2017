@@ -11,6 +11,8 @@ public class TurretAttack : MonoBehaviour {
 	public float spawnRateDelta;
 	private float currentSpawnRate;
 
+	private bool _fire = true;
+
 	public bool useDefaultTiming;
 	public bool applyRandomness;
 	public float randomnessMultiplier;
@@ -64,7 +66,7 @@ public class TurretAttack : MonoBehaviour {
 	private IEnumerator WaitForAttack() {
 		currentSpawnRate = turretSpawnRateStart;
 
-		while (true) {
+		while (_fire) {
 			targetPos = target.transform.position;
 			int diff = Control.currDifficulty;
 
@@ -81,6 +83,10 @@ public class TurretAttack : MonoBehaviour {
 		}
 	}
 
+	internal void CleanUp() {
+		pool_EnemyProjectile.ClearPool();
+	}
+
 	private void FireBullet() {
 		Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
 		if (applyRandomness) {
@@ -94,6 +100,8 @@ public class TurretAttack : MonoBehaviour {
 		bullet.transform.SetParent(enemy);
 		bullet.gameObject.SetActive(true);
 		bullet.projectileSpeed = 20;
+		bullet.isDestroyable = false;
+		bullet.isPooled = true;
 		if (projectileLifeSpan > 0) {
 			bullet.StartCoroutine(bullet.Kill(projectileLifeSpan));
 		}
@@ -141,6 +149,10 @@ public class TurretAttack : MonoBehaviour {
 
 	void OnDestroy() {
 		StopAllCoroutines();
+	}
+
+	public void Stop() {
+		_fire = false;
 	}
 
 	public float getCurrentSpawnRate {

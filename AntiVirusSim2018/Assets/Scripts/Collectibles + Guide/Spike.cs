@@ -16,7 +16,6 @@ public class Spike : MonoBehaviour {
 	}
 
 	private void OnSpikePickup(M_Player sender, GameObject spikeObj) {
-
 		spikesCollected++;
 
 		gameObject.SetActive(false);
@@ -26,7 +25,6 @@ public class Spike : MonoBehaviour {
 		}
 		//Finished avoidance
 		if (_spikesCollected == 3) {
-			MapData.script.OpenDoor(new RoomLink(2, 3));
 			CameraMovement.script.RaycastForRooms();
 		}
 		//Went through maze
@@ -50,19 +48,19 @@ public class Spike : MonoBehaviour {
 		float newY;
 		switch (stage) {
 			case 0: {
-				RectTransform room1BG = MapData.script.GetBackground(1);
+				RectTransform room1BG = MapData.script.GetRoom(1).background;
 				newX = room1BG.position.x;
 				newY = room1BG.position.y - 1;
 				break;
 			}
 			case 1: {
-				RectTransform roomIciclesBG = MapData.script.GetBackground(2);
+				RectTransform roomIciclesBG = MapData.script.GetRoom(2).background;
 				newX = Random.Range(roomIciclesBG.position.x - roomIciclesBG.sizeDelta.x / 2 + Xscale * 4, roomIciclesBG.position.x);
 				newY = Random.Range(roomIciclesBG.position.y - roomIciclesBG.sizeDelta.y / 2 + Yscale * 4, roomIciclesBG.position.y);
 				break;
 			}
 			case 2: {
-				RectTransform roomAvoidanceBG = MapData.script.GetBackground(3);
+				RectTransform roomAvoidanceBG = MapData.script.GetRoom(3).background;
 				newX = Random.Range(roomAvoidanceBG.position.x + (-roomAvoidanceBG.sizeDelta.x / 2) + Xscale, roomAvoidanceBG.position.x + (roomAvoidanceBG.sizeDelta.x / 2) - Xscale);
 				newY = Random.Range(roomAvoidanceBG.position.y, roomAvoidanceBG.position.y + (roomAvoidanceBG.sizeDelta.y / 2) - Yscale);
 				break;
@@ -74,7 +72,7 @@ public class Spike : MonoBehaviour {
 				break;
 			}
 			case 4: {
-				RectTransform roomPreBossBG = MapData.script.GetBackground(4);
+				RectTransform roomPreBossBG = MapData.script.GetRoom(4).background;
 				newX = roomPreBossBG.transform.position.x - roomPreBossBG.sizeDelta.x / 2 + 20;
 				newY = roomPreBossBG.transform.position.y + roomPreBossBG.sizeDelta.y / 2 - 20;
 				transform.localScale = new Vector2(0.4f, 0.5f);
@@ -100,7 +98,7 @@ public class Spike : MonoBehaviour {
 	public void Hide() {
 		gameObject.SetActive(false);
 		if (OnNewTarget != null) {
-			OnNewTarget(default(Vector3));
+			OnNewTarget(default);
 		}
 	}
 

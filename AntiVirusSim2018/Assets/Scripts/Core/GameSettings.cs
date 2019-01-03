@@ -32,8 +32,8 @@ public class GameSettings : MonoBehaviour {
 		if (!File.Exists(path)) {
 			using (StreamWriter sr = File.CreateText(path)) {
 				sr.WriteLine("# This is a configuration file for AVSim game.");
-				sr.WriteLine("# This is a coment and will be ingnored by the parser");
-				sr.WriteLine("# Everything in here was generated automatically and can be changed from the ingame interface.\n");
+				sr.WriteLine("# This is a comment and will be ignored by the parser");
+				sr.WriteLine("# Everything in here was generated automatically and can be changed from the in-game interface.\n");
 				sr.WriteLine("# AudioSettings");
 				sr.WriteLine();
 				sr.WriteLine("music_audio=1");

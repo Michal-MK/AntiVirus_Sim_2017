@@ -43,7 +43,6 @@ public class Control : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		currAttempt = data.core.localAttempt;
 		currDifficulty = data.core.difficulty;
 	}
 
@@ -67,6 +66,7 @@ public class Control : MonoBehaviour {
 
 	private void TransitionToNewGame() {
 		CamFadeOut.OnCamFullyFaded -= TransitionToNewGame;
+		Destroy(MenuMusic.script.gameObject);
 		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
 	}
 
@@ -114,6 +114,11 @@ public class Control : MonoBehaviour {
 				OnEscapePressed();
 			}
 		}
+		//int i = 0;
+		//foreach (Window w in WindowManager.getWindowArray) {
+		//	print(string.Format("{0} - {1}", i,w.window.name));
+		//	i++;
+		//}
 	}
 
 	public static void PressingEscape() {

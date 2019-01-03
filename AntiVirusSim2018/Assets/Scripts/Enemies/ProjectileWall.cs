@@ -72,7 +72,6 @@ public class ProjectileWall : MonoBehaviour {
 
 	private IEnumerator SpawnKillerWall() {
 		int diff = Control.currDifficulty;
-
 		while (gameObject) {
 			yield return new WaitForSeconds(spawnInterval);
 			if (diff == 0 || diff == 1) {
@@ -104,12 +103,21 @@ public class ProjectileWall : MonoBehaviour {
 	}
 
 
-	public Vector3 KWProjectilePositions(Directions side) {
+	private Vector3 KWProjectilePositions(Directions side) {
 		if (side == Directions.RIGHT || side == Directions.LEFT) {
 			return new Vector3(background.position.x - 5 + (side == Directions.RIGHT ? width : -width), UnityEngine.Random.Range(background.position.y - height, background.position.y + height));
 		}
 		else {
 			return new Vector3(UnityEngine.Random.Range(background.position.x - width, background.position.x + width), background.position.y + (side == Directions.TOP ? height : -height));
 		}
+	}
+
+	private void OnDisable() {
+		pool.ClearPool();
+	}
+
+
+	public ObjectPool GetPool() {
+		return pool;
 	}
 }

@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
 public class MapData : MonoBehaviour {
 
-	public GameObject[] doors;
-	public RectTransform[] backgrounds;
 	public RectTransform[] bossBackgrounds;
+
 	public RectTransform[] transitions;
 
 	public Light globalDirectionalLight;
 
 	public static MapData script;
 
-	private readonly List<Door> _doors = new List<Door>();
+	public Dictionary<int, Room> rooms = new Dictionary<int, Room>();
 
 	public bool isBoss1Killed { get; } = false;
 	public MapMode currentMapMode { get; private set; } = MapMode.LIGHT;
@@ -21,6 +22,10 @@ public class MapData : MonoBehaviour {
 	public enum MapMode {
 		LIGHT,
 		DARK
+	}
+
+	internal void RegisterRoom(Room room) {
+		rooms.Add(room.roomID, room);
 	}
 
 	private void Awake() {
@@ -33,17 +38,7 @@ public class MapData : MonoBehaviour {
 		GameObject.Find("_Blocker3").SetActive(!data.world.postMazeDoorOpen);
 		for (int i = 0; i < data.world.doorsOpen.Count; i++) {
 			string[] indicies = data.world.doorsOpen[i].Split(',');
-			OpenDoor(new RoomLink(int.Parse(indicies[0]), int.Parse(indicies[1])));
-		}
-	}
-
-	private void Start() {
-		for (int i = 0; i < doors.Length - 1; i += 2) {
-			string[] doorName = doors[i].name.Split('_');
-			int from = int.Parse(doorName[2]);
-			int to = int.Parse(doorName[3]);
-			_doors.Add(new Door(doors[i], new RoomLink(from, to)));
-			_doors.Add(new Door(doors[i + 1], new RoomLink(to, from)));
+			OpenDoor(new RoomLink(NumberToRoom(int.Parse(indicies[0])), NumberToRoom(int.Parse(indicies[1]))));
 		}
 	}
 
@@ -73,79 +68,42 @@ public class MapData : MonoBehaviour {
 	}
 
 	public void OpenDoor(RoomLink between, bool includeOpposite = true) {
-		RoomLink opposite = new RoomLink(between.to, between.from);
-		int opened = 0;
-		foreach (Door d in _doors) {
-			if (d.getRoomIndicies == between) {
-				d.Open();
-				opened++;
-			}
-			if (includeOpposite && d.getRoomIndicies == opposite) {
-				d.Open();
-				opened++;
-			}
-			if(opened == 2) {
-				return;
-			}
-			else if (opened == 1 && !includeOpposite) {
-				return;
-			}
-		}
-		throw new System.Exception("Door with indices " + between.from + " and " + between.to + "(or reversed) does not exist!");
+		between.OpenDoor(includeOpposite);
 	}
 
 	public void CloseDoor(RoomLink between, bool includeOpposite = true) {
-		RoomLink opposite = new RoomLink(between.to, between.from);
-		int opened = 0;
-		foreach (Door d in _doors) {
-			if (d.getRoomIndicies == between) {
-				d.Open();
-				opened++;
-			}
-			if (includeOpposite) {
-				if (d.getRoomIndicies == opposite) {
-					d.Open();
-					opened++;
-				}
-			}
-			if(opened == 2) {
-				return;
-			}
-			else if (opened == 1 && !includeOpposite) {
-				return;
-			}
-		}
-		throw new System.Exception("Door with indices " + between.from + " and " + between.to + " does not exist!");
+		between.CloseDoor(includeOpposite);
 	}
 
 	public void Progress(int progression, bool displayGuidance = true) {
 		switch (progression) {
 			case 1: {
-				OpenDoor(new RoomLink(1, 2));
+				OpenDoor(GetRoomLink(1, 2));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
 				}
 				break;
 			}
 			case 2: {
-				OpenDoor(new RoomLink(2, 3));
+				OpenDoor(GetRoomLink(2, 3));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.TOP);
 				}
 				break;
 			}
 			case 3: {
-				OpenDoor(new RoomLink(2, 4));
-				CloseDoor(new RoomLink(1, 2));
+				OpenDoor(GetRoomLink(2, 3));
+				OpenDoor(GetRoomLink(2, 4));
+				CloseDoor(GetRoomLink(1, 2));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.BOTTOM);
 				}
 				break;
 			}
 			case 10: {
-				OpenDoor(new RoomLink(1, 2));
-				OpenDoor(new RoomLink(4, 5));
-				OpenDoor(new RoomLink(5, 6));
+				OpenDoor(GetRoomLink(1, 2));
+				OpenDoor(GetRoomLink(4, 5));
+				OpenDoor(GetRoomLink(5, 6));
 				if (displayGuidance) {
 					Canvas_Renderer.script.DisplayDirection(Directions.RIGHT);
 				}
@@ -158,10 +116,10 @@ public class MapData : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Returns a background for selected room
+	/// Returns a room
 	/// </summary>
-	public RectTransform GetBackground(int room) {
-		return backgrounds[room - 1];
+	public Room GetRoom(int room) {
+		return rooms[room];
 	}
 
 	public RectTransform GetBackgroundBoss(int room) {
@@ -170,24 +128,37 @@ public class MapData : MonoBehaviour {
 
 	public RectTransform GetTransition(RoomLink link) {
 		foreach (RectTransform t in transitions) {
-			string[] s = t.name.Split('_');
-			int fromR = int.Parse(s[2]);
-			int toR = int.Parse(s[3]);
-
-			if ((fromR == link.from && toR == link.to) || (fromR == link.to && toR == link.from)) {
+			if (t.name == "Background_transition_" + link.from.roomID + "_" + link.to.roomID) {
 				return t;
 			}
 		}
-		throw new System.Exception("Transition does not exist!");
+		throw new System.Exception("Transition between " + link.from.roomID + " to " + link.to.roomID + " does not exist!");
 	}
 
 	private void OnDestroy() {
 		script = null;
-		_doors.Clear();
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 
 	public Door[] getAllDoors {
-		get { return _doors.ToArray(); }
+		get {
+			HashSet<Door> doors = new HashSet<Door>();
+			foreach (Room r in rooms.Values) {
+				doors.AddRange(r.doors);
+			}
+			return doors.ToArray();
+		}
+	}
+
+	public RoomLink GetRoomLink(int from, int to) {
+		return new RoomLink(NumberToRoom(from), NumberToRoom(to));
+	}
+
+	private Room NumberToRoom(int index) {
+		Room r = GameObject.Find("Room_" + index).GetComponent<Room>();
+		if (r == null) {
+			throw new System.Exception("Unable to find a room with index: " + index);
+		}
+		return r;
 	}
 }

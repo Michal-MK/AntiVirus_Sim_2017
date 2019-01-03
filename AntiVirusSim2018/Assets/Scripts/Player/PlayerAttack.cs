@@ -85,7 +85,7 @@ public class PlayerAttack : MonoBehaviour {
 													"Don't lose them", null);
 				attackModeIntro = false;
 				ammoType = SwitchAmmoType();
-				HUDElements elem = GameObject.Find("Time_&_Col_T").GetComponent<HUDElements>();
+				HUDElements elem = GameObject.Find("_Time and Collectibles").GetComponent<HUDElements>();
 				elem.SetVisibility(AttackType.BULLETS, true);
 				elem.SetVisibility(AttackType.BOMBS, true);
 			}

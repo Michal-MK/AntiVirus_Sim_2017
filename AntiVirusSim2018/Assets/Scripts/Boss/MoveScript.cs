@@ -1,3 +1,4 @@
+using Igor.Constants.Strings;
 using System.Collections;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ public class MoveScript : MonoBehaviour {
 	}
 
 	private void OnTriggerExit2D(Collider2D collision) {
-		if (collision.tag == "BG") {
+		if (collision.tag == Tags.BACKGROUND) {
 			if (destroy && !deactivate) {
 				Destroy(gameObject);
 			}
@@ -40,7 +41,7 @@ public class MoveScript : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
-		if (collision.transform.tag == "Wall") {
+		if (collision.transform.tag == Tags.WALL) {
 			if (destroy && !deactivate) {
 				Destroy(gameObject);
 			}

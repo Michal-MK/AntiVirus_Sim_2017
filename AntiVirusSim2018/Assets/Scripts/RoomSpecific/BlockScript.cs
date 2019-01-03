@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class BlockScript : MonoBehaviour {
 
-	public int backgroundIndex = 2;
-
 	private RectTransform player;
 	private RectTransform room2BG;
 	private Vector3 currentPos;
 	private Vector3 startingPos;
-	private Quaternion startingrotation = Quaternion.Euler(0, 0, 0);
-	private float dist;
+	private Quaternion defaultRotation = Quaternion.Euler(0, 0, 0);
+
 	public static bool pressurePlateTriggered = false;
 	private bool shownInfo = false;
 	private bool preventSoftLock = false;
+
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
 	}
 
-	private void M_Player_OnRoomEnter(RectTransform background, M_Player sender) {
-		if (background == MapData.script.GetBackground(backgroundIndex)){
+	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
+		if (background == MapData.script.GetRoom(2).background){
 			preventSoftLock = true;
 		}
 	}
@@ -32,27 +31,27 @@ public class BlockScript : MonoBehaviour {
 
 	private void Start() {
 		startingPos = gameObject.transform.position;
-		startingrotation = gameObject.transform.localRotation;
-		room2BG = MapData.script.GetBackground(backgroundIndex);
+		defaultRotation = gameObject.transform.localRotation;
+		room2BG = MapData.script.GetRoom(2).background;
 		player = M_Player.player.GetComponent<RectTransform>();
 	}
 
 	private void FixedUpdate() {
 		if (preventSoftLock) {
 			currentPos = transform.position;
-			dist = Vector3.Distance(player.position, transform.position);
+			float dist = Vector3.Distance(player.position, transform.position);
 
 			if (currentPos.x < room2BG.position.x + -room2BG.sizeDelta.x / 2) {
 				transform.position = startingPos;
-				transform.rotation = startingrotation;
+				transform.rotation = defaultRotation;
 			}
 			else if (currentPos.y < room2BG.position.y + -room2BG.sizeDelta.y / 2) {
 				transform.position = startingPos;
-				transform.rotation = startingrotation;
+				transform.rotation = defaultRotation;
 			}
 			else if (currentPos.y > room2BG.position.y + room2BG.sizeDelta.y / 2) {
 				transform.position = startingPos;
-				transform.rotation = startingrotation;
+				transform.rotation = defaultRotation;
 			}
 
 			if (!shownInfo && dist < 10) {

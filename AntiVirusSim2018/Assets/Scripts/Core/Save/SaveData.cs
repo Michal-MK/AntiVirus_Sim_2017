@@ -1,5 +1,6 @@
 ﻿using SaveData_Helper;
 using System.Collections.Generic;
+
 //Data to be saved
 [System.Serializable]
 public class SaveData {

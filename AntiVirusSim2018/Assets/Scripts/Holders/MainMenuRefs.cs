@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class MainMenuRefs : MonoBehaviour {
 
 	#region Buttons
-	public Toggle startGame;
+	public Button startGame;
 	public Button loadSave;
 	public Button leaderboard;
 	public Button settings;
@@ -12,9 +12,16 @@ public class MainMenuRefs : MonoBehaviour {
 	public Button quitGame;
 	#endregion
 
-	public Button[] getButtons {
+
+	public Button[] getAllButtons {
 		get {
-			return new Button[] { leaderboard, loadSave, quitGame, help, settings };
+			return new Button[] { startGame, leaderboard, loadSave, quitGame, help, settings };
+		}
+	}
+
+	public void ToggleButtons() {
+		foreach (Button b in getAllButtons) {
+			b.interactable = !b.interactable;
 		}
 	}
 }

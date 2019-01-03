@@ -39,7 +39,6 @@ namespace SaveData_Helper {
 
 	[System.Serializable]
 	public class Core {
-		public int localAttempt;
 		public int difficulty;
 		public float time;
 		public float camSize;

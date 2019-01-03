@@ -61,6 +61,7 @@ public class WindowManager {
 				}
 				if (OnWindowClose != null) {
 					OnWindowClose(win);
+
 				}
 			}
 			else {
@@ -186,7 +187,13 @@ public class WindowManager {
 	/// Removes the content of activeWindows list
 	/// </summary>
 	public static void ClearWindows() {
+		CloseAllActive();
 		activeWindows.Clear();
+	}
+
+
+	public static Window[] getWindowArray {
+		get { return activeWindows.ToArray(); }
 	}
 
 	public static int getWindowCount {
@@ -195,61 +202,4 @@ public class WindowManager {
 		}
 	}
 }
-
-public class Window {
-
-	public enum WindowType {
-		MOVING,
-		ACTIVATING,
-	}
-
-	public Window(GameObject window, WindowType type, bool disableAfterMoving = false) {
-		_window = window;
-		_type = type;
-		if (type == WindowType.MOVING) {
-			_anim = window.GetComponent<Animator>();
-			_disableAfterMoving = disableAfterMoving;
-		}
-	}
-
-	private GameObject _window;
-	private WindowType _type;
-	private Animator _anim;
-	private bool _disableAfterMoving;
-
-	public GameObject window {
-		get { return _window; }
-	}
-
-	public WindowType type {
-		get { return _type; }
-	}
-
-	public Animator animator {
-		get { return _anim; }
-	}
-
-	public bool isFlagedForSwitchOff {
-		get { return _disableAfterMoving; }
-	}
-}
-
-public static class WindowExtensions {
-	public static void Remove(this Stack<Window> stack, Window element) {
-		Window[] wins = stack.ToArray();
-		for (int i = 0; i < wins.Length; i++) {
-			if (wins[i] == element) {
-				wins[i] = null;
-				break;
-			}
-		}
-		stack.Clear();
-		for (int i = 0; i < wins.Length; i++) {
-			if (wins[i] != null) {
-				stack.Push(wins[i]);
-			}
-		}
-	}
-}
-
 

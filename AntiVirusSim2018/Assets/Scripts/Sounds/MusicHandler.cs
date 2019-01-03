@@ -37,9 +37,9 @@ public class MusicHandler : SoundBase {
 	}
 
 	#region EventHandling
-	private void NewRoom(RectTransform background, M_Player sender) {
+	private void NewRoom(M_Player sender, RectTransform background, RectTransform previous) {
 
-		if (background == MapData.script.GetBackground(1)) {
+		if (background == MapData.script.GetRoom(1).background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
@@ -47,7 +47,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_1);
 			}
 		}
-		else if (background == MapData.script.GetBackground(2)) {
+		else if (background == MapData.script.GetRoom(2).background) {
 			if (!isPlaying) {
 				PlayMusic(room1_2);
 			}
@@ -55,7 +55,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_2);
 			}
 		}
-		else if (background == MapData.script.GetBackground(3)) {
+		else if (background == MapData.script.GetRoom(3).background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
@@ -63,7 +63,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_1);
 			}
 		}
-		else if (background == MapData.script.GetBackground(4)) {
+		else if (background == MapData.script.GetRoom(4).background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}

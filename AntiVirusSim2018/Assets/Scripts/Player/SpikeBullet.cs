@@ -1,3 +1,4 @@
+using Igor.Constants.Strings;
 using System.Collections;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 	public float bulletDuration = 1.5f;
 	public PlayerAttack player;
 
-	public WeaponType weaponType { get; set; } = WeaponType.BULLET;
+	public WeaponType weaponType { get; } = WeaponType.BULLET;
+	public int damage { get; } = 1;
 
 	private void OnEnable() {
 		rg.velocity = transform.up * bulletSpeed;
@@ -18,8 +20,7 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 	}
 
 	private void OnCollisionEnter2D(Collision2D col) {
-		print(col.transform.name);
-		if (col.transform.tag == "Wall") {
+		if (col.transform.tag == Tags.WALL) {
 			CreatePickup(col);
 		}
 		if(col.transform.tag == "SpikeDetectBoss") {

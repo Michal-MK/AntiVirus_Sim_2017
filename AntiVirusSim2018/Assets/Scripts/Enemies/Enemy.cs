@@ -29,16 +29,18 @@ public class Enemy : MonoBehaviour {
 
 
 	public virtual void Kill() {
-		if (!isDestroyable) {
-			print("This enemy is unkillable");
+
+		if (isPooled) {
+			gameObject.SetActive(false);
+
 			return;
 		}
-		if (isPooled) {
-			//print("Deactivating " + gameObject.name);
-			gameObject.SetActive(false);
+
+		if (!isDestroyable) {
+			print("This enemy is not something you can kill");
+			return;
 		}
 		else {
-			//print("Destroying " + gameObject.name);
 			Destroy(gameObject);
 		}
 	}

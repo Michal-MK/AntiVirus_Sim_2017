@@ -52,13 +52,11 @@ public class BossBehaviour : MonoBehaviour {
 	private Vector3 attack4StartPos;
 	private Vector3 attack5StartPos;
 
-	private Coroutine currentAttack;
-
 	private bool Attack1 = false;
 	private bool Attack2 = false;
 	private bool Attack3 = false;
 	private bool Attack4 = false;
-	private bool Attack5 = false;
+	//private bool Attack5 = false; TODO
 
 
 	private bool informOnce = true;
@@ -110,7 +108,7 @@ public class BossBehaviour : MonoBehaviour {
 		Camera.main.transform.position = BG.transform.position + new Vector3(0, 0, -10);
 		Player_Movement.canMove = true;
 		Zoom.canZoom = true;
-		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stande NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from his body.");
+		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my contol. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
 		yield return new WaitForSeconds(1);
 
 		StartCoroutine(Attacks(ChooseAttack()));
@@ -132,7 +130,7 @@ public class BossBehaviour : MonoBehaviour {
 			StopAllCoroutines();
 			yield break;
 		}
-		currentAttack = StartCoroutine(Attacks(choice));
+		StartCoroutine(Attacks(choice));
 
 		for (int i = 0; i < spikeHitboxes.Length; i++) {
 			spikeHitboxes[i].enabled = false;
@@ -212,7 +210,6 @@ public class BossBehaviour : MonoBehaviour {
 
 					yield return new WaitForSeconds(15f);
 				}
-				//--//
 
 				Attack2 = false;
 
@@ -310,7 +307,7 @@ public class BossBehaviour : MonoBehaviour {
 			//Flappybird like Attack
 			case 5: {
 				MoveScript positioningCage = Instantiate(cageObj, player.transform.position, Quaternion.identity).GetComponent<MoveScript>();
-				Attack5 = true;
+				//Attack5 = true;
 				yield return new WaitForSeconds(2);
 				if (informOnce) {
 					informOnce = false;
@@ -328,7 +325,7 @@ public class BossBehaviour : MonoBehaviour {
 				yield return new WaitUntil(() => doneBouncing);
 
 				M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.ARROW);
-				Attack5 = false;
+				//Attack5 = false;
 				doneBouncing = false;
 				StartCoroutine(LerpFunctions.LerpPosition(gameObject, BG.transform.position + new Vector3(BG.sizeDelta.x / 2 - 140, 0, 0), Time.deltaTime / 2, null));
 				break;
@@ -408,7 +405,7 @@ public class BossBehaviour : MonoBehaviour {
 	public IEnumerator VariedRotation() {
 		rotationDelta = 0.1f;
 		zRotation = 0;
-		//this is why the attack is broken!!! - but keep is on harder difficulties because it is fun lel
+		//this is why the attack is broken!!! - but keep it on harder difficulties because it is fun lel
 		while (true) {
 			yield return new WaitForSeconds(Random.Range(2, 4));
 			rotationDelta = Chance.Half() ? Random.Range(0.4f, 1f) : Random.Range(-1, -0.4f);

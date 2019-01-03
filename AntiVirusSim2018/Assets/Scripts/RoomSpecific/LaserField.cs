@@ -10,7 +10,7 @@ public class LaserField : MonoBehaviour {
 	private const float particleLifetime = 1f;
 
 	private IEnumerator LaserAvoidance() {
-		while (M_Player.player.GetCurrentBackground() == MapData.script.GetBackground(5)) {
+		while (M_Player.player.GetCurrentBackground() == MapData.script.GetRoom(5).background) {
 			float waitTime = Random.Range(.4f, 1.1f); //Hard .6,1  //walk .4,1.1
 			yield return new WaitForSeconds(waitTime);
 			int amountSpawned = Control.currDifficulty < 2 ? 1 : 2;
@@ -21,12 +21,12 @@ public class LaserField : MonoBehaviour {
 				}
 			}
 		}
-		Canvas_Renderer.script.DisplayInfo(null, M_Player.player.GetCurrentBackground() == MapData.script.GetTransition(new RoomLink(5,6)) ?
-			"That was insane! Are you alright ? You should probably save... but y know.." : "That was insane, but don't give up, I believe in you!");
+		Canvas_Renderer.script.DisplayInfo(null, M_Player.player.GetCurrentBackground() == MapData.script.GetTransition(MapData.script.GetRoomLink(5,6)) ?
+			"That was insane! Are you alright ? You should probably save... but y know.." : "Still can't get over how insane that looks.");
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.transform.name == "Player") {
+		if (collision.transform.name == M_Player.player.name) {
 			StartCoroutine(LaserAvoidance());
 		}
 	}
@@ -34,7 +34,7 @@ public class LaserField : MonoBehaviour {
 	private IEnumerator SpawnLaser() {
 		float waitTime = Random.Range(0.1f, 0.3f); // Hard .2, .6
 		yield return new WaitForSeconds(waitTime);
-		RectTransform bg = MapData.script.GetBackground(5);
+		RectTransform bg = MapData.script.GetRoom(5).background;
 		Vector3 playerPos = M_Player.player.transform.position;
 		float xOff = Control.currDifficulty >= 4 ?
 						 Random.Range(0, 2) == 1 ? Random.Range(-20, -2) : Random.Range(2, 25):

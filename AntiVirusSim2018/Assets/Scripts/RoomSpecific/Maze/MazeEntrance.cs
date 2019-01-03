@@ -1,3 +1,4 @@
+using Igor.Constants.Strings;
 using System.Collections;
 using UnityEngine;
 using WindowsInput;
@@ -11,7 +12,7 @@ public class MazeEntrance : MonoBehaviour {
 	public static event Maze.MazeBehaviour OnMazeEnter;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == "Player") {
+		if (collision.tag == Tags.PLAYER) {
 
 			//Debug.Log("Remove after");
 			//M_Player.gameProgression = 3;
@@ -68,7 +69,6 @@ public class MazeEntrance : MonoBehaviour {
 		Control.script.saveManager.canSave = false;
 		Zoom.canZoom = false;
 		CamFadeOut.OnCamFullyFaded -= MazeTransition;
-
 	}
 
 	private IEnumerator PreventPlayerIdle() {

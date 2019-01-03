@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Igor.Constants.Strings;
 
-public delegate void BackgroundChanged(RectTransform background, M_Player sender);
+public delegate void BackgroundChanged(M_Player sender, RectTransform current, RectTransform previous);
 public delegate void PlayerColision(M_Player sender, GameObject other);
 public delegate void SimplePlayerEvent(M_Player sender);
 
@@ -59,7 +59,6 @@ public class M_Player : MonoBehaviour {
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		transform.position = data.player.playerPos;
 		gameProgression = data.player.gameProgression;
-		attempts = data.core.localAttempt;
 		newGame = false;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
@@ -77,7 +76,7 @@ public class M_Player : MonoBehaviour {
 		if (newGame) {
 			attempts++;
 			Canvas_Renderer.script.DisplayInfo("Welcome! \n" +
-												"This is your " + attempts + ". attempt to put the virus into a quaratine. \n\n" +
+												"This is your " + attempts + ". attempt to put the virus into a quarantine. \n\n" +
 												"This box will appear only when I have something important to say,\n otherwise look for information in the upper left corner, so it is less disruptive. \n"
 												, null);
 			Control.currAttempt = attempts;
@@ -92,7 +91,7 @@ public class M_Player : MonoBehaviour {
 				OnTargetableObjectCollision(this, collision.gameObject);
 			}
 		}
-		if (collision.transform.tag == "Enemy" && isInvincible == false) {
+		if (collision.transform.tag == Tags.ENEMY && isInvincible == false) {
 			print(collision.transform.name);
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -105,7 +104,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.tag == "Enemy" && isInvincible == false) {
+		if (col.tag == Tags.ENEMY && isInvincible == false) {
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
@@ -115,9 +114,9 @@ public class M_Player : MonoBehaviour {
 			GameOver();
 
 		}
-		if (col.transform.tag == "BG") {
+		if (col.transform.tag == Tags.BACKGROUND) {
 			if (OnRoomEnter != null) {
-				OnRoomEnter(col.GetComponent<RectTransform>(), this);
+				OnRoomEnter(this, col.GetComponent<RectTransform>(), GameObject.Find(currentBG_name).GetComponent<RectTransform>());
 			}
 			currentBG_name = col.name;
 			CameraMovement.script.RaycastForRooms();
@@ -133,7 +132,6 @@ public class M_Player : MonoBehaviour {
 			if (OnSpikePickup != null) {
 				OnSpikePickup(this, col.gameObject);
 			}
-			MapData.script.Progress(gameProgression);
 			face.sprite = happy;
 		}
 		if (col.name == ObjNames.COIN) {
@@ -186,7 +184,7 @@ public class M_Player : MonoBehaviour {
 		get { return _gameProgression; }
 		set {
 			_gameProgression = value;
-			print("Setting progession to " + gameProgression);
+			print("Setting progression to " + gameProgression);
 		}
 	}
 }

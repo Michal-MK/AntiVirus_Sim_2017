@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class ObjectPool {
+public class ObjectPool {
 	private GameObject pooledObject;
 
 	public int getLimit { get; }
@@ -41,7 +41,14 @@ class ObjectPool {
 			pooledObject = Resources.Load("Enemies/" + pooledObject.name.Replace("_Dark", "")) as GameObject;
 		}
 		foreach (GameObject g in getAllInstantiated) {
-			g.GetComponent<Projectile>().MapModeSwitch(mode);
+			g.GetComponent<Enemy>().MapModeSwitch(mode);
 		}
+	}
+
+	public void ClearPool() {
+		foreach (GameObject g in getAllInstantiated) {
+			UnityEngine.Object.Destroy(g);
+		}
+		getAllInstantiated.Clear();
 	}
 }

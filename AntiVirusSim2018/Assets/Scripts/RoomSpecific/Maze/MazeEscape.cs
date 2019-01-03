@@ -1,3 +1,4 @@
+using Igor.Constants.Strings;
 using System.Collections;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class MazeEscape : MonoBehaviour {
 	public static event Maze.MazeBehaviour OnMazeEscape;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == "Player") {
+		if (collision.tag == Tags.PLAYER) {
 			FromMazeTrans();
 			MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 		}
@@ -43,7 +44,7 @@ public class MazeEscape : MonoBehaviour {
 
 	private IEnumerator FadeWall() {
 		Canvas_Renderer.script.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
-		SpriteRenderer wallSprite = wall.GetComponent<SpriteRenderer>();
+		SpriteRenderer wallSprite = wall.GetComponentInChildren<SpriteRenderer>();
 		Color32 newColor;
 
 		for (float f = 255; f >= 0; f -= 0.8f) {

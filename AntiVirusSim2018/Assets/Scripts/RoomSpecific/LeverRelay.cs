@@ -26,7 +26,7 @@ public class LeverRelay : MonoBehaviour {
 	private void Hazards(Lever sender, bool isOn) {
 		switch (sender.name) {
 			case "Lever_8": {
-				instantiatedAvoidance = Instantiate(lever_8_Avoidance, MapData.script.GetBackground(8).position, Quaternion.identity);
+				instantiatedAvoidance = Instantiate(lever_8_Avoidance, MapData.script.GetRoom(8).background.position, Quaternion.identity);
 				instantiatedAvoidance.transform.GetChild(0).GetComponent<TurretAttack>().target = M_Player.player.gameObject;
 				sender.OnLeverSwitch -= Hazards;
 				M_Player.OnRoomEnter += RemoveInstantiatedAvoidance;
@@ -45,8 +45,8 @@ public class LeverRelay : MonoBehaviour {
 		}
 	}
 
-	private void RemoveInstantiatedAvoidance(RectTransform background, M_Player sender) {
-		if(background == MapData.script.GetBackground(6)) {
+	private void RemoveInstantiatedAvoidance(M_Player sender, RectTransform background, RectTransform previous) {
+		if(background == MapData.script.GetRoom(6).background) {
 			Destroy(instantiatedAvoidance);
 			M_Player.OnRoomEnter -= RemoveInstantiatedAvoidance;
 		}
@@ -78,7 +78,7 @@ public class LeverRelay : MonoBehaviour {
 					foreach (Lever l in levers) {
 						l.OnLeverSwitch -= LeverActivation;
 					}
-					MapData.script.OpenDoor(new RoomLink(6, 11));
+					MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 11));
 					break;
 				}
 			}
@@ -92,7 +92,7 @@ public class LeverRelay : MonoBehaviour {
 
 	public void Interact() {
 		Canvas_Renderer.script.DisplayInfo("Upon inspection, I was able to figure out, that this device is not fully operational.", "New path opened");
-		MapData.script.OpenDoor(new RoomLink(6, 7));
+		MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 7));
 		Canvas_Renderer.script.DisplayDirection(Directions.TOP);
 		CameraMovement.script.RaycastForRooms();
 	}

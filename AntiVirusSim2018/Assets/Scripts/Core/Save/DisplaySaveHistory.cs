@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
+using Igor.Constants.Strings;
 
 public class DisplaySaveHistory : MonoBehaviour {
 	private bool isDisplaying = false;
@@ -21,42 +22,11 @@ public class DisplaySaveHistory : MonoBehaviour {
 				g.GetComponent<SaveFileScript>().associatedData = s;
 				Text t = g.transform.Find("SaveInfo").GetComponent<Text>();
 				RawImage ri = g.transform.Find("SaveImage").GetComponent<RawImage>();
-				string BGName;
-
-				switch (s.player.currentBGName) {
-					case "Background_Start": {
-						BGName = "Electical Hall";
-						break;
-					}
-					case "Background_room_1": {
-						BGName = "Icy Plains";
-						break;
-					}
-					case "Background_room_2a": {
-						BGName = "Danger Zone";
-						break;
-					}
-					case "Background_room_2b": {
-						BGName = "Peaceful Corner";
-						break;
-					}
-					case "Background_room_Boss_1": {
-						BGName = "Boss Area";
-						break;
-					}
-					case "MazeBG": {
-						BGName = "Labirinthian";
-						break;
-					}
-					default: {
-						BGName = "Intersection";
-						break;
-					}
-				}
+				string BGName = BackgroundNames.GetRealName(s.player.currentBGName);
 
 				if (s.core.time != 0) {
 					t.text = "Loaction: " + BGName + "\n" + "Attempt " +
-							 "Time: " + string.Format("{0:00}:{1:00}.{2:00} {3}", (int)s.core.time / 60, s.core.time % 60, s.core.time.ToString().Remove(0, s.core.time.ToString().Length - 2), (int)s.core.time / 60 == 0 ? "seconds.":"minutes.") + "\n" +
+							 "Time: " + string.Format("{0:00}:{1:00}.{2:00} {3}", (int)s.core.time / 60, s.core.time % 60, s.core.time.ToString().Remove(0, s.core.time.ToString().Length - 2), (int)s.core.time / 60 == 0 ? "seconds." : "minutes.") + "\n" +
 							 "Spikes: " + s.player.spikesCollected + " Bullets: " + s.player.bullets + "\n" +
 							 "Coins: " + s.player.coinsCollected + " Bombs: " + s.player.bombs;
 				}
@@ -74,7 +44,7 @@ public class DisplaySaveHistory : MonoBehaviour {
 					ri.texture = null;
 				}
 			}
-			if(selfHistory.Count <= 0) {
+			if (selfHistory.Count <= 0) {
 				GameObject noHistory = new GameObject();
 				noHistory.transform.SetParent(content);
 				noHistory.AddComponent<CanvasRenderer>();

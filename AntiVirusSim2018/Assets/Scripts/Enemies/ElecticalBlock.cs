@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ElectricalBlock : Enemy {
+public class ElecticalBlock : Enemy {
 	public GameObject killerBlock;
 	public GameObject warnSign;
 	private Animator selfAnim;
@@ -19,11 +19,11 @@ public class ElectricalBlock : Enemy {
 		isDestroyable = false;
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();
-		room1BG = MapData.script.GetBackground(1);
+		room1BG = MapData.script.GetRoom(1).background;
 		StartCoroutine(Cycle());
 	}
 
-	private IEnumerator Cycle() {
+	public IEnumerator Cycle() {
 		while (!despawn) {
 			selfCol.enabled = false;
 			warnSign.SetActive(false);
@@ -43,7 +43,8 @@ public class ElectricalBlock : Enemy {
 			warnSign.SetActive(true);
 			yield return new WaitForSeconds(timeWarning);
 		}
-		Destroy(gameObject);
+		gameObject.SetActive(false);
+		despawn = false;
 	}
 
 	private Vector3 GetNewPosition() {

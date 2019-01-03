@@ -634,7 +634,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 83841508}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -786,14 +786,13 @@ GameObject:
   - component: {fileID: 224620284}
   - component: {fileID: 224620288}
   - component: {fileID: 224620286}
-  - component: {fileID: 224620285}
   m_Layer: 5
   m_Name: Delete Profile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224620284
 RectTransform:
   m_ObjectHideFlags: 0
@@ -814,17 +813,6 @@ RectTransform:
   m_AnchoredPosition: {x: 190, y: 75}
   m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &224620285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 224620283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66bcc0025d6674247a1989944efb3f03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &224620286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,8 +852,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 224620285}
-        m_MethodName: DeleteProfile
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -922,6 +910,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114714252559374086, guid: 2d7537e130f6ca445a8cae2945d7174c,
+        type: 2}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 561131169}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2d7537e130f6ca445a8cae2945d7174c, type: 2}
   m_IsPrefabParent: 0
@@ -1969,7 +1962,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 368647195}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2570,7 +2563,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1783026327}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2946,7 +2939,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1354364588}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3776,7 +3769,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1711918418}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -10,6 +10,7 @@ public class Projectile : Enemy {
 	protected virtual void OnEnable() {
 		selfRigid = GetComponent<Rigidbody2D>();
 		selfRender = GetComponent<SpriteRenderer>();
+		Fire();
 	}
 
 	public void Fire(float delay = 0) {

@@ -14,15 +14,15 @@ public class AdvanceInGame : MonoBehaviour {
 						for (int i = 0; i < 5; i++) {
 							FindObjectOfType<Coin>().OnCoinPickup(M_Player.player, null);
 						}
-						MapData.script.OpenDoor(new RoomLink(1, 2));
-						FindObjectOfType<Spike>().transform.position = MapData.script.doors[0].transform.position;
-						M_Player.player.transform.position = MapData.script.doors[0].transform.position;
+						MapData.script.OpenDoor(MapData.script.GetRoomLink(1,2));
+						FindObjectOfType<Spike>().transform.position = Vector3.zero;
+						M_Player.player.transform.position = Vector3.zero;
 						return;
 					}
 					case 2: {
 						FindObjectOfType<BlockScript>().transform.position = FindObjectOfType<PressurePlate>().transform.position;
-						MapData.script.OpenDoor(new RoomLink(2, 3));
-						M_Player.player.transform.position = MapData.script.doors[2].transform.position;
+						MapData.script.OpenDoor(MapData.script.GetRoomLink(2, 3));
+						M_Player.player.transform.position = FindObjectOfType<PressurePlate>().transform.position - new Vector3(20,0);
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = M_Player.player.transform.position;
 						return;
@@ -30,7 +30,7 @@ public class AdvanceInGame : MonoBehaviour {
 					case 3: {
 						FindObjectOfType<Avoidance>().avoidDuration = 2f;
 						FindObjectOfType<Avoidance>().StartAvoidance();
-						MapData.script.OpenDoor(new RoomLink(2, 3));
+						MapData.script.OpenDoor(MapData.script.GetRoomLink(2, 3));
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = M_Player.player.transform.position;
 						return;
@@ -76,7 +76,7 @@ public class AdvanceInGame : MonoBehaviour {
 		FindObjectOfType<BossBehaviour>().StopAllCoroutines();
 
 		Destroy(FindObjectOfType<BossBehaviour>().gameObject);
-		MapData.script.OpenDoor(new RoomLink(5, 6));
+		MapData.script.OpenDoor(MapData.script.GetRoomLink(5, 6));
 		yield return new WaitForSeconds(1);
 		Destroy(g);
 		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);

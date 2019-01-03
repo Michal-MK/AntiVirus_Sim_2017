@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 public class DisplayScoreList : MonoBehaviour {
 
@@ -46,7 +47,7 @@ public class DisplayScoreList : MonoBehaviour {
 		string[] values;
 
 		string link = "http://lestranky.maweb.eu/times.php";
-		WWW times = new WWW(link);
+		UnityWebRequest times = UnityWebRequest.Get(link);
 		yield return times;
 
 		if (times == null) {
@@ -54,12 +55,9 @@ public class DisplayScoreList : MonoBehaviour {
 			yield break;
 		}
 		else {
-			string data = times.text;
+			string data = times.downloadHandler.text;
 			values = data.Split('_', '%', '~');
 		}
-		//foreach (var item in values) {
-		//	print(item);
-		//}
 
 		int currentDiff = 0;
 		for (int i = 0; i < values.Length; i++) {

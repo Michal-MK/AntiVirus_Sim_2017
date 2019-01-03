@@ -25,12 +25,39 @@ namespace Igor {
 			}
 
 			public class BackgroundNames {
+
+				private readonly static Dictionary<string, string> realNames = new Dictionary<string, string>() {
+					{ BACKGROUND_1, "Electical Hall"},
+					{ BACKGROUND_2, "Icy Plains"},
+					{ BACKGROUND_3, "Ambush"},
+					{ BACKGROUND_4, "Peaceful Corner"},
+					{ BACKGROUND_BOSS_ + "1", "Boss Area 1"},
+					{ BACKGROUND_MAZE, "Labirinthian"},
+				};
+
+				public static string GetRealName(string gameObjectName) {
+					string s;
+					if(realNames.TryGetValue(gameObjectName, out s)) {
+						return s;
+					}
+					return "Intersection";
+				}
+
 				public const string BACKGROUND_1 = "Background_1";
 				public const string BACKGROUND_2 = "Background_2";
 				public const string BACKGROUND_3 = "Background_3";
 				public const string BACKGROUND_4 = "Background_4";
+				public const string BACKGROUND_5 = "Background_5";
+				public const string BACKGROUND_6 = "Background_6";
+				public const string BACKGROUND_7 = "Background_7";
+				public const string BACKGROUND_8 = "Background_8";
+				public const string BACKGROUND_9 = "Background_9";
+				public const string BACKGROUND_10 = "Background_10";
+				public const string BACKGROUND_11 = "Background_11";
+				public const string BACKGROUND_12 = "Background_12";
+				public const string BACKGROUND_13 = "Background_13";
 				public const string BACKGROUND_MAZE = "Background1_Maze";
-				public const string BACKGROUND_BOSS_X = "Background_Boss_";
+				public const string BACKGROUND_BOSS_ = "Background_Boss_";
 			}
 
 			public class Boss {
@@ -38,7 +65,7 @@ namespace Igor {
 			}
 
 			public class PrefabNames {
-				public const string ENEMY_PROJECTILE_ACCURATE = "Emeies/EnemyProjectile_Accurate";
+				public const string ENEMY_PROJECTILE_ACCURATE = "Enemies/EnemyProjectile_Accurate";
 				public const string ENEMY_PROJECTILE_INACCUARATE = "Enemies/EnemyProjectile_Inaccurate";
 				public const string ENEMY_PROJECTILE_ICICLE = "Enemies/EnemyProjectile_Icicle";
 				public const string ENEMY_KILLERBLOCK_BOSS = "Enemies/Boss/Enemy_KillerBlockBoss";
@@ -72,8 +99,10 @@ namespace Igor {
 			public class Tags {
 				public const string UNTAGGED = "Untagged";
 				public const string ENEMY = "Enemy";
+				public const string WALL = "Wall";
 				public const string ENEMY_INACTIVE = "EnemyInactive";
 				public const string BACKGROUND = "BG";
+				public const string PLAYER = "Player";
 			}
 
 			public class Settings {

@@ -1,36 +1,51 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Class representing a door between two rooms
+/// </summary>
 public class Door {
 
-	public RoomLink getRoomIndicies { get; }
-	public GameObject getDoor { get; }
-	public bool isDoorOpen { get; set; }
+	/// <summary>
+	/// The <see cref="RoomLink"/> between the Rooms, indicated where the door is
+	/// </summary>
+	public RoomLink connecting { get; }
 
-	public Door(GameObject doorObj, RoomLink connects) {
-		Transform t = doorObj.transform.GetChild(4);
-		getDoor = t.gameObject;
-		getRoomIndicies = connects;
-		isDoorOpen = t.gameObject.activeInHierarchy;
+	/// <summary>
+	/// Get the middle Door GameObject
+	/// </summary>
+	public GameObject getDoor { get; }
+
+	/// <summary>
+	/// Toggle to Open/Close this door
+	/// </summary>
+	public bool isDoorOpen {
+		get {
+			return getDoor.gameObject.activeInHierarchy;
+		}
+		set {
+			getDoor.SetActive(!value);
+		}
 	}
 
+	/// <summary>
+	/// Default constructor
+	/// </summary>
+	public Door(GameObject doorObj, RoomLink connects) {
+		getDoor = doorObj;
+		connecting = connects;
+	}
+
+	/// <summary>
+	/// Function to open this door
+	/// </summary>
 	public void Open() {
-		getDoor.SetActive(false);
 		isDoorOpen = true;
 	}
 
+	/// <summary>
+	/// Function to close this door
+	/// </summary>
 	public void Close() {
-		getDoor.SetActive(true);
 		isDoorOpen = false;
-	}
-}
-
-public class RoomLink {
-
-	public int from { get; }
-	public int to { get; }
-
-	public RoomLink(int fromRoom, int toRoom) {
-		from = fromRoom;
-		to = toRoom;
 	}
 }

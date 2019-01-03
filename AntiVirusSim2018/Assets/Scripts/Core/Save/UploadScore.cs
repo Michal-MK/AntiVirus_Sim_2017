@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class UploadScore {
 
@@ -6,7 +7,7 @@ public class UploadScore {
 		int difficulty = Control.currDifficulty;
 		string playerName = "";
 
-		if (playerName == null || playerName == "") {
+		if (playerName == "") {
 			playerName = System.Environment.UserName;
 		}
 
@@ -14,7 +15,7 @@ public class UploadScore {
 		form.AddField("time", Timer.getTimeFormated);
 		form.AddField("player_name", playerName);
 
-		new WWW("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);
+		UnityWebRequest.Post("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);
 	}
 }
 

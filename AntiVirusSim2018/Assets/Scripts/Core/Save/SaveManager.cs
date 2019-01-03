@@ -50,7 +50,6 @@ public class SaveManager : MonoBehaviour {
 
 			newSaveFile.data.core.time = 0;
 			newSaveFile.data.core.difficulty = difficulty;
-			newSaveFile.data.core.localAttempt = 0;
 			newSaveFile.data.core.fileLocation = filePath;
 			newSaveFile.data.core.imgFileLocation = imgPath;
 			newSaveFile.data.world.spikePos = new SaveData_Helper.SVector3(-100, -60, 0);
@@ -66,7 +65,7 @@ public class SaveManager : MonoBehaviour {
 		}
 	}
 
-	public void Save(int difficulty, bool isAutomatic) {
+	public void Save(bool isAutomatic) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		SaveFile newSave = current;
 		if (Control.script.allowTesting) {
@@ -86,7 +85,7 @@ public class SaveManager : MonoBehaviour {
 			#region Player data
 			newSave.data.player.bombs = M_Player.player.pAttack.bombs;
 			newSave.data.player.bullets = M_Player.player.pAttack.bullets;
-			newSave.data.player.playerPos = isAutomatic && M_Player.player.GetCurrentBackground() == MapData.script.GetBackground(4) ? automaticSave_PreBoss1 : SaveGameHelper.script.playerPos;
+			newSave.data.player.playerPos = isAutomatic && M_Player.player.GetCurrentBackground() == MapData.script.GetRoom(4).background ? automaticSave_PreBoss1 : SaveGameHelper.script.playerPos;
 			newSave.data.player.spikesCollected = Spike.spikesCollected;
 			newSave.data.player.coinsCollected = Coin.coinsCollected;
 			newSave.data.player.canZoom = Zoom.canZoom;
@@ -107,7 +106,7 @@ public class SaveManager : MonoBehaviour {
 			newSave.data.world.doorsOpen = new System.Collections.Generic.List<string>();
 			for (int i = 0; i < MapData.script.getAllDoors.Length; i++) {
 				if (MapData.script.getAllDoors[i].isDoorOpen) {
-					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].getRoomIndicies.from + "," + MapData.script.getAllDoors[i].getRoomIndicies.to);
+					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].connecting.from + "," + MapData.script.getAllDoors[i].connecting.to);
 				}
 			}
 			#endregion
@@ -121,7 +120,6 @@ public class SaveManager : MonoBehaviour {
 			#region Core data
 			newSave.data.core.time = Timer.getTime;
 			newSave.data.core.difficulty = Control.currDifficulty;
-			newSave.data.core.localAttempt = Control.currAttempt;
 			newSave.data.core.camSize = Camera.main.orthographicSize;
 			newSave.data.core.fileLocation = filePath;
 			newSave.data.core.imgFileLocation = imgFilePath;

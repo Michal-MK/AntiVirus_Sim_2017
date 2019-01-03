@@ -9,11 +9,22 @@ public class GameScene_Holder : MonoBehaviour {
 	public Button load;
 	public Button settings;
 
+
+	public Button[] getButtonsNonSpecial {
+		get { return new Button[] { restart, settings, quitToMenu }; }
+	}
+
 	public Button[] getButtonsSave {
-		get { return new Button[] { save, restart, quitToMenu }; }
+		get { return new Button[] { save, restart, settings, quitToMenu }; }
 	}
 
 	public Button[] getButtonLoad {
-		get { return new Button[] { load, restart, quitToMenu }; }
+		get { return new Button[] { load, restart, settings, quitToMenu }; }
+	}
+
+	public void SavePromptToggle() {
+		foreach (Button button in getButtonsNonSpecial) {
+			button.interactable = !button.interactable;
+		}
 	}
 }

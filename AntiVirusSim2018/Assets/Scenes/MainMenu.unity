@@ -221,12 +221,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 400022647}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 400022651}
+        m_MethodName: ToggleWindow
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 400022647}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -597,6 +597,35 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 223892067066588064, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 2}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644566770571550, guid: 4385a19bd0863df4fbff133c61dd522a, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224471393079772496, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224922546141772718, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224124354616352482, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224068443411830700, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4385a19bd0863df4fbff133c61dd522a, type: 2}
@@ -14854,12 +14883,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 400022647}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 400022651}
+        m_MethodName: ToggleWindow
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 400022647}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -19704,6 +19733,7 @@ GameObject:
   - component: {fileID: 400022648}
   - component: {fileID: 400022650}
   - component: {fileID: 400022649}
+  - component: {fileID: 400022651}
   m_Layer: 5
   m_Name: Select Difficulty
   m_TagString: Untagged
@@ -19767,6 +19797,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 400022647}
+--- !u!114 &400022651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 400022647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d161c911ff93c44db6e15adfff3d774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findSelectableInWindow: 0
+  isSpecialityWindow: 0
+  destroyWindow: 0
+  specialityWindow: 0
 --- !u!1 &468712698
 GameObject:
   m_ObjectHideFlags: 0
@@ -19778,6 +19823,7 @@ GameObject:
   - component: {fileID: 468712703}
   - component: {fileID: 468712700}
   - component: {fileID: 468712701}
+  - component: {fileID: 468712702}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -19817,9 +19863,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 344444485}
+    m_SelectOnDown: {fileID: 1921871249}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 3
@@ -19844,9 +19890,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 119077198}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 468712702}
+        m_MethodName: SetupSpecialityWindow
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -19855,7 +19901,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1557818243}
+      - m_Target: {fileID: 468712702}
+        m_MethodName: ToggleWindowSpecial
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 119077198}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1087983265}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -19886,6 +19943,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &468712702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 468712698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d161c911ff93c44db6e15adfff3d774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findSelectableInWindow: 1
+  isSpecialityWindow: 1
+  destroyWindow: 0
+  specialityWindow: 0
 --- !u!222 &468712703
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25266,7 +25338,7 @@ GameObject:
   - component: {fileID: 985965908}
   - component: {fileID: 985965906}
   - component: {fileID: 985965907}
-  - component: {fileID: 985965909}
+  - component: {fileID: 985965910}
   m_Layer: 5
   m_Name: StartGame
   m_TagString: Untagged
@@ -25302,7 +25374,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 985965904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -25329,15 +25401,12 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_TargetGraphic: {fileID: 2122974998}
+  m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 985965909}
-        m_MethodName: ToggleWindowActive
+      - m_Target: {fileID: 985965910}
+        m_MethodName: ToggleWindow
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 400022647}
@@ -25347,8 +25416,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1087983270}
-        m_MethodName: ToggleMenuButtons
+      - m_Target: {fileID: 1087983271}
+        m_MethodName: ToggleButtons
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25358,9 +25427,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
 --- !u!95 &985965907
 Animator:
   serializedVersion: 3
@@ -25385,7 +25453,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 985965904}
---- !u!114 &985965909
+--- !u!114 &985965910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -25393,9 +25461,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 985965904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e500e069677b3b649ac969b8ac8bb6a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d161c911ff93c44db6e15adfff3d774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  findSelectableInWindow: 1
+  isSpecialityWindow: 0
+  destroyWindow: 0
+  specialityWindow: 0
 --- !u!1 &1066954283
 GameObject:
   m_ObjectHideFlags: 0
@@ -30400,7 +30472,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1087983265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b21f805b3fc0d0d478af2736a43bd56a, type: 3}
+  m_Script: {fileID: 11500000, guid: 06875cf1aead3fa43b7a1fe6d2e0a1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startGame: {fileID: 985965906}
@@ -44923,12 +44995,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 400022647}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 400022651}
+        m_MethodName: ToggleWindow
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 400022647}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -45131,7 +45203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -50165,12 +50237,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 400022647}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 400022651}
+        m_MethodName: ToggleWindow
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 400022647}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -55070,7 +55142,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1921871246}
   - component: {fileID: 1921871250}
-  - component: {fileID: 1921871248}
   - component: {fileID: 1921871249}
   - component: {fileID: 1921871247}
   - component: {fileID: 1921871251}
@@ -55112,17 +55183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91a135ad641df64ea21626884404bab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1921871248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1921871245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d91a135ad641df64ea21626884404bab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1921871249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55135,9 +55195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 468712700}
+    m_SelectOnDown: {fileID: 1585893000}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 3
@@ -55162,7 +55222,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1921871248}
+      - m_Target: {fileID: 1921871247}
         m_MethodName: SwitchTo
         m_Mode: 5
         m_Arguments:
@@ -64687,12 +64747,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 400022647}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 400022651}
+        m_MethodName: ToggleWindow
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 400022647}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -69585,7 +69645,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2072498999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -69612,11 +69672,8 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  toggleTransition: 1
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_TargetGraphic: {fileID: 58704707}
+  m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2072499001}
@@ -69630,9 +69687,8 @@ MonoBehaviour:
           m_StringArgument: Ships
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
 --- !u!222 &2072499004
 CanvasRenderer:
   m_ObjectHideFlags: 0

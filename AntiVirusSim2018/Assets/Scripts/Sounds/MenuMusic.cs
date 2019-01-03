@@ -12,21 +12,12 @@ public class MenuMusic : SoundBase {
 			script = this;
 			DontDestroyOnLoad(gameObject);
 			GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
-			SceneManager.sceneLoaded += OnMenuLeave;
 		}
 		else if (script != this) {
 			Destroy(gameObject);
 		}
 	}
 
-	private void OnMenuLeave(Scene newScene, LoadSceneMode mode) {
-		if(newScene.name == Igor.Constants.Strings.SceneNames.GAME1_SCENE) {
-			Destroy(gameObject);
-		}
-	}
-
-	private void Start() {
-	}
 
 	private void UpdateMusicVol(float newValue) {
 		source.volume = newValue;
