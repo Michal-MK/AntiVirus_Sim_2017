@@ -31,7 +31,7 @@ public class Room : MonoBehaviour {
 		foreach (Transform t in GetComponentInChildren<Transform>()) {
 			if (t.name.Contains("Door_")) {
 				string[] split = t.name.Split('_');
-				doors.Add(new Door(t.GetChild(4).gameObject, MapData.script.GetRoomLink(split[2].Int(), split[3].Int())));
+				doors.Add(new Door(t.GetChild(4).gameObject,split[2].Int(),split[3].Int()));
 			}
 			if (t.name.Contains("Background_")) {
 				background = t.GetComponent<RectTransform>();

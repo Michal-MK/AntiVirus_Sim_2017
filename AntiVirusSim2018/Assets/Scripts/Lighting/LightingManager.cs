@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LightningManager : MonoBehaviour {
+public class LightingManager : MonoBehaviour {
 	new public Light light;
 
 	public bool oscilate;

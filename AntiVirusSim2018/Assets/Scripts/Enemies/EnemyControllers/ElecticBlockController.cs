@@ -21,10 +21,10 @@ public class ElecticBlockController : IEnemyControler {
 	}
 
 	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if (background != activeRoom.background && background != activeRoom.doors[0].connecting.transition) {
+		if (background != activeRoom.background && background != MapData.script.GetRoomLink(1,2).transition) {
 			Despawn();
 		}
-		if (background == activeRoom.doors[0].connecting.transition && previous != activeRoom.background) {
+		if (background == MapData.script.GetRoomLink(1, 2).transition && previous != activeRoom.background) {
 			foreach (ElecticalBlock block in blocks) {
 				block.gameObject.SetActive(true);
 				block.StartCoroutine(block.Cycle());

@@ -6,14 +6,19 @@
 public class Door {
 
 	/// <summary>
-	/// The <see cref="RoomLink"/> between the Rooms, indicated where the door is
-	/// </summary>
-	public RoomLink connecting { get; }
-
-	/// <summary>
 	/// Get the middle Door GameObject
 	/// </summary>
 	public GameObject getDoor { get; }
+
+	/// <summary>
+	/// The room this door is in
+	/// </summary>
+	public int fromRoomID { get; }
+
+	/// <summary>
+	/// The room this door is connecting, but not actually in
+	/// </summary>
+	public int toRoomID { get; }
 
 	/// <summary>
 	/// Toggle to Open/Close this door
@@ -30,9 +35,10 @@ public class Door {
 	/// <summary>
 	/// Default constructor
 	/// </summary>
-	public Door(GameObject doorObj, RoomLink connects) {
+	public Door(GameObject doorObj, int fromRoomID, int toRoomID) {
 		getDoor = doorObj;
-		connecting = connects;
+		this.fromRoomID = fromRoomID;
+		this.toRoomID = toRoomID;
 	}
 
 	/// <summary>

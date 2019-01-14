@@ -106,7 +106,7 @@ public class SaveManager : MonoBehaviour {
 			newSave.data.world.doorsOpen = new System.Collections.Generic.List<string>();
 			for (int i = 0; i < MapData.script.getAllDoors.Length; i++) {
 				if (MapData.script.getAllDoors[i].isDoorOpen) {
-					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].connecting.from + "," + MapData.script.getAllDoors[i].connecting.to);
+					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].fromRoomID + "," + MapData.script.getAllDoors[i].toRoomID);
 				}
 			}
 			#endregion

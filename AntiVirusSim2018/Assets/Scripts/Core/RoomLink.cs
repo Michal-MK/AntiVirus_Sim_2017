@@ -32,8 +32,8 @@ public struct RoomLink {
 		from = fromRoom;
 		to = toRoom;
 		transition = MapData.script.transitions.SelectUnique((RectTransform t) => { return t.name.Contains(fromRoom.roomID.ToString()) && t.name.Contains(toRoom.roomID.ToString()); });
-		connection = new Tuple<Door, Door>(from.doors.Find((d) => { return d.connecting.from == fromRoom && d.connecting.to == toRoom; }),
-										   to.doors.Find((d) => { return d.connecting.from == toRoom && d.connecting.to == fromRoom; }));
+		connection = new Tuple<Door, Door>(from.doors.Find((d) => { return d.fromRoomID == fromRoom.roomID && d.toRoomID == toRoom.roomID; }),
+										   to.doors.Find((d) => { return d.fromRoomID == toRoom.roomID && d.toRoomID == fromRoom.roomID; }));
 	}
 
 	/// <summary>
@@ -52,7 +52,6 @@ public struct RoomLink {
 		connection.Item1.Close();
 		if (both)
 			connection.Item2.Close();
-
 	}
 
 	#region Equality comparison
@@ -65,10 +64,7 @@ public struct RoomLink {
 	}
 
 	public static bool operator !=(RoomLink a, RoomLink b) {
-		if (a.from != b.from && a.to != b.to) {
-			return false;
-		}
-		return true;
+		return !(a == b);
 	}
 
 	public override bool Equals(object obj) {
