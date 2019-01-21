@@ -89,20 +89,12 @@ public class Control : MonoBehaviour {
 
 	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
 		if (scene.name == SceneNames.GAME1_SCENE) {
-			UserInterface.sceneMode = UserInterface.UIScene.GAME;
 			CamFadeOut.script.anim.speed = 0.5f;
 		}
 		else if (scene.name == SceneNames.MENU_SCENE) {
-			UserInterface.sceneMode = UserInterface.UIScene.MAIN_MENU;
 			if (!MenuMusic.script.isPlaying) {
 				MenuMusic.script.PlayMusic();
 			}
-		}
-		else if (scene.name == SceneNames.SAVES_SCENE) {
-			UserInterface.sceneMode = UserInterface.UIScene.SAVES;
-		}
-		else {
-			UserInterface.sceneMode = UserInterface.UIScene.OTHER;
 		}
 		Time.timeScale = 1;
 		WindowManager.ClearWindows();
@@ -110,21 +102,12 @@ public class Control : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetButtonDown("Escape")) {
-			if (OnEscapePressed != null) {
-				OnEscapePressed();
-			}
+			OnEscapePressed?.Invoke();
 		}
-		//int i = 0;
-		//foreach (Window w in WindowManager.getWindowArray) {
-		//	print(string.Format("{0} - {1}", i,w.window.name));
-		//	i++;
-		//}
 	}
 
 	public static void PressingEscape() {
-		if (OnEscapePressed != null) {
-			OnEscapePressed();
-		}
+		OnEscapePressed?.Invoke();
 	}
 
 	private void OnDestroy() {

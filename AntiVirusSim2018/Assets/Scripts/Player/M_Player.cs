@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Igor.Constants.Strings;
 
 public delegate void BackgroundChanged(M_Player sender, RectTransform current, RectTransform previous);
 public delegate void PlayerColision(M_Player sender, GameObject other);
-public delegate void SimplePlayerEvent(M_Player sender);
 
 public class M_Player : MonoBehaviour {
 
@@ -35,15 +35,15 @@ public class M_Player : MonoBehaviour {
 	public static event PlayerColision OnSpikePickup;
 	public static event PlayerColision OnCoinPickup;
 	public static event PlayerColision OnTargetableObjectCollision;
-	public static event SimplePlayerEvent OnPlayerDeath;
+	public static event EventHandler<PlayerDeathEventArgs> OnPlayerDeath;
 
 	public static PlayerState playerState = PlayerState.NORMAL;
 
+	[Flags]
 	public enum PlayerState {
 		NORMAL,
 		ATTACKING,
 		INVERSE,
-		INVERSE_ATTACKING
 	}
 
 	private void Awake() {
@@ -91,7 +91,7 @@ public class M_Player : MonoBehaviour {
 				OnTargetableObjectCollision(this, collision.gameObject);
 			}
 		}
-		if (collision.transform.tag == Tags.ENEMY && isInvincible == false) {
+		if (collision.transform.tag == Tags.ENEMY && !isInvincible) {
 			print(collision.transform.name);
 			if (collision.gameObject.GetComponent<Rigidbody2D>() != null) {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -104,7 +104,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.tag == Tags.ENEMY && isInvincible == false) {
+		if (col.tag == Tags.ENEMY && !isInvincible) {
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
@@ -115,9 +115,7 @@ public class M_Player : MonoBehaviour {
 
 		}
 		if (col.transform.tag == Tags.BACKGROUND) {
-			if (OnRoomEnter != null) {
-				OnRoomEnter(this, col.GetComponent<RectTransform>(), GameObject.Find(currentBG_name).GetComponent<RectTransform>());
-			}
+			OnRoomEnter?.Invoke(this, col.GetComponent<RectTransform>(), GameObject.Find(currentBG_name).GetComponent<RectTransform>());
 			currentBG_name = col.name;
 			CameraMovement.script.RaycastForRooms();
 
@@ -129,16 +127,12 @@ public class M_Player : MonoBehaviour {
 		}
 
 		if (col.name == ObjNames.SPIKE) {
-			if (OnSpikePickup != null) {
-				OnSpikePickup(this, col.gameObject);
-			}
+			OnSpikePickup?.Invoke(this, col.gameObject);
 			face.sprite = happy;
 		}
 		if (col.name == ObjNames.COIN) {
 			face.sprite = happy;
-			if (OnCoinPickup != null) {
-				OnCoinPickup(this, col.gameObject);
-			}
+			OnCoinPickup?.Invoke(this, col.gameObject);
 		}
 
 		if (col.tag == EnemyNames.ENEMY_TURRET) {
@@ -154,9 +148,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	public void GameOver() {
-		if (OnPlayerDeath != null) {
-			OnPlayerDeath(this);
-		}
+		OnPlayerDeath?.Invoke(this, new PlayerDeathEventArgs());
 
 		Zoom.canZoom = false;
 		Destroy(GameObject.Find("Enemies"));
@@ -170,7 +162,7 @@ public class M_Player : MonoBehaviour {
 			return GameObject.Find(currentBG_name).GetComponent<RectTransform>();
 		}
 		else {
-			throw new System.Exception("No background assigned to player!");
+			throw new Exception("No background assigned to player!");
 		}
 	}
 

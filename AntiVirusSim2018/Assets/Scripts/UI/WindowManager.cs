@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class WindowManager {
 
 	/// <summary>
-	/// Stack of active windows, since windows tend to "Stack up" may be switched for a list in the future to allow for removing from the middle.
+	/// Stack of active windows
 	/// </summary>
 	private static Stack<Window> activeWindows = new Stack<Window>();
 

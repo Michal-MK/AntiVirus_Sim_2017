@@ -116,7 +116,7 @@ public class MapData : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Returns a room
+	/// Returns a room by its identifier
 	/// </summary>
 	public Room GetRoom(int room) {
 		return rooms[room];

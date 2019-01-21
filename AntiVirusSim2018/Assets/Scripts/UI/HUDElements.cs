@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDElements : UserInterface {
+public class HUDElements : MonoBehaviour {
 
 	public delegate void HUDAttackUpdates(AttackType type, int amount);
 	public delegate void HUDAttackVisibility(AttackType type, bool state);
@@ -25,12 +25,11 @@ public class HUDElements : UserInterface {
 
 	private AttackType currentSelectedAtkType;
 
-	protected override void Awake() {
+	private void Awake() {
 		PlayerAttack.OnAmmoChanged += AmmoSwitch;
 		PlayerAttack.OnAmmoPickup += SetVisibility;
 		spikeSprt = bulletImage.sprite;
 		bombSprt = bombImage.sprite;
-		base.Awake();
 	}
 
 	private void AmmoSwitch(AttackType type, int ammo) {

@@ -2,15 +2,12 @@
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour {
-	private static float _time;
-	private static bool _isRunning;
-	private static float timeFlowMultiplier = 1;
 
-	private Text Timer_text;
+	public static float timeFlowMultiplier { get; private set; } = 1;
 
-	public static event PauseUnpause.Pause OnTimerPause;
+	public static Timer script { get; private set; }
 
-	public static Timer script;
+	private Text timerText;
 
 	private void Awake() {
 		if (script == null) {
@@ -19,61 +16,54 @@ public class Timer : MonoBehaviour {
 		else if (script != this) {
 			Destroy(gameObject);
 		}
+
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
 	}
 
-	private void M_Player_OnPlayerDeath(M_Player sender) {
-		_isRunning = false;
+	private void M_Player_OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
+		isRunning = false;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		_time = data.core.time;
+		getTime = data.core.time;
 		StartTimer(1f);
-		Timer_text = GetComponent<Text>();
-		Timer_text.gameObject.SetActive(true);
+		timerText = GetComponent<Text>();
+		timerText.gameObject.SetActive(true);
 	}
 
 	private void Start() {
-		if (Timer_text == null) {
-			Timer_text = GetComponent<Text>();
-			Timer_text.gameObject.SetActive(false);
+		if (timerText == null) {
+			timerText = GetComponent<Text>();
+			timerText.gameObject.SetActive(false);
 		}
 	}
 
 	private void Update() {
-		if (_isRunning) {
-			_time += Time.deltaTime * timeFlowMultiplier;
-			Timer_text.text = "Time:\t" + getTimeFormated;
+		if (isRunning) {
+			getTime += Time.deltaTime * timeFlowMultiplier;
+			timerText.text = "Time:\t" + getTimeFormated;
 		}
 	}
 
 
 	public static void PauseTimer() {
-		_isRunning = false;
-		if (OnTimerPause != null) {
-			OnTimerPause(true);
-		}
+		isRunning = false;
 	}
 
 	public static void StartTimer(float flowMultiplier) {
 		script.gameObject.SetActive(true);
-		_isRunning = true;
-		if (OnTimerPause != null) {
-			OnTimerPause(false);
-		}
+		isRunning = true;
 		timeFlowMultiplier = flowMultiplier;
 	}
 
 	public static void ResetTimer() {
-		_time = 0;
-		_isRunning = false;
+		getTime = 0;
+		isRunning = false;
 		timeFlowMultiplier = 1;
 	}
 
-	public static float getTime {
-		get { return _time; }
-	}
+	public static float getTime { get; private set; }
 
 	public static string getTimeFormated {
 		get {
@@ -86,9 +76,7 @@ public class Timer : MonoBehaviour {
 		}
 	}
 
-	public static bool isRunning {
-		get { return _isRunning; }
-	}
+	public static bool isRunning { get; private set; }
 
 	private void OnDestroy() {
 		script = null;
