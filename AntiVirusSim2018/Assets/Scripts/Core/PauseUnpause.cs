@@ -17,14 +17,15 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void OnEscapePressed() {
 		if (canPause) {
-			OnPaused?.Invoke(null, new PauseEventArgs(!isPaused, SceneManager.GetActiveScene().name));
+			isPaused ^= true;
+			OnPaused?.Invoke(null, new PauseEventArgs(isPaused, SceneManager.GetActiveScene().name));
 		}
 	}
 	
 	private void OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
 		isPaused = true;
 		canPause = false;
-		OnPaused?.Invoke(null, new PauseEventArgs(!isPaused, SceneManager.GetActiveScene().name));
+		OnPaused?.Invoke(null, new PauseEventArgs(isPaused, SceneManager.GetActiveScene().name));
 	}
 
 	private void OnDestroy() {

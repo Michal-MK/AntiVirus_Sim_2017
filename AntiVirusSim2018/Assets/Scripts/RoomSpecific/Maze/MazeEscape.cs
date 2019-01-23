@@ -26,9 +26,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		if (OnMazeEscape != null) {
-			OnMazeEscape();
-		}
+		OnMazeEscape?.Invoke();
 
 		Zoom.canZoom = true;
 		M_Player.player.transform.position = entrance.transform.position;

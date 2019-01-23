@@ -19,9 +19,7 @@ public class SignPost : MonoBehaviour {
 	private void Interact() {
 		switch (gameObject.name) {
 			case ObjNames.AVOIDANCE_SIGN: {
-				if (OnAvoidanceBegin != null) {
-					OnAvoidanceBegin();
-				}
+				OnAvoidanceBegin?.Invoke();
 				MusicHandler.script.TransitionMusic(MusicHandler.script.room1_3_avoidance);
 				break;
 			}
@@ -54,7 +52,7 @@ public class SignPost : MonoBehaviour {
 				break;
 			}
 			case "_SignPost TeleportationRoom": {
-				if (M_Player.player.pMovement.getCurrentMovementModifier == Player_Movement.PlayerMovement.INVERT) {
+				if (M_Player.player.pMovement.getCurrentMovementModifier == Player_Movement.PlayerMovementModifiers.INVERT) {
 					Canvas_Renderer.script.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
 				}
 				else {

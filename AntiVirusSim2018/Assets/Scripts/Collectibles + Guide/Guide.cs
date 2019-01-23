@@ -68,7 +68,7 @@ public class Guide : MonoBehaviour {
 	}
 
 	private void Recalculate(Vector3 targetPosition) {
-		if (targetPosition == default(Vector3)) {
+		if (targetPosition == default) {
 			Destroy(guideObj);
 			return;
 		}
@@ -87,7 +87,7 @@ public class Guide : MonoBehaviour {
 
 	private void Update() {
 		radius = defaultRadius;
-		if (guideObj != null && Timer.isRunning == true) {
+		if (guideObj != null && Timer.script.isRunning == true) {
 			Vector3 direction = targetPosition - playerTransform.position;
 			if (direction.magnitude < radius) {
 				radius = direction.magnitude;

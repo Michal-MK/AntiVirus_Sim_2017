@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 8879f20585cf83044bc25eb837c11416
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Marquisette BTN
+  fontNames:
+  - Marquisette BTN
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 45f289a817d822c4d8ad9461932f2bbb, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -7,7 +7,24 @@ public class Timer : MonoBehaviour {
 
 	public static Timer script { get; private set; }
 
+	public bool isRunning { get; set; }
+
 	private Text timerText;
+
+	public static float getTime { get; private set; }
+
+	public static string getTimeFormated {
+		get {
+			float current = getTime;
+			if (current != 0) {
+				print(current.ToString().Remove(0, current.ToString().Length - 2));
+				return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)current / 60, current % 60, current.ToString().Remove(0, current.ToString().Length - 2));
+			}
+			else {
+				return "0";
+			}
+		}
+	}
 
 	private void Awake() {
 		if (script == null) {
@@ -19,6 +36,12 @@ public class Timer : MonoBehaviour {
 
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
+		PauseUnpause.OnPaused += OnPaused;
+	}
+
+	private void OnPaused(object sender, PauseEventArgs e) {
+		isRunning = e.isPlaying;
+		Time.timeScale = e.isPaused ? 0 : 1;
 	}
 
 	private void M_Player_OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
@@ -46,37 +69,17 @@ public class Timer : MonoBehaviour {
 		}
 	}
 
-
-	public static void PauseTimer() {
-		isRunning = false;
-	}
-
 	public static void StartTimer(float flowMultiplier) {
 		script.gameObject.SetActive(true);
-		isRunning = true;
+		script.isRunning = true;
 		timeFlowMultiplier = flowMultiplier;
 	}
 
 	public static void ResetTimer() {
 		getTime = 0;
-		isRunning = false;
+		script.isRunning = false;
 		timeFlowMultiplier = 1;
 	}
-
-	public static float getTime { get; private set; }
-
-	public static string getTimeFormated {
-		get {
-			if (getTime != 0) {
-				return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)getTime / 60, getTime % 60, getTime.ToString().Remove(0, getTime.ToString().Length - 2));
-			}
-			else {
-				return "0";
-			}
-		}
-	}
-
-	public static bool isRunning { get; private set; }
 
 	private void OnDestroy() {
 		script = null;

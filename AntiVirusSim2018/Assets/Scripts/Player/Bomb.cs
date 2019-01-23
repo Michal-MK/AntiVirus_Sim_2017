@@ -19,13 +19,13 @@ public class Bomb : MonoBehaviour, IWeaponType {
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (checkTriggers && col.gameObject.GetComponent<IDamageable>() != null) {
-			col.gameObject.GetComponent<IDamageable>().Damaged(col.gameObject, WeaponType.BOMB);
+			col.gameObject.GetComponent<IDamageable>().TakeDamage(col.gameObject, WeaponType.BOMB);
 		}
 	}
 
 	private void OnCollisionEnter2D(Collision2D col) {
 		if (checkColliders && col.gameObject.GetComponent<IDamageable>() != null) {
-			col.gameObject.GetComponent<IDamageable>().Damaged(col.gameObject, WeaponType.BOMB);
+			col.gameObject.GetComponent<IDamageable>().TakeDamage(col.gameObject, WeaponType.BOMB);
 		}
 	}
 

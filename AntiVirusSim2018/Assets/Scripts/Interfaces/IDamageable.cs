@@ -8,7 +8,7 @@ public enum WeaponType {
 }
 
 interface IDamageable {
-	WeaponType damageType { get; set; }
+	WeaponType damagedByType { get; set; }
 
-	void Damaged(GameObject by, WeaponType type);
+	void TakeDamage(GameObject by, WeaponType type);
 }

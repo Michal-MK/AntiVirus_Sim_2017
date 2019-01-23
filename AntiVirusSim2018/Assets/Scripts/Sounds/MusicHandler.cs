@@ -16,7 +16,7 @@ public class MusicHandler : SoundBase {
 
 	public static MusicHandler script;
 
-	private bool isPlaying { get { return source.isPlaying; } }
+	private bool isPlaying => source.isPlaying;
 
 	private void Awake() {
 		if (script == null) {
@@ -27,16 +27,14 @@ public class MusicHandler : SoundBase {
 		}
 	}
 
-	private void UpdateMusicVol(float newValue) {
-		source.volume = newValue;
-	}
-
 	private void Start() {
 		M_Player.OnRoomEnter += NewRoom;
 		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
 	}
 
+
 	#region EventHandling
+
 	private void NewRoom(M_Player sender, RectTransform background, RectTransform previous) {
 
 		if (background == MapData.script.GetRoom(1).background) {
@@ -72,25 +70,38 @@ public class MusicHandler : SoundBase {
 			}
 		}
 	}
-	#endregion
 
+	private void UpdateMusicVol(float newValue) {
+		source.volume = newValue;
+	}
+
+	#endregion
+	/// <summary>
+	/// Starts playing music from 0 volume fading in for 1 second
+	/// </summary>
 	public void PlayMusic(AudioClip clip) {
 		if (!isPlaying) {
 			StartCoroutine(_PlayMusic(clip));
 		}
 	}
 
+	/// <summary>
+	/// Fade out music for 1 second
+	/// </summary>
 	public void FadeMusic() {
 		StartCoroutine(_FadeMusic());
 	}
 
+	/// <summary>
+	/// Fades out current music and fades in the new one, potentially just plays the clip normally, if nothing was playing before.
+	/// </summary>
 	public void TransitionMusic(AudioClip newClip) {
 		if (isPlaying) {
 			StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
 			StartCoroutine(_PlayMusic(newClip));
-			Canvas_Renderer.script.DisplayInfo("Nothing to transition from! Attempting to play normally", null);
+			Canvas_Renderer.script.DisplayInfo("Nothing to transition from! Playing normally", null);
 		}
 	}
 
@@ -98,43 +109,31 @@ public class MusicHandler : SoundBase {
 		source.clip = current = clip;
 		source.Play();
 		source.volume = 0;
-		for (float f = 0; f < GameSettings.audioVolume; f += Time.unscaledDeltaTime * 0.5f) {
-			source.volume = f;
+		for (float f = 0; f < 1; f += Time.unscaledDeltaTime * 0.5f) {
+			source.volume = Mathf.Lerp(0, GameSettings.audioVolume, f);
 			yield return null;
 		}
 		source.volume = GameSettings.audioVolume;
 	}
 
 	private IEnumerator _FadeMusic() {
-		for (float f = source.volume; f > 0; f -= Time.unscaledDeltaTime * 0.5f) {
-			source.volume = f;
+		float originalVolume = source.volume;
+		for (float f = 0; f < 1; f += Time.unscaledDeltaTime * 0.5f) {
+			source.volume = Mathf.Lerp(originalVolume, 0, f);
 			yield return null;
 		}
 		current = null;
+		source.volume = 0;
+		source.Stop();
 	}
 
 	private IEnumerator _TransitionMusic(AudioClip clip) {
 		if (clip == current) {
-			//print("Transitioning to the same clip, skipping");
+			print("Transitioning to the same clip, skipping");
 			yield break;
 		}
-
-		float initialVolume = source.volume;
-		for (float f = initialVolume; f >= 0; f -= Time.unscaledDeltaTime * 0.5f) {
-			source.volume = f;
-			yield return null;
-		}
-
-		source.volume = 0;
-		source.Stop();
-
-		source.clip = current = clip;
-		source.Play();
-		for (float f = 0; f <= GameSettings.audioVolume; f += Time.unscaledDeltaTime * 0.5f) {
-			source.volume = f;
-			yield return null;
-		}
-		source.volume = GameSettings.audioVolume;
+		yield return _FadeMusic();
+		yield return _PlayMusic(clip);
 	}
 
 

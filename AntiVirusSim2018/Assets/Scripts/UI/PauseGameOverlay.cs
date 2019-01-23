@@ -18,7 +18,7 @@ public class PauseGameOverlay : MonoBehaviour {
 		EventSystem.current.SetSelectedGameObject(saveButton);
 		Cursor.visible = true;
 		Player_Movement.canMove = false;
-		Timer.PauseTimer();
+		Timer.script.isRunning = false;
 		Time.timeScale = 0;
 	}
 

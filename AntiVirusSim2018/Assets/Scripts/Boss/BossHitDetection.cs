@@ -4,7 +4,7 @@ using UnityEngine;
 public class BossHitDetection : MonoBehaviour, IDamageable {
 	public BossHealth hp;
 
-	public WeaponType damageType { get; set; }
+	public WeaponType damagedByType { get; set; }
 
 	private DamageConfig configuration;
 
@@ -13,7 +13,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 	}
 
 
-	public void Damaged(GameObject by, WeaponType type) {
+	public void TakeDamage(GameObject by, WeaponType type) {
 		switch (type) {
 			case WeaponType.BULLET: {
 				hp.Collided(by, gameObject);
@@ -37,7 +37,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 
 	private void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.GetComponent<IWeaponType>() != null) {
-			Damaged(col.gameObject, col.gameObject.GetComponent<IWeaponType>().weaponType);
+			TakeDamage(col.gameObject, col.gameObject.GetComponent<IWeaponType>().weaponType);
 		}
 	}
 

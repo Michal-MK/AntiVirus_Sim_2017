@@ -65,14 +65,14 @@ public class LeverRelay : MonoBehaviour {
 					break;
 				}
 				case 2: {
-					M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.INVERT);
+					M_Player.player.pMovement.SetMovementModifier(Player_Movement.PlayerMovementModifiers.INVERT);
 					ParticleSystem.LightsModule module = emmiters[1].lights;
 					module.light = greenParticle;
 					Canvas_Renderer.script.DisplayInfo(".thgir leef t'nseod siht ...gnineppah si tahW !yeH","?thgirla gnihtyreve si ,egnarts leef I");
 					break;
 				}
 				case 3: {
-					M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.REVERT);
+					M_Player.player.pMovement.SetMovementModifier(Player_Movement.PlayerMovementModifiers.INVERT);
 					ParticleSystem.LightsModule module = emmiters[2].lights;
 					module.light = greenParticle;
 					foreach (Lever l in levers) {
