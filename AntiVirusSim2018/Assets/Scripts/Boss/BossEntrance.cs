@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Igor.Constants.Strings;
 
@@ -27,7 +26,6 @@ public class BossEntrance : MonoBehaviour {
 				CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 				lockin = true;
 				Control.script.saveManager.Save(true);
-				//print("Saving is disabled");
 				Zoom.canZoom = false;
 				Player_Movement.canMove = false;
 			}

@@ -1,3 +1,4 @@
+using Igor.Constants.Strings;
 using UnityEngine;
 
 public class PressurePlate : MonoBehaviour {
@@ -65,19 +66,17 @@ public class PressurePlate : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col) {
 		if (!alreadyTriggered) {
-			if (col.name == "Block") {
+			if (col.name == ObjNames.BLOCK) {
 				selfSprite.sprite = sprtActive;
 				SoundFXHandler.script.PlayFX(switchOn);
 				spike.SetPosition();
-				if (OnNewTarget != null) {
-					OnNewTarget(spike.transform.position);
-				}
+				OnNewTarget?.Invoke(spike.transform.position);
 				BlockScript.pressurePlateTriggered = true;
 			}
 		}
 	}
 	void OnTriggerExit2D(Collider2D col) {
-		if (col.name == "Block") {
+		if (col.name == ObjNames.BLOCK) {
 			attempts++;
 			if (attempts == 1) {
 				Canvas_Renderer.script.DisplayInfo("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
@@ -86,6 +85,7 @@ public class PressurePlate : MonoBehaviour {
 				Canvas_Renderer.script.DisplayInfo(null, "Aaand again... darn.");
 			}
 			if (attempts == 3) {
+				Canvas_Renderer.script.DisplayInfo(null, "Alright enough.");
 				CreateBarrier();
 			}
 			SoundFXHandler.script.PlayFX(switchOff);
@@ -95,10 +95,12 @@ public class PressurePlate : MonoBehaviour {
 		}
 	}
 	public void CreateBarrier() {
-		Canvas_Renderer.script.DisplayInfo(null, "Ok, let me help you a little.");
 		GameObject protection = Instantiate(wall, transform.position + new Vector3(10, 0, 0), Quaternion.identity, transform.parent);
-		protection.name = "Blocker";
+		protection.name = ObjNames.PRESSURE_PLATE_WALL;
 		protection.transform.localScale = new Vector3(0.2f, 0.1f, 1);
+		Rigidbody2D rb = protection.AddComponent<Rigidbody2D>();
+		rb.isKinematic = true;
+		rb.useFullKinematicContacts = true;
 	}
 
 	private void OnDestroy() {

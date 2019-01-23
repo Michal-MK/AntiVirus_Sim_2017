@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Igor.Constants.Strings;
 using UnityEngine;
 
 public class Icicle : Projectile {
@@ -12,20 +12,17 @@ public class Icicle : Projectile {
 	private int hitCount = 1;
 
 	private void OnCollisionEnter2D(Collision2D col) {
-		if (col.transform.name == "Block") {
+		if (col.transform.name == ObjNames.BLOCK) {
 			FadeSetup();
 		}
-	}
-
-	private void OnTriggerEnter2D(Collider2D col) {
-		if (col.name == "Blocker") {
+		if (col.transform.name == ObjNames.PRESSURE_PLATE_WALL) {
 			FadeSetup();
 		}
 	}
 
 	private void FadeSetup() {
 		selfRender.sprite = crackedIcicleSprite;
-		gameObject.tag = Igor.Constants.Strings.Tags.ENEMY_INACTIVE;
+		gameObject.tag = Tags.ENEMY_INACTIVE;
 		StartCoroutine(Fade());
 		SpawnParticles();
 		selfRigid.velocity /= 1.4f;

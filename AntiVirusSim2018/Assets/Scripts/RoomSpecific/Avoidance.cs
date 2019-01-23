@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,8 +56,9 @@ public class Avoidance : MonoBehaviour {
 		yield return new WaitForSeconds(10);
 		foreach (TurretAttack turret in turrets) {
 			turret.CleanUp();
-			Destroy(turret);
+			Destroy(turret.gameObject);
 		}
+		turrets = null;
 	}
 
 	private IEnumerator TimeLeft() {

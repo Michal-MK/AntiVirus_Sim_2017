@@ -17,7 +17,7 @@ public class Timer : MonoBehaviour {
 		get {
 			float current = getTime;
 			if (current != 0) {
-				print(current.ToString().Remove(0, current.ToString().Length - 2));
+				//print(current.ToString().Remove(0, current.ToString().Length - 2));
 				return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)current / 60, current % 60, current.ToString().Remove(0, current.ToString().Length - 2));
 			}
 			else {

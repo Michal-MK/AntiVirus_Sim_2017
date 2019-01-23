@@ -22,6 +22,8 @@ namespace Igor {
 				public const string SPIKE = "Spike";
 				public const string MENU_CHOOSE_DIFFICULTY = "Select Difficulty";
 				public const string AVOIDANCE_SIGN = "_SignPost Avoidance";
+				public const string BLOCK = "Block";
+				public const string PRESSURE_PLATE_WALL = "Blocking Wall";
 			}
 
 			public class BackgroundNames {

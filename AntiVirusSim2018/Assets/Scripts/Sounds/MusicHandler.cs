@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicHandler : SoundBase {
@@ -10,13 +12,19 @@ public class MusicHandler : SoundBase {
 	public AudioClip room_1_boss;
 	public AudioClip darkWorld;
 
-	public AudioClip gameOver;
+	public Dictionary<AudioClip, float> positions = new Dictionary<AudioClip, float>();
 
-	private AudioClip current;
+	public AudioClip gameOver;
 
 	public static MusicHandler script;
 
 	private bool isPlaying => source.isPlaying;
+
+	private bool isTransitioning = false;
+
+	private Coroutine transitionRoutine;
+
+	public const float fadeSpeed = 0.001f;
 
 	private void Awake() {
 		if (script == null) {
@@ -30,6 +38,12 @@ public class MusicHandler : SoundBase {
 	private void Start() {
 		M_Player.OnRoomEnter += NewRoom;
 		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
+		positions.Add(room1_1, 0);
+		positions.Add(room1_2, 0);
+		positions.Add(room1_3_avoidance, 0);
+		positions.Add(room_maze, 0);
+		positions.Add(room_1_boss, 0);
+		positions.Add(darkWorld, 0);
 	}
 
 
@@ -76,12 +90,13 @@ public class MusicHandler : SoundBase {
 	}
 
 	#endregion
+
 	/// <summary>
 	/// Starts playing music from 0 volume fading in for 1 second
 	/// </summary>
 	public void PlayMusic(AudioClip clip) {
 		if (!isPlaying) {
-			StartCoroutine(_PlayMusic(clip));
+			transitionRoutine = StartCoroutine(_PlayMusic(clip));
 		}
 	}
 
@@ -89,7 +104,9 @@ public class MusicHandler : SoundBase {
 	/// Fade out music for 1 second
 	/// </summary>
 	public void FadeMusic() {
-		StartCoroutine(_FadeMusic());
+		if (!isTransitioning) {
+			StartCoroutine(_FadeMusic());
+		}
 	}
 
 	/// <summary>
@@ -97,45 +114,73 @@ public class MusicHandler : SoundBase {
 	/// </summary>
 	public void TransitionMusic(AudioClip newClip) {
 		if (isPlaying) {
-			StartCoroutine(_TransitionMusic(newClip));
+			if (transitionRoutine != null) {
+				StopCoroutine(transitionRoutine);
+			}
+			transitionRoutine = StartCoroutine(_TransitionMusic(newClip));
 		}
 		else {
-			StartCoroutine(_PlayMusic(newClip));
-			Canvas_Renderer.script.DisplayInfo("Nothing to transition from! Playing normally", null);
+			PlayMusic(newClip);
 		}
 	}
 
 	private IEnumerator _PlayMusic(AudioClip clip) {
-		source.clip = current = clip;
+		isTransitioning = true;
+		source.clip = clip;
 		source.Play();
-		source.volume = 0;
-		for (float f = 0; f < 1; f += Time.unscaledDeltaTime * 0.5f) {
-			source.volume = Mathf.Lerp(0, GameSettings.audioVolume, f);
-			yield return null;
-		}
-		source.volume = GameSettings.audioVolume;
+		yield return _TransitionVolume(0, GameSettings.audioVolume);
+		isTransitioning = false;
 	}
 
 	private IEnumerator _FadeMusic() {
+		isTransitioning = true;
 		float originalVolume = source.volume;
-		for (float f = 0; f < 1; f += Time.unscaledDeltaTime * 0.5f) {
-			source.volume = Mathf.Lerp(originalVolume, 0, f);
-			yield return null;
-		}
-		current = null;
-		source.volume = 0;
+		yield return _TransitionVolume(originalVolume, 0);
+		positions[source.clip] = 0;
 		source.Stop();
+		isTransitioning = false;
 	}
 
 	private IEnumerator _TransitionMusic(AudioClip clip) {
-		if (clip == current) {
-			print("Transitioning to the same clip, skipping");
+		isTransitioning = true;
+		float originalVolume = source.volume;
+
+		if (clip == source.clip) {
+			yield return _TransitionVolume(originalVolume, GameSettings.audioVolume);
+			isTransitioning = false;
 			yield break;
 		}
-		yield return _FadeMusic();
-		yield return _PlayMusic(clip);
+
+		yield return _TransitionVolume(originalVolume, 0);
+		positions[source.clip] = source.time;
+		source.clip = clip;
+		source.time = positions[source.clip];
+		source.Play();
+		yield return _TransitionVolume(0, GameSettings.audioVolume);
+
+		isTransitioning = false;
 	}
 
+	private void TransitionVolume(float initValue, float endValue) {
+		StartCoroutine(_TransitionVolume(initValue, endValue));
+	}
+
+	private IEnumerator _TransitionVolume(float initValue, float endValue) {
+		if (initValue < endValue) {
+			for (float f = initValue; f < endValue; f += fadeSpeed) {
+				source.volume = f;
+				yield return null;
+			}
+			source.volume = endValue;
+		}
+		else {
+			for (float f = initValue; f > endValue; f -= fadeSpeed) {
+				source.volume = f;
+				yield return null;
+			}
+			source.volume = endValue;
+		}
+	}
 
 	private void OnDestroy() {
 		script = null;
