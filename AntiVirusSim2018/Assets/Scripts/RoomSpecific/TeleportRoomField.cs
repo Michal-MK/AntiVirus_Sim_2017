@@ -48,7 +48,7 @@ public class TeleportRoomField : MonoBehaviour {
 			foreach (Transform t in pathFields) {
 				t.GetChild(0).gameObject.SetActive(false);
 			}
-			MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 8));
+			MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 10));
 		}
 		sender.OnLeverSwitch -= L_OnLeverSwitch;
 	}
@@ -65,7 +65,7 @@ public class TeleportRoomField : MonoBehaviour {
 	private void OnTopRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
 		if(background == MapData.script.GetTransition(MapData.script.GetRoomLink(7,9))) {
 			print("Entering Transition to top room");
-			MapData.script.GetRoom(10).background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
+			MapData.script.GetRoom(9).background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
 			M_Player.OnRoomEnter -= OnTopRoomEnter;
 		}
 	}

@@ -28,7 +28,7 @@ public class SignPost : MonoBehaviour {
 				break;
 			}
 			case "_SignPost Room 1": {
-				Canvas_Renderer.script.DisplayInfo("All the spikes you are collecting have a purpouse, hold on to them.", null);
+				Canvas_Renderer.script.DisplayInfo("All the spikes you are collecting have a purpose, hold on to them.", null);
 				break;
 			}
 			case "_SignPost PostAvoidance": {
@@ -39,13 +39,17 @@ public class SignPost : MonoBehaviour {
 				Canvas_Renderer.script.DisplayInfo("The coins are up to no use... yet", null);
 				break;
 			}
+			case "_SignPost PreBossEntrance": {
+				Canvas_Renderer.script.DisplayInfo("Your real challenge awaits inside this portal. Are you prepared? Sorry I can not help.", null);
+				break;
+			}
 			case "_SignPost PreBoss": {
-				Canvas_Renderer.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the taget. Sorry for telling you this late lel. No regrets.", null);
+				Canvas_Renderer.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the target. Sorry for telling you this late lel. No regrets.", null);
 				break;
 			}
 			case "_SignPost LaserRoom": {
 				Canvas_Renderer.script.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
-																		  "This is the seventh sign, but you found only " + readPosts.Count + " dissapointed.", null);
+																		  "This is the seventh sign, but you found only " + readPosts.Count + " disappointed.", null);
 				if (readPosts.Count == 6) {
 					Coin.coinsCollected++;
 				}

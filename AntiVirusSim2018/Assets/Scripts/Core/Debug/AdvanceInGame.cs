@@ -28,7 +28,9 @@ public class AdvanceInGame : MonoBehaviour {
 						return;
 					}
 					case 3: {
-						FindObjectOfType<Avoidance>().avoidDuration = 2f;
+						FindObjectOfType<Avoidance>().avoidDuration = 6f;
+						FindObjectOfType<Avoidance>().GetType().GetMethod("SignPost_OnAvoidanceBegin", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(FindObjectOfType<Avoidance>(),null);
+						
 						FindObjectOfType<Avoidance>().StartAvoidance();
 						MapData.script.OpenDoor(MapData.script.GetRoomLink(2, 3));
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
@@ -63,22 +65,16 @@ public class AdvanceInGame : MonoBehaviour {
 			print("++++");
 			FindObjectOfType<Player_Movement>().SetMovementMode((Player_Movement.PlayerMovement)movementTypeCounter);
 			movementTypeCounter++;
-			movementTypeCounter = movementTypeCounter % 5;
+			movementTypeCounter = movementTypeCounter % 4;
 		}
 	}
 
 	private IEnumerator FirstBoss() {
 		M_Player.player.transform.position = FindObjectOfType<BossEntrance>().transform.position;
-		yield return new WaitForSeconds(3);
-		GameObject g = FindObjectOfType<BossHealth>().healthIndicator.gameObject;
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(2);
 		StartCoroutine(FindObjectOfType<BossHealth>().Death());
 		FindObjectOfType<BossBehaviour>().StopAllCoroutines();
-
-		Destroy(FindObjectOfType<BossBehaviour>().gameObject);
 		MapData.script.OpenDoor(MapData.script.GetRoomLink(5, 6));
-		yield return new WaitForSeconds(1);
-		Destroy(g);
 		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
 	}

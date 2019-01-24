@@ -198,8 +198,6 @@ public class CameraMovement : MonoBehaviour {
 	/// <summary>
 	/// Configures particle systems dimensions and particle lifetime
 	/// </summary>
-	/// <param name="time">particles lifetime</param>
-	/// <param name="room">room for which to configure, null = camera</param>
 	public void ConfigureParticles(float time, RectTransform room) {
 		ParticleSystem.ShapeModule shapeA = psAbove.shape;
 		psBelow.gameObject.SetActive(false);

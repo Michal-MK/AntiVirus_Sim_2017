@@ -76,9 +76,7 @@ public class BossBehaviour : MonoBehaviour {
 
 
 	void Start() {
-		if (OnBossfightBegin != null) {
-			OnBossfightBegin(this);
-		}
+		OnBossfightBegin?.Invoke(this);
 		playerSpeedMultiplier = 5;
 		BG = MapData.script.GetBackgroundBoss(1);
 		player = M_Player.player.gameObject;

@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class BossHealth : MonoBehaviour {
 
-	public BossBehaviour behaviour;
-
-	//Prefab
+	//Prefabs
 	public GameObject bossHealth;
 	public ParticleSystem deathParticles;
 
+	public BossBehaviour behaviour;
+
 	private ParticleSystem instantiatedParticles;
+
 	public Slider healthIndicator;
 
 	public GameObject ShieldT;
@@ -22,10 +23,8 @@ public class BossHealth : MonoBehaviour {
 
 	public Vector3 tpLocation;
 
-	private bool topShieldUp = false;
-	private bool rightShieldUp = false;
-	private bool bottomShieldUp = false;
-	private bool leftShieldUp = false;
+	public AudioClip bossDeathExplosions;
+
 	private bool once = true;
 
 	void Start() {
@@ -63,9 +62,9 @@ public class BossHealth : MonoBehaviour {
 	}
 
 	public void CheckShields() {
-		if (topShieldUp && rightShieldUp && bottomShieldUp && leftShieldUp && once) {
+		if (healthIndicator.value == 1 && once) {
 			Canvas_Renderer.script.DisplayInfo("His shields are up ... but we got a bomb!\n " +
-												"Switch to it in Attack mode by pressing \"Right Mouse Button\"",
+												"Switch to it in Attack mode by pressing \"Right Mouse Button\"", //TODO
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
 		}
@@ -73,61 +72,51 @@ public class BossHealth : MonoBehaviour {
 
 	public void RaiseShields(Directions where) {
 		switch (where) {
-			case Directions.TOP:
-			ShieldT.SetActive(true);
-			topShieldUp = true;
-			break;
-
-			case Directions.RIGHT:
-			ShieldR.SetActive(true);
-			rightShieldUp = true;
-			break;
-
-
-			case Directions.BOTTOM:
-			ShieldB.SetActive(true);
-			bottomShieldUp = true;
-			break;
-
-			case Directions.LEFT:
-			ShieldL.SetActive(true);
-			leftShieldUp = true;
-			break;
+			case Directions.TOP: {
+				ShieldT.SetActive(true);
+				break;
+			}
+			case Directions.RIGHT: {
+				ShieldR.SetActive(true);
+				break;
+			}
+			case Directions.BOTTOM: {
+				ShieldB.SetActive(true);
+				break;
+			}
+			case Directions.LEFT: {
+				ShieldL.SetActive(true);
+				break;
+			}
 		}
 	}
 
 	public IEnumerator Death() {
-		M_Player.gameProgression = 10;
-
 		behaviour.selfAnim.enabled = false;
 		behaviour.selfRigid.velocity = Vector2.zero;
-		behaviour.enabled = false;
 		behaviour.StopAllCoroutines();
+		behaviour.enabled = false;
 
 		instantiatedParticles = Instantiate(deathParticles.gameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
-		GetComponent<AudioSource>().Play();
-		yield return new WaitForSeconds(5);
+
+		SoundFXHandler.script.PlayFXLoop(bossDeathExplosions, 4);
+		yield return new WaitForSeconds(4);
 		foreach (SpriteRenderer sprR in transform.parent.GetComponentsInChildren<SpriteRenderer>()) {
 			for (float f = 0; f <= 1; f += 0.1f) {
 				sprR.color = new Color(1, 1, 1, 1 - f);
 				yield return null;
 			}
 		}
-		//print("Stopping emmission");
-		ParticleSystem.EmissionModule e = instantiatedParticles.emission;
-		e.enabled = false;
-		yield return new WaitForSeconds(1);
-		GetComponent<AudioSource>().loop = false;
-		yield return new WaitForSeconds(1);
+		Destroy(instantiatedParticles.gameObject);
 
-		//print("One s to destruction.");
+		yield return new WaitForSeconds(1);
 		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1.2f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
-		Destroy(instantiatedParticles.gameObject);
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		MapData.script.Progress(M_Player.gameProgression);
+		MapData.script.Progress(M_Player.gameProgression = 10);
+
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
 		M_Player.player.transform.position = tpLocation + new Vector3(0, 10);
@@ -135,6 +124,7 @@ public class BossHealth : MonoBehaviour {
 		CameraMovement.script.inBossRoom = false;
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
 		Control.script.saveManager.canSave = true;
+		Player_Movement.canMove = true;
 		Destroy(transform.parent.gameObject);
 		Destroy(healthIndicator.gameObject);
 		Canvas_Renderer.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);

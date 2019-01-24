@@ -52,13 +52,13 @@ public class Avoidance : MonoBehaviour {
 		spike.SetPosition();
 		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		performed = true;
-		StopAllCoroutines();
 		yield return new WaitForSeconds(10);
 		foreach (TurretAttack turret in turrets) {
 			turret.CleanUp();
 			Destroy(turret.gameObject);
 		}
 		turrets = null;
+		StopAllCoroutines();
 	}
 
 	private IEnumerator TimeLeft() {

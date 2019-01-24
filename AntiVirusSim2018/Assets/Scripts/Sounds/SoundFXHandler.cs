@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class SoundFXHandler : SoundBase {
 
@@ -37,19 +38,38 @@ public class SoundFXHandler : SoundBase {
 	}
 
 	public void PlayFX(AudioClip newClip) {
-		bool added = false;
-		foreach (AudioSource s in sources) {
-			if (s.clip == null) {
-				added = true;
-				s.clip = newClip;
-				s.Play();
-				StartCoroutine(RemoveClipAfterFinish(s));
-				return;
-			}
+		AudioSource source = FindFreeSource();
+		if (source != null) {
+			source.clip = newClip;
+			source.Play();
+			StartCoroutine(RemoveClipAfterFinish(source));
 		}
-		if (!added) {
+		else {
 			print("Not Enough Sound players to play " + newClip.name);
 		}
+	}
+
+	public IEnumerator PlayFXLoop(AudioClip loopingEffect, float loopDuration) {
+		AudioSource source = FindFreeSource();
+		if(source != null) {
+			source.clip = loopingEffect;
+			source.loop = true;
+			source.Play();
+			yield return new WaitForSeconds(loopDuration);
+			source.loop = false;
+		}
+		else {
+			print("Not Enough Sound players to play looping " + loopingEffect.name);
+		}
+	}
+
+	private AudioSource FindFreeSource() {
+		foreach (AudioSource s in sources) {
+			if (s.clip == null) {
+				return s;
+			}
+		}
+		return null;
 	}
 
 	public void PlayFxChannel(int channel, AudioClip newClip) {
@@ -61,6 +81,7 @@ public class SoundFXHandler : SoundBase {
 	public IEnumerator RemoveClipAfterFinish(AudioSource s) {
 		yield return new WaitUntil(() => !s.isPlaying);
 		s.clip = null;
+		s.loop = false;
 	}
 
 	private void OnDestroy() {
