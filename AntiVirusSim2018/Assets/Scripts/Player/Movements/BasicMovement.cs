@@ -22,7 +22,7 @@ public class BasicMovement : MonoBehaviour, IPlayerMovement {
 		}
 	}
 
-	public float movementSpeed = 50;
+	public float movementSpeed { get; set; } = 50;
 
 	public float movementDrag = 30;
 

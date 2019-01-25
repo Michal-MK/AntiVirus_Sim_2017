@@ -8,6 +8,7 @@ public class TeleportationMovement : MonoBehaviour, IPlayerMovement {
 	public PlayerMovement movementType => PlayerMovement.TELEPORT;
 
 	public PlayerMovementModifiers movementModifier { get; set; } = PlayerMovementModifiers.NONE;
+	public float movementSpeed { get; set; } = 0;
 
 	public AudioClip FX_Teleport;
 	public Rigidbody2D body;

@@ -38,8 +38,7 @@ namespace Igor {
 				};
 
 				public static string GetRealName(string gameObjectName) {
-					string s;
-					if(realNames.TryGetValue(gameObjectName, out s)) {
+					if (realNames.TryGetValue(gameObjectName, out string s)) {
 						return s;
 					}
 					return "Intersection";
@@ -73,6 +72,8 @@ namespace Igor {
 				public const string ENEMY_KILLERBLOCK_BOSS = "Enemies/Boss/Enemy_KillerBlockBoss";
 				public const string ENEMY_KILLERBLOCK = "Enemies/KillerBlock";
 				public const string ENEMY_TURRET = "Enemies/Turret";
+
+				public const string CAGE = "Bossfight/Cage";
 			}
 
 			public class EnemyNames {

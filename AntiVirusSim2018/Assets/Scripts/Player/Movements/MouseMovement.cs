@@ -21,9 +21,10 @@ public class MouseMovement : MonoBehaviour, IPlayerMovement {
 		}
 	}
 
+	public float movementSpeed { get; set; } = 0.03f;
+
 	public Rigidbody2D body;
 
-	public float movementSpeed = 0.03f;
 	public float movementDrag = 30;
 
 	public void Setup(Rigidbody2D body) {
