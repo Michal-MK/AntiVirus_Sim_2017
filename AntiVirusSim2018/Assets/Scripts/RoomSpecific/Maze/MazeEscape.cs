@@ -1,4 +1,5 @@
 using Igor.Constants.Strings;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class MazeEscape : MonoBehaviour {
 
 	public GameObject wall;
 
-	public static event Maze.MazeBehaviour OnMazeEscape;
+	public static event EventHandler OnMazeEscape;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == Tags.PLAYER) {
@@ -26,7 +27,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		OnMazeEscape?.Invoke();
+		OnMazeEscape?.Invoke(this, EventArgs.Empty);
 
 		Zoom.canZoom = true;
 		M_Player.player.transform.position = entrance.transform.position;

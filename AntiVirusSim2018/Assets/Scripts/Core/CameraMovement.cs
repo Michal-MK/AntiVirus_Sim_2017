@@ -45,13 +45,13 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	#region Events
-	private void MazeEntrance_OnMazeEnter() {
+	private void MazeEntrance_OnMazeEnter(object sender, EventArgs e) {
 		psAbove.gameObject.SetActive(false);
 		psBelow.gameObject.SetActive(false);
 		inMaze = true;
 	}
 
-	private void MazeEscape_OnMazeEscape() {
+	private void MazeEscape_OnMazeEscape(object sender, EventArgs e) {
 		ParticleSystem.ShapeModule shapeA = psAbove.shape;
 		ParticleSystem.ShapeModule shapeB = psBelow.shape;
 
