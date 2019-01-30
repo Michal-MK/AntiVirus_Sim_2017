@@ -1,4 +1,5 @@
 using Igor.Constants.Strings;
+using System;
 using System.Collections;
 using UnityEngine;
 using WindowsInput;
@@ -9,7 +10,7 @@ public class MazeEntrance : MonoBehaviour {
 
 	public float playerIdleTime = 6;
 
-	public static event Maze.MazeBehaviour OnMazeEnter;
+	public static event EventHandler OnMazeEnter;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == Tags.PLAYER) {
@@ -51,9 +52,7 @@ public class MazeEntrance : MonoBehaviour {
 	}
 
 	private void MazeTransition() {
-		if (OnMazeEnter != null) {
-			OnMazeEnter();
-		}
+		OnMazeEnter?.Invoke(this,EventArgs.Empty);
 
 		CameraMovement.script.transform.position = new Vector3(maze.middleCell.position.x, maze.middleCell.position.y, -10);
 		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, maze.mazeSize/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
@@ -63,7 +62,6 @@ public class MazeEntrance : MonoBehaviour {
 		M_Player.player.transform.position = maze.grid[rndEdge.x, rndEdge.y].transform.position;
 		M_Player.player.transform.localScale = new Vector3(2, 2, 0);
 		maze.playerEntrancePosition = rndEdge;
-
 
 
 		Control.script.saveManager.canSave = false;
@@ -77,16 +75,11 @@ public class MazeEntrance : MonoBehaviour {
 	}
 
 	private IEnumerator LerpCamPos(Vector3 start, Vector3 end) {
-		for (float f = 0; f < 2; f += Time.deltaTime) {
-			if (f < 1) {
-				float x = Mathf.Lerp(start.x, end.x, f);
-				float y = Mathf.Lerp(start.y, end.y, f);
-				CameraMovement.script.transform.position = new Vector3(x, y, -10);
-				yield return null;
-			}
-			else {
-				break;
-			}
+		for (float f = 0; f <= 1; f += Time.deltaTime) {
+			float x = Mathf.Lerp(start.x, end.x, f);
+			float y = Mathf.Lerp(start.y, end.y, f);
+			CameraMovement.script.transform.position = new Vector3(x, y, -10);
+			yield return null;
 		}
 	}
 }

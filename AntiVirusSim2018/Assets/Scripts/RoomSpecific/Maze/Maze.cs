@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Maze : MonoBehaviour {
 
-	public delegate void MazeBehaviour();
-
 	public GameObject cellPrefab;
 	public GameObject wallVertical;
 	public GameObject wallHorizontal;
@@ -51,8 +49,9 @@ public class Maze : MonoBehaviour {
 				GameObject cell = Instantiate(cellPrefab, transform.position + new Vector3((i * cellWidth * 2), (j * cellWidth * 2), 0), Quaternion.identity, gameObject.transform);
 				cell.name = "Cell " + i + " " + j;
 
-				cell.GetComponent<Cell>().selfX = i;
-				cell.GetComponent<Cell>().selfY = j;
+				Cell cellScript = cell.GetComponent<Cell>();
+				cellScript.selfX = i;
+				cellScript.selfY = j;
 
 				GameObject wallT = Instantiate(Control.currDifficulty < 3 ? wallHorizontal : wallHorizontalDmg, cell.transform);
 				GameObject wallR = Instantiate(Control.currDifficulty < 3 ? wallVertical : wallVerticalDmg, cell.transform);
@@ -90,7 +89,7 @@ public class Maze : MonoBehaviour {
 			}
 			case 1: {
 				getMazeSpeedMultiplier = 2.75f;
-				return 21;
+				return 19;
 			}
 			case 2: {
 				getMazeSpeedMultiplier = 2.75f;
@@ -135,36 +134,30 @@ public class Maze : MonoBehaviour {
 
 		while (stack.Count > 0) {
 			chosenNeighbor = GetRandomNeighbor(xPos, yPos, ref current);
+			string nameCurrent;
+			string nameNeighbor;
 
 			yield return null;
 			if (chosenNeighbor.transform.position.x < current.transform.position.x) {
-				string nameCurrent = "WallLeft";
-				string nameNeighbor = "WallRight";
-
-				current.transform.Find(nameCurrent).gameObject.SetActive(false);
-				chosenNeighbor.transform.Find(nameNeighbor).gameObject.SetActive(false);
+				 nameCurrent = "WallLeft";
+				 nameNeighbor = "WallRight";
 			}
 			else if (chosenNeighbor.transform.position.x > current.transform.position.x) {
-				string nameCurrent = "WallRight";
-				string nameNeighbor = "WallLeft";
-
-				current.transform.Find(nameCurrent).gameObject.SetActive(false);
-				chosenNeighbor.transform.Find(nameNeighbor).gameObject.SetActive(false);
+				 nameCurrent = "WallRight";
+				 nameNeighbor = "WallLeft";
 			}
 			else if (chosenNeighbor.transform.position.y < current.transform.position.y) {
-				string nameCurrent = "WallBottom";
-				string nameNeighbor = "WallTop";
-
-				current.transform.Find(nameCurrent).gameObject.SetActive(false);
-				chosenNeighbor.transform.Find(nameNeighbor).gameObject.SetActive(false);
+				 nameCurrent = "WallBottom";
+				 nameNeighbor = "WallTop";
 			}
-			else if (chosenNeighbor.transform.position.y > current.transform.position.y) {
-				string nameCurrent = "WallTop";
-				string nameNeighbor = "WallBottom";
-
-				current.transform.Find(nameCurrent).gameObject.SetActive(false);
-				chosenNeighbor.transform.Find(nameNeighbor).gameObject.SetActive(false);
+			else {
+				 nameCurrent = "WallTop";
+				 nameNeighbor = "WallBottom";
 			}
+
+			current.transform.Find(nameCurrent).gameObject.SetActive(false);
+			chosenNeighbor.transform.Find(nameNeighbor).gameObject.SetActive(false);
+
 			stack.Push(chosenNeighbor);
 			current = chosenNeighbor;
 		}
@@ -226,12 +219,12 @@ public class Maze : MonoBehaviour {
 	/// Returns a vector of maze array indexes
 	/// </summary>
 	/// <param name="antiBias">Supply a vector to prevent getting simillar results.</param>
-	public Vector2Int GetEdgeCell(Vector2Int antiBias = default(Vector2Int)) {
+	public Vector2Int GetEdgeCell(Vector2Int antiBias = default) {
 		Directions dir = (Directions)Random.Range(0, 4);
 		switch (dir) {
 			case Directions.TOP: {
 				Vector2Int vec = new Vector2Int(Random.Range(0, rowColCount), rowColCount - 1);
-				if (antiBias != default(Vector2Int) && Vector2Int.Distance(antiBias, vec) <= 5) {
+				if (antiBias != default && Vector2Int.Distance(antiBias, vec) <= 5) {
 					return GetEdgeCell(antiBias);
 				}
 				else {
@@ -240,7 +233,7 @@ public class Maze : MonoBehaviour {
 			}
 			case Directions.RIGHT: {
 				Vector2Int vec = new Vector2Int(0, Random.Range(0, rowColCount));
-				if (antiBias != default(Vector2Int) && Vector2Int.Distance(antiBias, vec) <= 5) {
+				if (antiBias != default && Vector2Int.Distance(antiBias, vec) <= 5) {
 					return GetEdgeCell(antiBias);
 				}
 				else {
@@ -249,7 +242,7 @@ public class Maze : MonoBehaviour {
 			}
 			case Directions.BOTTOM: {
 				Vector2Int vec = new Vector2Int(Random.Range(0, rowColCount), 0);
-				if (antiBias != default(Vector2Int) && Vector2Int.Distance(antiBias, vec) <= 5) {
+				if (antiBias != default && Vector2Int.Distance(antiBias, vec) <= 5) {
 					return GetEdgeCell(antiBias);
 				}
 				else {
@@ -258,7 +251,7 @@ public class Maze : MonoBehaviour {
 			}
 			case Directions.LEFT: {
 				Vector2Int vec = new Vector2Int(rowColCount - 1, Random.Range(0, rowColCount));
-				if (antiBias != default(Vector2Int) && Vector2Int.Distance(antiBias, vec) <= 5) {
+				if (antiBias != default && Vector2Int.Distance(antiBias, vec) <= 5) {
 					return GetEdgeCell(antiBias);
 				}
 				else {
