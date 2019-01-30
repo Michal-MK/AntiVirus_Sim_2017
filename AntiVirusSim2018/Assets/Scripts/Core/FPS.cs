@@ -4,22 +4,14 @@ public class FPS : MonoBehaviour {
 
 	private float deltaTime = 0.0f;
 	private GUIStyle style;
-	private int w, h;
 	private Rect rect;
 
 
 	void Start() {
-#if UNITY_STANDALONE
-		int quality = QualitySettings.GetQualityLevel();
-		if (quality != 6) {
-			enabled = false;
-			return;
-		}
-#endif
 		style = new GUIStyle();
-		w = Screen.width;
-		h = Screen.height;
-		rect = new Rect(w / 2, 0, w, h * 2 / 100);
+		int w = Screen.width;
+		int h = Screen.height;
+		rect = new Rect(w / 2, 20, w, h * 2 / 100);
 		style.alignment = TextAnchor.UpperLeft;
 		style.fontSize = h * 2 / 50;
 		style.normal.textColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);

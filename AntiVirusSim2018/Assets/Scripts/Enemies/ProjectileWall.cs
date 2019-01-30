@@ -48,11 +48,11 @@ public class ProjectileWall : MonoBehaviour {
 		GameObject projectilePrefab;
 		switch (type) {
 			case Enemy.EnemyType.PROJECTILE_SIMPLE: {
-				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
+				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
 				break;
 			}
 			case Enemy.EnemyType.PROJECTILE_ACCURATE: {
-				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_ACCURATE) as GameObject;
+				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject;
 				break;
 			}
 			case Enemy.EnemyType.PROJECTILE_ICICLE: {
@@ -92,7 +92,7 @@ public class ProjectileWall : MonoBehaviour {
 
 	private void Spawn() {
 		Projectile wallShot = pool.getNext.GetComponent<Projectile>();
-		wallShot.isPooled = wallShot.isDestroyable = true;
+		wallShot.isDestroyable = true;
 		wallShot.gameObject.tag = Tags.ENEMY;
 		wallShot.transform.rotation = Quaternion.AngleAxis(spriteRotation, Vector3.back);
 		wallShot.transform.position = KWProjectilePositions(origin);

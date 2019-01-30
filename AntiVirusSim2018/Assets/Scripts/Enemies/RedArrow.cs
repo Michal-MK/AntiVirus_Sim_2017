@@ -40,13 +40,4 @@ public class RedArrow : Projectile {
 			col.enabled = true;
 		}
 	}
-
-	private int collidersOut = 0;
-	protected override void OnTriggerExit2D(Collider2D col) {
-		collidersOut++;
-		if(collidersOut == TOTAL_COLLIDERS) {
-			Kill();
-			collidersOut = 0;
-		}
-	}
 }

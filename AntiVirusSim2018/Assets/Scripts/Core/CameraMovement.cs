@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using Igor.Constants.Strings;
+using System;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -28,10 +29,12 @@ public class CameraMovement : MonoBehaviour {
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
+		NewBossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin2;
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
 		script = this;
 	}
+
 
 	void Start() {
 		Cursor.visible = false;
@@ -64,6 +67,10 @@ public class CameraMovement : MonoBehaviour {
 	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
 		BossFightCam(1);
 	}
+	private void BossBehaviour_OnBossfightBegin2(object sender, BossEncouterEventArgs e) {
+		BossFightCam(1);
+	}
+
 
 	#endregion
 

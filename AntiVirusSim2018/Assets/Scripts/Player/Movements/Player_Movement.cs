@@ -22,10 +22,12 @@ public class Player_Movement : MonoBehaviour {
 
 	public static bool canMove { get; set; } = true;
 
-	public PlayerMovement getCurrentMovementMode { get; private set; } = PlayerMovement.MOUSE;
+	public PlayerMovement getCurrentMovementMode { get; private set; } = PlayerMovement.ARROW;
 	public PlayerMovementModifiers getCurrentMovementModifier { get; private set; } = PlayerMovementModifiers.NONE;
 
 	public IPlayerMovement movementMethod;
+
+	public bool overrideMovementMethod = false;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -33,8 +35,8 @@ public class Player_Movement : MonoBehaviour {
 		SetMovementMode(getCurrentMovementMode);
 		SetMovementModifier(getCurrentMovementModifier);
 
-		overrideMovement = getCurrentMovementMode;
-		overrideModifier = getCurrentMovementModifier;
+		//overrideMovement = getCurrentMovementMode;
+		//overrideModifier = getCurrentMovementModifier;
 	}
 
 	private void OnPaused(object sender, PauseEventArgs e) {
@@ -50,13 +52,15 @@ public class Player_Movement : MonoBehaviour {
 		if (getCurrentMovementMode != PlayerMovement.FLAPPY && canMove) {
 			movementMethod.Move();
 		}
-		if (overrideModifier != getCurrentMovementModifier) {
-			SetMovementModifier(overrideModifier);
-			getCurrentMovementModifier = overrideModifier;
-		}
-		if (overrideMovement != getCurrentMovementMode) {
-			SetMovementMode(overrideMovement);
-			getCurrentMovementMode = overrideMovement;
+		if (overrideMovementMethod) {
+			if (overrideModifier != getCurrentMovementModifier) {
+				SetMovementModifier(overrideModifier);
+				getCurrentMovementModifier = overrideModifier;
+			}
+			if (overrideMovement != getCurrentMovementMode) {
+				SetMovementMode(overrideMovement);
+				getCurrentMovementMode = overrideMovement;
+			}
 		}
 	}
 

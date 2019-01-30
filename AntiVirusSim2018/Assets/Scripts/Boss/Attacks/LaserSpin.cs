@@ -5,9 +5,6 @@ using UnityEngine;
 namespace Igor.Boss.Attacks {
 	public class LaserSpin : IAttackPattern {
 
-		private GameObject brimstone;
-
-
 		private RectTransform topBrim;
 		private RectTransform rightBrim;
 		private RectTransform bottomBrim;
@@ -19,47 +16,35 @@ namespace Igor.Boss.Attacks {
 		private GameObject brimstonePrefab;
 		private GameObject boss;
 		private MonoBehaviour bossBehaviour;
-		private RectTransform arenaTransform;
+		private RectTransform arenaBackground;
 
 		public Vector3 startPosition { get; set; }
 
 		public bool isAttackInProgress { get; set; }
 
-		public LaserSpin(GameObject boss, Vector3 start, GameObject brimstone, RectTransform arenaBackground) {
-			startPosition = start;
+		public LaserSpin(GameObject boss, Vector3 startPosition, RectTransform arenaBackground) {
+			this.startPosition = startPosition;
 			this.boss = boss;
+			this.arenaBackground = arenaBackground;
+
 			bossBehaviour = boss.GetComponent<MonoBehaviour>();
-			brimstonePrefab = brimstone;
-			this.arenaTransform = arenaTransform;
+			brimstonePrefab = Resources.Load<GameObject>(PrefabNames.BOSS_BRIMSTONE);
 		}
 
 		public IEnumerator Attack() {
-			isAttackInProgress = true;
 
 			boss.GetComponent<ParticleSystem>().Emit(100);
-			yield return new WaitForSeconds(2f);
+			yield return new WaitForSeconds(2);
 
+			SpawnBrim(ref topBrim, "Top");
+			SpawnBrim(ref rightBrim, "Right");
+			SpawnBrim(ref bottomBrim, "Bottom");
+			SpawnBrim(ref leftBrim, "Left");
 
-			topBrim = Object.Instantiate(brimstonePrefab, boss.transform).GetComponent<RectTransform>();
-			topBrim.transform.localPosition = Vector3.zero;
-			topBrim.name = "Top";
-
-			rightBrim = Object.Instantiate(brimstonePrefab, boss.transform).GetComponent<RectTransform>();
-			rightBrim.transform.localPosition = Vector3.zero;
-			rightBrim.name = "Right";
-
-			bottomBrim = Object.Instantiate(brimstonePrefab, boss.transform).GetComponent<RectTransform>();
-			bottomBrim.transform.localPosition = Vector3.zero;
-			bottomBrim.name = "Bottom";
-
-			leftBrim = Object.Instantiate(brimstonePrefab, boss.transform).GetComponent<RectTransform>();
-			leftBrim.transform.localPosition = Vector3.zero;
-			leftBrim.name = "Left";
-
+			isAttackInProgress = true;
 			bossBehaviour.StartCoroutine(VariedRotation());
 
 			yield return new WaitForSeconds(35);
-			//--//
 
 			topBrim.gameObject.SetActive(false);
 			rightBrim.gameObject.SetActive(false);
@@ -71,11 +56,16 @@ namespace Igor.Boss.Attacks {
 			isAttackInProgress = false;
 		}
 
+		private void SpawnBrim(ref RectTransform brimRef, string name) {
+			brimRef = Object.Instantiate(brimstonePrefab, boss.transform).GetComponent<RectTransform>();
+			brimRef.transform.localPosition = Vector3.zero;
+			brimRef.name = name;
+		}
+
 		public IEnumerator VariedRotation() {
 			rotationDelta = 0.1f;
 			zRotation = 0;
-			//this is why the attack is broken!!! - but keep it on harder difficulties because it is fun lel
-			while (true) {
+			while (isAttackInProgress) {
 				yield return new WaitForSeconds(Random.Range(2, 4));
 				rotationDelta = Chance.Half() ? Random.Range(0.4f, 1f) : Random.Range(-1, -0.4f);
 			}
@@ -87,34 +77,22 @@ namespace Igor.Boss.Attacks {
 
 			LayerMask mask = LayerMask.GetMask(Layers.WALLS);
 
-			RaycastHit2D up = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.up, arenaTransform.sizeDelta.x * 2, mask.value);
-			RaycastHit2D right = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.right, arenaTransform.sizeDelta.x * 2, mask.value);
-			RaycastHit2D down = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.down, arenaTransform.sizeDelta.x * 2, mask.value);
-			RaycastHit2D left = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.left, arenaTransform.sizeDelta.x * 2, mask.value);
+			RaycastHit2D up = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.up, arenaBackground.sizeDelta.x * 2, mask.value);
+			RaycastHit2D right = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.right, arenaBackground.sizeDelta.x * 2, mask.value);
+			RaycastHit2D bottom = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.down, arenaBackground.sizeDelta.x * 2, mask.value);
+			RaycastHit2D left = Physics2D.Raycast(boss.transform.position, boss.transform.rotation * Vector3.left, arenaBackground.sizeDelta.x * 2, mask.value);
 
-			//print(up.transform.name);
+			UpdatePosition(topBrim, up.point);
+			UpdatePosition(rightBrim, right.point);
+			UpdatePosition(bottomBrim, bottom.point);
+			UpdatePosition(leftBrim, left.point);
+		}
 
-			float distance;
-
-			distance = Vector3.Distance(boss.transform.position, up.point);
-			topBrim.position = ((Vector2)boss.transform.position + up.point) * 0.5f;
-			topBrim.localScale = new Vector3(1, distance / topBrim.sizeDelta.y, 1);
-			topBrim.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)up.point - new Vector3(boss.transform.position.x, boss.transform.position.y, 0)));
-
-			distance = Vector3.Distance(boss.transform.position, right.point);
-			rightBrim.position = ((Vector2)boss.transform.position + right.point) * 0.5f;
-			rightBrim.localScale = new Vector3(1, distance / rightBrim.sizeDelta.y, 1);
-			rightBrim.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)right.point - new Vector3(boss.transform.position.x, boss.transform.position.y, 0)));
-
-			distance = Vector3.Distance(boss.transform.position, down.point);
-			bottomBrim.position = ((Vector2)boss.transform.position + down.point) * 0.5f;
-			bottomBrim.localScale = new Vector3(1, distance / bottomBrim.sizeDelta.y, 1);
-			bottomBrim.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)down.point - new Vector3(boss.transform.position.x, boss.transform.position.y, 0)));
-
-			distance = Vector3.Distance(boss.transform.position, left.point);
-			leftBrim.position = ((Vector2)boss.transform.position + left.point) * 0.5f;
-			leftBrim.localScale = new Vector3(1, distance / leftBrim.sizeDelta.y, 1);
-			leftBrim.rotation = Quaternion.FromToRotation(Vector3.up, ((Vector3)left.point - new Vector3(boss.transform.position.x, boss.transform.position.y, 0)));
+		private void UpdatePosition(RectTransform brimstone, Vector2 hitPoint) {
+			float distance = Vector2.Distance(boss.transform.position, hitPoint);
+			brimstone.position = ((Vector2)boss.transform.position + hitPoint) * 0.5f;
+			brimstone.localScale = new Vector3(1, distance / brimstone.sizeDelta.y, 1);
+			brimstone.rotation = Quaternion.FromToRotation(Vector3.up, hitPoint - new Vector2(boss.transform.position.x, boss.transform.position.y));
 		}
 	}
 }

@@ -25,8 +25,9 @@ public class ObjectPool {
 				return null;
 			}
 			else {
-				GameObject newObj = GameObject.Instantiate(pooledObject);
+				GameObject newObj = UnityEngine.Object.Instantiate(pooledObject);
 				getAllInstantiated.Add(newObj);
+				newObj.GetComponent<IPoolable>().isPooled = true;
 				return newObj;
 			}
 		}

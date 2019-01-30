@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Movement))]
 public class Projectile : Enemy {
 
 	public float projectileSpeed { get; set; } = 15;
 	protected Rigidbody2D selfRigid;
 	protected SpriteRenderer selfRender;
+
 
 	protected virtual void OnEnable() {
 		selfRigid = GetComponent<Rigidbody2D>();
@@ -15,16 +17,21 @@ public class Projectile : Enemy {
 
 	public void Fire(float delay = 0) {
 		if (delay != 0) {
+			selfRigid.velocity = Vector2.zero;
 			StartCoroutine(DelayedFire(delay));
 		}
 		else {
-			selfRigid.velocity = transform.up * -projectileSpeed;
+			Movement m = gameObject.GetComponent<Movement>();
+			m.direction = transform.up * -projectileSpeed;
+			m.MoveAndDestroyOnWallLeave();
 		}
 	}
 
 	private IEnumerator DelayedFire(float delay) {
 		yield return new WaitForSeconds(delay);
-		selfRigid.velocity = transform.up * -projectileSpeed;
+		Movement m = gameObject.GetComponent<Movement>();
+		m.direction = transform.up * -projectileSpeed;
+		m.MoveAndDestroyOnWallLeave();
 	}
 
 
@@ -38,12 +45,6 @@ public class Projectile : Enemy {
 		Kill();
 		if (isPooled) {
 			selfRender.color = new Color(1, 1, 1, 1);
-		}
-	}
-	
-	protected virtual void OnTriggerExit2D(Collider2D col) {
-		if (col.tag == Igor.Constants.Strings.Tags.BACKGROUND) {
-			Kill();
 		}
 	}
 }

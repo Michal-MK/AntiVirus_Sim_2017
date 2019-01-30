@@ -5,53 +5,70 @@ using UnityEngine;
 namespace Igor.Boss.Attacks {
 	public class LoopBulletSpawn : IAttackPattern {
 
-		private ObjectPool pool_EnemyProjectile;
 		private GameObject boss;
 		private MonoBehaviour bossBehaviour;
 
+		private ObjectPool pool_EnemyProjectile;
+
+		private GameObject cageObj;
 		private float cageSize;
-
-		public Vector3 startPosition { get; set; }
-
 		private Vector3 cagePosition;
+
+		private RectTransform backgroundTransform;
 
 		private int totalCircles;
 
-		public GameObject cageObj;
+		public bool isAttackInProgress { get; set; }
+		public Vector3 startPosition { get; set; }
 
-		public LoopBulletSpawn(GameObject boss, Vector3 start, Vector3 cagePosition) {
-			totalCircles = 2;
-			pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE_INACCUARATE) as GameObject);
-			startPosition = start;
+
+		public LoopBulletSpawn(GameObject boss, Vector3 startPosition, Vector3 cagePosition, RectTransform backgroundTransform) {
+			this.startPosition = startPosition;
 			this.boss = boss;
 			this.cagePosition = cagePosition;
+			this.backgroundTransform = backgroundTransform;
+
+			totalCircles = 2;
+
+			pool_EnemyProjectile = new ObjectPool(Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject);
+			cageObj = Resources.Load<GameObject>(PrefabNames.CAGE);
 			bossBehaviour = boss.GetComponent<MonoBehaviour>();
 		}
 
-		public bool isAttackInProgress { get; set; }
 
 		public IEnumerator Attack() {
 			isAttackInProgress = true;
-			MoveScript positioningCage = Object.Instantiate(cageObj, M_Player.player.transform.position, Quaternion.identity).GetComponent<MoveScript>();
-			yield return new WaitForSeconds(2);
+			M_Player.player.pMovement.movementMethod.movementSpeed = 10;
+			GameObject positioningCage = Object.Instantiate(cageObj, M_Player.player.transform.position, Quaternion.identity);
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, cagePosition, Time.deltaTime / 2, null));
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, cagePosition, Time.deltaTime / 2, null));
-			positioningCage.destroy = true;
+
 			yield return new WaitForSeconds(3);
 			Canvas_Renderer.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
 
 			bossBehaviour.StartCoroutine(Caged(positioningCage.gameObject, 1.1f));
-			for (int i = 0; i <= totalCircles; i++) {
-				yield return new WaitForSeconds(15f);
+			SpriteRenderer arenaSprite = backgroundTransform.GetComponent<SpriteRenderer>();
+			Vector3[] positions = new[]{
+				SpriteOffsets.GetPoint(arenaSprite,12,12),
+				SpriteOffsets.GetPoint(arenaSprite,88,12),
+				SpriteOffsets.GetPoint(arenaSprite,88,88),
+				SpriteOffsets.GetPoint(arenaSprite,12,88),
+			};
+
+			float timeToCover = 5;
+			for (int i = 0; i < totalCircles; i++) {
+				bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(boss, positions, timeToCover));
+				yield return new WaitForSeconds(timeToCover * positions.Length);
 			}
-			yield return new WaitForSeconds(2f);
-			Object.Destroy(positioningCage.gameObject);
 			isAttackInProgress = false;
+			M_Player.player.pMovement.movementMethod.movementSpeed = 50;
+			yield return new WaitForSeconds(2);
+			Object.Destroy(positioningCage.gameObject);
 		}
 
 		public IEnumerator Caged(GameObject cage, float waitTime) {
+			cageSize = cage.GetComponent<RectTransform>().sizeDelta.x / 2;
 			while (isAttackInProgress) {
-				cageSize = cage.GetComponent<RectTransform>().sizeDelta.x / 2;
 				Vector3 target = GetPosInCage(cage);
 				yield return new WaitForSeconds(waitTime);
 				Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();

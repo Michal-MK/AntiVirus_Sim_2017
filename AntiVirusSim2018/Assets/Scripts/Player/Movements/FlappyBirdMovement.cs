@@ -11,8 +11,8 @@ public class FlappyBirdMovement : MonoBehaviour, IPlayerMovement {
 	private bool canFlapAgain = true;
 	private Rigidbody2D body;
 
-	public float flappyGravity = 8;
-	public float flappyForceScale = 35;
+	public float flappyGravity = 12;
+	public float flappyForceScale = 60;
 
 	public void Setup(Rigidbody2D body) {
 		this.body = body;

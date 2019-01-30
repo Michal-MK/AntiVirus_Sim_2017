@@ -21,7 +21,12 @@ public class BossEntrance : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.tag == Tags.PLAYER && !lockin) {
-			if (M_Player.player.pAttack.bombs > 0 && M_Player.player.pAttack.bullets == 5) {
+
+			print("Debug");
+			M_Player.player.pAttack.bullets = 5;
+			M_Player.player.pAttack.bombs = 1;
+
+			if (M_Player.player.pAttack.bombs > 0 && M_Player.player.pAttack.bullets >= 5) {
 				CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1);
 				CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 				lockin = true;
@@ -37,9 +42,6 @@ public class BossEntrance : MonoBehaviour {
 												   "MuHAHaHaa!!!", "Explore this location further.");
 			}
 
-			print("Debug");
-			M_Player.player.pAttack.bullets = 5;
-			M_Player.player.pAttack.bombs = 1;
 		}
 	}
 
