@@ -1053,15 +1053,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7224e168fa86a94f887f7e2e4bf28e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossHealth: {fileID: 0}
+  bossHealth: {fileID: 1407855708280686, guid: 6360b455712ca3044a54edc8ffbeaf2f, type: 3}
   deathParticles: {fileID: 6591184198481973389}
-  behaviour: {fileID: 0}
+  behaviour: {fileID: 6811189375122090069}
   healthIndicator: {fileID: 0}
-  ShieldT: {fileID: 1840660826413385299}
-  ShieldR: {fileID: 498438830391721525}
-  ShieldB: {fileID: 3224960730844799713}
-  ShieldL: {fileID: 5970928653678089837}
-  tpLocation: {x: 0, y: 0, z: 0}
+  shields:
+  - {fileID: 1840660826413385299}
+  - {fileID: 498438830391721525}
+  - {fileID: 3224960730844799713}
+  - {fileID: 5970928653678089837}
+  bulletColliders:
+  - {fileID: 6226699019525771883}
+  - {fileID: 3670364114695009134}
+  - {fileID: 1402436929591843255}
+  - {fileID: 4777948099660369581}
   bossDeathExplosions: {fileID: 8300000, guid: 074e2046c754e6540b21e378648f9087, type: 3}
 --- !u!1 &5970928653678089837
 GameObject:
@@ -1289,7 +1294,7 @@ GameObject:
   - component: {fileID: 6591184198481973389}
   - component: {fileID: 8535595621747241298}
   m_Layer: 14
-  m_Name: New
+  m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1337,11 +1342,6 @@ MonoBehaviour:
   Invincible: {fileID: 21300000, guid: 6ff18bdb47c0c474aaa15caf7a61114b, type: 3}
   Damageable: {fileID: 21300000, guid: 325778a8c5a1a93438408658219be46b, type: 3}
   selfRender: {fileID: 29257997406926056}
-  selfSpikeHitboxes:
-  - {fileID: 6226699019525771883}
-  - {fileID: 3670364114695009134}
-  - {fileID: 1402436929591843255}
-  - {fileID: 4777948099660369581}
   selfHealth: {fileID: 8391493001038031543}
 --- !u!198 &6591184198481973389
 ParticleSystem:

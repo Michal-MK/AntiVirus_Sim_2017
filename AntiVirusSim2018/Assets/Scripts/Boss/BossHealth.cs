@@ -6,26 +6,23 @@ using UnityEngine.UI;
 
 public class BossHealth : MonoBehaviour {
 
-	//Prefabs
 	public GameObject bossHealth;
 	public ParticleSystem deathParticles;
+
 
 	public BossBehaviour behaviour;
 
 	private ParticleSystem instantiatedParticles;
-
 	public Slider healthIndicator;
 
-	public GameObject ShieldT;
-	public GameObject ShieldR;
-	public GameObject ShieldB;
-	public GameObject ShieldL;
-
-	public Vector3 tpLocation;
+	public GameObject[] shields = new GameObject[4];
+	public Collider2D[] bulletColliders = new Collider2D[4];
 
 	public AudioClip bossDeathExplosions;
 
 	private bool once = true;
+
+
 
 	void Start() {
 		if (GameObject.Find("BossHealth") != null) {
@@ -40,24 +37,27 @@ public class BossHealth : MonoBehaviour {
 		}
 		healthIndicator.gameObject.SetActive(true);
 		healthIndicator.value = 5;
-		//healthIndicator.value = 1;
-		//print("Debug");
 	}
 
-	public void Collided(GameObject it, GameObject with) {
+	public void OnCollision(GameObject bullet, GameObject bulletHitbox) {
 
-		if (it.name == ObjNames.BULLET) {
-			it.SetActive(false);
+		if (bullet.name == ObjNames.BULLET) {
+			bullet.SetActive(false);
 			healthIndicator.value--;
-			RaiseShields(with.name.ToDirection());
-			for (int i = 0; i < behaviour.spikeHitboxes.Length; i++) {
-				behaviour.spikeHitboxes[i].enabled = false;
-			}
+			shields[(int)bulletHitbox.name.ToDirection()].SetActive(true);
+			CheckShields();
+			SetDamageable(false);
 			behaviour.selfRender.sprite = behaviour.Invincible;
 		}
 		if (healthIndicator.value == 0) {
-			Destroy(with);
+			Destroy(bulletHitbox);
 			StartCoroutine(Death());
+		}
+	}
+
+	public void SetDamageable(bool state) {
+		for (int i = 0; i < bulletColliders.Length; i++) {
+			bulletColliders[i].enabled = state;
 		}
 	}
 
@@ -70,30 +70,7 @@ public class BossHealth : MonoBehaviour {
 		}
 	}
 
-	public void RaiseShields(Directions where) {
-		switch (where) {
-			case Directions.TOP: {
-				ShieldT.SetActive(true);
-				break;
-			}
-			case Directions.RIGHT: {
-				ShieldR.SetActive(true);
-				break;
-			}
-			case Directions.BOTTOM: {
-				ShieldB.SetActive(true);
-				break;
-			}
-			case Directions.LEFT: {
-				ShieldL.SetActive(true);
-				break;
-			}
-		}
-	}
-
 	public IEnumerator Death() {
-		behaviour.selfAnim.enabled = false;
-		behaviour.selfRigid.velocity = Vector2.zero;
 		behaviour.StopAllCoroutines();
 		behaviour.enabled = false;
 
@@ -102,7 +79,7 @@ public class BossHealth : MonoBehaviour {
 		SoundFXHandler.script.PlayFXLoop(bossDeathExplosions, 4);
 		yield return new WaitForSeconds(4);
 		foreach (SpriteRenderer sprR in transform.parent.GetComponentsInChildren<SpriteRenderer>()) {
-			for (float f = 0; f <= 1; f += 0.1f) {
+			for (float f = 0; f <= 1; f += 0.02f) { 
 				sprR.color = new Color(1, 1, 1, 1 - f);
 				yield return null;
 			}
@@ -119,7 +96,7 @@ public class BossHealth : MonoBehaviour {
 
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
-		M_Player.player.transform.position = tpLocation + new Vector3(0, 10);
+		M_Player.player.transform.position = FindObjectOfType<BossEntrance>().transform.position + new Vector3(0, 10);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 		CameraMovement.script.inBossRoom = false;
 		Camera.main.orthographicSize = CameraMovement.defaultCamSize;

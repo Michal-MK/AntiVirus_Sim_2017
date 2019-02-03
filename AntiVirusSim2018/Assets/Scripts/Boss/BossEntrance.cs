@@ -54,13 +54,14 @@ public class BossEntrance : MonoBehaviour {
 		RectTransform bossBG = MapData.script.GetBackgroundBoss(1);
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room_1_boss);
 		GameObject spawnedBoss = Instantiate(boss, bossBG.transform.position - new Vector3(0, bossBG.sizeDelta.y / 3), Quaternion.identity);
-		spawnedBoss.GetComponentInChildren<BossHealth>().tpLocation = transform.position;
 		spawnedBoss.name = "Boss";
+		Player_Movement.playerMovementSpeedMultiplier = 5;
 		GameObject health = Instantiate(bossHP, HPHolder.transform.position, Quaternion.identity, HPHolder.transform);
 		health.name = "BossHealth";
 		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, bossBG.sizeDelta.x * Screen.height / Screen.width * 0.5f, 0.15f, new Vector3(bossBG.position.x, bossBG.position.y, -10)));
 		bossHP.SetActive(true);
 		Control.script.saveManager.canSave = false;
+		Player_Movement.canMove = false;
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 }

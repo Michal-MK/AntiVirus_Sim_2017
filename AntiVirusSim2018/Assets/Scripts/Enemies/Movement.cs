@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour {
 	private bool destroyOnBackgroundLeave;
 	private bool destroyOnWallLeave;
 
+	#region Movement & Destroy calls
 
 	public void MoveAndDestroyOnWallLeave() {
 		destroyOnWallLeave = true;
@@ -45,6 +46,8 @@ public class Movement : MonoBehaviour {
 		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().isPooled;
 		Move();
 	}
+
+	#endregion
 
 	public void Move() {
 		GetComponent<Rigidbody2D>().velocity = direction;
@@ -83,24 +86,23 @@ public class Movement : MonoBehaviour {
 	}
 
 	#region Collision Checkers
+
 	private void OnTriggerEnter2D(Collider2D collision) {
 		Conditions(collision.tag, true);
 	}
 
 	private void OnTriggerExit2D(Collider2D collision) {
 		Conditions(collision.tag, false);
-
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
 		Conditions(collision.transform.tag, true);
-
 	}
 
 	private void OnCollisionExit2D(Collision2D collision) {
 		Conditions(collision.transform.tag, false);
-
 	}
+
 	#endregion
 
 	private void Destroy() {

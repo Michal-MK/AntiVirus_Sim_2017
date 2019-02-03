@@ -24,7 +24,7 @@ public class MusicHandler : SoundBase {
 
 	private Coroutine transitionRoutine;
 
-	public const float fadeSpeed = 0.001f;
+	public const float transitionTime = 2;
 
 	private void Awake() {
 		if (script == null) {
@@ -143,15 +143,15 @@ public class MusicHandler : SoundBase {
 
 	private IEnumerator _TransitionMusic(AudioClip clip) {
 		isTransitioning = true;
-		float originalVolume = source.volume;
+		float currentVolume = source.volume;
 
 		if (clip == source.clip) {
-			yield return _TransitionVolume(originalVolume, GameSettings.audioVolume);
+			yield return _TransitionVolume_SameClip(currentVolume);
 			isTransitioning = false;
 			yield break;
 		}
 
-		yield return _TransitionVolume(originalVolume, 0);
+		yield return _TransitionVolume(currentVolume, 0);
 		positions[source.clip] = source.time;
 		source.clip = clip;
 		source.time = positions[source.clip];
@@ -161,20 +161,29 @@ public class MusicHandler : SoundBase {
 		isTransitioning = false;
 	}
 
-	private void TransitionVolume(float initValue, float endValue) {
-		StartCoroutine(_TransitionVolume(initValue, endValue));
+	private IEnumerator _TransitionVolume_SameClip(float currentVolume) {
+		float fadeVal = Mathf.Lerp(0, GameSettings.audioVolume, Time.unscaledDeltaTime / transitionTime);
+		for (float f = currentVolume; f < GameSettings.audioVolume; f += fadeVal) {
+			source.volume = f;
+			yield return null;
+		}
+		source.volume = GameSettings.audioVolume;
 	}
 
 	private IEnumerator _TransitionVolume(float initValue, float endValue) {
+
 		if (initValue < endValue) {
-			for (float f = initValue; f < endValue; f += fadeSpeed) {
+			float fadeVal = Mathf.Lerp(initValue, endValue, Time.unscaledDeltaTime / transitionTime);
+
+			for (float f = initValue; f < endValue; f += fadeVal) {
 				source.volume = f;
 				yield return null;
 			}
 			source.volume = endValue;
 		}
 		else {
-			for (float f = initValue; f > endValue; f -= fadeSpeed) {
+			float fadeVal = Mathf.Lerp(endValue, initValue, Time.unscaledDeltaTime / transitionTime);
+			for (float f = initValue; f > endValue; f -= fadeVal) {
 				source.volume = f;
 				yield return null;
 			}

@@ -21,6 +21,7 @@ public class Player_Movement : MonoBehaviour {
 	public PlayerMovementModifiers overrideModifier;
 
 	public static bool canMove { get; set; } = true;
+	public static float playerMovementSpeedMultiplier { get; set; } = 1;
 
 	public PlayerMovement getCurrentMovementMode { get; private set; } = PlayerMovement.ARROW;
 	public PlayerMovementModifiers getCurrentMovementModifier { get; private set; } = PlayerMovementModifiers.NONE;

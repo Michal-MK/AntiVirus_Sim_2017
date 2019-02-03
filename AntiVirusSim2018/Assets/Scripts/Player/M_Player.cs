@@ -97,7 +97,7 @@ public class M_Player : MonoBehaviour {
 				gameObject.GetComponent<BoxCollider2D>().enabled = false;
 				collision.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
-			collision.transform.parent = GameObject.Find("Collectibles").transform;
+			//collision.transform.SetParent(null, false);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();
 		}
@@ -108,7 +108,7 @@ public class M_Player : MonoBehaviour {
 			if (col.gameObject.GetComponent<Rigidbody2D>() != null) {
 				col.gameObject.GetComponent<Rigidbody2D>().velocity /= 10;
 			}
-			col.transform.SetParent(null);
+			//col.transform.SetParent(null, false);
 			face.sprite = sad;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ELShock);
 			GameOver();

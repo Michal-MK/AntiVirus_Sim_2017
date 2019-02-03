@@ -12,7 +12,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 	public void TakeDamage(GameObject by, WeaponType type) {
 		switch (type) {
 			case WeaponType.BULLET: {
-				hp.Collided(by, gameObject);
+				hp.OnCollision(by, gameObject);
 				break;
 			}
 			case WeaponType.BOMB: {

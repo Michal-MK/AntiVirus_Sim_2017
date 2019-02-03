@@ -21,15 +21,15 @@ public class CameraMovement : MonoBehaviour {
 
 	public ParticleSystem psAbove;
 	public ParticleSystem psBelow;
-
-	private bool _doneMoving = true;
 	public const float defaultCamSize = 15;
+
+	public bool isCameraDoneMoving { get; private set; } = true;
+
 
 	public static CameraMovement script;
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
-		NewBossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin2;
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
 		script = this;
@@ -64,14 +64,10 @@ public class CameraMovement : MonoBehaviour {
 		inMaze = false;
 	}
 
-	private void BossBehaviour_OnBossfightBegin(BossBehaviour sender) {
+	private void BossBehaviour_OnBossfightBegin(object sender, BossEncouterEventArgs e) {
 		BossFightCam(1);
 	}
-	private void BossBehaviour_OnBossfightBegin2(object sender, BossEncouterEventArgs e) {
-		BossFightCam(1);
-	}
-
-
+	
 	#endregion
 
 	public void RaycastForRooms() {
@@ -146,7 +142,7 @@ public class CameraMovement : MonoBehaviour {
 
 
 	public IEnumerator LerpSize(float startSize, float finalSize, float lerpSpeedMult, Vector3 pos = default(Vector3)) {
-		_doneMoving = false;
+		isCameraDoneMoving = false;
 		if (pos != default(Vector3)) {
 			transform.position = pos;
 			yield return new WaitForSeconds(0.5f);
@@ -156,7 +152,7 @@ public class CameraMovement : MonoBehaviour {
 			yield return null;
 		}
 		Camera.main.orthographicSize = finalSize;
-		_doneMoving = true;
+		isCameraDoneMoving = true;
 	}
 
 	public float camX {
@@ -220,9 +216,4 @@ public class CameraMovement : MonoBehaviour {
 		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
-
-	public bool isCameraDoneMoving {
-		get { return _doneMoving; }
-	}
-
 }

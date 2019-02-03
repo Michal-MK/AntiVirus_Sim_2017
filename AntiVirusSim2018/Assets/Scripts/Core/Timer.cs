@@ -18,7 +18,9 @@ public class Timer : MonoBehaviour {
 			float current = getTime;
 			if (current != 0) {
 				float divided = current / 60;
-				return string.Format("{0:00}:{1:00}.{2:00} minutes", (int)divided, current % 60, divided % 60);
+				int modulo = (int)divided % 60;
+
+				return string.Format("{0:00}:{1:00}.{2:000} {3}", modulo, (int)current % 60, (int)(current * 1000 % 1000), modulo == 0 ? "seconds" : "minute(s)");
 			}
 			else {
 				return "0";

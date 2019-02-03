@@ -1,5 +1,5 @@
 ﻿public enum Directions {
-	TOP,
+	TOP = 0,
 	RIGHT,
 	BOTTOM,
 	LEFT,

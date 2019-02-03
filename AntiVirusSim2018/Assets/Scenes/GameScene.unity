@@ -17147,7 +17147,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &460457958
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43547,7 +43547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 302.07, y: -117.85}
+  m_AnchoredPosition: {x: 302.5, y: -119}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1574297772
@@ -43563,7 +43563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 1574297774}
-  overrideMovement: 0
+  overrideMovement: 3
   overrideModifier: 0
   overrideMovementMethod: 0
 --- !u!61 &1574297773
@@ -43633,7 +43633,7 @@ MonoBehaviour:
   smile: {fileID: 21300000, guid: ecda8c94ad4f59f4d984b1c73c28f6ab, type: 3}
   happy: {fileID: 21300000, guid: 8ef7510ae6dc9b34fa182a125407f316, type: 3}
   sad: {fileID: 21300000, guid: d127f0f3d4860af478ebacf335e32b91, type: 3}
-  isInvincible: 1
+  isInvincible: 0
 --- !u!114 &1574297778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58626,7 +58626,6 @@ GameObject:
   - component: {fileID: 1871248956}
   - component: {fileID: 1871248958}
   - component: {fileID: 1871248957}
-  - component: {fileID: 1871248959}
   m_Layer: 11
   m_Name: Background_Boss_1
   m_TagString: BG
@@ -58727,21 +58726,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1871248959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1871248955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d674634649086d44c8b3ad626bdda40b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &1878975515
 GameObject:
   m_ObjectHideFlags: 0
@@ -58962,7 +58946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slideInText: {fileID: 994226660}
-  infoPanel: {fileID: 967240772}
+  infoPanelText: {fileID: 880425351}
   coinCounter: {fileID: 444506490}
   spikeCounter: {fileID: 1326466219}
   isRunning: 0

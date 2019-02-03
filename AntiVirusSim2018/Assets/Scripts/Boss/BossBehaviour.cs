@@ -5,14 +5,13 @@ using Igor.Boss.Attacks;
 using System;
 using Random = UnityEngine.Random;
 
-public class NewBossBehaviour : Enemy {
+public class BossBehaviour : Enemy {
 
 	#region Outside References
 	public Sprite Invincible;
 	public Sprite Damageable;
 
 	public SpriteRenderer selfRender;
-	public BoxCollider2D[] selfSpikeHitboxes = new BoxCollider2D[4];
 	public BossHealth selfHealth;
 
 
@@ -41,9 +40,7 @@ public class NewBossBehaviour : Enemy {
 	}
 
 	private IEnumerator InitialAttack() {
-		for (int i = 0; i < selfSpikeHitboxes.Length; i++) {
-			selfSpikeHitboxes[i].enabled = false;
-		}
+		selfHealth.SetDamageable(false);
 		selfRender.sprite = Invincible;
 
 		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
@@ -53,22 +50,19 @@ public class NewBossBehaviour : Enemy {
 		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my control. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
 		yield return new WaitForSeconds(1);
 
-		StartCoroutine(InterPhase());
+		StartCoroutine(Attack(Random.Range(0, attacks.Count)));
 	}
 
 	public IEnumerator InterPhase() {
-		for (int i = 0; i < selfSpikeHitboxes.Length; i++) {
-			selfSpikeHitboxes[i].enabled = true;
-		}
+		selfHealth.SetDamageable(true);
+
 		selfRender.sprite = Damageable;
 		int choice = ChooseAttack();
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(5);
 
 		StartCoroutine(Attack(choice));
 
-		for (int i = 0; i < selfSpikeHitboxes.Length; i++) {
-			selfSpikeHitboxes[i].enabled = false;
-		}
+		selfHealth.SetDamageable(false);
 	}
 
 	public int ChooseAttack() {

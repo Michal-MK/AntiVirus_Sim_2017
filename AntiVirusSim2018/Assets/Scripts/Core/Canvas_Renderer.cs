@@ -10,9 +10,8 @@ public class Canvas_Renderer : MonoBehaviour {
 	public Text slideInText;
 	private Animator slideAnim;
 
-	public GameObject infoPanel;
+	public Text infoPanelText;
 	private Animator infoPanelAnim;
-	private Text infoPanelText;
 
 	public Text coinCounter;
 	public Text spikeCounter;
@@ -45,8 +44,8 @@ public class Canvas_Renderer : MonoBehaviour {
 
 	private void Start() {
 		slideAnim = slideInText.GetComponent<Animator>();
-		infoPanelAnim = infoPanel.GetComponent<Animator>();
-		infoPanelText = infoPanel.GetComponentInChildren<Text>();
+		infoPanelAnim = infoPanelText.transform.parent.GetComponent<Animator>();
+		infoPanelText = infoPanelText.GetComponentInChildren<Text>();
 
 		Transform dirArrows = transform.Find("_DirectionArrows");
 		topDirectionArrows = dirArrows.Find("Up").gameObject;
