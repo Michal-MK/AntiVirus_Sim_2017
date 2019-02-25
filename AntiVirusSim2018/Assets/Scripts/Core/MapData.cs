@@ -51,7 +51,7 @@ public class MapData : MonoBehaviour {
 		foreach (SignPost sign in FindObjectsOfType<SignPost>()) {
 			sign.MapStanceSwitch(mode);
 		}
-		foreach (ProjectileWall wall in FindObjectsOfType<ProjectileWall>()) {
+		foreach (ProjectileWallController wall in FindObjectsOfType<ProjectileWallController>()) {
 			wall.MapStanceSwitch(mode);
 		}
 
@@ -132,12 +132,28 @@ public class MapData : MonoBehaviour {
 				return t;
 			}
 		}
-		throw new System.Exception("Transition between " + link.from.roomID + " to " + link.to.roomID + " does not exist!");
+		throw new Exception("Transition between " + link.from.roomID + " to " + link.to.roomID + " does not exist!");
 	}
 
 	private void OnDestroy() {
 		script = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+	}
+
+	public bool IsOneOfAdjecentLinks(RectTransform background, int roomID) {
+		Room room = GetRoom(roomID);
+		string[] transitionNamesSplit = transitions.Where( trans => {
+			string[] split = trans.name.Split('_');
+			string roomIDString = room.roomID.ToString();
+			return split[2] == roomIDString || split[3] == roomIDString;
+		}).Select(t => t.name ).ToArray();
+
+		foreach (string s in transitionNamesSplit) {
+			if (string.Equals(s, background.name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Door[] getAllDoors {
@@ -157,7 +173,7 @@ public class MapData : MonoBehaviour {
 	private Room NumberToRoom(int index) {
 		Room r = GameObject.Find("Room_" + index).GetComponent<Room>();
 		if (r == null) {
-			throw new System.Exception("Unable to find a room with index: " + index);
+			throw new Exception("Unable to find a room with index: " + index);
 		}
 		return r;
 	}

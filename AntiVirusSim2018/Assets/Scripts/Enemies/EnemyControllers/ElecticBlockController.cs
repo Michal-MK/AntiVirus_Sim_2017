@@ -59,5 +59,6 @@ public class ElecticBlockController : IEnemyControler {
 		foreach (ElecticalBlock b in blocks) {
 			Object.Destroy(b.gameObject);
 		}
+		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
 	}
 }

@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour {
 	public GameObject projectileWallPrefab;
 	#endregion
 
-	private List<ProjectileWall> currentProjectileWalls = new List<ProjectileWall>();
+	private List<ProjectileWallController> currentProjectileWalls = new List<ProjectileWallController>();
 
 	private RectTransform arrowtrapBG;
 
@@ -49,34 +49,31 @@ public class EnemySpawner : MonoBehaviour {
 	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
 		if (background == MapData.script.GetRoom(2).background) {
 			if (currentProjectileWalls.Count == 0) {
-				ProjectileWall currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWall>();
+				ProjectileWallController currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWallController>();
 				currentProjectileWall.origin = Directions.RIGHT;
 				currentProjectileWall.spawnInterval = 0.7f;
-				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWall>());
+				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
 
 				currentProjectileWalls[0].SetProjecileType(Enemy.EnemyType.PROJECTILE_ICICLE);
-
 			}
 		}
 		else if (background == MapData.script.GetRoom(9).background) {
 			if (currentProjectileWalls.Count == 0) {
-				ProjectileWall currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWall>();
+				ProjectileWallController currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWallController>();
 				currentProjectileWall.origin = Directions.TOP;
 				currentProjectileWall.spawnInterval = 1.2f;
-				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWall>());
+				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
 
 				currentProjectileWalls[0].SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
 
-
 				currentProjectileWall.origin = Directions.BOTTOM;
 				currentProjectileWall.spawnInterval = 0.8f;
-				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWall>());
+				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
 				currentProjectileWalls[1].SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
-
 			}
 		}
 		else if (currentProjectileWalls.Count != 0) {
-			foreach (ProjectileWall wall in currentProjectileWalls) {
+			foreach (ProjectileWallController wall in currentProjectileWalls) {
 				Destroy(wall.gameObject);
 			}
 			currentProjectileWalls.Clear();

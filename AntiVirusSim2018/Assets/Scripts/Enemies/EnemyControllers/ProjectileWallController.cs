@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using Igor.Constants.Strings;
 using System;
+using Random = UnityEngine.Random;
 
-public class ProjectileWall : MonoBehaviour {
+public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 
 	private RectTransform background;
 	private ObjectPool pool;
@@ -16,11 +16,20 @@ public class ProjectileWall : MonoBehaviour {
 	private float height = 0;
 	private float spriteRotation;
 
+	private bool spawnLoop = true;
+
+	public GameObject enemyPrefab { get; private set; }
+
+	public Room activeRoom => MapData.script.GetRoom(2);
+
+	public bool respawnOnReEntry => true;
+
+
 	private void Start() {
 		background = transform.parent.GetComponent<RectTransform>();
 		width = background.sizeDelta.x / 2;
 		height = background.sizeDelta.y / 2;
-
+		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
 
 		switch (origin) {
 			case Directions.TOP: {
@@ -45,25 +54,24 @@ public class ProjectileWall : MonoBehaviour {
 	}
 
 	public void SetProjecileType(Enemy.EnemyType type) {
-		GameObject projectilePrefab;
 		switch (type) {
 			case Enemy.EnemyType.PROJECTILE_SIMPLE: {
-				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
+				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
 				break;
 			}
 			case Enemy.EnemyType.PROJECTILE_ACCURATE: {
-				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject;
+				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject;
 				break;
 			}
 			case Enemy.EnemyType.PROJECTILE_ICICLE: {
-				projectilePrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
+				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
 				break;
 			}
 			default: {
 				throw new Exception("Not a valid enemy type " + type);
 			}
 		}
-		pool = new ObjectPool(projectilePrefab);
+		pool = new ObjectPool(enemyPrefab);
 	}
 
 	public void MapStanceSwitch(MapData.MapMode mode) {
@@ -72,7 +80,8 @@ public class ProjectileWall : MonoBehaviour {
 
 	private IEnumerator SpawnKillerWall() {
 		int diff = Control.currDifficulty;
-		while (gameObject) {
+		spawnLoop = true;
+		while (spawnLoop) {
 			yield return new WaitForSeconds(spawnInterval);
 			if (diff == 0 || diff == 1) {
 				Spawn();
@@ -90,7 +99,7 @@ public class ProjectileWall : MonoBehaviour {
 		}
 	}
 
-	private void Spawn() {
+	public void Spawn() {
 		Projectile wallShot = pool.getNext.GetComponent<Projectile>();
 		wallShot.isDestroyable = true;
 		wallShot.gameObject.tag = Tags.ENEMY;
@@ -105,19 +114,28 @@ public class ProjectileWall : MonoBehaviour {
 
 	private Vector3 KWProjectilePositions(Directions side) {
 		if (side == Directions.RIGHT || side == Directions.LEFT) {
-			return new Vector3(background.position.x - 5 + (side == Directions.RIGHT ? width : -width), UnityEngine.Random.Range(background.position.y - height, background.position.y + height));
+			return new Vector3(background.position.x - 5 + (side == Directions.RIGHT ? width : -width), Random.Range(background.position.y - height, background.position.y + height));
 		}
 		else {
-			return new Vector3(UnityEngine.Random.Range(background.position.x - width, background.position.x + width), background.position.y + (side == Directions.TOP ? height : -height));
+			return new Vector3(Random.Range(background.position.x - width, background.position.x + width), background.position.y + (side == Directions.TOP ? height : -height));
 		}
 	}
 
-	private void OnDisable() {
-		pool.ClearPool();
+	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
+		if (background != activeRoom.background && !MapData.script.IsOneOfAdjecentLinks(background, 2)) {
+			Despawn();
+		}
+		if (MapData.script.IsOneOfAdjecentLinks(background, 2) && previous != activeRoom.background) {
+			StartCoroutine(SpawnKillerWall());
+		}
 	}
 
+	public void Despawn() {
+		spawnLoop = false;
+	}
 
-	public ObjectPool GetPool() {
-		return pool;
+	public void Clear() {
+		pool.ClearPool();
+		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
 	}
 }
