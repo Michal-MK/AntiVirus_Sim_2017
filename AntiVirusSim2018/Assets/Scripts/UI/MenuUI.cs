@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Igor.Constants.Strings;
 
 public class MenuUI : MonoBehaviour {
 
@@ -20,10 +21,10 @@ public class MenuUI : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0) {
+		if (Input.GetAxisRaw(InputNames.MOUSE_X) != 0 || Input.GetAxisRaw(InputNames.MOUSE_Y) != 0) {
 			EventSystem.current.gameObject.GetComponent<EventSystemManager>().TryDeselect();
 		}
-		if ((Input.GetAxisRaw("HorMovement") != 0 || Input.GetAxisRaw("VertMovement") != 0) && EventSystem.current.currentSelectedGameObject == null) {
+		if ((Input.GetAxisRaw(InputNames.MOVEMENT_HORIZONTAL) != 0 || Input.GetAxisRaw(InputNames.MOVEMENT_VERTICAL) != 0) && EventSystem.current.currentSelectedGameObject == null) {
 			EventSystem.current.SetSelectedGameObject(FindObjectOfType<Button>().gameObject);
 		}
 	}

@@ -1,77 +1,210 @@
 fileFormatVersion: 2
 guid: 48f8abe78b02077468cd655765740f50
-timeCreated: 1488561264
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ElBlock_0
-    21300002: ElBlock_1
-    21300004: ElBlock_2
-    21300006: ElBlock_3
-    21300008: ElBlock_4
-    21300010: ElBlock_5
-    21300012: ElBlock_6
-    21300014: ElBlock_7
-    21300016: ElBlock_8
-    21300018: ElBlock_9
-    21300020: ElBlock_10
-    21300022: ElBlock_11
-    21300024: ElBlock_12
-    21300026: ElBlock_13
-    21300028: ElBlock_14
-    21300030: ElBlock_15
-    21300032: ElBlock_16
-    21300034: ElBlock_17
-    21300036: ElBlock_18
-    21300038: ElBlock_19
-    21300040: ElBlock_20
-    21300042: ElBlock_21
-    21300044: ElBlock_22
-    21300046: ElBlock_23
-    21300048: ElBlock_24
-    21300050: ElBlock_25
-    21300052: ElBlock_26
-    21300054: ElBlock_27
-    21300056: ElBlock_28
-    21300058: ElBlock_29
-    21300060: ElBlock_30
-    21300062: ElBlock_31
-    21300064: ElBlock_32
-    21300066: ElBlock_33
-    21300068: ElBlock_34
-    21300070: ElBlock_35
-    21300072: ElBlock_36
-    21300074: ElBlock_37
-    21300076: ElBlock_38
-    21300078: ElBlock_39
-    21300080: ElBlock_40
-    21300082: ElBlock_41
-    21300084: ElBlock_42
-    21300086: ElBlock_43
-    21300088: ElBlock_44
-    21300090: ElBlock_45
-    21300092: ElBlock_46
-    21300094: ElBlock_47
-    21300096: ElBlock_48
-    21300098: ElBlock_49
-    21300100: ElBlock_50
-    21300102: ElBlock_51
-    21300104: ElBlock_52
-    21300106: ElBlock_53
-    21300108: ElBlock_54
-    21300110: ElBlock_55
-    21300112: ElBlock_56
-    21300114: ElBlock_57
-    21300116: ElBlock_58
-    21300118: ElBlock_59
-    21300120: ElBlock_60
-    21300122: ElBlock_61
-    21300124: ElBlock_62
-    21300126: ElBlock_63
-    21300128: ElBlock_64
-    21300130: ElBlock_65
-    21300132: ElBlock_66
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: ElBlock_0
+  - first:
+      213: 21300002
+    second: ElBlock_1
+  - first:
+      213: 21300004
+    second: ElBlock_2
+  - first:
+      213: 21300006
+    second: ElBlock_3
+  - first:
+      213: 21300008
+    second: ElBlock_4
+  - first:
+      213: 21300010
+    second: ElBlock_5
+  - first:
+      213: 21300012
+    second: ElBlock_6
+  - first:
+      213: 21300014
+    second: ElBlock_7
+  - first:
+      213: 21300016
+    second: ElBlock_8
+  - first:
+      213: 21300018
+    second: ElBlock_9
+  - first:
+      213: 21300020
+    second: ElBlock_10
+  - first:
+      213: 21300022
+    second: ElBlock_11
+  - first:
+      213: 21300024
+    second: ElBlock_12
+  - first:
+      213: 21300026
+    second: ElBlock_13
+  - first:
+      213: 21300028
+    second: ElBlock_14
+  - first:
+      213: 21300030
+    second: ElBlock_15
+  - first:
+      213: 21300032
+    second: ElBlock_16
+  - first:
+      213: 21300034
+    second: ElBlock_17
+  - first:
+      213: 21300036
+    second: ElBlock_18
+  - first:
+      213: 21300038
+    second: ElBlock_19
+  - first:
+      213: 21300040
+    second: ElBlock_20
+  - first:
+      213: 21300042
+    second: ElBlock_21
+  - first:
+      213: 21300044
+    second: ElBlock_22
+  - first:
+      213: 21300046
+    second: ElBlock_23
+  - first:
+      213: 21300048
+    second: ElBlock_24
+  - first:
+      213: 21300050
+    second: ElBlock_25
+  - first:
+      213: 21300052
+    second: ElBlock_26
+  - first:
+      213: 21300054
+    second: ElBlock_27
+  - first:
+      213: 21300056
+    second: ElBlock_28
+  - first:
+      213: 21300058
+    second: ElBlock_29
+  - first:
+      213: 21300060
+    second: ElBlock_30
+  - first:
+      213: 21300062
+    second: ElBlock_31
+  - first:
+      213: 21300064
+    second: ElBlock_32
+  - first:
+      213: 21300066
+    second: ElBlock_33
+  - first:
+      213: 21300068
+    second: ElBlock_34
+  - first:
+      213: 21300070
+    second: ElBlock_35
+  - first:
+      213: 21300072
+    second: ElBlock_36
+  - first:
+      213: 21300074
+    second: ElBlock_37
+  - first:
+      213: 21300076
+    second: ElBlock_38
+  - first:
+      213: 21300078
+    second: ElBlock_39
+  - first:
+      213: 21300080
+    second: ElBlock_40
+  - first:
+      213: 21300082
+    second: ElBlock_41
+  - first:
+      213: 21300084
+    second: ElBlock_42
+  - first:
+      213: 21300086
+    second: ElBlock_43
+  - first:
+      213: 21300088
+    second: ElBlock_44
+  - first:
+      213: 21300090
+    second: ElBlock_45
+  - first:
+      213: 21300092
+    second: ElBlock_46
+  - first:
+      213: 21300094
+    second: ElBlock_47
+  - first:
+      213: 21300096
+    second: ElBlock_48
+  - first:
+      213: 21300098
+    second: ElBlock_49
+  - first:
+      213: 21300100
+    second: ElBlock_50
+  - first:
+      213: 21300102
+    second: ElBlock_51
+  - first:
+      213: 21300104
+    second: ElBlock_52
+  - first:
+      213: 21300106
+    second: ElBlock_53
+  - first:
+      213: 21300108
+    second: ElBlock_54
+  - first:
+      213: 21300110
+    second: ElBlock_55
+  - first:
+      213: 21300112
+    second: ElBlock_56
+  - first:
+      213: 21300114
+    second: ElBlock_57
+  - first:
+      213: 21300116
+    second: ElBlock_58
+  - first:
+      213: 21300118
+    second: ElBlock_59
+  - first:
+      213: 21300120
+    second: ElBlock_60
+  - first:
+      213: 21300122
+    second: ElBlock_61
+  - first:
+      213: 21300124
+    second: ElBlock_62
+  - first:
+      213: 21300126
+    second: ElBlock_63
+  - first:
+      213: 21300128
+    second: ElBlock_64
+  - first:
+      213: 21300130
+    second: ElBlock_65
+  - first:
+      213: 21300132
+    second: ElBlock_66
+  externalObjects: {}
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -79,6 +212,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -87,6 +222,9 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -94,10 +232,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -106,41 +247,57 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Android
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -156,7 +313,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ElBlock_1
       rect:
@@ -169,7 +334,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ElBlock_2
       rect:
@@ -182,7 +355,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ElBlock_3
       rect:
@@ -195,9 +376,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -55,7 +55,7 @@ public class Notifications : MonoBehaviour {
 		return new Window(w, Window.WindowType.ACTIVATING);
 	}
 
-	public static Window Confirm<T>(string msg, T value, Action<T> confirmation, Action returnBack) {
+	public static Window Confirm(string msg, bool value, Action<bool> confirmation, Action returnBack) {
 		GameObject w = Instantiate(_confirmationPrefabStatic, _canvas, false);
 		Button ok = w.transform.Find("Ok").GetComponent<Button>();
 		Button back = w.transform.Find("Back").GetComponent<Button>();

@@ -87,6 +87,9 @@ namespace Igor {
 				public const string MOVEMENT_VERTICAL = "VertMovement";
 				public const string RMB = "Right Mouse Button";
 				public const string LMB = "Left Mouse Button";
+				public const string MOUSE_X = "Mouse X";
+				public const string MOUSE_Y = "Mouse Y";
+				public const string ESCAPE = "Escape";
 			}
 
 			public class Layers {

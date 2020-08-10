@@ -64,7 +64,7 @@ public class M_Player : MonoBehaviour {
 	}
 
 	private IEnumerator Start() {
-		Cursor.lockState = CursorLockMode.Confined;
+		//Cursor.lockState = CursorLockMode.Confined; TODO
 		currentBG_name = BackgroundNames.BACKGROUND_1;
 		yield return new WaitForSeconds(1);
 #if UNITY_EDITOR

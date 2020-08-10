@@ -6,6 +6,8 @@ using Igor.Constants.Strings;
 
 public class Control : MonoBehaviour {
 
+	public delegate void EmptyEventHandler();
+
 	public bool allowTesting = false;
 
 	public static Control script;
@@ -16,8 +18,7 @@ public class Control : MonoBehaviour {
 	public static int currAttempt = 0;
 	public static int currDifficulty = 0;
 
-	public delegate void Escape();
-	public static event Escape OnEscapePressed;
+	public static event EmptyEventHandler OnEscapePressed;
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	private static void Init() {
@@ -101,7 +102,7 @@ public class Control : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (Input.GetButtonDown("Escape")) {
+		if (Input.GetButtonDown(InputNames.ESCAPE)) {
 			OnEscapePressed?.Invoke();
 		}
 	}

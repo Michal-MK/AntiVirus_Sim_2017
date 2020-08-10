@@ -15,7 +15,7 @@ public class Rotations : MonoBehaviour {
 
 	public RotationType type = RotationType.DEFAULT;
 	public float speed;
-	public bool isCouterCloclwise;
+	public bool isCounterClockwise;
 	public float radius;
 	public float angleOffset;
 	public bool useRandomSpeed = false;
@@ -72,7 +72,7 @@ public class Rotations : MonoBehaviour {
 		for (int i = 0; i < affectedObjects.Length; i++) {
 			affectedObjects[i].position = positionFunc.Invoke(i);
 		}
-		if (isCouterCloclwise) {
+		if (isCounterClockwise) {
 			angle = (angle - speed) % 360;
 		}
 		else {
@@ -90,7 +90,7 @@ public class Rotations : MonoBehaviour {
 	private IEnumerator AlterRotationDirection() {
 		while (gameObject.activeSelf) {
 			yield return new WaitForSeconds(UnityEngine.Random.Range(8, 15));
-			isCouterCloclwise = !isCouterCloclwise;
+			isCounterClockwise = !isCounterClockwise;
 		}
 	}
 
@@ -128,6 +128,7 @@ public class Rotations : MonoBehaviour {
 
 	public float XEntireFunc = 0;
 	public float YEntireFunc = 0;
+
 	private Vector3 Exp(int position) {
 		float newX = radius * XRadiusMod * Mathf.Tan(Mathf.Deg2Rad * (angle + XAngleMod + angleOffset * position + 1) + XEntireFunc) + transform.position.x + XPosOff;
 		float newY = radius * YRadiusMod * Mathf.Cos(Mathf.Deg2Rad * (angle + YAngleMod + angleOffset * position) + YEntireFunc) + transform.position.y + YPosOff;

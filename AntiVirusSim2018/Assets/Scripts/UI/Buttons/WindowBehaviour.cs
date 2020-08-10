@@ -27,7 +27,7 @@ public class WindowBehaviour : MonoBehaviour {
 			w.window.SetActive(true);
 			windowRef = w;
 			WindowManager.AddWindow(w);
-			if (findSelectableInWindow) {
+			if (!UIControlScheme.Instance.IsMouseScheme() && findSelectableInWindow) {
 				EventSystem.current.SetSelectedGameObject(w.window.GetComponentInChildren<Selectable>().gameObject);
 			}
 			WindowManager.OnWindowClose += WindowManager_OnWindowClose;
@@ -62,7 +62,7 @@ public class WindowBehaviour : MonoBehaviour {
 		w.window.SetActive(true);
 		windowRef = w;
 		WindowManager.AddWindow(w);
-		if (findSelectableInWindow) {
+		if (!UIControlScheme.Instance.IsMouseScheme() && findSelectableInWindow) {
 			EventSystem.current.SetSelectedGameObject(w.window.GetComponentInChildren<Selectable>().gameObject);
 		}
 		WindowManager.OnWindowClose += WindowManager_OnWindowClose;
@@ -70,7 +70,9 @@ public class WindowBehaviour : MonoBehaviour {
 
 	private void WindowManager_OnWindowClose(Window changed) {
 		if (changed == windowRef) {
-			EventSystem.current.SetSelectedGameObject(self.gameObject);
+			if (!UIControlScheme.Instance.IsMouseScheme() && findSelectableInWindow) {
+				EventSystem.current.SetSelectedGameObject(self.gameObject);
+			}
 			self.OnSelect(null);
 			changed.closeAction?.Invoke();
 			WindowManager.OnWindowClose -= WindowManager_OnWindowClose;
@@ -87,24 +89,24 @@ public class WindowBehaviour : MonoBehaviour {
 
 		savePromptActive = true;
 		windowRef = Notifications.Confirm("Do you wish to save in this place?", true,
-			delegate {
+			(b) => { 
 				Control.script.saveManager.Save(false);
 				self.interactable = false;
 				transform.Find("_saveGameText").GetComponent<Text>().text = "Saved!";
 			},
-			delegate {
+			() => {
 				WindowManager.CloseMostRecent();
 				EventSystem.current.SetSelectedGameObject(self.gameObject);
 				self.OnSelect(null);
 				savePromptActive = false;
 				gameHolder.SavePromptToggle();
-			}
-		);
-		if (findSelectableInWindow) {
+			});
+		if (!UIControlScheme.Instance.IsMouseScheme() && findSelectableInWindow) {
 			EventSystem.current.SetSelectedGameObject(windowRef.window.GetComponentInChildren<Selectable>().gameObject);
 		}
 		gameHolder.SavePromptToggle();
 	}
+
 
 	[Serializable]
 	public enum SpecialityWindow {

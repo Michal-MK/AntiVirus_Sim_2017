@@ -9,10 +9,10 @@ InputManager:
     m_Name: Mouse X
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: left
-    positiveButton: right
-    altNegativeButton: a
-    altPositiveButton: d
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
     gravity: 20
     dead: 0.001
     sensitivity: 1000
@@ -20,6 +20,22 @@ InputManager:
     invert: 0
     type: 1
     axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Mouse Y
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 20
+    dead: 0.001
+    sensitivity: 1000
+    snap: 1
+    invert: 0
+    type: 1
+    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: HorMovement
@@ -52,22 +68,6 @@ InputManager:
     invert: 0
     type: 2
     axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Mouse Y
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: down
-    positiveButton: up
-    altNegativeButton: s
-    altPositiveButton: w
-    gravity: 20
-    dead: 0.001
-    sensitivity: 1000
-    snap: 1
-    invert: 0
-    type: 1
-    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: VertMovement
@@ -100,22 +100,6 @@ InputManager:
     invert: 1
     type: 2
     axis: 1
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Attack
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: space
-    altNegativeButton: 
-    altPositiveButton: joystick button 2
-    gravity: 0
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
     joyNum: 0
   - serializedVersion: 3
     m_Name: Right Mouse Button
@@ -294,34 +278,18 @@ InputManager:
     axis: 4
     joyNum: 0
   - serializedVersion: 3
-    m_Name: HorMovement
+    m_Name: Attack
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: space
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick button 4
     gravity: 20
     dead: 0.1
     sensitivity: 1
     snap: 0
-    invert: 0
-    type: 2
-    axis: 5
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: VertMovement
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 20
-    dead: 0.1
-    sensitivity: 1
-    snap: 0
-    invert: 0
-    type: 2
-    axis: 6
+    invert: 1
+    type: 0
+    axis: 4
     joyNum: 0
