@@ -26,7 +26,7 @@ public class SoundFXHandler : SoundBase {
 	void Start() {
 		foreach (AudioSource s in transform.GetComponentsInChildren<AudioSource>()) {
 			sources.Add(s);
-			s.volume = GameSettings.fxVolume;
+			s.volume = GameSettings.FXVolume;
 		}
 		GameSettings.script.OnFxVolumeChanged += UpdateFxVol;
 	}

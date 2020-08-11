@@ -8,50 +8,37 @@ public class Door {
 	/// <summary>
 	/// Get the middle Door GameObject
 	/// </summary>
-	public GameObject getDoor { get; }
+	public GameObject DoorObj { get; }
 
 	/// <summary>
 	/// The room this door is in
 	/// </summary>
-	public int fromRoomID { get; }
+	public int FromRoomID { get; }
 
 	/// <summary>
 	/// The room this door is connecting, but not actually in
 	/// </summary>
-	public int toRoomID { get; }
+	public int ToRoomID { get; }
 
 	/// <summary>
 	/// Toggle to Open/Close this door
 	/// </summary>
-	public bool isDoorOpen {
-		get {
-			return getDoor.gameObject.activeInHierarchy;
-		}
-		set {
-			getDoor.SetActive(!value);
-		}
+	public bool IsOpen {
+		get => DoorObj.activeInHierarchy;
+		set { DoorObj.SetActive(!value); }
 	}
 
-	/// <summary>
-	/// Default constructor
-	/// </summary>
 	public Door(GameObject doorObj, int fromRoomID, int toRoomID) {
-		getDoor = doorObj;
-		this.fromRoomID = fromRoomID;
-		this.toRoomID = toRoomID;
+		DoorObj = doorObj;
+		FromRoomID = fromRoomID;
+		ToRoomID = toRoomID;
 	}
 
-	/// <summary>
-	/// Function to open this door
-	/// </summary>
 	public void Open() {
-		isDoorOpen = true;
+		IsOpen = true;
 	}
 
-	/// <summary>
-	/// Function to close this door
-	/// </summary>
 	public void Close() {
-		isDoorOpen = false;
+		IsOpen = false;
 	}
 }

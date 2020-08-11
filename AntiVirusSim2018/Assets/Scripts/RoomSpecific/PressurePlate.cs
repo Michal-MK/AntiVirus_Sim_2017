@@ -19,7 +19,7 @@ public class PressurePlate : MonoBehaviour {
 	public int attempts = 0;
 	public bool alreadyTriggered = false;
 
-	public static event Guide.GuideTargetStatic OnNewTarget;
+	public static event GuideTargetStaticEventHandler OnNewTarget;
 
 	private SpriteRenderer selfSprite;
 
@@ -79,13 +79,13 @@ public class PressurePlate : MonoBehaviour {
 		if (col.name == ObjNames.BLOCK) {
 			attempts++;
 			if (attempts == 1) {
-				Canvas_Renderer.script.DisplayInfo("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
+				HUDisplay.script.DisplayInfo("Something pushed the block off of the activator...", "These projectiles sure are a nuisance.");
 			}
 			if (attempts == 2) {
-				Canvas_Renderer.script.DisplayInfo(null, "Aaand again... darn.");
+				HUDisplay.script.DisplayInfo(null, "Aaand again... darn.");
 			}
 			if (attempts == 3) {
-				Canvas_Renderer.script.DisplayInfo(null, "Alright enough.");
+				HUDisplay.script.DisplayInfo(null, "Alright enough.");
 				CreateBarrier();
 			}
 			SoundFXHandler.script.PlayFX(switchOff);

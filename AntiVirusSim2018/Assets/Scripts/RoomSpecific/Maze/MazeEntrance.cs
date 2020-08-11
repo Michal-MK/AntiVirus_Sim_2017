@@ -13,7 +13,7 @@ public class MazeEntrance : MonoBehaviour {
 	public static event EventHandler OnMazeEnter;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == Tags.PLAYER) {
+		if (collision.CompareTag(Tags.PLAYER)) {
 
 			//Debug.Log("Remove after");
 			//M_Player.gameProgression = 3;
@@ -21,51 +21,49 @@ public class MazeEntrance : MonoBehaviour {
 			//Coins.coinsCollected = 5;
 			//PlayerAttack.bullets = 3;
 
-			if (Spike.spikesCollected == 3) {
-				StartCoroutine(TransToPos());
-				MusicHandler.script.TransitionMusic(MusicHandler.script.room_maze);
-				GetComponent<Collider2D>().enabled = false;
-			}
+			StartCoroutine(TransToPos());
+			MusicHandler.script.TransitionMusic(MusicHandler.script.room_maze);
+			GetComponent<Collider2D>().enabled = false;
 		}
 	}
 
 	private IEnumerator TransToPos() {
 
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += MazeTransition;
-		Player_Movement.canMove = false;
-		CameraMovement.script.inMaze = true;
+		PlayerMovement.CanMove = false;
+		CameraMovement.Instance.IsInMaze = true;
 
-		yield return new WaitUntil(() => !CameraMovement.script.isCameraDoneMoving);
-		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
+		yield return new WaitUntil(() => !CameraMovement.Instance.CameraStill);
+		yield return new WaitUntil(() => CameraMovement.Instance.CameraStill);
 
 		StartCoroutine(PreventPlayerIdle());
-		Canvas_Renderer.script.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
+		HUDisplay.script.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
 
-		yield return new WaitWhile(() => Canvas_Renderer.script.isRunning);
+		yield return new WaitWhile(() => HUDisplay.script.isRunning);
 
 		if (Control.currDifficulty >= 3) {
-			StartCoroutine(LerpCamPos(CameraMovement.script.transform.position, M_Player.player.transform.position));
-			StartCoroutine(CameraMovement.script.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
+			StartCoroutine(LerpCamPos(CameraMovement.Instance.transform.position, Player.Instance.transform.position));
+			StartCoroutine(CameraMovement.Instance.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
 		}
-		Player_Movement.canMove = true;
+		PlayerMovement.CanMove = true;
 	}
 
 	private void MazeTransition() {
-		OnMazeEnter?.Invoke(this,EventArgs.Empty);
+		OnMazeEnter?.Invoke(this, EventArgs.Empty);
 
-		CameraMovement.script.transform.position = new Vector3(maze.middleCell.position.x, maze.middleCell.position.y, -10);
-		StartCoroutine(CameraMovement.script.LerpSize(CameraMovement.defaultCamSize, maze.mazeSize/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
+		CameraMovement.Instance.transform.position = new Vector3(maze.middleCell.position.x, maze.middleCell.position.y, -10);
+		StartCoroutine(CameraMovement.Instance.LerpSize(CameraMovement.DEFAULT_CAM_SIZE, maze.mazeSize/* * Screen.height / Screen.width * 0.5f*/, 0.2f));
 
 		spike.SetPosition(false);
 		Vector2Int rndEdge = maze.GetEdgeCell();
-		M_Player.player.transform.position = maze.grid[rndEdge.x, rndEdge.y].transform.position;
-		M_Player.player.transform.localScale = new Vector3(2, 2, 0);
+		Player.Instance.transform.position = maze.grid[rndEdge.x, rndEdge.y].transform.position;
+		Player.Instance.transform.localScale = new Vector3(2, 2, 0);
 		maze.playerEntrancePosition = rndEdge;
 
 
-		Control.script.saveManager.canSave = false;
-		Zoom.canZoom = false;
+		Control.Instance.saveManager.canSave = false;
+		Zoom.CanZoom = false;
 		CamFadeOut.OnCamFullyFaded -= MazeTransition;
 	}
 
@@ -78,7 +76,7 @@ public class MazeEntrance : MonoBehaviour {
 		for (float f = 0; f <= 1; f += Time.deltaTime) {
 			float x = Mathf.Lerp(start.x, end.x, f);
 			float y = Mathf.Lerp(start.y, end.y, f);
-			CameraMovement.script.transform.position = new Vector3(x, y, -10);
+			CameraMovement.Instance.transform.position = new Vector3(x, y, -10);
 			yield return null;
 		}
 	}

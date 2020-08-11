@@ -3,11 +3,6 @@ using System.Collections;
 using UnityEngine;
 using Igor.Constants.Strings;
 
-public enum AttackType {
-	BULLETS,
-	BOMBS,
-}
-
 public class PlayerAttack : MonoBehaviour {
 
 	public GameObject spikeBullet;
@@ -25,44 +20,44 @@ public class PlayerAttack : MonoBehaviour {
 	public Sprite attacking;
 	public Sprite happy;
 
-	public float bombRechargeDelay { get; set; } = 8f;
+	public float BombRechargeDelay { get; set; } = 8f;
 
-	public int bullets { get; set; } = 0;
-	public int bombs { get; set; } = 0;
+	public int Bullets { get; set; } = 0;
+	public int Bombs { get; set; } = 0;
 
 	public bool attackModeIntro;
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+		Player.OnSpikePickup += M_Player_OnSpikePickup;
 	}
 
 	#region EventImplementation
-	private void M_Player_OnSpikePickup(M_Player sender, GameObject other) {
-		bullets++;
-		OnAmmoChanged(AttackType.BULLETS, bullets);
-		if (Spike.spikesCollected == 5) {
+	private void M_Player_OnSpikePickup(Player sender, GameObject other) {
+		Bullets++;
+		OnAmmoChanged(AttackType.BULLETS, Bullets);
+		if (other.GetComponent<Spike>().SpikesCollected == 5) {
 			string text;
 			if (attackModeIntro) {
-				text = "You found all the bullets.\n You can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\n The bullets are limited, don't lose them!";
+				text = "You found all the bullets.\nYou can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\nThe bullets are limited, don't lose them!";
 				attackModeIntro = false;
 			}
 			else {
 				text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
 			}
-			Canvas_Renderer.script.DisplayInfo(text, "Don't give up now.");
+			HUDisplay.script.DisplayInfo(text, "Don't give up now.");
 		}
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		attackModeIntro = data.shownHints.shootingIntro;
-		bullets = data.player.bullets;
-		bombs = data.player.bombs;
+		Bullets = data.player.bullets;
+		Bombs = data.player.bombs;
 	}
 	#endregion
 
 	void Update() {
-		if (M_Player.gameProgression != -1 && !PauseUnpause.isPaused && Input.GetButtonDown("Attack")) {
+		if (Player.GameProgression != -1 && !PauseUnpause.isPaused && Input.GetButtonDown("Attack")) {
 			inFireMode = !inFireMode;
 			if (inFireMode) {
 				face.sprite = attacking;
@@ -78,10 +73,10 @@ public class PlayerAttack : MonoBehaviour {
 			}
 
 			if (attackModeIntro) {
-				Canvas_Renderer.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
+				HUDisplay.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
 													"Use your mouse to aim.\n " +
 													"The bullets are limited and you HAVE to pick them up after you fire!\n" +
-													"Currently you have: " + bullets + " bullets.\n " +
+													"Currently you have: " + Bullets + " bullets.\n " +
 													"Don't lose them", null);
 				attackModeIntro = false;
 				ammoType = SwitchAmmoType();
@@ -95,7 +90,7 @@ public class PlayerAttack : MonoBehaviour {
 				ammoType = SwitchAmmoType();
 			}
 			if (Input.GetButtonDown(InputNames.LMB) && ammoType == AttackType.BULLETS) {
-				if (bullets >= 1) {
+				if (Bullets >= 1) {
 					FireSpike();
 				}
 				else {
@@ -103,7 +98,7 @@ public class PlayerAttack : MonoBehaviour {
 				}
 			}
 			if (Input.GetButtonDown(InputNames.LMB) && ammoType == AttackType.BOMBS) {
-				if (bombs > 0) {
+				if (Bombs > 0) {
 					FireBomb();
 					StartCoroutine(RefreshBombs());
 				}
@@ -116,11 +111,11 @@ public class PlayerAttack : MonoBehaviour {
 
 	private AttackType SwitchAmmoType() {
 		if (ammoType == AttackType.BULLETS) {
-			OnAmmoChanged(AttackType.BOMBS, bombs);
+			OnAmmoChanged(AttackType.BOMBS, Bombs);
 			return AttackType.BOMBS;
 		}
 		else {
-			OnAmmoChanged(AttackType.BULLETS, bullets);
+			OnAmmoChanged(AttackType.BULLETS, Bullets);
 			return AttackType.BULLETS;
 		}
 	}
@@ -141,8 +136,8 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.GetComponent<SpikeBullet>().player = this;
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
-		bullets--;
-		OnAmmoChanged(AttackType.BULLETS, bullets);
+		Bullets--;
+		OnAmmoChanged(AttackType.BULLETS, Bullets);
 	}
 
 	public void FireBomb() {
@@ -150,37 +145,37 @@ public class PlayerAttack : MonoBehaviour {
 		firedBomb.transform.position = transform.position + Vector3.down * 2.5f;
 		firedBomb.name = ObjNames.BOMB;
 		firedBomb.transform.parent = GameObject.Find("Collectibles").transform;
-		bombs--;
-		OnAmmoChanged(AttackType.BOMBS, bombs);
+		Bombs--;
+		OnAmmoChanged(AttackType.BOMBS, Bombs);
 	}
 
 	public IEnumerator RefreshBombs() {
-		Canvas_Renderer.script.DisplayInfo(null, "Wait for the bomb to regenerate!");
-		yield return new WaitForSeconds(bombRechargeDelay);
-		bombs++;
-		OnAmmoChanged(AttackType.BOMBS, bombs);
+		HUDisplay.script.DisplayInfo(null, "Wait for the bomb to regenerate!");
+		yield return new WaitForSeconds(BombRechargeDelay);
+		Bombs++;
+		OnAmmoChanged(AttackType.BOMBS, Bombs);
 	}
 
 	public void Collided(Transform collided) {
 		if (collided.name == ObjNames.BOMB_PICKUP) {
 			Destroy(collided.gameObject);
-			bombs++;
+			Bombs++;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			OnAmmoPickup(AttackType.BOMBS, true);
-			Canvas_Renderer.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
+			HUDisplay.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (collided.name == ObjNames.BULLET_PICKUP) {
 			Destroy(collided.gameObject);
-			bullets++;
-			OnAmmoChanged(AttackType.BULLETS, bullets);
+			Bullets++;
+			OnAmmoChanged(AttackType.BULLETS, Bullets);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 	}
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		Player.OnSpikePickup -= M_Player_OnSpikePickup;
 	}
 }
 

@@ -36,7 +36,7 @@ public class MusicHandler : SoundBase {
 	}
 
 	private void Start() {
-		M_Player.OnRoomEnter += NewRoom;
+		Player.OnRoomEnter += NewRoom;
 		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
 		positions.Add(room1_1, 0);
 		positions.Add(room1_2, 0);
@@ -49,9 +49,9 @@ public class MusicHandler : SoundBase {
 
 	#region EventHandling
 
-	private void NewRoom(M_Player sender, RectTransform background, RectTransform previous) {
+	private void NewRoom(Player sender, RectTransform background, RectTransform previous) {
 
-		if (background == MapData.script.GetRoom(1).background) {
+		if (background == MapData.Instance.GetRoom(1).Background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
@@ -59,7 +59,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_1);
 			}
 		}
-		else if (background == MapData.script.GetRoom(2).background) {
+		else if (background == MapData.Instance.GetRoom(2).Background) {
 			if (!isPlaying) {
 				PlayMusic(room1_2);
 			}
@@ -67,7 +67,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_2);
 			}
 		}
-		else if (background == MapData.script.GetRoom(3).background) {
+		else if (background == MapData.Instance.GetRoom(3).Background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
@@ -75,7 +75,7 @@ public class MusicHandler : SoundBase {
 				TransitionMusic(room1_1);
 			}
 		}
-		else if (background == MapData.script.GetRoom(4).background) {
+		else if (background == MapData.Instance.GetRoom(4).Background) {
 			if (!isPlaying) {
 				PlayMusic(room1_1);
 			}
@@ -128,7 +128,7 @@ public class MusicHandler : SoundBase {
 		isTransitioning = true;
 		source.clip = clip;
 		source.Play();
-		yield return _TransitionVolume(0, GameSettings.audioVolume);
+		yield return _TransitionVolume(0, GameSettings.AudioVolume);
 		isTransitioning = false;
 	}
 
@@ -156,18 +156,18 @@ public class MusicHandler : SoundBase {
 		source.clip = clip;
 		source.time = positions[source.clip];
 		source.Play();
-		yield return _TransitionVolume(0, GameSettings.audioVolume);
+		yield return _TransitionVolume(0, GameSettings.AudioVolume);
 
 		isTransitioning = false;
 	}
 
 	private IEnumerator _TransitionVolume_SameClip(float currentVolume) {
-		float fadeVal = Mathf.Lerp(0, GameSettings.audioVolume, Time.unscaledDeltaTime / transitionTime);
-		for (float f = currentVolume; f < GameSettings.audioVolume; f += fadeVal) {
+		float fadeVal = Mathf.Lerp(0, GameSettings.AudioVolume, Time.unscaledDeltaTime / transitionTime);
+		for (float f = currentVolume; f < GameSettings.AudioVolume; f += fadeVal) {
 			source.volume = f;
 			yield return null;
 		}
-		source.volume = GameSettings.audioVolume;
+		source.volume = GameSettings.AudioVolume;
 	}
 
 	private IEnumerator _TransitionVolume(float initValue, float endValue) {
@@ -193,7 +193,7 @@ public class MusicHandler : SoundBase {
 
 	private void OnDestroy() {
 		script = null;
-		M_Player.OnRoomEnter -= NewRoom;
+		Player.OnRoomEnter -= NewRoom;
 		GameSettings.script.OnMusicVolumeChanged -= UpdateMusicVol;
 	}
 }

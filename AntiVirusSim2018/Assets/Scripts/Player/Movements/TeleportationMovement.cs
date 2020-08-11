@@ -1,14 +1,12 @@
 ﻿using Igor.Constants.Strings;
-using System;
 using System.Collections;
 using UnityEngine;
-using static Player_Movement;
 
 public class TeleportationMovement : MonoBehaviour, IPlayerMovement {
-	public PlayerMovement movementType => PlayerMovement.TELEPORT;
+	public PlayerMovementType MovementType => PlayerMovementType.TELEPORT;
 
-	public PlayerMovementModifiers movementModifier { get; set; } = PlayerMovementModifiers.NONE;
-	public float movementSpeed { get; set; } = 0;
+	public PlayerMovementModifiers MovementModifier { get; set; }
+	public float MovementSpeed { get; set; } = 0;
 
 	public AudioClip FX_Teleport;
 	public Rigidbody2D body;
@@ -64,7 +62,7 @@ public class TeleportationMovement : MonoBehaviour, IPlayerMovement {
 
 	private Directions DetermineDirection(bool isHorizontal, float value) {
 		if (isHorizontal) {
-			if (movementModifier != PlayerMovementModifiers.INVERT) {
+			if (MovementModifier != PlayerMovementModifiers.INVERT) {
 				return value > 0 ? Directions.RIGHT : Directions.LEFT;
 			}
 			else {
@@ -72,7 +70,7 @@ public class TeleportationMovement : MonoBehaviour, IPlayerMovement {
 			}
 		}
 		else {
-			if (movementModifier != PlayerMovementModifiers.INVERT) {
+			if (MovementModifier != PlayerMovementModifiers.INVERT) {
 				return value > 0 ? Directions.TOP : Directions.BOTTOM;
 			}
 			else {

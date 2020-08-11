@@ -26,7 +26,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 
 	private void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.GetComponent<IWeaponType>() != null) {
-			TakeDamage(col.gameObject, col.gameObject.GetComponent<IWeaponType>().weaponType);
+			TakeDamage(col.gameObject, col.gameObject.GetComponent<IWeaponType>().WeaponType);
 		}
 	}
 }

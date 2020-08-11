@@ -2,41 +2,27 @@
 using System.Collections;
 
 public class Enemy : MonoBehaviour, IPoolable {
+	[SerializeField]
+	private Material lightMat = null;
+	[SerializeField]
+	private Material darkMat = null;
 
-	public enum EnemyClass {
-		TOUCH,
-		CLOSE_RANGE,
-		LONG_RANGE,
-	}
+	public bool IsKillable { get; set; } = false;
+	public bool IsPooled { get; set; } = false;
+	protected EnemyClass Class { get; set; }
+	protected EnemyType Type { get; set; }
 
-	public enum EnemyType {
-		ELECTRIC_BLOCK,
-		KILLER_BLOCK,
-		PROJECTILE_SIMPLE,
-		PROJECTILE_ACCURATE,
-		PROJECTILE_ICICLE,
-	}
-
-	public Material lightMat;
-	public Material darkMat;
-
-	protected bool instantKiller = true;
-	public bool isDestroyable { get; set; } = false;
-	public bool isPooled { get; set; } = false;
-	protected float damage { get; set; } = 1;
-	protected EnemyClass enemyClass { get; set; }
-	protected EnemyType enemyType { get; set; }
-
-
+	/// <summary>
+	/// Override to modify killing behaviour. <para/>
+	/// <see langword="Always"/> call <see langword="base"/>!
+	/// </summary>
 	public virtual void Kill() {
-
-		if (isPooled) {
+		if (IsPooled) {
 			gameObject.SetActive(false);
-
 			return;
 		}
 
-		if (!isDestroyable) {
+		if (!IsKillable) {
 			print("This enemy is not something you can kill");
 			return;
 		}
@@ -45,13 +31,21 @@ public class Enemy : MonoBehaviour, IPoolable {
 		}
 	}
 
+	/// <summary>
+	/// Override to modify delayed killing behaviour. <para/>
+	/// <see langword="Never"/> call <see langword="base"/>!
+	/// </summary>
 	public virtual IEnumerator Kill(float seconds) {
 		yield return new WaitForSeconds(seconds);
 		Kill();
 	}
 
-	public virtual void MapModeSwitch(MapData.MapMode mode) {
-		if (mode == MapData.MapMode.DARK) {
+	/// <summary>
+	/// Override to change behaviour for <see cref="MapMode"/> change.<para/>
+	/// Calling <see langword="base"/> is not required!
+	/// </summary>
+	public virtual void MapModeSwitch(MapMode mode) {
+		if (mode == MapMode.DARK) {
 			gameObject.layer = (int)Igor.Constants.Integers.Layers.Layer.DARK_ENEMIES;
 			gameObject.GetComponent<SpriteRenderer>().material = darkMat;
 		}
@@ -59,9 +53,5 @@ public class Enemy : MonoBehaviour, IPoolable {
 			gameObject.layer = (int)Igor.Constants.Integers.Layers.Layer.LIGHT_ENEMIES;
 			gameObject.GetComponent<SpriteRenderer>().material = lightMat;
 		}
-	}
-
-	public virtual void Damage(float amount) {
-		print("Damaged for " + amount + " points of damage.");
 	}
 }

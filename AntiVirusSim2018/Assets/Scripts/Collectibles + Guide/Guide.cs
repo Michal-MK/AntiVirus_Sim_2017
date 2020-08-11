@@ -2,49 +2,42 @@ using UnityEngine;
 
 public class Guide : MonoBehaviour {
 
-	public delegate void GuideTargetDynamic(GameObject target);
-	public delegate void GuideTargetStatic(Vector3 target);
-
-	//Prefab
 	public GameObject guidePrefab;
+
+
 	private GameObject guideObj;
-	private SpriteRenderer guideObjSprRender;
+	private SpriteRenderer guideSpr;
 
 	private Vector3 targetPosition;
-	private RectTransform playerTransform;
+	private RectTransform player;
 
-	public float radius;
 	private float defaultRadius;
+	[SerializeField]
+	private float radius = 10;
+
 
 	private void Awake() {
-		M_Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
+		Player.OnTargetableObjectCollision += M_Player_OnTargetableObjectCollision;
 		Coin.OnNewTarget += Recalculate;
 		Spike.OnNewTarget += Recalculate;
-		M_Player.OnSpikePickup += M_Player_OnSpikePickup;
+		Player.OnSpikePickup += M_Player_OnSpikePickup;
 	}
 
 	void Start() {
-		playerTransform = M_Player.player.GetComponent<RectTransform>();
+		player = Player.Instance.GetComponent<RectTransform>();
 		defaultRadius = radius;
 	}
 
 	#region Event Handling
 
-	private void M_Player_OnTargetableObjectCollision(M_Player sender, GameObject other) {
+	private void M_Player_OnTargetableObjectCollision(Player sender, GameObject other) {
 		if (other.name == "Block") {
 			Recalculate(GameObject.Find("Pressure_Plate"));
 		}
 	}
 
-	private void M_Player_OnSpikePickup(M_Player sender, GameObject other) {
+	private void M_Player_OnSpikePickup(Player sender, GameObject other) {
 		Recalculate(null);
-	}
-
-	private void Coins_OnNewTarget(GameObject target) {
-		Recalculate(target);
-	}
-	private void Spike_OnNewTarget(GameObject target) {
-		Recalculate(target);
 	}
 
 	#endregion
@@ -52,35 +45,30 @@ public class Guide : MonoBehaviour {
 	private void Recalculate(GameObject destination) {
 		if (destination == null) {
 			Destroy(guideObj);
-			return;
-		}
-
-		targetPosition = destination.transform.position;
-
-		if (guideObj == null) {
-			guideObj = Instantiate(guidePrefab, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - playerTransform.position)), transform);
-			guideObjSprRender = guideObj.GetComponent<SpriteRenderer>();
 		}
 		else {
-			guideObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - playerTransform.position));
+			SetupGuiding(destination.transform.position);
 		}
-		gameObject.SetActive(true);
 	}
 
-	private void Recalculate(Vector3 targetPosition) {
-		if (targetPosition == default) {
+	private void Recalculate(Vector3 targetPos) {
+		if (targetPos == default) {
 			Destroy(guideObj);
-			return;
-		}
-
-		this.targetPosition = targetPosition;
-
-		if (guideObj == null) {
-			guideObj = Instantiate(guidePrefab, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - playerTransform.position)), transform);
-			guideObjSprRender = guideObj.GetComponent<SpriteRenderer>();
 		}
 		else {
-			guideObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - playerTransform.position));
+			SetupGuiding(targetPos);
+		}
+	}
+
+	private void SetupGuiding(Vector3 pos) {
+		targetPosition = pos;
+
+		if (guideObj == null) {
+			guideObj = Instantiate(guidePrefab, Vector3.down, Quaternion.FromToRotation(Vector3.up, (targetPosition - player.position)), transform);
+			guideSpr = guideObj.GetComponent<SpriteRenderer>();
+		}
+		else {
+			guideObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - player.position));
 		}
 		gameObject.SetActive(true);
 	}
@@ -88,24 +76,19 @@ public class Guide : MonoBehaviour {
 	private void Update() {
 		radius = defaultRadius;
 		if (guideObj != null && Timer.script.isRunning == true) {
-			Vector3 direction = targetPosition - playerTransform.position;
+			Vector3 direction = targetPosition - player.position;
 			if (direction.magnitude < radius) {
 				radius = direction.magnitude;
 			}
-			if (radius < 10) {
-				guideObjSprRender.enabled = false;
-			}
-			else {
-				guideObjSprRender.enabled = true;
-			}
-			guideObj.transform.position = playerTransform.position + direction.normalized * radius;
-			guideObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - playerTransform.position));
+			guideSpr.enabled = radius >= defaultRadius;
+			guideObj.transform.position = player.position + direction.normalized * radius;
+			guideObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, (targetPosition - player.position));
 		}
 	}
 
 	private void OnDestroy() {
-		M_Player.OnSpikePickup -= M_Player_OnSpikePickup;
-		M_Player.OnTargetableObjectCollision -= M_Player_OnTargetableObjectCollision;
+		Player.OnSpikePickup -= M_Player_OnSpikePickup;
+		Player.OnTargetableObjectCollision -= M_Player_OnTargetableObjectCollision;
 		Coin.OnNewTarget -= Recalculate;
 		Spike.OnNewTarget -= Recalculate;
 	}

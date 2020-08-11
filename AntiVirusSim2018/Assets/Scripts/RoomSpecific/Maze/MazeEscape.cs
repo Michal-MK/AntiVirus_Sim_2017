@@ -21,28 +21,28 @@ public class MazeEscape : MonoBehaviour {
 
 	public void FromMazeTrans() {
 		entrance.gameObject.SetActive(false);
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
-		Player_Movement.canMove = false;
+		PlayerMovement.CanMove = false;
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
 		OnMazeEscape?.Invoke(this, EventArgs.Empty);
 
-		Zoom.canZoom = true;
-		M_Player.player.transform.position = entrance.transform.position;
+		Zoom.CanZoom = true;
+		Player.Instance.transform.position = entrance.transform.position;
 		Camera.main.orthographicSize = 25;
-		Camera.main.transform.position = M_Player.player.transform.position;
-		M_Player.player.transform.localScale = Vector3.one;
+		Camera.main.transform.position = Player.Instance.transform.position;
+		Player.Instance.transform.localScale = Vector3.one;
 		spike.SetPosition();
 		StartCoroutine(FadeWall());
-		Player_Movement.canMove = true;
-		Control.script.saveManager.canSave = true;
+		PlayerMovement.CanMove = true;
+		Control.Instance.saveManager.canSave = true;
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
 	}
 
 	private IEnumerator FadeWall() {
-		Canvas_Renderer.script.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
+		HUDisplay.script.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
 		SpriteRenderer wallSprite = wall.GetComponentInChildren<SpriteRenderer>();
 		Color32 newColor;
 

@@ -27,7 +27,7 @@ public class SaveManager : MonoBehaviour {
 	}
 
 	private void Start() {
-		Control.script.saveManager = this;
+		Control.Instance.saveManager = this;
 	}
 
 
@@ -38,7 +38,7 @@ public class SaveManager : MonoBehaviour {
 		folderName = folderName + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Year.ToString();
 		DirectoryInfo newSaveDir = Directory.CreateDirectory(Application.dataPath + Path.DirectorySeparatorChar + "Saves" + Path.DirectorySeparatorChar + "D" + difficulty + " " + folderName);
 
-		string filePath = newSaveDir.FullName + Path.DirectorySeparatorChar.ToString() + "data.Kappa";
+		string filePath = newSaveDir.FullName + Path.DirectorySeparatorChar.ToString() + "data.Kappa"; //This was the moment I realized that file extensions are irrelevant ;) What a time that was.
 		string imgPath = newSaveDir.FullName + Path.DirectorySeparatorChar.ToString() + "00.png";
 
 		using (FileStream file = File.Create(filePath)) {
@@ -68,7 +68,7 @@ public class SaveManager : MonoBehaviour {
 	public void Save(bool isAutomatic) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		SaveFile newSave = current;
-		if (Control.script.allowTesting) {
+		if (Control.Instance.allowTesting) {
 			print("No saving!");
 			return;
 		}
@@ -83,14 +83,14 @@ public class SaveManager : MonoBehaviour {
 			SaveGameHelper.script.GetValues();
 
 			#region Player data
-			newSave.data.player.bombs = M_Player.player.pAttack.bombs;
-			newSave.data.player.bullets = M_Player.player.pAttack.bullets;
-			newSave.data.player.playerPos = isAutomatic && M_Player.player.GetCurrentBackground() == MapData.script.GetRoom(4).background ? automaticSave_PreBoss1 : SaveGameHelper.script.playerPos;
-			newSave.data.player.spikesCollected = Spike.spikesCollected;
-			newSave.data.player.coinsCollected = Coin.coinsCollected;
-			newSave.data.player.canZoom = Zoom.canZoom;
-			newSave.data.player.currentBGName = M_Player.player.GetCurrentBackground().name;
-			newSave.data.player.gameProgression = M_Player.gameProgression;
+			newSave.data.player.bombs = Player.Instance.pAttack.Bombs;
+			newSave.data.player.bullets = Player.Instance.pAttack.Bullets;
+			newSave.data.player.playerPos = isAutomatic && Player.Instance.GetCurrentBackground() == MapData.Instance.GetRoom(4).Background ? automaticSave_PreBoss1 : SaveGameHelper.script.playerPos;
+			newSave.data.player.spikesCollected = SaveGameHelper.script.spike.SpikesCollected;
+			newSave.data.player.coinsCollected = SaveGameHelper.script.coin.CoinsCollected;
+			newSave.data.player.canZoom = Zoom.CanZoom;
+			newSave.data.player.currentBGName = Player.Instance.GetCurrentBackground().name;
+			newSave.data.player.gameProgression = Player.GameProgression;
 			#endregion
 
 			#region World data
@@ -100,21 +100,21 @@ public class SaveManager : MonoBehaviour {
 			newSave.data.world.spikeActive = collectibles.Find("Spike").gameObject.activeSelf;
 			newSave.data.world.spikePos = SaveGameHelper.script.spikePos;
 			newSave.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
-			newSave.data.world.doneAvoidance = avoidance.performed;
-			newSave.data.world.boss1Killed = MapData.script.isBoss1Killed;
-			newSave.data.world.postMazeDoorOpen = CameraMovement.script.inMaze == false && Spike.spikesCollected >= 4 ? true : false;
+			newSave.data.world.doneAvoidance = avoidance.AvoidanceFinished;
+			newSave.data.world.boss1Killed = MapData.Instance.BossOneKilled;
+			newSave.data.world.postMazeDoorOpen = CameraMovement.Instance.IsInMaze == false && SaveGameHelper.script.spike.SpikesCollected >= 4 ? true : false;
 			newSave.data.world.doorsOpen = new System.Collections.Generic.List<string>();
-			for (int i = 0; i < MapData.script.getAllDoors.Length; i++) {
-				if (MapData.script.getAllDoors[i].isDoorOpen) {
-					newSave.data.world.doorsOpen.Add(MapData.script.getAllDoors[i].fromRoomID + "," + MapData.script.getAllDoors[i].toRoomID);
+			for (int i = 0; i < MapData.Instance.AllDoors.Length; i++) {
+				if (MapData.Instance.AllDoors[i].IsOpen) {
+					newSave.data.world.doorsOpen.Add(MapData.Instance.AllDoors[i].FromRoomID + "," + MapData.Instance.AllDoors[i].ToRoomID);
 				}
 			}
 			#endregion
 
 			#region Hints data
-			newSave.data.shownHints.currentlyDisplayedSideInfo = Canvas_Renderer.script.slideInText.text;
-			newSave.data.shownHints.shownBlockInfo = block.save_shownInfo;
-			newSave.data.shownHints.shootingIntro = M_Player.player.pAttack.attackModeIntro;
+			newSave.data.shownHints.currentlyDisplayedSideInfo = HUDisplay.script.slideInText.text;
+			newSave.data.shownHints.shownBlockInfo = block.FirstApproachHint;
+			newSave.data.shownHints.shootingIntro = Player.Instance.pAttack.attackModeIntro;
 			#endregion
 
 			#region Core data

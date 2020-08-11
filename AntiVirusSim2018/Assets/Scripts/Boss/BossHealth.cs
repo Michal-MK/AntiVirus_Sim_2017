@@ -63,7 +63,7 @@ public class BossHealth : MonoBehaviour {
 
 	public void CheckShields() {
 		if (healthIndicator.value == 1 && once) {
-			Canvas_Renderer.script.DisplayInfo("His shields are up ... but we got a bomb!\n " +
+			HUDisplay.script.DisplayInfo("His shields are up ... but we got a bomb!\n " +
 												"Switch to it in Attack mode by pressing \"Right Mouse Button\"", //TODO
 												"Pressing it again will switch your ammo back to bullets");
 			once = false;
@@ -87,23 +87,23 @@ public class BossHealth : MonoBehaviour {
 		Destroy(instantiatedParticles.gameObject);
 
 		yield return new WaitForSeconds(1);
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1.2f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1.2f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		MapData.script.Progress(M_Player.gameProgression = 10);
+		MapData.Instance.Progress(Player.GameProgression = 10);
 
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
-		M_Player.player.transform.position = FindObjectOfType<BossEntrance>().transform.position + new Vector3(0, 10);
+		Player.Instance.transform.position = FindObjectOfType<BossEntrance>().transform.position + new Vector3(0, 10);
 		CamFadeOut.OnCamFullyFaded -= CamFadeOut_OnCamFullyFaded;
-		CameraMovement.script.inBossRoom = false;
-		Camera.main.orthographicSize = CameraMovement.defaultCamSize;
-		Control.script.saveManager.canSave = true;
-		Player_Movement.canMove = true;
+		CameraMovement.Instance.IsInBossRoom = false;
+		Camera.main.orthographicSize = CameraMovement.DEFAULT_CAM_SIZE;
+		Control.Instance.saveManager.canSave = true;
+		PlayerMovement.CanMove = true;
 		Destroy(transform.parent.gameObject);
 		Destroy(healthIndicator.gameObject);
-		Canvas_Renderer.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
+		HUDisplay.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
 	}
 }

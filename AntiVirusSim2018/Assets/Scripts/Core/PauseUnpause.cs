@@ -12,7 +12,7 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void Awake() {
 		Control.OnEscapePressed += OnEscapePressed;
-		M_Player.OnPlayerDeath += OnPlayerDeath;
+		Player.OnPlayerDeath += OnPlayerDeath;
 	}
 
 	private void OnEscapePressed() {
@@ -30,7 +30,7 @@ public class PauseUnpause : MonoBehaviour {
 
 	private void OnDestroy() {
 		Control.OnEscapePressed += OnEscapePressed;
-		M_Player.OnPlayerDeath -= OnPlayerDeath;
+		Player.OnPlayerDeath -= OnPlayerDeath;
 	}
 }
 

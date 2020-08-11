@@ -6,8 +6,8 @@ public class Bomb : MonoBehaviour, IWeaponType {
 	public bool checkTriggers;
 	public bool checkColliders;
 
-	public WeaponType weaponType { get; set; } = WeaponType.BOMB;
-	public int damage { get; } = 1;
+	public WeaponType WeaponType { get; set; } = WeaponType.BOMB;
+	public int Damage { get; } = 1;
 
 
 	public AudioClip bombFuse;
@@ -30,10 +30,10 @@ public class Bomb : MonoBehaviour, IWeaponType {
 	}
 
 	private IEnumerator Explode() {
-		SoundFXHandler.script.PlayFxChannel(0,bombFuse);
+		SoundFXHandler.script.PlayFxChannel(0, bombFuse);
 		yield return new WaitForSeconds(1.5f);
 		GetComponent<Collider2D>().enabled = true;
-		SoundFXHandler.script.PlayFxChannel(0,bombExplosion);
+		SoundFXHandler.script.PlayFxChannel(0, bombExplosion);
 		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);
 	}

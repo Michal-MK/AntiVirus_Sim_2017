@@ -23,53 +23,53 @@ public class EnemySpawner : MonoBehaviour {
 
 
 	private void Awake() {
-		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
-		M_Player.OnCoinPickup += M_Player_OnCoinPickup;
+		Player.OnRoomEnter += M_Player_OnRoomEnter;
+		Player.OnCoinPickup += M_Player_OnCoinPickup;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 	}
 
 	private void Start() {
-		UpdatePrefabs(MapData.script.currentMapMode);
-		arrowtrapBG = MapData.script.GetRoom(3).background;
+		UpdatePrefabs(MapData.Instance.CurrentMapMode);
+		arrowtrapBG = MapData.Instance.GetRoom(3).Background;
 		electicBlockController = new ElecticBlockController(deathBlock);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		if (data.player.currentBGName == MapData.script.GetRoom(1).background.name) {
+		if (data.player.currentBGName == MapData.Instance.GetRoom(1).Background.name) {
 			for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
 				SpawnElecticalBlocks();
 			}
 		}
 	}
 
-	private void M_Player_OnCoinPickup(M_Player sender, GameObject coinObj) {
+	private void M_Player_OnCoinPickup(Player sender, GameObject coinObj) {
 		SpawnElecticalBlocks();
 	}
 
-	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if (background == MapData.script.GetRoom(2).background) {
+	private void M_Player_OnRoomEnter(Player sender, RectTransform background, RectTransform previous) {
+		if (background == MapData.Instance.GetRoom(2).Background) {
 			if (currentProjectileWalls.Count == 0) {
 				ProjectileWallController currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWallController>();
 				currentProjectileWall.origin = Directions.RIGHT;
 				currentProjectileWall.spawnInterval = 0.7f;
 				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
 
-				currentProjectileWalls[0].SetProjecileType(Enemy.EnemyType.PROJECTILE_ICICLE);
+				currentProjectileWalls[0].SetProjecileType(EnemyType.PROJECTILE_ICICLE);
 			}
 		}
-		else if (background == MapData.script.GetRoom(9).background) {
+		else if (background == MapData.Instance.GetRoom(9).Background) {
 			if (currentProjectileWalls.Count == 0) {
 				ProjectileWallController currentProjectileWall = projectileWallPrefab.GetComponent<ProjectileWallController>();
 				currentProjectileWall.origin = Directions.TOP;
 				currentProjectileWall.spawnInterval = 1.2f;
 				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
 
-				currentProjectileWalls[0].SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
+				currentProjectileWalls[0].SetProjecileType(EnemyType.PROJECTILE_SIMPLE);
 
 				currentProjectileWall.origin = Directions.BOTTOM;
 				currentProjectileWall.spawnInterval = 0.8f;
 				currentProjectileWalls.Add(Instantiate(projectileWallPrefab, background).GetComponent<ProjectileWallController>());
-				currentProjectileWalls[1].SetProjecileType(Enemy.EnemyType.PROJECTILE_SIMPLE);
+				currentProjectileWalls[1].SetProjecileType(EnemyType.PROJECTILE_SIMPLE);
 			}
 		}
 		else if (currentProjectileWalls.Count != 0) {
@@ -93,7 +93,7 @@ public class EnemySpawner : MonoBehaviour {
 		turrets = new TurretAttack[4];
 		for (int i = 0; i < turrets.Length; i++) {
 			turrets[i] = Instantiate(turretBase, pos + (Vector3)positions[i], Quaternion.identity, transform).GetComponent<TurretAttack>();
-			turrets[i].target = M_Player.player.gameObject;
+			turrets[i].target = Player.Instance.gameObject;
 			turrets[i].useDefaultTiming = true;
 			turrets[i].applyRandomness = true;
 			turrets[i].randomnessMultiplier = 20;
@@ -110,14 +110,14 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 
-	public void UpdatePrefabs(MapData.MapMode mode) {
+	public void UpdatePrefabs(MapMode mode) {
 		switch (mode) {
-			case MapData.MapMode.LIGHT: {
+			case MapMode.LIGHT: {
 				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK) as GameObject;
 				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET) as GameObject;
 				return;
 			}
-			case MapData.MapMode.DARK: {
+			case MapMode.DARK: {
 				deathBlock = Resources.Load(PrefabNames.ENEMY_KILLERBLOCK + "_Dark") as GameObject;
 				turretBase = Resources.Load(PrefabNames.ENEMY_TURRET + "_Dark") as GameObject;
 				return;
@@ -126,8 +126,8 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
-		M_Player.OnCoinPickup -= M_Player_OnCoinPickup;
+		Player.OnRoomEnter -= M_Player_OnRoomEnter;
+		Player.OnCoinPickup -= M_Player_OnCoinPickup;
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		StopAllCoroutines();
 	}

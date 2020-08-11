@@ -13,8 +13,8 @@ public class SwitchScene : MonoBehaviour {
 			return;
 		}
 		SceneManager.LoadScene(name);
-		if (CamFadeOut.script != null) {
-			CamFadeOut.script.anim.SetTrigger("UnDim");
+		if (CamFadeOut.Instance != null) {
+			CamFadeOut.Instance.Animator.SetTrigger("UnDim");
 		}
 	}
 
@@ -41,7 +41,7 @@ public class SwitchScene : MonoBehaviour {
 
 		quit.transform.position = new Vector3(0, -200, 10);
 		CamFadeOut.registerGameMusicVolumeFade = true;
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		sceneNameHolder = SceneNames.MENU_SCENE;
 	}

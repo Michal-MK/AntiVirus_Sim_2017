@@ -22,8 +22,9 @@ public static class BreakPrefab {
 			if (EditorUtility.DisplayDialog(k_WARNING_MSG_HEADER, k_WARNING_MSG_TEXT, k_WARNING_MSG_POS_ANSWER, k_WARNING_MSG_NEG_ANSWER)) {
 				while (Selection.gameObjects.Length > 0) {
 					GameObject old = Selection.gameObjects[0];
-
+#pragma warning disable CS0618
 					if (PrefabUtility.GetPrefabType(old) != PrefabType.None) {
+#pragma warning restore CS0618
 						Scene oldScene = old.scene;
 						Transform oldParent = old.transform.parent;
 						Quaternion oldRot = old.transform.rotation;

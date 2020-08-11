@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,36 +6,45 @@ using UnityEngine;
 /// </summary>
 public class Room : MonoBehaviour {
 
+	[SerializeField]
+	private int roomID = 0;
 	/// <summary>
 	/// The ID of this room, starting at <see langword="1"/>
 	/// </summary>
-	public int roomID;
+	public int RoomID => roomID;
 
+
+	[SerializeField]
+	private string roomName = "";
 	/// <summary>
 	/// The user friendly name of this <see cref="Room"/>
 	/// </summary>
-	public string roomName;
+	public string RoomName => roomName;
 
+
+	[SerializeField]
+	private List<Door> doors = new List<Door>();
 	/// <summary>
 	/// All <see cref="Door"/>s that are going from this <see cref="Room"/> 
 	/// </summary>
-	public List<Door> doors = new List<Door>();
+	public List<Door> OutgoingDoors => doors;
+
 
 	/// <summary>
 	/// The background of this <see cref="Room"/>
 	/// </summary>
-	public RectTransform background { get; private set; }
+	public RectTransform Background { get; private set; }
 
 	private void OnEnable() {
 		foreach (Transform t in GetComponentInChildren<Transform>()) {
 			if (t.name.Contains("Door_")) {
 				string[] split = t.name.Split('_');
-				doors.Add(new Door(t.GetChild(4).gameObject,split[2].Int(),split[3].Int()));
+				doors.Add(new Door(t.GetChild(4).gameObject, split[2].Int(), split[3].Int()));
 			}
 			if (t.name.Contains("Background_")) {
-				background = t.GetComponent<RectTransform>();
+				Background = t.GetComponent<RectTransform>();
 			}
 		}
-		MapData.script.RegisterRoom(this);
+		MapData.Instance.RegisterRoom(this);
 	}
 }

@@ -3,53 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPool {
+
 	private GameObject pooledObject;
 
-	public int getLimit { get; }
-	public List<GameObject> getAllInstantiated { get; } = new List<GameObject>();
+	public int Limit { get; }
+	public List<GameObject> Pool { get; } = new List<GameObject>();
 
 
 	public ObjectPool(GameObject type, int upperLimit = -1) {
 		pooledObject = type;
-		getLimit = upperLimit;
+		Limit = upperLimit;
 	}
 
-	public GameObject getNext {
+	public GameObject Next {
 		get {
-			foreach (GameObject g in getAllInstantiated) {
-				if(g.activeInHierarchy == false) {
+			foreach (GameObject g in Pool) {
+				if (g.activeInHierarchy == false) {
 					return g;
 				}
 			}
-			if (getLimit != -1 && getAllInstantiated.Count >= getLimit) {
-				return null;
+			if (Limit != -1 && Pool.Count >= Limit) {
+				throw new InvalidOperationException($"Attempting to get next element from the pool but the pool is exhausted. Limit: {Pool.Count}/{Limit}");
 			}
 			else {
 				GameObject newObj = UnityEngine.Object.Instantiate(pooledObject);
-				getAllInstantiated.Add(newObj);
-				newObj.GetComponent<IPoolable>().isPooled = true;
+				Pool.Add(newObj);
+				newObj.GetComponent<IPoolable>().IsPooled = true;
 				return newObj;
 			}
 		}
 	}
 
 
-	public void SwitchEnemyIllumination(MapData.MapMode mode) {
-		if (mode == MapData.MapMode.DARK) {
+	public void SwitchEnemyIllumination(MapMode mode) {
+		if (mode == MapMode.DARK) {
 			pooledObject = Resources.Load("Enemies/" + pooledObject.name + "_Dark") as GameObject;
 		}
 		else {
 			pooledObject = Resources.Load("Enemies/" + pooledObject.name.Replace("_Dark", "")) as GameObject;
 		}
-		foreach (GameObject g in getAllInstantiated) {
+		foreach (GameObject g in Pool) {
 			g.GetComponent<Enemy>().MapModeSwitch(mode);
 		}
 	}
 
 	public void ClearPool() {
-		foreach (GameObject g in getAllInstantiated) {
+		foreach (GameObject g in Pool) {
 			UnityEngine.Object.Destroy(g);
 		}
-		getAllInstantiated.Clear();
+		Pool.Clear();
 	}
 }

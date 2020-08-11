@@ -1,27 +1,27 @@
-﻿using UnityEngine;
-using static Player_Movement;
+﻿using Igor.Constants.Strings;
+using UnityEngine;
 
 public class BasicMovement : MonoBehaviour, IPlayerMovement {
 
-	public PlayerMovement movementType => PlayerMovement.ARROW;
+	public PlayerMovementType MovementType => PlayerMovementType.ARROW;
 
-	private PlayerMovementModifiers _modifiers = PlayerMovementModifiers.NONE;
+	private PlayerMovementModifiers modifiers;
 
-	public PlayerMovementModifiers movementModifier {
-		get { return _modifiers; }
+	public PlayerMovementModifiers MovementModifier {
+		get { return modifiers; }
 		set {
 			switch (value) {
 				case PlayerMovementModifiers.INVERT: {
 					print("Inverting.");
-					movementSpeed = -movementSpeed;
-					_modifiers = value;
+					MovementSpeed = -MovementSpeed;
+					modifiers = value;
 					break;
 				}
 			}
 		}
 	}
 
-	public float movementSpeed { get; set; } = 50;
+	public float MovementSpeed { get; set; } = 50;
 	public float movementDrag = 30;
 
 	private Rigidbody2D body;
@@ -33,11 +33,11 @@ public class BasicMovement : MonoBehaviour, IPlayerMovement {
 	}
 
 	public void Move() {
-		if (Input.GetAxis("VertMovement") != 0) {
-			body.AddForce(new Vector2(0, movementSpeed * Input.GetAxis("VertMovement")) * playerMovementSpeedMultiplier);
+		if (Input.GetAxis(InputNames.MOVEMENT_VERTICAL) != 0) {
+			body.AddForce(new Vector2(0, MovementSpeed * Input.GetAxis(InputNames.MOVEMENT_VERTICAL)) * PlayerMovement.SpeedMultiplier);
 		}
-		if (Input.GetAxis("HorMovement") != 0) {
-			body.AddForce(new Vector2(Input.GetAxis("HorMovement") * movementSpeed, 0) * playerMovementSpeedMultiplier);
+		if (Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) != 0) {
+			body.AddForce(new Vector2(Input.GetAxis(InputNames.MOVEMENT_HORIZONTAL) * MovementSpeed, 0) * PlayerMovement.SpeedMultiplier);
 		}
 	}
 

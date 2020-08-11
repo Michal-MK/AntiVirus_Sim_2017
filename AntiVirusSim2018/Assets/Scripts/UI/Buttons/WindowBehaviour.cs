@@ -90,7 +90,7 @@ public class WindowBehaviour : MonoBehaviour {
 		savePromptActive = true;
 		windowRef = Notifications.Confirm("Do you wish to save in this place?", true,
 			(b) => { 
-				Control.script.saveManager.Save(false);
+				Control.Instance.saveManager.Save(false);
 				self.interactable = false;
 				transform.Find("_saveGameText").GetComponent<Text>().text = "Saved!";
 			},

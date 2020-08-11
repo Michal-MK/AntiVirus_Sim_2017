@@ -21,11 +21,11 @@ public class TurretAttack : MonoBehaviour {
 	private Vector3 targetPos;
 	private ObjectPool pool_EnemyProjectile;
 	private Transform enemy;
-	private MapData.MapMode myStance;
+	private MapMode myStance;
 
 	private void Start() {
-		pool_EnemyProjectile = new ObjectPool(Resources.Load("Enemies/" + projectile.name + (MapData.script.currentMapMode == MapData.MapMode.LIGHT ? "" : "_Dark")) as GameObject);
-		myStance = MapData.script.currentMapMode;
+		pool_EnemyProjectile = new ObjectPool(Resources.Load("Enemies/" + projectile.name + (MapData.Instance.CurrentMapMode == MapMode.LIGHT ? "" : "_Dark")) as GameObject);
+		myStance = MapData.Instance.CurrentMapMode;
 		enemy = GameObject.Find("Enemies").transform;
 		targetPos = target.transform.position;
 		if (useDefaultTiming) {
@@ -88,7 +88,7 @@ public class TurretAttack : MonoBehaviour {
 	}
 
 	private void FireBullet() {
-		Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
+		Projectile bullet = pool_EnemyProjectile.Next.GetComponent<Projectile>();
 		if (applyRandomness) {
 			Vector3 rnd = RandomVec(Control.currDifficulty);
 			bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, ((targetPos + rnd) - gameObject.transform.position));
@@ -100,17 +100,17 @@ public class TurretAttack : MonoBehaviour {
 		bullet.transform.SetParent(enemy);
 		bullet.gameObject.SetActive(true);
 		bullet.projectileSpeed = 20;
-		bullet.isDestroyable = false;
-		bullet.isPooled = true;
+		bullet.IsKillable = false;
+		bullet.IsPooled = true;
 		if (projectileLifeSpan > 0) {
 			bullet.StartCoroutine(bullet.Kill(projectileLifeSpan));
 		}
 		bullet.Fire();
 	}
 
-	public void MapStanceSwitch(MapData.MapMode stance) {
+	public void MapStanceSwitch(MapMode stance) {
 		switch (stance) {
-			case MapData.MapMode.LIGHT: {
+			case MapMode.LIGHT: {
 				if (stance != myStance) {
 					GameObject g = Instantiate(Resources.Load<GameObject>(PrefabNames.ENEMY_TURRET), transform.position, transform.rotation, transform.parent);
 					g.transform.localScale = transform.localScale;
@@ -121,7 +121,7 @@ public class TurretAttack : MonoBehaviour {
 				}
 				break;
 			}
-			case MapData.MapMode.DARK: {
+			case MapMode.DARK: {
 				if (stance != myStance) {
 					GameObject g = Instantiate(Resources.Load<GameObject>(PrefabNames.ENEMY_TURRET + "_Dark"), transform.position, transform.rotation, transform.parent);
 					g.transform.localScale = transform.localScale;

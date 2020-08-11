@@ -3,16 +3,18 @@ using System.Collections;
 
 public class Interactable : MonoBehaviour {
 
-	public GameObject triggerInteractionWith;
-	public GameObject interactionInfo;
+	[SerializeField]
+	private GameObject triggerInteractionWith = null;
+	[SerializeField]
+	private GameObject interactionInfo = null;
+	[SerializeField]
+	private bool allowMultipleIntaractions = false;
+	[SerializeField]
+	private bool fireBySendingMessage = true;
 
-	public bool allowMultipleIntaractions;
-	public bool fireBySendingMessage;
-
-	private bool awaitingInput = false;
+	private bool awaitingInput;
 	private Coroutine routine;
 	private bool interacted;
-
 
 	private void OnTriggerEnter2D(Collider2D col) {
 		if (col.name == triggerInteractionWith.name) {

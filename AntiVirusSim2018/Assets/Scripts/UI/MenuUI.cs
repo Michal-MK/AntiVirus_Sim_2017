@@ -5,19 +5,10 @@ using Igor.Constants.Strings;
 
 public class MenuUI : MonoBehaviour {
 
+	#region Lifecycle
+
 	private void Awake() {
 		Control.OnEscapePressed += Control_OnEscapePressed;
-	}
-
-	private void Control_OnEscapePressed() {
-		MainMenuRefs refs = GetComponent<MainMenuRefs>();
-		if (WindowManager.getWindowCount > 0) {
-			WindowManager.CloseMostRecent();
-			foreach (Button b in refs.getAllButtons) {
-				b.interactable = !b.interactable;
-			}
-			EventSystem.current.SetSelectedGameObject(refs.startGame.gameObject);
-		}
 	}
 
 	private void Update() {
@@ -31,5 +22,18 @@ public class MenuUI : MonoBehaviour {
 
 	private void OnDestroy() {
 		Control.OnEscapePressed -= Control_OnEscapePressed;
+	}
+
+	#endregion
+
+	private void Control_OnEscapePressed() {
+		MainMenuRefs refs = GetComponent<MainMenuRefs>();
+		if (WindowManager.getWindowCount > 0) {
+			WindowManager.CloseMostRecent();
+			foreach (Button b in refs.getAllButtons) {
+				b.interactable = !b.interactable;
+			}
+			EventSystem.current.SetSelectedGameObject(refs.startGame.gameObject);
+		}
 	}
 }

@@ -17,7 +17,7 @@ public class PauseGameOverlay : MonoBehaviour {
 		saveButton.SetActive(true);
 		EventSystem.current.SetSelectedGameObject(saveButton);
 		Cursor.visible = true;
-		Player_Movement.canMove = false;
+		PlayerMovement.CanMove = false;
 		Timer.script.isRunning = false;
 		Time.timeScale = 0;
 	}
@@ -30,13 +30,11 @@ public class PauseGameOverlay : MonoBehaviour {
 		settingsButton.SetActive(false);
 		quitToMenu.SetActive(false);
 		Cursor.visible = false;
-		Player_Movement.canMove = true;
+		PlayerMovement.CanMove = true;
 		Time.timeScale = 1;
 
-		if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
-			if (Coin.coinsCollected > 0) {
-				Timer.StartTimer(1f);
-			}
+		if (Player.PlayerState == PlayerState.NORMAL) {
+			Timer.StartTimer(1f);
 		}
 		else {
 			Timer.StartTimer(2f);

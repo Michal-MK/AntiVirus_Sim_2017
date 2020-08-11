@@ -22,28 +22,28 @@ public class Movement : MonoBehaviour {
 	public void MoveAndDestroyOnWallLeave() {
 		destroyOnWallLeave = true;
 		selfDestruct = false;
-		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().isPooled;
+		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().IsPooled;
 		Move();
 	}
 
 	public void MoveAndDestroyOnBackgroundLeave() {
 		destroyOnBackgroundLeave = true;
 		selfDestruct = false;
-		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().isPooled;
+		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().IsPooled;
 		Move();
 	}
 
 	public void MoveAndDestroyOnWallEnter() {
 		destroyOnWallEnter = true;
 		selfDestruct = false;
-		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().isPooled;
+		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().IsPooled;
 		Move();
 	}
 
 	public void MoveAndDestroyOnBackgroundEnter() {
 		destroyOnBackgroundEnter = true;
 		selfDestruct = false;
-		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().isPooled;
+		isPooled = GetComponent<IPoolable>() == null ? false : GetComponent<IPoolable>().IsPooled;
 		Move();
 	}
 

@@ -26,7 +26,7 @@ namespace SaveData_Helper {
 	}
 
 	[System.Serializable]
-	public class Player {
+	public class PlayerData {
 		public SVector3 playerPos;
 		public int coinsCollected;
 		public int spikesCollected;

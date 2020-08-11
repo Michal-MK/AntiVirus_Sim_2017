@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class OpenPage : MonoBehaviour {
 
-	// Use this for initialization
 	public void OpenIt() {
 		switch (gameObject.name) {
 			case "Source": {
-				Application.OpenURL("https://github.com/MoonKill/Unity-Game");
+				Application.OpenURL("https://github.com/Michal-MK/AntiVirus_Sim_2017");
 				break;
 			}
 			case "School": {

@@ -1,19 +1,17 @@
-﻿using System;
-using UnityEngine;
-using static Player_Movement;
+﻿using UnityEngine;
 
 public class MouseMovement : MonoBehaviour, IPlayerMovement {
-	public PlayerMovement movementType => PlayerMovement.MOUSE;
+	public PlayerMovementType MovementType => PlayerMovementType.MOUSE;
 
 	private PlayerMovementModifiers _modifiers = PlayerMovementModifiers.NONE;
 
-	public PlayerMovementModifiers movementModifier {
+	public PlayerMovementModifiers MovementModifier {
 		get { return _modifiers; }
 		set {
 			switch (value) {
 				case PlayerMovementModifiers.INVERT: {
 					print("Inverting.");
-					movementSpeed = -movementSpeed;
+					MovementSpeed = -MovementSpeed;
 					_modifiers = value;
 					break;
 				}
@@ -21,7 +19,7 @@ public class MouseMovement : MonoBehaviour, IPlayerMovement {
 		}
 	}
 
-	public float movementSpeed { get; set; } = 0.03f;
+	public float MovementSpeed { get; set; } = 0.03f;
 
 	public Rigidbody2D body;
 
@@ -35,19 +33,19 @@ public class MouseMovement : MonoBehaviour, IPlayerMovement {
 
 	public void Move() {
 		if (Input.GetAxis("Mouse X") > 0) {
-			body.AddForce(new Vector2(movementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+			body.AddForce(new Vector2(MovementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
 		}
 
 		else if (Input.GetAxis("Mouse X") < 0) {
-			body.AddForce(new Vector2(-movementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
+			body.AddForce(new Vector2(-MovementSpeed * Mathf.Abs(Input.GetAxis("Mouse X")) * 2, 0));
 		}
 
 		if (Input.GetAxis("Mouse Y") > 0) {
-			body.AddForce(new Vector2(0, movementSpeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+			body.AddForce(new Vector2(0, MovementSpeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
 		}
 
 		else if (Input.GetAxis("Mouse Y") < 0) {
-			body.AddForce(new Vector2(0, -movementSpeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
+			body.AddForce(new Vector2(0, -MovementSpeed * Mathf.Abs(Input.GetAxis("Mouse Y")) * 2));
 		}
 	}
 

@@ -9,22 +9,23 @@ public class BlockScript : MonoBehaviour {
 	private Quaternion defaultRotation = Quaternion.Euler(0, 0, 0);
 
 	public static bool pressurePlateTriggered = false;
-	private bool shownInfo = false;
 	private bool preventSoftLock = false;
+
+	public bool FirstApproachHint { get; private set; }
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
+		Player.OnRoomEnter += M_Player_OnRoomEnter;
 	}
 
-	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if (background == MapData.script.GetRoom(2).background){
+	private void M_Player_OnRoomEnter(Player sender, RectTransform background, RectTransform previous) {
+		if (background == MapData.Instance.GetRoom(2).Background){
 			preventSoftLock = true;
 		}
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		shownInfo = data.shownHints.shownBlockInfo;
+		FirstApproachHint = data.shownHints.shownBlockInfo;
 		transform.localPosition = data.world.blockPos;
 		transform.rotation = Quaternion.AngleAxis(data.world.blockZRotation, Vector3.back);
 	}
@@ -32,8 +33,8 @@ public class BlockScript : MonoBehaviour {
 	private void Start() {
 		startingPos = gameObject.transform.position;
 		defaultRotation = gameObject.transform.localRotation;
-		room2BG = MapData.script.GetRoom(2).background;
-		player = M_Player.player.GetComponent<RectTransform>();
+		room2BG = MapData.Instance.GetRoom(2).Background;
+		player = Player.Instance.GetComponent<RectTransform>();
 	}
 
 	private void FixedUpdate() {
@@ -54,19 +55,15 @@ public class BlockScript : MonoBehaviour {
 				transform.rotation = defaultRotation;
 			}
 
-			if (!shownInfo && dist < 10) {
-				Canvas_Renderer.script.DisplayInfo("Find the activator and put the block in front of you on it.", null);
-				shownInfo = true;
+			if (!FirstApproachHint && dist < 10) {
+				HUDisplay.script.DisplayInfo("Find the activator and put the block in front of you on it.", null);
+				FirstApproachHint = true;
 			}
 		}
 	}
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
-	}
-
-	public bool save_shownInfo {
-		get { return shownInfo; }
+		Player.OnRoomEnter -= M_Player_OnRoomEnter;
 	}
 }

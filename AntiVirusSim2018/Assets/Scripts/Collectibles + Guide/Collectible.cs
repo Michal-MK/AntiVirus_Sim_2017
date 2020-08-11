@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 
 public class Collectible : MonoBehaviour {
-	public bool includeNonTriggerCollisions;
-	public Transform objectToCheckCollisionWith;
+	[SerializeField]
+	private bool includeNonTriggerCollisions = false;
+
+	[SerializeField]
+	private Transform objectToCheckCollisionWith = null;
+	/// <summary>
+	/// Who can collect this <see cref="Collectible"/>
+	/// </summary>
+	public Transform Collector { get => objectToCheckCollisionWith; set { objectToCheckCollisionWith = value; } }
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if(objectToCheckCollisionWith == collision.transform) {
+		if (objectToCheckCollisionWith == collision.transform) {
 			objectToCheckCollisionWith.SendMessage("Collided", transform, SendMessageOptions.RequireReceiver);
 		}
 	}

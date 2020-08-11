@@ -32,29 +32,29 @@ namespace Igor.Boss.Attacks {
 		public IEnumerator Attack() {
 			isAttackInProgress = true;
 
-			GameObject positioningCage = Object.Instantiate(cageObj, M_Player.player.transform.position, Quaternion.identity);
+			GameObject positioningCage = Object.Instantiate(cageObj, Player.Instance.transform.position, Quaternion.identity);
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(boss, startPosition, Time.deltaTime / 2, null));
 			yield return new WaitForSeconds(2);
 			if (informOnce) {
 				informOnce = false;
-				Canvas_Renderer.script.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+				HUDisplay.script.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 			}
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, (Vector2)arenaBackground.transform.position - arenaBackground.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
-			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, (Vector2)arenaBackground.transform.position - arenaBackground.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
+			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, (Vector2)arenaBackground.transform.position - arenaBackground.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
 
 			yield return new WaitForSeconds(2.5f);
-			M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.FLAPPY);
+			Player.Instance.pMovement.SetMovementMode(PlayerMovementType.FLAPPY);
 			Object.Destroy(positioningCage.gameObject);
 			bossBehaviour.StartCoroutine(PipeGeneration());
 
 			yield return new WaitUntil(() => !isAttackInProgress);
-			M_Player.player.pMovement.SetMovementMode(Player_Movement.PlayerMovement.ARROW);
+			Player.Instance.pMovement.SetMovementMode(PlayerMovementType.ARROW);
 		}
 
 		public IEnumerator PipeGeneration() {
 
 			const float pipeSpacing = 2f;
-			float horizontalDistance = Mathf.Abs(Mathf.Abs(M_Player.player.transform.position.x) - Mathf.Abs(boss.transform.position.x));
+			float horizontalDistance = Mathf.Abs(Mathf.Abs(Player.Instance.transform.position.x) - Mathf.Abs(boss.transform.position.x));
 			const float arriveTime = 10f;
 			bool downwardsMovement = true;
 			int wallCount = 9;
@@ -77,7 +77,7 @@ namespace Igor.Boss.Attacks {
 					float change = arriveTime - (Time.timeSinceLevelLoad - timeAtStart);
 
 					if (boss.transform.position.y > holeMid + 15 || boss.transform.position.y < holeMid - 15) {
-						Projectile shot = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
+						Projectile shot = pool_EnemyProjectile.Next.GetComponent<Projectile>();
 						shot.transform.position = boss.transform.position;
 						shot.transform.rotation = Quaternion.Euler(0, 0, 270);
 						shot.gameObject.SetActive(true);

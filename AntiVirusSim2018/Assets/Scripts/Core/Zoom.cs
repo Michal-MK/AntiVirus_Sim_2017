@@ -5,14 +5,14 @@ public class Zoom : MonoBehaviour {
 	public Camera cam;
 	public ParticleSystem matrixA;
 	public ParticleSystem matrixB;
-
-	private static bool _canZoom = true;
-
 	public float BossMax = 107f;
 	public float BossMin = 15f;
 
 	public float NormMax = 25;
 	public float NormMin = 15;
+
+	public static bool CanZoom { get; set; } = true;
+
 
 	private float intermediateValue = 0;
 
@@ -21,11 +21,11 @@ public class Zoom : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		_canZoom = data.player.canZoom;
+		CanZoom = data.player.canZoom;
 	}
 
 	private void LateUpdate() {
-		if (CameraMovement.script.inBossRoom && canZoom) {
+		if (CameraMovement.Instance.IsInBossRoom && CanZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			intermediateValue = cam.orthographicSize;
 			if (roll > 0) {
@@ -43,7 +43,7 @@ public class Zoom : MonoBehaviour {
 				}
 			}
 		}
-		else if (!CameraMovement.script.inBossRoom && canZoom) {
+		else if (!CameraMovement.Instance.IsInBossRoom && CanZoom) {
 			float roll = Input.GetAxis("Mouse Scroll Wheel");
 			intermediateValue = cam.orthographicSize;
 			if (roll > 0) {
@@ -60,7 +60,7 @@ public class Zoom : MonoBehaviour {
 				}
 			}
 		}
-		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !CameraMovement.script.inBossRoom) {
+		if (matrixA.shape.radius != Camera.main.orthographicSize * 2 + 10 && !CameraMovement.Instance.IsInBossRoom) {
 
 			matrixA.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + Camera.main.orthographicSize, 0);
 			matrixB.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y - Camera.main.orthographicSize, 0);
@@ -71,11 +71,6 @@ public class Zoom : MonoBehaviour {
 			shapeA.radius = Camera.main.orthographicSize * 2 + 10;
 			shapeB.radius = Camera.main.orthographicSize * 2 + 10;
 		}
-	}
-
-	public static bool canZoom {
-		get { return _canZoom; }
-		set { _canZoom = value; }
 	}
 
 	private void OnDestroy() {

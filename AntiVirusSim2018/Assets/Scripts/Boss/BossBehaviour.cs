@@ -28,9 +28,9 @@ public class BossBehaviour : Enemy {
 
 
 	void Start() {
-		OnBossfightBegin?.Invoke(this, new BossEncouterEventArgs(this, M_Player.player));
-		RectTransform arenaBackground = MapData.script.GetBackgroundBoss(1);
-		player = M_Player.player.gameObject;
+		OnBossfightBegin?.Invoke(this, new BossEncouterEventArgs(1, this, Player.Instance));
+		RectTransform arenaBackground = MapData.Instance.GetBackgroundBoss(1);
+		player = Player.Instance.gameObject;
 		attacks.Add(new LoopBulletSpawn(gameObject, SpriteOffsets.GetPoint(arenaBackground.GetComponent<SpriteRenderer>(), 12, 88), arenaBackground.position, arenaBackground));
 		attacks.Add(new KillerBlockPath(gameObject, arenaBackground.transform.position - new Vector3(0, arenaBackground.sizeDelta.y / 3), arenaBackground));
 		attacks.Add(new FlappyBirdWalls(gameObject, new Vector3(arenaBackground.position.x + arenaBackground.sizeDelta.x / 4, arenaBackground.position.y + arenaBackground.sizeDelta.y / 2), arenaBackground));
@@ -43,11 +43,11 @@ public class BossBehaviour : Enemy {
 		selfHealth.SetDamageable(false);
 		selfRender.sprite = Invincible;
 
-		yield return new WaitUntil(() => CameraMovement.script.isCameraDoneMoving);
+		yield return new WaitUntil(() => CameraMovement.Instance.CameraStill);
 
-		Player_Movement.canMove = true;
-		Zoom.canZoom = true;
-		Canvas_Renderer.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my control. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
+		PlayerMovement.CanMove = true;
+		Zoom.CanZoom = true;
+		HUDisplay.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my control. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
 		yield return new WaitForSeconds(1);
 
 		StartCoroutine(Attack(Random.Range(0, attacks.Count)));

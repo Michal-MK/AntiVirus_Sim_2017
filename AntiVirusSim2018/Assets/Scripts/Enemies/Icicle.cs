@@ -30,9 +30,9 @@ public class Icicle : Projectile {
 		StartCoroutine(Fade());
 	}
 
-	public override void MapModeSwitch(MapData.MapMode mode) {
+	public override void MapModeSwitch(MapMode mode) {
 		base.MapModeSwitch(mode);
-		if (mode == MapData.MapMode.DARK) {
+		if (mode == MapMode.DARK) {
 			GameObject g = Instantiate(darkModeLight, transform);
 			g.transform.localPosition = new Vector3(-0.5f, -4.5f, -4);
 		}

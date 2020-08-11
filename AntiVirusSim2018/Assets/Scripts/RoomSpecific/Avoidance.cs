@@ -4,41 +4,61 @@ using UnityEngine.UI;
 
 public class Avoidance : MonoBehaviour {
 
-	public bool performed = false;
-	public EnemySpawner spawner;
-	public Spike spike;
+	[SerializeField]
+	private EnemySpawner spawner = null;
 
-	public float avoidDuration = 60;
+	[SerializeField]
+	private Spike spike = null;
+
+	[SerializeField]
+	private float avoidDuration = 60;
+	/// <summary>
+	/// Time in seconds how log should this <see cref="Avoidance"/> last
+	/// </summary>
+	public float AvoidanceDuration { get => avoidDuration; set => avoidDuration = value; }
 
 	private TurretAttack[] turrets;
 
+	/// <summary>
+	/// <see cref="Avoidance"/> completion state, prevents re-activation
+	/// </summary>
+	public bool AvoidanceFinished { get; private set; }
+
+	#region Lifecycle
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
 		SignPost.OnAvoidanceBegin += SignPost_OnAvoidanceBegin;
 	}
 
+	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		SignPost.OnAvoidanceBegin -= SignPost_OnAvoidanceBegin;
+	}
+
+	#endregion
+
 	private void SignPost_OnAvoidanceBegin() {
-		if (!performed) {
-			Canvas_Renderer.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
-												"You fell for my genius trap, now... DIE!", "Survive, You can zoom out using the Mouse Wheel");
+		if (!AvoidanceFinished) {
+			HUDisplay.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+										 "You fell for my genius trap, now... DIE!", "Survive, You can zoom out using the Mouse Wheel");
 			StartAvoidance();
 			turrets = spawner.SpawnAvoidance();
 		}
 		else {
-			Canvas_Renderer.script.DisplayInfo(null, "Nope, not doing that thing again!");
+			HUDisplay.script.DisplayInfo(null, "Nope, not doing that thing again!");
 		}
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		performed = data.world.doneAvoidance;
+		AvoidanceFinished = data.world.doneAvoidance;
 	}
 
 	public void StartAvoidance() {
-		MapData.script.CloseDoor(MapData.script.GetRoomLink(2, 3));
+		MapData.Instance.GetRoomLink(2, 3).CloseDoor();
 		StartCoroutine(HoldAvoidance());
-		Control.script.saveManager.canSave = false;
-		CameraMovement.script.RaycastForRooms();
+		Control.Instance.saveManager.canSave = false;
+		CameraMovement.Instance.RaycastForRooms();
 		StartCoroutine(TimeLeft());
 	}
 
@@ -48,10 +68,10 @@ public class Avoidance : MonoBehaviour {
 			turret.Stop();
 		}
 		yield return new WaitForSeconds(5);
-		Control.script.saveManager.canSave = true;
+		Control.Instance.saveManager.canSave = true;
 		spike.SetPosition();
-		Canvas_Renderer.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
-		performed = true;
+		HUDisplay.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		AvoidanceFinished = true;
 		yield return new WaitForSeconds(10);
 		foreach (TurretAttack turret in turrets) {
 			turret.CleanUp();
@@ -62,7 +82,7 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	private IEnumerator TimeLeft() {
-		Text SideText = Canvas_Renderer.script.slideInText;
+		Text SideText = HUDisplay.script.slideInText;
 		int timeLeft = (int)avoidDuration - 1;
 		bool show = false;
 
@@ -80,10 +100,5 @@ public class Avoidance : MonoBehaviour {
 				break;
 			}
 		}
-	}
-
-	private void OnDestroy() {
-		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		SignPost.OnAvoidanceBegin -= SignPost_OnAvoidanceBegin;
 	}
 }

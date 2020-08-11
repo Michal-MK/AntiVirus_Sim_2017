@@ -1,51 +1,46 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CamFadeOut : MonoBehaviour {
-	public Animator anim;
+	[SerializeField]
+	private Animator anim = null;
+	public Animator Animator => anim;
+
 	public const float CAM_FULLY_FADED_NORMAL = 1.5f;
 	public const float CAM_FULLY_FADED_DIMMED = 1.5f;
 
-	public static CamFadeOut script;
+	public static CamFadeOut Instance { get; private set; }
 
-	public delegate void CamFaded();
-
-	public static event CamFaded OnCamFullyFaded;
+	public static event EmptyEventHandler OnCamFullyFaded;
 
 	public static bool registerMenuMusicVolumeFade;
 	public static bool registerGameMusicVolumeFade;
 
-	public enum CameraModeChanges {
-		DIM_CAMERA,
- 		TRANSITION_SCENES,
-	}
-
 	private void Awake() {
-		if(script == null) {
+		if (Instance == null) {
 			DontDestroyOnLoad(transform.parent.gameObject);
-			script = this;
+			Instance = this;
 		}
-		else if(script != this) {
+		else if (Instance != this) {
 			Destroy(gameObject);
 		}
 	}
 
 	/// <summary>
-	/// Transitions camera into deifferent mode.
+	/// Transitions camera into different mode.
 	/// </summary>
 	/// <param name="change">Transition mode</param>
 	/// <param name="speed">Animator speed</param>
-	public void PlayTransition(CameraModeChanges change, float speed) {
+	public void PlayTransition(CameraTransitionModes change, float speed) {
 		switch (change) {
-			case CameraModeChanges.DIM_CAMERA: {
+			case CameraTransitionModes.DIM_CAMERA: {
 				anim.Play("DimCamera");
 				anim.speed = speed;
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 0;
 				break;
 			}
-			case CameraModeChanges.TRANSITION_SCENES: {
+			case CameraTransitionModes.TRANSITION_SCENES: {
 				if (anim.GetCurrentAnimatorStateInfo(0).IsName("DimCamera")) {
 					anim.Play("TransitionFromDim");
 					anim.speed = speed;
@@ -72,8 +67,6 @@ public class CamFadeOut : MonoBehaviour {
 
 	private IEnumerator AnimState(float delay) {
 		yield return new WaitForSecondsRealtime(delay);
-		if(OnCamFullyFaded != null) {
-			OnCamFullyFaded();
-		}
+		OnCamFullyFaded?.Invoke();
 	}
 }

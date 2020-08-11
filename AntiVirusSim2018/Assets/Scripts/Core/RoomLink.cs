@@ -10,54 +10,39 @@ public struct RoomLink {
 	/// <summary>
 	/// The <see cref="Room"/> from which this link goes
 	/// </summary>
-	public Room from { get; }
+	public Room From { get; }
 
 	/// <summary>
 	/// The <see cref="Room"/> to which this link goes
 	/// </summary>
-	public Room to { get; }
+	public Room To { get; }
 
+	private Tuple<Door, Door> Connection { get; }
 
-	private Tuple<Door, Door> connection { get; }
+	public RectTransform Transition { get; }
 
-	/// <summary>
-	/// The <see cref="RectTransform"/> of the transition between <see cref="Room"/>s
-	/// </summary>
-	public RectTransform transition;
-
-	/// <summary>
-	/// Default constructor
-	/// </summary>
 	public RoomLink(Room fromRoom, Room toRoom) {
-		from = fromRoom;
-		to = toRoom;
-		transition = MapData.script.transitions.SelectUnique((RectTransform t) => { return t.name.Contains(fromRoom.roomID.ToString()) && t.name.Contains(toRoom.roomID.ToString()); });
-		connection = new Tuple<Door, Door>(from.doors.Find((d) => { return d.fromRoomID == fromRoom.roomID && d.toRoomID == toRoom.roomID; }),
-										   to.doors.Find((d) => { return d.fromRoomID == toRoom.roomID && d.toRoomID == fromRoom.roomID; }));
+		From = fromRoom;
+		To = toRoom;
+		Transition = MapData.Instance.Transitions.SelectUnique((RectTransform t) => { return t.name.Contains(fromRoom.RoomID.ToString()) && t.name.Contains(toRoom.RoomID.ToString()); });
+		Connection = new Tuple<Door, Door>(From.OutgoingDoors.Find((d) => d.FromRoomID == fromRoom.RoomID && d.ToRoomID == toRoom.RoomID),
+										   To.OutgoingDoors.Find((d) => d.FromRoomID == toRoom.RoomID && d.ToRoomID == fromRoom.RoomID));
 	}
 
-	/// <summary>
-	/// Open the door
-	/// </summary>
 	public void OpenDoor(bool both = true) {
-		connection.Item1.Open();
-		if (both)
-			connection.Item2.Open();
+		Connection.Item1.Open();
+		if (both) Connection.Item2.Open();
 	}
 
-	/// <summary>
-	/// Open the door
-	/// </summary>
 	public void CloseDoor(bool both = true) {
-		connection.Item1.Close();
-		if (both)
-			connection.Item2.Close();
+		Connection.Item1.Close();
+		if (both) Connection.Item2.Close();
 	}
 
 	#region Equality comparison
 
 	public static bool operator ==(RoomLink a, RoomLink b) {
-		if (a.from == b.from && a.to == b.to) {
+		if (a.From == b.From && a.To == b.To) {
 			return true;
 		}
 		return false;
@@ -73,14 +58,14 @@ public struct RoomLink {
 		}
 
 		RoomLink link = (RoomLink)obj;
-		return EqualityComparer<Room>.Default.Equals(from, link.from) &&
-			   EqualityComparer<Room>.Default.Equals(to, link.to);
+		return EqualityComparer<Room>.Default.Equals(From, link.From) &&
+			   EqualityComparer<Room>.Default.Equals(To, link.To);
 	}
 
 	public override int GetHashCode() {
 		int hashCode = -1951484959;
-		hashCode = hashCode * -1521134295 + EqualityComparer<Room>.Default.GetHashCode(from);
-		hashCode = hashCode * -1521134295 + EqualityComparer<Room>.Default.GetHashCode(to);
+		hashCode = hashCode * -1521134295 + EqualityComparer<Room>.Default.GetHashCode(From);
+		hashCode = hashCode * -1521134295 + EqualityComparer<Room>.Default.GetHashCode(To);
 		return hashCode;
 	}
 

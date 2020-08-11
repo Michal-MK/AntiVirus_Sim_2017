@@ -11,8 +11,8 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 	public float bulletDuration = 1.5f;
 	public PlayerAttack player;
 
-	public WeaponType weaponType { get; } = WeaponType.BULLET;
-	public int damage { get; } = 1;
+	public WeaponType WeaponType { get; } = WeaponType.BULLET;
+	public int Damage { get; } = 1;
 
 	private void OnEnable() {
 		rg.velocity = transform.up * bulletSpeed;
@@ -20,10 +20,10 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 	}
 
 	private void OnCollisionEnter2D(Collision2D col) {
-		if (col.transform.tag == Tags.WALL) {
+		if (col.transform.CompareTag(Tags.WALL)) {
 			CreatePickup(col);
 		}
-		if(col.transform.tag == "SpikeDetectBoss") {
+		if (col.transform.CompareTag("SpikeDetectBoss")) {
 			rg.velocity = Vector3.zero;
 			Destroy(gameObject);
 		}
@@ -37,7 +37,7 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 	private void CreatePickup(Collision2D info = null) {
 		rg.velocity = Vector3.zero;
 		Vector3 impactPosition;
-		if(info!= null) {
+		if (info != null) {
 			impactPosition = info.contacts[0].point;
 		}
 		else {
@@ -46,7 +46,7 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 		GameObject newspikeBullet = Instantiate(bulletPickup, impactPosition, transform.rotation);
 		newspikeBullet.transform.parent = GameObject.Find("Collectibles").transform;
 		newspikeBullet.name = "FiredBullet";
-		newspikeBullet.GetComponent<Collectible>().objectToCheckCollisionWith = player.transform;
+		newspikeBullet.GetComponent<Collectible>().Collector = player.transform;
 		Destroy(gameObject);
 	}
 }

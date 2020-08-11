@@ -2,10 +2,9 @@
 
 interface IEnemyControler {
 
-	GameObject enemyPrefab { get; }
-
-	Room activeRoom { get; }
-	bool respawnOnReEntry { get; }
+	GameObject EnemyPrefab { get; }
+	Room ActiveRoom { get; }
+	bool RespawnOnReEntry { get; }
 
 	void Spawn();
 	void Despawn();

@@ -5,8 +5,7 @@ using Igor.Constants.Strings;
 
 public class SignPost : MonoBehaviour {
 
-	public delegate void SignPostInteractions();
-	public static event SignPostInteractions OnAvoidanceBegin;
+	public static event EmptyEventHandler OnAvoidanceBegin;
 
 	private static List<SignPost> readPosts = new List<SignPost>();
 
@@ -24,48 +23,48 @@ public class SignPost : MonoBehaviour {
 				break;
 			}
 			case "_SignPost Start": {
-				Canvas_Renderer.script.DisplayInfo("The virus can not be damaged while it is attacking.", null);
+				HUDisplay.script.DisplayInfo("The virus can not be damaged while it is attacking.", null);
 				break;
 			}
 			case "_SignPost Room 1": {
-				Canvas_Renderer.script.DisplayInfo("All the spikes you are collecting have a purpose, hold on to them.", null);
+				HUDisplay.script.DisplayInfo("All the spikes you are collecting have a purpose, hold on to them.", null);
 				break;
 			}
 			case "_SignPost PostAvoidance": {
-				Canvas_Renderer.script.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
+				HUDisplay.script.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
 				break;
 			}
 			case "_SignPost Maze": {
-				Canvas_Renderer.script.DisplayInfo("The coins are up to no use... yet", null);
+				HUDisplay.script.DisplayInfo("The coins are up to no use... yet", null);
 				break;
 			}
 			case "_SignPost PreBossEntrance": {
-				Canvas_Renderer.script.DisplayInfo("Your real challenge awaits inside this portal. Are you prepared? Sorry I can not help.", null);
+				HUDisplay.script.DisplayInfo("Your real challenge awaits inside this portal. Are you prepared? Sorry I can not help.", null);
 				break;
 			}
 			case "_SignPost PreBoss": {
-				Canvas_Renderer.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the target. Sorry for telling you this late lel. No regrets.", null);
+				HUDisplay.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the target. Sorry for telling you this late lel. No regrets.", null);
 				break;
 			}
 			case "_SignPost LaserRoom": {
-				Canvas_Renderer.script.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
-																		  "This is the seventh sign, but you found only " + readPosts.Count + " disappointed.", null);
+				HUDisplay.script.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
+																	"This is the seventh sign, but you found only " + readPosts.Count + " disappointed.", null);
 				if (readPosts.Count == 6) {
-					Coin.coinsCollected++;
+					FindObjectOfType<Coin>().CoinsCollected++;
 				}
 				break;
 			}
 			case "_SignPost TeleportationRoom": {
-				if (M_Player.player.pMovement.getCurrentMovementModifier == Player_Movement.PlayerMovementModifiers.INVERT) {
-					Canvas_Renderer.script.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
+				if (Player.Instance.pMovement.CurrentMovementModifier == PlayerMovementModifiers.INVERT) {
+					HUDisplay.script.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
 				}
 				else {
-					Canvas_Renderer.script.DisplayInfo("!petssim ot tnaw ton od uoy dna ,tnemom yna ta raeppasid nac htap eht ,elbatsnu yrev si moor siht ni gninthgil ehT", null);
+					HUDisplay.script.DisplayInfo("!petssim ot tnaw ton od uoy dna ,tnemom yna ta raeppasid nac htap eht ,elbatsnu yrev si moor siht ni gninthgil ehT", null);
 				}
 				break;
 			}
 			case "_SignPost InvertingRoom": {
-				Canvas_Renderer.script.DisplayInfo("!desruc si moor sihT", null);
+				HUDisplay.script.DisplayInfo("!desruc si moor sihT", null);
 				break;
 			}
 		}
@@ -74,13 +73,13 @@ public class SignPost : MonoBehaviour {
 		readPosts.Add(this);
 	}
 
-	public void MapStanceSwitch(MapData.MapMode mode) {
+	public void MapStanceSwitch(MapMode mode) {
 		switch (mode) {
-			case MapData.MapMode.LIGHT: {
+			case MapMode.LIGHT: {
 				GetComponent<SpriteRenderer>().sprite = signPostNormal;
 				return;
 			}
-			case MapData.MapMode.DARK: {
+			case MapMode.DARK: {
 				GetComponent<SpriteRenderer>().sprite = signPostDark;
 				return;
 			}

@@ -1,16 +1,14 @@
 using UnityEngine;
 using System.IO;
-using System;
 using UnityEngine.SceneManagement;
 using Igor.Constants.Strings;
 
 public class Control : MonoBehaviour {
 
-	public delegate void EmptyEventHandler();
-
 	public bool allowTesting = false;
 
-	public static Control script;
+	public static Control Instance { get; private set; }
+
 	public SaveManager saveManager;
 	public LoadManager loadManager;
 	public MapData mapData;
@@ -31,14 +29,14 @@ public class Control : MonoBehaviour {
 	}
 
 	private void Awake() {
-		if (script == null) {
-			script = this;
-			script.loadManager = new LoadManager();
+		if (Instance == null) {
+			Instance = this;
+			Instance.loadManager = new LoadManager();
 			DontDestroyOnLoad(gameObject);
 			SceneManager.sceneLoaded += OnSceneFinishedLoading;
 			gameObject.name = "Active Game Control";
 		}
-		else if (script != this) {
+		else if (Instance != this) {
 			Destroy(gameObject);
 		}
 	}
@@ -50,19 +48,17 @@ public class Control : MonoBehaviour {
 	public void StartNewGame(int difficulty) {
 		SaveManager.SaveNewGame(difficulty);
 		CamFadeOut.registerMenuMusicVolumeFade = true;
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
 		SceneManager.sceneLoaded += NewGameSceneLoaded;
 	}
 
-	private void NewGameSceneLoaded(Scene arg0, LoadSceneMode arg1) {
+	private void NewGameSceneLoaded(Scene _, LoadSceneMode __) {
 		SceneManager.sceneLoaded -= NewGameSceneLoaded;
-		Spike.spikesCollected = 0;
-		Coin.coinsCollected = 0;
-		M_Player.gameProgression = 0;
+		Player.GameProgression = 0;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
-		CamFadeOut.script.anim.speed = 0.75f;
+		CamFadeOut.Instance.Animator.speed = 0.75f;
 	}
 
 	private void TransitionToNewGame() {
@@ -73,24 +69,22 @@ public class Control : MonoBehaviour {
 
 	public void Restart() {
 		CamFadeOut.registerGameMusicVolumeFade = true;
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += RestartTransition;
 	}
 
 	private void RestartTransition() {
-		Player_Movement.canMove = false;
-		Spike.spikesCollected = 0;
-		Coin.coinsCollected = 0;
-		M_Player.gameProgression = 0;
+		PlayerMovement.CanMove = false;
+		Player.GameProgression = 0;
 		Timer.ResetTimer();
 		Time.timeScale = 1;
 		CamFadeOut.OnCamFullyFaded -= RestartTransition;
 		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
 	}
 
-	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode) {
+	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode _) {
 		if (scene.name == SceneNames.GAME1_SCENE) {
-			CamFadeOut.script.anim.speed = 0.5f;
+			CamFadeOut.Instance.Animator.speed = 0.5f;
 		}
 		else if (scene.name == SceneNames.MENU_SCENE) {
 			if (!MenuMusic.script.isPlaying) {
@@ -119,36 +113,34 @@ public class Control : MonoBehaviour {
 }
 
 /* List of Static variables
- * Control: currAttempt, currDifficulty, currProfile, OnEscapePressed Control
- * BossBehaviour: playerSpeedMultiplier, OnBossfightBegin
- * Coins: coinsCollected, OnNewTarget
- * Spike: spikesCollected, OnNewTarget
- * CameraMovement: OnZoomModeSwitch, CameraMovement
- * CamFadeOut: CamFadeOut, OnCamFullyFaded, registerGameMusicVolumeFade, registerMenuMusicVolumeFade
- * CanvasRenderer: CanvasRenderer
- * MapData: MapData
- * MusicHandler: MusicHandler
- * PauseUnpause: canPause, isPaused
- * LoadManager: OnSaveDataLoaded
- * SaveManager: saveButton, canSave, current,
- * SaveGameHelper: SaveGameHelper
- * SoundFXHandler: SoundFXHandler
- * Timer: time, isRunning, timeFlowMultiplier, OnTimerPause, Timer, 
- * Zoom: canZoom
- * SignPost: OnAvoidanceBegin
- * M_Player: gameProgression, currentBG_name, M_Player, playerState, EVENTS
- * Player_Movement: canMove
- * PlayerAttack: OnAmmoChanged, OnAmmoPickup
- * Profile: profilesFolder, currProfile, profileRepresentation, authentication, profileName, 
- * BlockScript: pressurePlateTriggered
- * Maze: mazeSpeedMultiplier
- * MazeEntrance: OnMazeEnter
- * MazeEscape: OnMazeEscape
- * PressurePlate: OnNewTarget
- * MenuMusic: MenuMusic
- * HUDElements: HudElements
- * Notifications: all the prefabs, canvas
- * UserInterface: OnPauseChange, sceneMode, 
- * WindowManager: activeWindows
- * UICallbacks: source(private)
+ * Control: ., currAttempt, currDifficulty, OnEscapePressed
+  BossBehaviour: OnBossfightBegin, OnBossfightResult
+  Coins: OnNewTarget
+  Spike: OnNewTarget, $_spikesCollected
+  CameraMovement: .
+  CamFadeOut: ., OnCamFullyFaded, registerGameMusicVolumeFade, registerMenuMusicVolumeFade
+  HUDisplay: .
+  UIControlScheme: .
+  GameSettings: ., AudioVolume, FXVolume, $path, $fileContents
+  MapData: .
+  PauseUnpause: canPause, isPaused, OnPaused
+  LoadManager: OnSaveDataLoaded
+  SaveManager: current, $_canSave
+  SaveGameHelper: .
+  Zoom: $_canZoom
+  Timer: ., getTime, timeFlowMultiplier 
+  SignPost: OnAvoidanceBegin, $readPosts
+  Player: ., PlayerState, EVENTS{5}, $gameProgression
+  PlayerMovement: canMove, playerMovementSpeedMultiplier
+  PlayerAttack: OnAmmoChanged, OnAmmoPickup
+  BlockScript: pressurePlateTriggered
+  Maze: getMazeSpeedMultiplier
+  MazeEntrance: OnMazeEnter
+  MazeEscape: OnMazeEscape
+  PressurePlate: OnNewTarget
+  MenuMusic: .
+  MusicHandler: .
+  SoundFXHandler: .
+  Notifications: NotificationActive, $PREFABS{3}, $canvas
+  WindowManager: OnWindowOpen, OnWindowClose, $activeWindows
  */

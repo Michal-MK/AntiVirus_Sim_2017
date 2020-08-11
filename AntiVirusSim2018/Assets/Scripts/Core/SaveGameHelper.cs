@@ -1,11 +1,11 @@
 using Igor.Constants.Strings;
-using System;
 using UnityEngine;
 
 public class SaveGameHelper : MonoBehaviour {
 
 	public GameObject block;
 	public Spike spike;
+	public Coin coin;
 
 	public Vector3 playerPos;
 	public Vector3 boxPos;

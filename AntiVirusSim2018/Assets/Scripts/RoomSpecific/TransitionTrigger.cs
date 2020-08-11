@@ -4,9 +4,9 @@ public class TransitionTrigger : MonoBehaviour {
 
 	public GameObject reactToObject;
 	public bool isPlayer = true;
-	public Player_Movement.PlayerMovement modeToApply;
+	public PlayerMovementType modeToApply;
 
-	private Player_Movement.PlayerMovement modeToRestore;
+	private PlayerMovementType modeToRestore;
 
 	public bool setupPosition;
 	public Transform[] setupPositionLocations;
@@ -14,15 +14,15 @@ public class TransitionTrigger : MonoBehaviour {
 
 	private void Start() {
 		if (isPlayer) {
-			reactToObject = M_Player.player.gameObject;
+			reactToObject = Player.Instance.gameObject;
 		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D c) {
 		if (c.name == reactToObject.name) {
 			if (isPlayer) {
-				M_Player player = c.GetComponent<M_Player>();
-				modeToRestore = player.pMovement.getCurrentMovementMode;
+				Player player = c.GetComponent<Player>();
+				modeToRestore = player.pMovement.CurrentMovementMode;
 				SetMode(player, setupPosition, modeToApply);
 				if (setupPosition) {
 					data = c;
@@ -35,7 +35,7 @@ public class TransitionTrigger : MonoBehaviour {
 	private void OnTriggerExit2D(Collider2D c) {
 		if (c.name == reactToObject.name) {
 			if (isPlayer) {
-				M_Player player = c.GetComponent<M_Player>();
+				Player player = c.GetComponent<Player>();
 				SetMode(player, false, modeToRestore);
 				if (setupPosition) {
 					data = c;
@@ -45,7 +45,7 @@ public class TransitionTrigger : MonoBehaviour {
 	}
 
 	private Collider2D data;
-	private void SetMode(M_Player player, bool setPosition, Player_Movement.PlayerMovement mode) {
+	private void SetMode(Player player, bool setPosition, PlayerMovementType mode) {
 		if (setPosition) {
 			float dist = Mathf.Infinity;
 			int index = -1;
@@ -57,7 +57,7 @@ public class TransitionTrigger : MonoBehaviour {
 					index = i;
 				}
 			}
-			Player_Movement.canMove = false;
+			PlayerMovement.CanMove = false;
 			StartCoroutine(LerpFunctions.LerpPosition(player.gameObject, setupPositionLocations[index].position, Time.deltaTime,FinializeSwitch));
 			return;
 		}
@@ -65,8 +65,8 @@ public class TransitionTrigger : MonoBehaviour {
 	}
 
 	private void FinializeSwitch() {
-		data.GetComponent<M_Player>().pMovement.SetMovementMode(modeToApply);
-		Player_Movement.canMove = true;
+		data.GetComponent<Player>().pMovement.SetMovementMode(modeToApply);
+		PlayerMovement.CanMove = true;
 	}
 }
 

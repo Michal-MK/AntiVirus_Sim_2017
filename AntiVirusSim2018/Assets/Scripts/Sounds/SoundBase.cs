@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,18 +15,17 @@ public class SoundBase : MonoBehaviour {
 	}
 
 	private IEnumerator _MapToAlpha(SpriteRenderer sprite) {
-		while (sprite.color.a < 1) {
-			if (sprite.color.a >= 1 - GameSettings.audioVolume) {
-				source.volume = 1 - sprite.color.a;
-			}
-			yield return null;
-		}
+		yield return _MapToAlpha(sprite.color);
 	}
 
 	private IEnumerator _MapToAlpha(Image image) {
-		while (image.color.a < 1) {
-			if (image.color.a >= 1 - GameSettings.audioVolume) {
-				source.volume = 1 - image.color.a;
+		yield return _MapToAlpha(image.color);
+	}
+
+	private IEnumerator _MapToAlpha(Color c) {
+		while (c.a < 1) {
+			if (c.a >= 1 - GameSettings.AudioVolume) {
+				source.volume = 1 - c.a;
 			}
 			yield return null;
 		}

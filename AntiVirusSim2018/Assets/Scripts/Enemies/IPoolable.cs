@@ -1,3 +1,3 @@
 ﻿public interface IPoolable {
-	bool isPooled { get; set; }
+	bool IsPooled { get; set; }
 }

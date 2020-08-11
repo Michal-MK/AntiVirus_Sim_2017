@@ -3,15 +3,15 @@
 public class Buttons : MonoBehaviour {
 
 	public void StartNewGame(int difficulty) {
-		Control.script.StartNewGame(difficulty);
+		Control.Instance.StartNewGame(difficulty);
 	}
 
 	public void LoadGame(Transform myParent) {
-		Control.script.loadManager.Load(myParent.name);
+		Control.Instance.loadManager.Load(myParent.name);
 	}
 
 	public void Restart() {
-		Control.script.Restart();
+		Control.Instance.Restart();
 	}
 
 	public void Quit() {

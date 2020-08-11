@@ -9,8 +9,8 @@ public class GameSettings : MonoBehaviour {
 	public static GameSettings script;
 
 	public delegate void SoundVoulmeChanged(float newValue);
-	public static float audioVolume { get; private set; }
-	public static float fxVolume { get; private set; }
+	public static float AudioVolume { get; private set; }
+	public static float FXVolume { get; private set; }
 
 	public event SoundVoulmeChanged OnMusicVolumeChanged;
 	public event SoundVoulmeChanged OnFxVolumeChanged;
@@ -24,7 +24,7 @@ public class GameSettings : MonoBehaviour {
 
 	private static string[] fileContents;
 
-	public bool fromGame { get; set; }
+	public bool FromGame { get; set; }
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	private static void Init() {
@@ -56,14 +56,14 @@ public class GameSettings : MonoBehaviour {
 	private void SilderValChange(float value) {
 		switch (EventSystem.current.currentSelectedGameObject.name) {
 			case "Music_Slid": {
-				audioVolume = value;
+				AudioVolume = value;
 				if (OnMusicVolumeChanged != null) {
 					OnMusicVolumeChanged(value);
 				}
 				break;
 			}
 			case "FX_Slid": {
-				fxVolume = value;
+				FXVolume = value;
 				if (OnFxVolumeChanged != null) {
 					OnFxVolumeChanged(value);
 				}
@@ -82,11 +82,11 @@ public class GameSettings : MonoBehaviour {
 
 			switch (split[0]) {
 				case MUSIC_VOL: {
-					audioVolume = float.Parse(split[1]);
+					AudioVolume = float.Parse(split[1]);
 					break;
 				}
 				case FX_VOL: {
-					fxVolume = float.Parse(split[1]);
+					FXVolume = float.Parse(split[1]);
 					break;
 				}
 			}
@@ -103,11 +103,11 @@ public class GameSettings : MonoBehaviour {
 
 			switch (split[0]) {
 				case MUSIC_VOL: {
-					fileContents[i] = split[0] + "=" + audioVolume;
+					fileContents[i] = split[0] + "=" + AudioVolume;
 					break;
 				}
 				case FX_VOL: {
-					fileContents[i] = split[0] + "=" + fxVolume;
+					fileContents[i] = split[0] + "=" + FXVolume;
 					break;
 				}
 			}
@@ -121,16 +121,16 @@ public class GameSettings : MonoBehaviour {
 		fxSlid = settingsJoiner.transform.Find("Panel/Controls/FX_Slid").GetComponent<Slider>();
 		applyChanges = settingsJoiner.transform.Find("Panel/Controls/Apply_Changes").GetComponent<Button>();
 		backButton = settingsJoiner.transform.Find("Panel/Controls/Return").GetComponent<Button>();
-		musicSlid.value = audioVolume;
-		fxSlid.value = fxVolume;
+		musicSlid.value = AudioVolume;
+		fxSlid.value = FXVolume;
 		musicSlid.onValueChanged.AddListener(SilderValChange);
 		fxSlid.onValueChanged.AddListener(SilderValChange);
 		applyChanges.onClick.AddListener(SaveConfig);
 
-		if (fromGame) {
+		if (FromGame) {
 			backButton.gameObject.SetActive(false);
 			applyChanges.onClick.AddListener(delegate { SaveConfig();  WindowManager.CloseMostRecent(); canvas.SetActive(true); });
-			fromGame = false;
+			FromGame = false;
 		}
 		else {
 			backButton.onClick.AddListener(delegate { WindowManager.CloseMostRecent(); canvas.SetActive(true); });

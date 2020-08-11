@@ -4,9 +4,8 @@ public class GameUI : MonoBehaviour {
 
 	public GameObject pauseGameOverlay;
 
-
 	private void Awake() {
-		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
+		Player.OnPlayerDeath += M_Player_OnPlayerDeath;
 		PauseUnpause.OnPaused += OnGamePaused;
 	}
 
@@ -22,7 +21,7 @@ public class GameUI : MonoBehaviour {
 	private void M_Player_OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
 		Animator gameOverAnim = GameObject.Find("GameOver").GetComponent<Animator>();
 		gameOverAnim.Play("GameOver");
-		M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
+		Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
 	}
 
 

@@ -6,57 +6,73 @@ using System;
 
 public class CameraMovement : MonoBehaviour {
 
-	private RectTransform playerRect;
-
-	private RectTransform bg;
+	private RectTransform player;
+	private RectTransform background;
 	private Camera cam;
+
 	private Vector3 camMidPoint;
 	private float allowedCamWidth;
 	private float allowefCamHeight;
 
-	public List<RectTransform> accessibleBackgrounds = new List<RectTransform>();
+	[SerializeField]
+	private List<RectTransform> accessibleBackgrounds = new List<RectTransform>();
+	[SerializeField]
+	private ParticleSystem above = null;
+	[SerializeField]
+	private ParticleSystem below = null;
 
-	public bool inBossRoom = false;
-	public bool inMaze = false;
+	[SerializeField]
+	private bool inBossRoom = false;
+	public bool IsInBossRoom { get => inBossRoom; set { inBossRoom = value; } }
+	[SerializeField]
+	private bool inMaze = false;
+	public bool IsInMaze { get => inMaze; set { inMaze = value; } }
 
-	public ParticleSystem psAbove;
-	public ParticleSystem psBelow;
-	public const float defaultCamSize = 15;
+	public bool CameraStill { get; private set; } = true;
 
-	public bool isCameraDoneMoving { get; private set; } = true;
+	public const float DEFAULT_CAM_SIZE = 15;
 
+	public static CameraMovement Instance { get; private set; }
 
-	public static CameraMovement script;
+	#region Lifecycle
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
 		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
-		script = this;
+		Instance = this;
 	}
-
 
 	void Start() {
 		Cursor.visible = false;
 		cam = GetComponent<Camera>();
-		playerRect = M_Player.player.GetComponent<RectTransform>();
-		bg = M_Player.player.GetCurrentBackground();
-		accessibleBackgrounds.Add(bg);
+		player = Player.Instance.GetComponent<RectTransform>();
+		background = Player.Instance.GetCurrentBackground();
+		accessibleBackgrounds.Add(background);
 	}
 
+	private void OnDestroy() {
+		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
+		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
+		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
+	}
+
+	#endregion
+
 	#region Events
+
 	private void MazeEntrance_OnMazeEnter(object sender, EventArgs e) {
-		psAbove.gameObject.SetActive(false);
-		psBelow.gameObject.SetActive(false);
+		above.gameObject.SetActive(false);
+		below.gameObject.SetActive(false);
 		inMaze = true;
 	}
 
 	private void MazeEscape_OnMazeEscape(object sender, EventArgs e) {
-		ParticleSystem.ShapeModule shapeA = psAbove.shape;
-		ParticleSystem.ShapeModule shapeB = psBelow.shape;
+		ParticleSystem.ShapeModule shapeA = above.shape;
+		ParticleSystem.ShapeModule shapeB = below.shape;
 
-		psAbove.gameObject.SetActive(true);
-		psBelow.gameObject.SetActive(true);
+		above.gameObject.SetActive(true);
+		below.gameObject.SetActive(true);
 
 		shapeA.radius = cam.orthographicSize * 2;
 		shapeB.radius = cam.orthographicSize * 2;
@@ -65,7 +81,7 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	private void BossBehaviour_OnBossfightBegin(object sender, BossEncouterEventArgs e) {
-		BossFightCam(1);
+		BossFightCam(e.BossID);
 	}
 	
 	#endregion
@@ -73,16 +89,16 @@ public class CameraMovement : MonoBehaviour {
 	public void RaycastForRooms() {
 		accessibleBackgrounds.Clear();
 
-		bg = M_Player.player.GetCurrentBackground();
-		allowefCamHeight = bg.sizeDelta.y / 2;
-		allowedCamWidth = bg.sizeDelta.x / 2;
+		background = Player.Instance.GetCurrentBackground();
+		allowefCamHeight = background.sizeDelta.y / 2;
+		allowedCamWidth = background.sizeDelta.x / 2;
 
 		LayerMask mask = LayerMask.GetMask(Layers.BACKGROUNDS, Layers.WALLS);
 
-		RaycastHit2D[] up = Physics2D.RaycastAll(bg.position, Vector2.up, allowefCamHeight + 10, mask.value);
-		RaycastHit2D[] down = Physics2D.RaycastAll(bg.position, Vector2.down, allowefCamHeight + 10, mask.value);
-		RaycastHit2D[] left = Physics2D.RaycastAll(bg.position, Vector2.left, allowedCamWidth + 10, mask.value);
-		RaycastHit2D[] right = Physics2D.RaycastAll(bg.position, Vector2.right, allowedCamWidth + 10, mask.value);
+		RaycastHit2D[] up = Physics2D.RaycastAll(background.position, Vector2.up, allowefCamHeight + 10, mask.value);
+		RaycastHit2D[] down = Physics2D.RaycastAll(background.position, Vector2.down, allowefCamHeight + 10, mask.value);
+		RaycastHit2D[] left = Physics2D.RaycastAll(background.position, Vector2.left, allowedCamWidth + 10, mask.value);
+		RaycastHit2D[] right = Physics2D.RaycastAll(background.position, Vector2.right, allowedCamWidth + 10, mask.value);
 
 		foreach (RaycastHit2D[] sides in new RaycastHit2D[4][] { up, right, down, left }) {
 			foreach (RaycastHit2D rects in sides) {
@@ -141,9 +157,9 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 
-	public IEnumerator LerpSize(float startSize, float finalSize, float lerpSpeedMult, Vector3 pos = default(Vector3)) {
-		isCameraDoneMoving = false;
-		if (pos != default(Vector3)) {
+	public IEnumerator LerpSize(float startSize, float finalSize, float lerpSpeedMult, Vector3 pos = default) {
+		CameraStill = false;
+		if (pos != default) {
 			transform.position = pos;
 			yield return new WaitForSeconds(0.5f);
 		}
@@ -152,33 +168,33 @@ public class CameraMovement : MonoBehaviour {
 			yield return null;
 		}
 		Camera.main.orthographicSize = finalSize;
-		isCameraDoneMoving = true;
+		CameraStill = true;
 	}
 
 	public float camX {
 		get {
-			if (playerRect.position.x > allowedCamWidth + camMidPoint.x - cam.aspect * cam.orthographicSize) {
+			if (player.position.x > allowedCamWidth + camMidPoint.x - cam.aspect * cam.orthographicSize) {
 				return allowedCamWidth + camMidPoint.x - cam.aspect * cam.orthographicSize;
 			}
-			else if (playerRect.position.x < -allowedCamWidth + camMidPoint.x + cam.aspect * cam.orthographicSize) {
+			else if (player.position.x < -allowedCamWidth + camMidPoint.x + cam.aspect * cam.orthographicSize) {
 				return -allowedCamWidth + camMidPoint.x + cam.aspect * cam.orthographicSize;
 			}
 			else {
-				return playerRect.position.x;
+				return player.position.x;
 			}
 		}
 	}
 
 	public float camY {
 		get {
-			if (playerRect.position.y > allowefCamHeight + camMidPoint.y - cam.orthographicSize) {
+			if (player.position.y > allowefCamHeight + camMidPoint.y - cam.orthographicSize) {
 				return allowefCamHeight + camMidPoint.y - cam.orthographicSize;
 			}
-			else if (playerRect.position.y < -allowefCamHeight + camMidPoint.y + cam.orthographicSize) {
+			else if (player.position.y < -allowefCamHeight + camMidPoint.y + cam.orthographicSize) {
 				return -allowefCamHeight + camMidPoint.y + cam.orthographicSize;
 			}
 			else {
-				return playerRect.position.y;
+				return player.position.y;
 			}
 		}
 	}
@@ -186,14 +202,14 @@ public class CameraMovement : MonoBehaviour {
 	public void BossFightCam(int bossNo) {
 		inBossRoom = true;
 
-		RectTransform bossRoom = MapData.script.GetBackgroundBoss(bossNo);
+		RectTransform bossRoom = MapData.Instance.GetBackgroundBoss(bossNo);
 
 		float bossX = bossRoom.position.x;
 		float bossY = bossRoom.position.y;
 
-		playerRect.position = new Vector3(bossX, bossY, 0);
+		player.position = new Vector3(bossX, bossY, 0);
 		gameObject.transform.position = new Vector3(bossX, bossY, -10);
-		cam.orthographicSize = defaultCamSize;
+		cam.orthographicSize = DEFAULT_CAM_SIZE;
 
 		ConfigureParticles(25, bossRoom);
 	}
@@ -202,18 +218,12 @@ public class CameraMovement : MonoBehaviour {
 	/// Configures particle systems dimensions and particle lifetime
 	/// </summary>
 	public void ConfigureParticles(float time, RectTransform room) {
-		ParticleSystem.ShapeModule shapeA = psAbove.shape;
-		psBelow.gameObject.SetActive(false);
+		ParticleSystem.ShapeModule shapeA = above.shape;
+		below.gameObject.SetActive(false);
 		shapeA.radius = room != null ? room.sizeDelta.x : cam.aspect * cam.orthographicSize;
-		psAbove.time = psAbove.time * 4;
-		psAbove.transform.position = room != null ? room.transform.position + new Vector3(0, room.sizeDelta.y / 2) : cam.transform.position + new Vector3(0,cam.orthographicSize + 10);
-		ParticleSystem.MainModule main = psAbove.main;
+		above.time = above.time * 4;
+		above.transform.position = room != null ? room.transform.position + new Vector3(0, room.sizeDelta.y / 2) : cam.transform.position + new Vector3(0,cam.orthographicSize + 10);
+		ParticleSystem.MainModule main = above.main;
 		main.startLifetime = time;
-	}
-
-	private void OnDestroy() {
-		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
-		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
-		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 }

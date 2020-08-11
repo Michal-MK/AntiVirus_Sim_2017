@@ -38,13 +38,13 @@ namespace Igor.Boss.Attacks {
 
 		public IEnumerator Attack() {
 			isAttackInProgress = true;
-			Player_Movement.playerMovementSpeedMultiplier = 0.2f;
-			GameObject positioningCage = Object.Instantiate(cageObj, M_Player.player.transform.position, Quaternion.identity);
+			PlayerMovement.SpeedMultiplier = 0.2f;
+			GameObject positioningCage = Object.Instantiate(cageObj, Player.Instance.transform.position, Quaternion.identity);
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, cagePosition, Time.deltaTime / 2, null));
-			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, cagePosition, Time.deltaTime / 2, null));
+			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, cagePosition, Time.deltaTime / 2, null));
 
 			yield return new WaitForSeconds(3);
-			Canvas_Renderer.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
+			HUDisplay.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
 
 			bossBehaviour.StartCoroutine(Caged(positioningCage.gameObject, 1.1f));
 			SpriteRenderer arenaSprite = backgroundTransform.GetComponent<SpriteRenderer>();
@@ -61,7 +61,7 @@ namespace Igor.Boss.Attacks {
 				yield return new WaitForSeconds(timeToCover * positions.Length);
 			}
 			isAttackInProgress = false;
-			Player_Movement.playerMovementSpeedMultiplier = 1f;
+			PlayerMovement.SpeedMultiplier = 1f;
 			yield return new WaitForSeconds(2);
 			Object.Destroy(positioningCage.gameObject);
 		}
@@ -71,7 +71,7 @@ namespace Igor.Boss.Attacks {
 			while (isAttackInProgress) {
 				Vector3 target = GetPosInCage(cage);
 				yield return new WaitForSeconds(waitTime);
-				Projectile bullet = pool_EnemyProjectile.getNext.GetComponent<Projectile>();
+				Projectile bullet = pool_EnemyProjectile.Next.GetComponent<Projectile>();
 				bullet.transform.rotation = Quaternion.FromToRotation(Vector3.down, target - boss.transform.position);
 				bullet.transform.position = boss.transform.position;
 				bullet.gameObject.SetActive(true);

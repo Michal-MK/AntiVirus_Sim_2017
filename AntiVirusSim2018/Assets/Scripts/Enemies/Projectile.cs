@@ -43,7 +43,7 @@ public class Projectile : Enemy {
 			yield return null;
 		}
 		Kill();
-		if (isPooled) {
+		if (IsPooled) {
 			selfRender.color = new Color(1, 1, 1, 1);
 		}
 	}

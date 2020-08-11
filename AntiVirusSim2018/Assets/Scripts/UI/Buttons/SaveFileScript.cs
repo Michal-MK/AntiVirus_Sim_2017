@@ -15,6 +15,6 @@ public class SaveFileScript : MonoBehaviour {
 
 
 	public void LoadData() {
-		Control.script.loadManager.Load(associatedData);
+		Control.Instance.loadManager.Load(associatedData);
 	}
 }

@@ -53,7 +53,7 @@ public class WindowManager {
 				else {
 					win.animator.SetTrigger("Hide");
 					if (win.isFlagedForSwitchOff) {
-						Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
+						Control.Instance.StartCoroutine(DisableAfterAnimation(win.animator));
 					}
 				}
 				if (OnWindowClose != null) {
@@ -84,7 +84,7 @@ public class WindowManager {
 					else {
 						win.animator.SetTrigger("Hide");
 						if (win.isFlagedForSwitchOff) {
-							Control.script.StartCoroutine(DisableAfterAnimation(win.animator));
+							Control.Instance.StartCoroutine(DisableAfterAnimation(win.animator));
 						}
 					}
 					if (OnWindowClose != null) {

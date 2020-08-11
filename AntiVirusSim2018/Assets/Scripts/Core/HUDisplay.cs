@@ -2,10 +2,11 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using Igor.Constants.Strings;
+using System;
 
-public class Canvas_Renderer : MonoBehaviour {
+public class HUDisplay : MonoBehaviour {
 
-	public static Canvas_Renderer script;
+	public static HUDisplay script;
 
 	public Text slideInText;
 	private Animator slideAnim;
@@ -141,12 +142,16 @@ public class Canvas_Renderer : MonoBehaviour {
 		}
 	}
 
-	public void UpdateCounters() {
-		coinCounter.text = "x " + Coin.coinsCollected;
-		spikeCounter.text = "x " + Spike.spikesCollected;
+	public void UpdateSpikeCounter(int value) {
+		spikeCounter.text = $"x {value}";
+	}
 
-		if (Coin.coinsCollected == 5) {
-			coinCounter.text = coinCounter.text + " Completed?";
+
+	public void UpdateCoinCounter(int value) {
+		coinCounter.text = $"x {value}";
+
+		if (value == 5) {
+			coinCounter.text += " Completed?";
 		}
 	}
 

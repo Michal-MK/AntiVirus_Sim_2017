@@ -10,21 +10,18 @@ public class Lever : MonoBehaviour {
 
 	private SpriteRenderer selfRender;
 
-	public delegate void LeverState(Lever sender, bool isOn);
 	public event LeverState OnLeverSwitch;
 
-	public bool isOn { get; set; } = false;
+	public bool IsOn { get; set; }
 
 	void Start() {
 		selfRender = GetComponent<SpriteRenderer>();
 	}
 
 	public void Interact() {
-		isOn = !isOn;
-		if (OnLeverSwitch != null) {
-			OnLeverSwitch(this, isOn);
-		}
-		selfRender.sprite = isOn ? toggleOnSpr : toggleOffSpr;
-		SoundFXHandler.script.PlayFX(isOn ? toggleOn : toggleOff);
+		IsOn = !IsOn;
+		OnLeverSwitch?.Invoke(this, IsOn);
+		selfRender.sprite = IsOn ? toggleOnSpr : toggleOffSpr;
+		SoundFXHandler.script.PlayFX(IsOn ? toggleOn : toggleOff);
 	}
 }

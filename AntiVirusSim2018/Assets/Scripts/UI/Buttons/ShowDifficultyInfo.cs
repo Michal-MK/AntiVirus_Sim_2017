@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,10 +7,18 @@ using UnityEngine.UI;
 public class ShowDifficultyInfo : MonoBehaviour {
 	private Text text;
 
+	#region Lifecycle
+
 	private void OnEnable() {
 		text = gameObject.GetComponent<Text>();
 		StartCoroutine(_Appear());
 	}
+
+	private void OnDisable() {
+		text.color = new Color(1, 1, 1, 0);
+	}
+
+	#endregion
 
 	public void Appear() {
 		StartCoroutine(_Appear());
@@ -22,7 +31,8 @@ public class ShowDifficultyInfo : MonoBehaviour {
 		}
 	}
 
-	private void OnDisable() {
+
+	public void Hide() {
 		text.color = new Color(1, 1, 1, 0);
 	}
 }

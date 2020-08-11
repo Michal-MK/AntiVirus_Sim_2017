@@ -18,18 +18,18 @@ public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 
 	private bool spawnLoop = true;
 
-	public GameObject enemyPrefab { get; private set; }
+	public GameObject EnemyPrefab { get; private set; }
 
-	public Room activeRoom => MapData.script.GetRoom(2);
+	public Room ActiveRoom => MapData.Instance.GetRoom(2);
 
-	public bool respawnOnReEntry => true;
+	public bool RespawnOnReEntry => true;
 
 
 	private void Start() {
 		background = transform.parent.GetComponent<RectTransform>();
 		width = background.sizeDelta.x / 2;
 		height = background.sizeDelta.y / 2;
-		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
+		Player.OnRoomEnter += M_Player_OnRoomEnter;
 
 		switch (origin) {
 			case Directions.TOP: {
@@ -53,28 +53,32 @@ public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 		StartCoroutine(SpawnKillerWall());
 	}
 
-	public void SetProjecileType(Enemy.EnemyType type) {
+	private void OnDestroy() {
+		Clear();
+	}
+
+	public void SetProjecileType(EnemyType type) {
 		switch (type) {
-			case Enemy.EnemyType.PROJECTILE_SIMPLE: {
-				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
+			case EnemyType.PROJECTILE_SIMPLE: {
+				EnemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE + (MapData.Instance.CurrentMapMode == MapMode.DARK ? "_Dark" : "")) as GameObject;
 				break;
 			}
-			case Enemy.EnemyType.PROJECTILE_ACCURATE: {
-				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject;
+			case EnemyType.PROJECTILE_ACCURATE: {
+				EnemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE) as GameObject;
 				break;
 			}
-			case Enemy.EnemyType.PROJECTILE_ICICLE: {
-				enemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + (MapData.script.currentMapMode == MapData.MapMode.DARK ? "_Dark" : "")) as GameObject;
+			case EnemyType.PROJECTILE_ICICLE: {
+				EnemyPrefab = Resources.Load(PrefabNames.ENEMY_PROJECTILE_ICICLE + (MapData.Instance.CurrentMapMode == MapMode.DARK ? "_Dark" : "")) as GameObject;
 				break;
 			}
 			default: {
 				throw new Exception("Not a valid enemy type " + type);
 			}
 		}
-		pool = new ObjectPool(enemyPrefab);
+		pool = new ObjectPool(EnemyPrefab);
 	}
 
-	public void MapStanceSwitch(MapData.MapMode mode) {
+	public void MapStanceSwitch(MapMode mode) {
 		pool.SwitchEnemyIllumination(mode);
 	}
 
@@ -100,8 +104,8 @@ public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 	}
 
 	public void Spawn() {
-		Projectile wallShot = pool.getNext.GetComponent<Projectile>();
-		wallShot.isDestroyable = true;
+		Projectile wallShot = pool.Next.GetComponent<Projectile>();
+		wallShot.IsKillable = true;
 		wallShot.gameObject.tag = Tags.ENEMY;
 		wallShot.transform.rotation = Quaternion.AngleAxis(spriteRotation, Vector3.back);
 		wallShot.transform.position = KWProjectilePositions(origin);
@@ -121,11 +125,11 @@ public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 		}
 	}
 
-	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if (background != activeRoom.background && !MapData.script.IsOneOfAdjecentLinks(background, 2)) {
+	private void M_Player_OnRoomEnter(Player sender, RectTransform background, RectTransform previous) {
+		if (background != ActiveRoom.Background && !MapData.Instance.IsOneOfAdjecentLinks(background, 2)) {
 			Despawn();
 		}
-		if (MapData.script.IsOneOfAdjecentLinks(background, 2) && previous != activeRoom.background) {
+		if (MapData.Instance.IsOneOfAdjecentLinks(background, 2) && previous != ActiveRoom.Background) {
 			StartCoroutine(SpawnKillerWall());
 		}
 	}
@@ -136,6 +140,6 @@ public class ProjectileWallController : MonoBehaviour, IEnemyControler {
 
 	public void Clear() {
 		pool.ClearPool();
-		M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
+		Player.OnRoomEnter -= M_Player_OnRoomEnter;
 	}
 }

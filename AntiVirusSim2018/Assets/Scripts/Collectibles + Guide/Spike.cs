@@ -2,65 +2,80 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour {
 
-	public Maze maze;
-	public bool guideTowardsSpike = true; // NIY
+	[SerializeField]
+	private Maze maze = null;
 
-	private static int _spikesCollected;
-	private int stage;
+	public static event GuideTargetStaticEventHandler OnNewTarget;
 
-	public static event Guide.GuideTargetStatic OnNewTarget;
+	private int spikesCollected;
+	public int SpikesCollected {
+		get => spikesCollected;
+		set {
+			spikesCollected = value;
+			HUDisplay.script.UpdateSpikeCounter(value);
+			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
+		}
+	}
+
+	#region Lifecycle
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup += OnSpikePickup;
+		Player.OnSpikePickup += OnSpikePickup;
 	}
 
-	private void OnSpikePickup(M_Player sender, GameObject spikeObj) {
-		spikesCollected++;
+	private void OnDestroy() {
+		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		Player.OnSpikePickup -= OnSpikePickup;
+	}
+
+	#endregion
+
+	private void OnSpikePickup(Player sender, GameObject spikeObj) {
+		SpikesCollected++;
 
 		gameObject.SetActive(false);
 
-		if (_spikesCollected == 1) {
-			Canvas_Renderer.script.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+		if (spikesCollected == 1) {
+			HUDisplay.script.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 		}
 		//Finished avoidance
-		if (_spikesCollected == 3) {
-			CameraMovement.script.RaycastForRooms();
+		if (spikesCollected == 3) {
+			CameraMovement.Instance.RaycastForRooms();
 		}
 		//Went through maze
-		if (_spikesCollected == 4) {
+		if (spikesCollected == 4) {
 			maze.MazeEscape();
 		}
-		MapData.script.Progress(++M_Player.gameProgression);
+		MapData.Instance.Progress(++Player.GameProgression);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		spikesCollected = data.player.spikesCollected;
+		SpikesCollected = data.player.spikesCollected;
 		gameObject.SetActive(data.world.spikeActive);
 		gameObject.transform.position = data.world.spikePos;
 	}
 
 	public void SetPosition(bool guideTowards = true) {
-		stage = M_Player.gameProgression;
 		float Xscale = gameObject.transform.lossyScale.x / 2;
 		float Yscale = gameObject.transform.lossyScale.y / 2;
 		float newX;
 		float newY;
-		switch (stage) {
+		switch (Player.GameProgression) {
 			case 0: {
-				RectTransform room1BG = MapData.script.GetRoom(1).background;
+				RectTransform room1BG = MapData.Instance.GetRoom(1).Background;
 				newX = room1BG.position.x;
 				newY = room1BG.position.y - 1;
 				break;
 			}
 			case 1: {
-				RectTransform roomIciclesBG = MapData.script.GetRoom(2).background;
+				RectTransform roomIciclesBG = MapData.Instance.GetRoom(2).Background;
 				newX = Random.Range(roomIciclesBG.position.x - roomIciclesBG.sizeDelta.x / 2 + Xscale * 4, roomIciclesBG.position.x);
 				newY = Random.Range(roomIciclesBG.position.y - roomIciclesBG.sizeDelta.y / 2 + Yscale * 4, roomIciclesBG.position.y);
 				break;
 			}
 			case 2: {
-				RectTransform roomAvoidanceBG = MapData.script.GetRoom(3).background;
+				RectTransform roomAvoidanceBG = MapData.Instance.GetRoom(3).Background;
 				newX = Random.Range(roomAvoidanceBG.position.x + (-roomAvoidanceBG.sizeDelta.x / 2) + Xscale, roomAvoidanceBG.position.x + (roomAvoidanceBG.sizeDelta.x / 2) - Xscale);
 				newY = Random.Range(roomAvoidanceBG.position.y, roomAvoidanceBG.position.y + (roomAvoidanceBG.sizeDelta.y / 2) - Yscale);
 				break;
@@ -72,7 +87,7 @@ public class Spike : MonoBehaviour {
 				break;
 			}
 			case 4: {
-				RectTransform roomPreBossBG = MapData.script.GetRoom(4).background;
+				RectTransform roomPreBossBG = MapData.Instance.GetRoom(4).Background;
 				newX = roomPreBossBG.transform.position.x - roomPreBossBG.sizeDelta.x / 2 + 20;
 				newY = roomPreBossBG.transform.position.y + roomPreBossBG.sizeDelta.y / 2 - 20;
 				transform.localScale = new Vector2(0.4f, 0.5f);
@@ -89,30 +104,13 @@ public class Spike : MonoBehaviour {
 
 		gameObject.transform.position = new Vector3(newX, newY);
 		gameObject.SetActive(true);
-		if (OnNewTarget != null && guideTowards) {
-			OnNewTarget(transform.position);
-
+		if (guideTowards) {
+			OnNewTarget?.Invoke(transform.position);
 		}
 	}
 
 	public void Hide() {
 		gameObject.SetActive(false);
-		if (OnNewTarget != null) {
-			OnNewTarget(default);
-		}
-	}
-
-	public static int spikesCollected {
-		get { return _spikesCollected; }
-		set {
-			_spikesCollected = value;
-			Canvas_Renderer.script.UpdateCounters();
-			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
-		}
-	}
-
-	private void OnDestroy() {
-		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnSpikePickup -= OnSpikePickup;
+		OnNewTarget?.Invoke(default);
 	}
 }

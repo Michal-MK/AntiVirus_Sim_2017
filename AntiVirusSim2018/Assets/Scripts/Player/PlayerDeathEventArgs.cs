@@ -1,7 +1,6 @@
 ﻿using System;
 
-public class PlayerDeathEventArgs {
-
-
+public class PlayerDeathEventArgs : EventArgs {
+	// TODO
 }
 

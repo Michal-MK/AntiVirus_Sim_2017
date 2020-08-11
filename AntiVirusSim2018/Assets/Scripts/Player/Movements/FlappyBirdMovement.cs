@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 
 public class FlappyBirdMovement : MonoBehaviour, IPlayerMovement {
-	public Player_Movement.PlayerMovement movementType => Player_Movement.PlayerMovement.FLAPPY;
+	public PlayerMovementType MovementType => PlayerMovementType.FLAPPY;
 
-	public Player_Movement.PlayerMovementModifiers movementModifier { get; set; } = Player_Movement.PlayerMovementModifiers.NONE;
-	public float movementSpeed { get; set; } = 0; 
+	public PlayerMovementModifiers MovementModifier { get; set; }
+	public float MovementSpeed { get; set; } = 0; 
 
 	private bool canFlapAgain = true;
 	private Rigidbody2D body;

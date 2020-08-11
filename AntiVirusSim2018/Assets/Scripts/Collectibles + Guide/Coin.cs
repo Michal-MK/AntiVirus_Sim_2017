@@ -1,21 +1,18 @@
 using UnityEngine;
-using Igor.Constants.Strings;
 
 public class Coin : MonoBehaviour {
 
-	public Spike spike;
-	public bool guideTowardsCoin = true; // NIY
+	[SerializeField]
+	private Spike spike = null;
 
 	private Vector3 oldpos;
 	private float scale;
 
-	private static int _coinsCollected = 0;
-
-	public static event Guide.GuideTargetStatic OnNewTarget;
+	public static event GuideTargetStaticEventHandler OnNewTarget; // 1 Usage by Guide
 
 	private void Awake() {
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnCoinPickup += OnCoinPickup;
+		Player.OnCoinPickup += OnCoinPickup;
 	}
 
 	void Start() {
@@ -24,44 +21,34 @@ public class Coin : MonoBehaviour {
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		coinsCollected = data.player.coinsCollected;
+		CoinsCollected = data.player.coinsCollected;
 
 		if (data.player.coinsCollected == 5) {
 			gameObject.SetActive(false);
-			if (Spike.spikesCollected == 0) {
+			if (spike.SpikesCollected == 0) {
 				gameObject.SetActive(false);
 				spike.SetPosition();
 			}
 		}
 		else if (data.player.coinsCollected <= 4) {
 			OnCoinPickup(null, null);
-			if (OnNewTarget != null) {
-				OnNewTarget(gameObject.transform.position);
-			}
+			OnNewTarget?.Invoke(gameObject.transform.position);
 		}
 	}
 
-	public void OnCoinPickup(M_Player sender, GameObject coinObj) {
+	public void OnCoinPickup(Player sender, GameObject coinObj) {
 		if (sender != null) {
-			coinsCollected++;
+			CoinsCollected++;
 		}
 
-		if (coinsCollected <= 4) {
+		if (CoinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
 			Vector3 newpos = GenerateNewPos(oldpos);
-			if (M_Player.playerState == M_Player.PlayerState.NORMAL) {
-				Timer.StartTimer(1f);
-			}
-			else {
-				Timer.StartTimer(2f);
-			}
 			transform.position = newpos;
-			if(OnNewTarget != null) {
-				OnNewTarget(transform.position);
-			}
+			OnNewTarget?.Invoke(transform.position);
 		}
-		if (coinsCollected == 5) {
-			if (Spike.spikesCollected == 0) {
+		if (CoinsCollected == 5) {
+			if (spike.SpikesCollected == 0) {
 				gameObject.SetActive(false);
 				spike.SetPosition();
 			}
@@ -71,7 +58,7 @@ public class Coin : MonoBehaviour {
 	private Vector3 GenerateNewPos(Vector3 oldpos) {
 		Vector3 newpos = oldpos;
 		while (Mathf.Abs(Vector3.Distance(newpos, oldpos)) < 40) {
-			RectTransform room1BG = MapData.script.GetRoom(1).background;
+			RectTransform room1BG = MapData.Instance.GetRoom(1).Background;
 			float x = Random.Range(-room1BG.sizeDelta.x / 2 + scale, room1BG.sizeDelta.x / 2 - scale);
 			float y = Random.Range(-room1BG.sizeDelta.y / 2 + scale, room1BG.sizeDelta.y / 2 - scale);
 			float z = 0f;
@@ -81,17 +68,19 @@ public class Coin : MonoBehaviour {
 		return newpos;
 	}
 
-	public static int coinsCollected {
-		get { return _coinsCollected; }
+	[SerializeField]
+	private int coinsCollected = 0;
+	public int CoinsCollected {
+		get => coinsCollected;
 		set {
-			_coinsCollected = value;
-			Canvas_Renderer.script.UpdateCounters();
+			coinsCollected = value;
+			HUDisplay.script.UpdateCoinCounter(value);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 		}
 	}
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnCoinPickup -= OnCoinPickup;
+		Player.OnCoinPickup -= OnCoinPickup;
 	}
 }

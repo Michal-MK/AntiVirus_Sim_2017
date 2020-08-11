@@ -29,7 +29,7 @@ public class MenuMusic : SoundBase {
 
 	private IEnumerator _PlayMusic() {
 		source.Play();
-		for (float f = 0; f <= GameSettings.audioVolume; f += Time.deltaTime) {
+		for (float f = 0; f <= GameSettings.AudioVolume; f += Time.deltaTime) {
 			source.volume = f;
 			yield return null;
 		}
@@ -41,7 +41,7 @@ public class MenuMusic : SoundBase {
 	}
 
 	private IEnumerator _StopMusic() {
-		for (float f = GameSettings.audioVolume; f >= 0; f -= Time.deltaTime) {
+		for (float f = GameSettings.AudioVolume; f >= 0; f -= Time.deltaTime) {
 			source.volume = f;
 			yield return null;
 		}

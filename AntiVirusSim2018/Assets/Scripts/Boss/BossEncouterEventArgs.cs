@@ -1,11 +1,13 @@
 ﻿using System;
 
 public class BossEncouterEventArgs : EventArgs {
-	public Enemy boss { get; }
-	public M_Player encouteredBy { get; }
+	public int BossID { get; }
+	public Enemy Boss { get; }
+	public Player EncouteredBy { get; }
 
-	public BossEncouterEventArgs(Enemy boss, M_Player player) {
-		this.boss = boss;
-		this.encouteredBy = player;
+	public BossEncouterEventArgs(int bossID, Enemy boss, Player player) {
+		BossID = bossID;
+		Boss = boss;
+		EncouteredBy = player;
 	}
 }

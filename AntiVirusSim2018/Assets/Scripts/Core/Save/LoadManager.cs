@@ -21,7 +21,7 @@ public class LoadManager {
 			save = saveFile.data;
 		}
 		CamFadeOut.registerMenuMusicVolumeFade = true;
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 		SaveManager.current = saveFile;
@@ -29,7 +29,7 @@ public class LoadManager {
 
 	public void Load(SaveData saveToLoad) {
 		save = saveToLoad;
-		CamFadeOut.script.PlayTransition(CamFadeOut.CameraModeChanges.TRANSITION_SCENES, 1f);
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 
@@ -40,7 +40,7 @@ public class LoadManager {
 	}
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode) {
-		Control.script.StartCoroutine(DelayLoad());
+		Control.Instance.StartCoroutine(DelayLoad());
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 	}
 

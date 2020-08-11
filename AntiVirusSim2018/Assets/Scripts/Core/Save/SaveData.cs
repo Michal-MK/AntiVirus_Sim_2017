@@ -4,7 +4,7 @@ using System.Collections.Generic;
 //Data to be saved
 [System.Serializable]
 public class SaveData {
-	public Player player = new Player();
+	public PlayerData player = new PlayerData();
 	public DisplayedHints shownHints = new DisplayedHints();
 	public World world = new World();
 	public Core core = new Core();

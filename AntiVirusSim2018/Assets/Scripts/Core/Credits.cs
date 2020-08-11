@@ -19,7 +19,8 @@ public class Credits : MonoBehaviour {
 		t.text += "This game is a result of my seminary project for IT classes at: \n";
 		t.text += "Gymnázium Dr. Antona Randy\n Jablonec nad Nisou \n";
 		t.text += "\n\n\n";
-		t.text += "Project began on the 8th of december 2016 and finished on the 16th of march 2017. \n\n";
+		t.text += "Project began on the 8th of December 2016 and finished on the 16th of march 2017.\n\n";
+		t.text += "Since then I tried to improve the code and expand on it in my free time.\n";
 		t.text += "Total of 129 days.\n";
 		t.text += "\n\n";
 		t.text += "Using:\n Unity3D Framework\n by \n Unity Technologies\n\n";
@@ -41,7 +42,6 @@ public class Credits : MonoBehaviour {
 
 	private IEnumerator LoadScene1() {
 		one = false;
-		print("S");
 		for (float f = 1; f > -1; f -= Time.unscaledDeltaTime * 0.5f) {
 			if (f > 0) {
 				source.volume = f;

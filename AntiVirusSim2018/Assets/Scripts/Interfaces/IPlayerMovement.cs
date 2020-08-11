@@ -5,8 +5,8 @@ public interface IPlayerMovement {
 	void Move();
 	void Stop();
 
-	Player_Movement.PlayerMovement movementType { get; }
-	Player_Movement.PlayerMovementModifiers movementModifier { get; set; }
+	PlayerMovementType MovementType { get; }
+	PlayerMovementModifiers MovementModifier { get; set; }
 
-	float movementSpeed { get; set; }
+	float MovementSpeed { get; set; }
 }

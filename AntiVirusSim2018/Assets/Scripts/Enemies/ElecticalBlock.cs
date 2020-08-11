@@ -15,11 +15,11 @@ public class ElecticalBlock : Enemy {
 	private bool despawn = false;
 
 	private void Start() {
-		enemyClass = EnemyClass.TOUCH;
-		isDestroyable = false;
+		Class = EnemyClass.TOUCH;
+		IsKillable = false;
 		selfAnim = killerBlock.GetComponent<Animator>();
 		selfCol = killerBlock.GetComponent<BoxCollider2D>();
-		room1BG = MapData.script.GetRoom(1).background;
+		room1BG = MapData.Instance.GetRoom(1).Background;
 		StartCoroutine(Cycle());
 	}
 
@@ -48,8 +48,8 @@ public class ElecticalBlock : Enemy {
 	}
 
 	private Vector3 GetNewPosition() {
-		Vector3 killerblockpos = M_Player.player.transform.position;
-		while (Vector2.Distance(M_Player.player.transform.position, killerblockpos) < 12) {
+		Vector3 killerblockpos = Player.Instance.transform.position;
+		while (Vector2.Distance(Player.Instance.transform.position, killerblockpos) < 12) {
 
 			float x = Random.Range(-room1BG.sizeDelta.x / 2 + 2, room1BG.sizeDelta.x / 2 - 2);
 			float y = Random.Range(-room1BG.sizeDelta.y / 2 + 2, room1BG.sizeDelta.y / 2 - 2);

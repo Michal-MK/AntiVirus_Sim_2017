@@ -23,15 +23,15 @@ public class TeleportRoomField : MonoBehaviour {
 	private const int MID_AXES = 5;
 
 	private void Awake() {
-		M_Player.OnRoomEnter += M_Player_OnRoomEnter;
-		foreach (Lever l in relay.levers) {
+		Player.OnRoomEnter += M_Player_OnRoomEnter;
+		foreach (Lever l in relay.Levers) {
 			l.OnLeverSwitch += L_OnLeverSwitch;
 		}
 		signPost = transform.Find("_SignPost TeleportationRoom");
 	}
 
 	private void L_OnLeverSwitch(Lever sender, bool isOn) {
-		if (relay.currentlyActiveLevers == 0) {
+		if (relay.LeversActivated == 0) {
 			foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
 				render.color = new Color(1, 0.2f, 0.2f, 1);
 			}
@@ -40,7 +40,7 @@ public class TeleportRoomField : MonoBehaviour {
 				t.GetComponentInChildren<Animator>().Play("Alpha Pulse Sprite");
 			}
 		}
-		else if (relay.currentlyActiveLevers == 1) {
+		else if (relay.LeversActivated == 1) {
 			foreach (SpriteRenderer render in dangerWarnings.GetComponentsInChildren<SpriteRenderer>()) {
 				render.color = new Color(1, 1, 1, 0);
 			}
@@ -48,25 +48,25 @@ public class TeleportRoomField : MonoBehaviour {
 			foreach (Transform t in pathFields) {
 				t.GetChild(0).gameObject.SetActive(false);
 			}
-			MapData.script.OpenDoor(MapData.script.GetRoomLink(6, 10));
+			MapData.Instance.GetRoomLink(6, 10).OpenDoor();
 		}
 		sender.OnLeverSwitch -= L_OnLeverSwitch;
 	}
 
-	private void M_Player_OnRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if (background == MapData.script.GetRoom(6).background) {
+	private void M_Player_OnRoomEnter(Player sender, RectTransform background, RectTransform previous) {
+		if (background == MapData.Instance.GetRoom(6).Background) {
 			FillRoom();
 			print("Entering LEVER RELAY");
-			M_Player.OnRoomEnter -= M_Player_OnRoomEnter;
-			M_Player.OnRoomEnter += OnTopRoomEnter;
+			Player.OnRoomEnter -= M_Player_OnRoomEnter;
+			Player.OnRoomEnter += OnTopRoomEnter;
 		}
 	}
 
-	private void OnTopRoomEnter(M_Player sender, RectTransform background, RectTransform previous) {
-		if(background == MapData.script.GetTransition(MapData.script.GetRoomLink(7,9))) {
+	private void OnTopRoomEnter(Player sender, RectTransform background, RectTransform previous) {
+		if(background == MapData.Instance.GetTransition(MapData.Instance.GetRoomLink(7,9))) {
 			print("Entering Transition to top room");
-			MapData.script.GetRoom(9).background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
-			M_Player.OnRoomEnter -= OnTopRoomEnter;
+			MapData.Instance.GetRoom(9).Background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
+			Player.OnRoomEnter -= OnTopRoomEnter;
 		}
 	}
 

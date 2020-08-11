@@ -37,7 +37,7 @@ public class Timer : MonoBehaviour {
 		}
 
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
-		M_Player.OnPlayerDeath += M_Player_OnPlayerDeath;
+		Player.OnPlayerDeath += M_Player_OnPlayerDeath;
 		PauseUnpause.OnPaused += OnPaused;
 	}
 
@@ -86,6 +86,6 @@ public class Timer : MonoBehaviour {
 	private void OnDestroy() {
 		script = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
-		M_Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
+		Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
 	}
 }

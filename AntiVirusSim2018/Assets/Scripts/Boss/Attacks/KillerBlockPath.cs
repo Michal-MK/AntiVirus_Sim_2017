@@ -45,23 +45,23 @@ namespace Igor.Boss.Attacks {
 
 			isAttackInProgress = true;
 
-			Movement positioningCage = Object.Instantiate(cageObj, M_Player.player.transform.position, Quaternion.identity).GetComponent<Movement>();
+			Movement positioningCage = Object.Instantiate(cageObj, Player.Instance.transform.position, Quaternion.identity).GetComponent<Movement>();
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, bossTransform.position + new Vector3(0, 50, 0), Time.deltaTime / 2, null));
-			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(M_Player.player.gameObject, bossTransform.position + new Vector3(0, 50, 0), Time.deltaTime / 2, null));
+			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, bossTransform.position + new Vector3(0, 50, 0), Time.deltaTime / 2, null));
 			yield return new WaitForSeconds(2);
 
 			pathGenerationRoutine = bossBehaviour.StartCoroutine(KillerBlockPathGenerator(positioningCage));
 
 			while (isAttackInProgress) {
 
-				Movement BlockL = pool_KillerBlock.getNext.GetComponent<Movement>();
+				Movement BlockL = pool_KillerBlock.Next.GetComponent<Movement>();
 				BlockL.gameObject.SetActive(true);
 				BlockL.transform.position = new Vector3(bossTransform.position.x - bossTransform.sizeDelta.x / 2, bossTransform.position.y, 1);
 				BlockL.transform.localScale = new Vector3(3, 3, 1);
 				BlockL.direction = Vector2.up * 30;
 				BlockL.MoveAndDestroyOnWallLeave();
 
-				Movement BlockR = pool_KillerBlock.getNext.GetComponent<Movement>();
+				Movement BlockR = pool_KillerBlock.Next.GetComponent<Movement>();
 				BlockR.gameObject.SetActive(true);
 				BlockR.transform.position = new Vector3(bossTransform.position.x + bossTransform.sizeDelta.x / 2, bossTransform.position.y, 1);
 				BlockR.transform.localScale = new Vector3(3, 3, 1);
