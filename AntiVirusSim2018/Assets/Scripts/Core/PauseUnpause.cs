@@ -6,8 +6,8 @@ public class PauseUnpause : MonoBehaviour {
 
 	public static event EventHandler<PauseEventArgs> OnPaused;
 
-	public static bool canPause { get; set; } = true;
-	public static bool isPaused { get; private set; } = false;
+	public static bool CanPause { get; set; } = true;
+	public static bool IsPaused { get; private set; } = false;
 
 
 	private void Awake() {
@@ -16,16 +16,16 @@ public class PauseUnpause : MonoBehaviour {
 	}
 
 	private void OnEscapePressed() {
-		if (canPause) {
-			isPaused ^= true;
-			OnPaused?.Invoke(null, new PauseEventArgs(isPaused, SceneManager.GetActiveScene().name));
+		if (CanPause) {
+			IsPaused ^= true;
+			OnPaused?.Invoke(null, new PauseEventArgs(IsPaused, SceneManager.GetActiveScene().name));
 		}
 	}
 	
 	private void OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
-		isPaused = true;
-		canPause = false;
-		OnPaused?.Invoke(null, new PauseEventArgs(isPaused, SceneManager.GetActiveScene().name));
+		IsPaused = true;
+		CanPause = false;
+		OnPaused?.Invoke(null, new PauseEventArgs(IsPaused, SceneManager.GetActiveScene().name));
 	}
 
 	private void OnDestroy() {

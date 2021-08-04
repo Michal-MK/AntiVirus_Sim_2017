@@ -10,7 +10,7 @@ public class MenuMusic : SoundBase {
 		if (script == null) {
 			script = this;
 			DontDestroyOnLoad(gameObject);
-			GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
+			GameSettings.Instance.OnMusicVolumeChanged += UpdateMusicVol;
 		}
 		else if (script != this) {
 			Destroy(gameObject);
@@ -33,6 +33,7 @@ public class MenuMusic : SoundBase {
 			source.volume = f;
 			yield return null;
 		}
+		source.volume = GameSettings.AudioVolume;
 	}
 
 	public void StopMusic() {
@@ -45,13 +46,14 @@ public class MenuMusic : SoundBase {
 			source.volume = f;
 			yield return null;
 		}
+		source.volume = 0;
 		source.Stop();
 	}
 
 	private void OnDestroy() {
 		if (script == this) {
 			script = null;
-			GameSettings.script.OnMusicVolumeChanged -= UpdateMusicVol;
+			GameSettings.Instance.OnMusicVolumeChanged -= UpdateMusicVol;
 		}
 	}
 }

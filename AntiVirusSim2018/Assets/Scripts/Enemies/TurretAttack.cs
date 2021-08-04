@@ -136,7 +136,7 @@ public class TurretAttack : MonoBehaviour {
 	}
 
 	public Vector3 RandomVec(int difficulty) {
-		float r = 0;
+		float r;
 		if (difficulty <= 2) {
 			r = Random.Range(-1 * randomnessMultiplier, 1 * randomnessMultiplier);
 			return Vector2.one * r;

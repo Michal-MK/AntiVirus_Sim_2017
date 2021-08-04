@@ -14,9 +14,6 @@ public class CamFadeOut : MonoBehaviour {
 
 	public static event EmptyEventHandler OnCamFullyFaded;
 
-	public static bool registerMenuMusicVolumeFade;
-	public static bool registerGameMusicVolumeFade;
-
 	private void Awake() {
 		if (Instance == null) {
 			DontDestroyOnLoad(transform.parent.gameObject);
@@ -52,14 +49,8 @@ public class CamFadeOut : MonoBehaviour {
 					StartCoroutine(AnimState(CAM_FULLY_FADED_NORMAL));
 				}
 				gameObject.transform.parent.gameObject.GetComponent<Canvas>().sortingOrder = 2;
-				if (registerGameMusicVolumeFade) {
-					MusicHandler.script.MapAlphaToVolume(GetComponent<Image>());
-					registerGameMusicVolumeFade = false;
-				}
-				if (registerMenuMusicVolumeFade) {
-					MenuMusic.script.MapAlphaToVolume(GetComponent<Image>());
-					registerMenuMusicVolumeFade = false;
-				}
+				MusicHandler.script?.MapAlphaToVolume(GetComponent<Image>());
+				MenuMusic.script?.MapAlphaToVolume(GetComponent<Image>());
 				break;
 			}
 		}

@@ -2,10 +2,14 @@
 using System.Collections;
 
 public class LaserField : MonoBehaviour {
-	public GameObject laser_warning;
-	public GameObject laser;
+	[SerializeField]
+	private GameObject laser_warning = null;
+	[SerializeField]
+	private GameObject laser = null;
+	[SerializeField]
+	private int maxLasers = 4;
 
-	private int activeLasers = 0;
+	private int activeLasers;
 
 	private const float PARTICLE_LIFETIME = 1f;
 
@@ -16,12 +20,12 @@ public class LaserField : MonoBehaviour {
 			int amountSpawned = Control.currDifficulty < 2 ? 1 : 2;
 			for (int i = 0; i < amountSpawned; i++) { //Hard 2
 				StartCoroutine(SpawnLaser());
-				if (activeLasers > 4) {
+				if (activeLasers >= maxLasers) {
 					yield return new WaitForSeconds(waitTime);
 				}
 			}
 		}
-		HUDisplay.script.DisplayInfo(null, Player.Instance.GetCurrentBackground() == MapData.Instance.GetTransition(MapData.Instance.GetRoomLink(5,6)) ?
+		HUDisplay.Instance.DisplayInfo(null, Player.Instance.GetCurrentBackground() == MapData.Instance.GetTransition(MapData.Instance.GetRoomLink(5,6)) ?
 			"That was insane! Are you alright ? You should probably save... but y know.." : "Still can't get over how insane that looks.");
 	}
 

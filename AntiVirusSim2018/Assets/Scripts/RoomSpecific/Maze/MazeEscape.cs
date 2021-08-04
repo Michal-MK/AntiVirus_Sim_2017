@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class MazeEscape : MonoBehaviour {
 
-	public Spike spike;
-	public MazeEntrance entrance;
-
-	public GameObject wall;
-
-	public static event EventHandler OnMazeEscape;
+	[SerializeField]
+	private Spike spike = null;
+	[SerializeField]
+	private MazeEntrance entrance = null;
+	[SerializeField]
+	private GameObject wall = null;
+	[SerializeField]
+	private CameraControls camControls = null;
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == Tags.PLAYER) {
+		if (collision.CompareTag(Tags.PLAYER)) {
 			FromMazeTrans();
 			MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 		}
@@ -24,15 +26,14 @@ public class MazeEscape : MonoBehaviour {
 		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		PlayerMovement.CanMove = false;
+		PlayerMovement.SpeedMultiplier = 1;
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {
-		OnMazeEscape?.Invoke(this, EventArgs.Empty);
-
+		camControls.CamMovement.OnMazeEscaped();
 		Zoom.CanZoom = true;
 		Player.Instance.transform.position = entrance.transform.position;
-		Camera.main.orthographicSize = 25;
-		Camera.main.transform.position = Player.Instance.transform.position;
+		camControls.Zoom.ZoomTo(camControls.Zoom.NormalZoom);
 		Player.Instance.transform.localScale = Vector3.one;
 		spike.SetPosition();
 		StartCoroutine(FadeWall());
@@ -42,7 +43,7 @@ public class MazeEscape : MonoBehaviour {
 	}
 
 	private IEnumerator FadeWall() {
-		HUDisplay.script.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
+		HUDisplay.Instance.DisplayInfo(null, "Ok we are past that... Hey! That wall!");
 		SpriteRenderer wallSprite = wall.GetComponentInChildren<SpriteRenderer>();
 		Color32 newColor;
 

@@ -15,18 +15,23 @@ public class SoundBase : MonoBehaviour {
 	}
 
 	private IEnumerator _MapToAlpha(SpriteRenderer sprite) {
-		yield return _MapToAlpha(sprite.color);
+		float initial = sprite.color.a;
+		float end = initial > 0.5f ? 0 : 1;
+		float startVol = source.volume;
+		float endVol = end == 1 ? 0 : GameSettings.AudioVolume;
+		while (source.volume != endVol) {
+			source.volume = ValueMapping.MapFloat(sprite.color.a, initial, end, startVol, endVol);
+			yield return null;
+		}
 	}
 
 	private IEnumerator _MapToAlpha(Image image) {
-		yield return _MapToAlpha(image.color);
-	}
-
-	private IEnumerator _MapToAlpha(Color c) {
-		while (c.a < 1) {
-			if (c.a >= 1 - GameSettings.AudioVolume) {
-				source.volume = 1 - c.a;
-			}
+		float initial = image.color.a;
+		float end = initial > 0.5f ? 0 : 1;
+		float startVol = source.volume;
+		float endVol = end == 1 ? 0 : GameSettings.AudioVolume;
+		while (source.volume != endVol) {
+			source.volume = ValueMapping.MapFloat(image.color.a, initial, end, startVol, endVol);
 			yield return null;
 		}
 	}

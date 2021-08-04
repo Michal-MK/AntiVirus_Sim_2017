@@ -7,7 +7,7 @@ public class WindowBehaviour : MonoBehaviour {
 
 	private Button self;
 	private Window windowRef;
-	private GameScene_Holder gameHolder;
+	private GameSceneRefHolder gameHolder;
 
 	public bool findSelectableInWindow;
 	public bool isSpecialityWindow;
@@ -15,7 +15,7 @@ public class WindowBehaviour : MonoBehaviour {
 
 	private void Start() {
 		self = GetComponent<Button>();
-		gameHolder = FindObjectOfType<GameScene_Holder>();
+		gameHolder = FindObjectOfType<GameSceneRefHolder>();
 	}
 
 	public void ToggleWindow(GameObject window) {

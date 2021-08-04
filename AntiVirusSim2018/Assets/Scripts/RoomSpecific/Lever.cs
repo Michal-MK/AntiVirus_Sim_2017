@@ -2,21 +2,20 @@
 using System.Collections;
 
 public class Lever : MonoBehaviour {
-	public Sprite toggleOnSpr;
-	public Sprite toggleOffSpr;
-
-	public AudioClip toggleOn;
-	public AudioClip toggleOff;
-
-	private SpriteRenderer selfRender;
+	[SerializeField]
+	private Sprite toggleOnSpr = null;
+	[SerializeField]
+	private Sprite toggleOffSpr = null;
+	[SerializeField]
+	private AudioClip toggleOn = null;
+	[SerializeField]
+	private AudioClip toggleOff = null;
+	[SerializeField]
+	private SpriteRenderer selfRender = null;
 
 	public event LeverState OnLeverSwitch;
 
 	public bool IsOn { get; set; }
-
-	void Start() {
-		selfRender = GetComponent<SpriteRenderer>();
-	}
 
 	public void Interact() {
 		IsOn = !IsOn;

@@ -52898,7 +52898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f4be27a1aaa71648b00d90b68d88efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Debug: 0
+  debug: 0
 --- !u!1 &1604158626
 GameObject:
   m_ObjectHideFlags: 0
@@ -63809,6 +63809,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114482834796544042, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114617208815610324, guid: 4385a19bd0863df4fbff133c61dd522a,
+        type: 3}
+      propertyPath: settingsButton
+      value: 
+      objectReference: {fileID: 468712700}
     - target: {fileID: 224068443411830700, guid: 4385a19bd0863df4fbff133c61dd522a,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -63976,7 +63986,8 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 65535
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114986933594948246, guid: 4385a19bd0863df4fbff133c61dd522a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4385a19bd0863df4fbff133c61dd522a, type: 3}
 --- !u!1 &1945435526
 GameObject:

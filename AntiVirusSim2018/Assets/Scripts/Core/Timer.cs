@@ -3,19 +3,19 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour {
 
-	public static float timeFlowMultiplier { get; private set; } = 1;
+	public float TimeFlowMultiplier { get; private set; } = 1;
 
-	public static Timer script { get; private set; }
+	public static Timer Instance { get; private set; }
 
-	public bool isRunning { get; set; }
+	public bool IsRunning { get; set; }
 
 	private Text timerText;
 
-	public static float getTime { get; private set; }
+	public float ElapsedTime { get; private set; }
 
-	public static string getTimeFormated {
+	public string ElapsedStr {
 		get {
-			float current = getTime;
+			float current = ElapsedTime;
 			if (current != 0) {
 				float divided = current / 60;
 				int modulo = (int)divided % 60;
@@ -29,10 +29,10 @@ public class Timer : MonoBehaviour {
 	}
 
 	private void Awake() {
-		if (script == null) {
-			script = this;
+		if (Instance == null) {
+			Instance = this;
 		}
-		else if (script != this) {
+		else if (Instance != this) {
 			Destroy(gameObject);
 		}
 
@@ -42,16 +42,16 @@ public class Timer : MonoBehaviour {
 	}
 
 	private void OnPaused(object sender, PauseEventArgs e) {
-		isRunning = e.isPlaying;
-		Time.timeScale = e.isPaused ? 0 : 1;
+		IsRunning = e.IsPlaying;
+		Time.timeScale = e.IsPaused ? 0 : 1;
 	}
 
 	private void M_Player_OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
-		isRunning = false;
+		IsRunning = false;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		getTime = data.core.time;
+		ElapsedTime = data.core.time;
 		StartTimer(1f);
 		timerText = GetComponent<Text>();
 		timerText.gameObject.SetActive(true);
@@ -65,27 +65,28 @@ public class Timer : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (isRunning) {
-			getTime += Time.deltaTime * timeFlowMultiplier;
-			timerText.text = "Time:\t" + getTimeFormated;
+		if (IsRunning) {
+			ElapsedTime += Time.deltaTime * TimeFlowMultiplier;
+			timerText.text = "Time:\t" + ElapsedStr;
 		}
 	}
 
 	public static void StartTimer(float flowMultiplier) {
-		script.gameObject.SetActive(true);
-		script.isRunning = true;
-		timeFlowMultiplier = flowMultiplier;
+		Instance.gameObject.SetActive(true);
+		Instance.IsRunning = true;
+		Instance.TimeFlowMultiplier = flowMultiplier;
 	}
 
 	public static void ResetTimer() {
-		getTime = 0;
-		script.isRunning = false;
-		timeFlowMultiplier = 1;
+		Instance.ElapsedTime = 0;
+		Instance.IsRunning = false;
+		Instance.TimeFlowMultiplier = 1;
 	}
 
 	private void OnDestroy() {
-		script = null;
+		Instance = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 		Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
+		PauseUnpause.OnPaused -= OnPaused;
 	}
 }

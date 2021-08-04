@@ -37,7 +37,7 @@ public class MusicHandler : SoundBase {
 
 	private void Start() {
 		Player.OnRoomEnter += NewRoom;
-		GameSettings.script.OnMusicVolumeChanged += UpdateMusicVol;
+		GameSettings.Instance.OnMusicVolumeChanged += UpdateMusicVol;
 		positions.Add(room1_1, 0);
 		positions.Add(room1_2, 0);
 		positions.Add(room1_3_avoidance, 0);
@@ -194,6 +194,6 @@ public class MusicHandler : SoundBase {
 	private void OnDestroy() {
 		script = null;
 		Player.OnRoomEnter -= NewRoom;
-		GameSettings.script.OnMusicVolumeChanged -= UpdateMusicVol;
+		GameSettings.Instance.OnMusicVolumeChanged -= UpdateMusicVol;
 	}
 }

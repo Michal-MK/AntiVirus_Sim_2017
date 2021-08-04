@@ -27,10 +27,10 @@ public class MenuUI : MonoBehaviour {
 	#endregion
 
 	private void Control_OnEscapePressed() {
-		MainMenuRefs refs = GetComponent<MainMenuRefs>();
+		MainMenuRefHolder refs = GetComponent<MainMenuRefHolder>();
 		if (WindowManager.getWindowCount > 0) {
 			WindowManager.CloseMostRecent();
-			foreach (Button b in refs.getAllButtons) {
+			foreach (Button b in refs.All) {
 				b.interactable = !b.interactable;
 			}
 			EventSystem.current.SetSelectedGameObject(refs.startGame.gameObject);

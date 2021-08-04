@@ -12,7 +12,7 @@ public class UploadScore {
 		}
 
 		WWWForm form = new WWWForm();
-		form.AddField("time", Timer.getTimeFormated);
+		form.AddField("time", Timer.Instance.ElapsedStr);
 		form.AddField("player_name", playerName);
 
 		UnityWebRequest.Post("http://lestranky.maweb.eu/saveTimes/diff" + difficulty + ".php", form);

@@ -63,9 +63,9 @@ public class BossHealth : MonoBehaviour {
 
 	public void CheckShields() {
 		if (healthIndicator.value == 1 && once) {
-			HUDisplay.script.DisplayInfo("His shields are up ... but we got a bomb!\n " +
-												"Switch to it in Attack mode by pressing \"Right Mouse Button\"", //TODO
-												"Pressing it again will switch your ammo back to bullets");
+			HUDisplay.Instance.DisplayInfo("His shields are up ... but we got a bomb!\n " +
+										   "Switch to it in Attack mode by pressing \"Right Mouse Button\"", //TODO
+										   "Pressing it again will switch your ammo back to bullets");
 			once = false;
 		}
 	}
@@ -93,7 +93,6 @@ public class BossHealth : MonoBehaviour {
 
 	private void CamFadeOut_OnCamFullyFaded() {
 		MapData.Instance.Progress(Player.GameProgression = 10);
-
 		MusicHandler.script.TransitionMusic(MusicHandler.script.room1_1);
 
 		Player.Instance.transform.position = FindObjectOfType<BossEntrance>().transform.position + new Vector3(0, 10);
@@ -101,9 +100,10 @@ public class BossHealth : MonoBehaviour {
 		CameraMovement.Instance.IsInBossRoom = false;
 		Camera.main.orthographicSize = CameraMovement.DEFAULT_CAM_SIZE;
 		Control.Instance.saveManager.canSave = true;
+		PlayerMovement.SpeedMultiplier = 1;
 		PlayerMovement.CanMove = true;
 		Destroy(transform.parent.gameObject);
 		Destroy(healthIndicator.gameObject);
-		HUDisplay.script.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
+		HUDisplay.Instance.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
 	}
 }

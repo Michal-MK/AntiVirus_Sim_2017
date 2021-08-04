@@ -20,26 +20,25 @@ public class BossEntrance : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == Tags.PLAYER && !lockin) {
+		if (collision.CompareTag(Tags.PLAYER) && !lockin) {
 
-			print("Debug");
-			Player.Instance.pAttack.Bullets = 5;
-			Player.Instance.pAttack.Bombs = 1;
+			//print("Debug");
+			//Player.Instance.pAttack.Bullets = 5;
+			//Player.Instance.pAttack.Bombs = 1;
 
 			if (Player.Instance.pAttack.Bombs > 0 && Player.Instance.pAttack.Bullets >= 5) {
 				CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1);
 				CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 				lockin = true;
-				Control.Instance.saveManager.Save(true);
 				Zoom.CanZoom = false;
 				PlayerMovement.CanMove = false;
 			}
 			if (Player.Instance.pAttack.Bombs <= 0 || Player.Instance.pAttack.Bullets <= 4) {
-				HUDisplay.script.DisplayInfo("You are not a worthy opponent!\n"+
+				HUDisplay.Instance.DisplayInfo("You are not a worthy opponent!\n"+
 												   "Bullets: " + Player.Instance.pAttack.Bullets +"/5\n"+
 												   "Bombs: "+ Player.Instance.pAttack.Bombs + "/1\n"+
 												   "Return to me once you have everything... to meet your demise!\n" +
-												   "MuHAHaHaa!!!", "Explore this location further.");
+												   "HAHaHaa!!!", "Explore this location further.");
 			}
 
 		}

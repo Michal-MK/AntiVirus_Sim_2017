@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	private void OnPaused(object sender, PauseEventArgs e) {
-		CanMove = e.isPlaying;
+		CanMove = e.IsPlaying;
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.I)) {
 			Player.Instance.isInvincible ^= true;
-			HUDisplay.script.DisplayInfo(null, "Invincibility " + (Player.Instance.isInvincible ? "Enabled" : "Disabled"));
+			HUDisplay.Instance.DisplayInfo(null, "Invincibility " + (Player.Instance.isInvincible ? "Enabled" : "Disabled"));
 		}
 	}
 
@@ -93,6 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void OnDestroy() {
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
+		PauseUnpause.OnPaused -= OnPaused;
 	}
 }
 

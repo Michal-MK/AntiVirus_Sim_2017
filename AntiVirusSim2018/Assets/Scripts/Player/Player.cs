@@ -39,9 +39,9 @@ public class Player : MonoBehaviour {
 	public bool isInvincible = false;
 
 	public static event BackgroundChangedEventHandler OnRoomEnter;
-	public static event PlayerColisionEventHandler OnSpikePickup;
-	public static event PlayerColisionEventHandler OnCoinPickup;
-	public static event PlayerColisionEventHandler OnTargetableObjectCollision;
+	public static event PlayerColisionEventHandler<Spike> OnSpikePickup;
+	public static event PlayerColisionEventHandler<Coin> OnCoinPickup;
+	public static event PlayerColisionEventHandler<GameObject> OnTargetableObjectCollision;
 	public static event EventHandler<PlayerDeathEventArgs> OnPlayerDeath;
 
 
@@ -65,27 +65,22 @@ public class Player : MonoBehaviour {
 	private IEnumerator Start() {
 		currentBG_name = BackgroundNames.BACKGROUND_1;
 		yield return new WaitForSeconds(1);
-#if UNITY_EDITOR
-		if (!Control.Instance.allowTesting && SaveManager.current == null) {
-			UnityEditor.EditorApplication.isPlaying = false;
-		}
-#endif
 
 		if (newGame) {
 			attempts++;
-			HUDisplay.script.DisplayInfo("Welcome!\n" +
+			HUDisplay.Instance.DisplayInfo("Welcome!\n" +
 											  $"This is your {attempts}. attempt to put the virus into a quarantine.\n\n" +
 											   "This box will appear only when I have something important to say,\notherwise look for information in the upper left corner, so it is less disruptive."
 											   , null);
 			Control.currAttempt = attempts;
 		}
-		HUDisplay.script.DisplayInfo(null, "Good luck & Have fun!");
+		HUDisplay.Instance.DisplayInfo(null, "Good luck & Have fun!");
 		PlayerMovement.CanMove = true;
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
-		if (collision.transform.name == "Block") {
-			if (!BlockScript.pressurePlateTriggered && OnTargetableObjectCollision != null) {
+		if (collision.transform.name == ObjNames.BLOCK) {
+			if (!collision.gameObject.GetComponent<BlockScript>().pressurePlateTriggered && OnTargetableObjectCollision != null) {
 				OnTargetableObjectCollision(this, collision.gameObject);
 			}
 		}
@@ -117,18 +112,18 @@ public class Player : MonoBehaviour {
 
 			if (col.name == BackgroundNames.BACKGROUND_2) {
 				if (GameProgression == 3) {
-					HUDisplay.script.DisplayInfo(null, "Go down even further.");
+					HUDisplay.Instance.DisplayInfo(null, "Go down even further.");
 				}
 			}
 		}
 
 		if (col.CompareTag(ObjNames.SPIKE)) {
-			OnSpikePickup?.Invoke(this, col.gameObject);
+			OnSpikePickup?.Invoke(this, col.gameObject.GetComponent<Spike>());
 			face.sprite = happy;
 		}
 		if (col.CompareTag(ObjNames.COIN)) {
 			face.sprite = happy;
-			OnCoinPickup?.Invoke(this, col.gameObject);
+			OnCoinPickup?.Invoke(this, col.gameObject.GetComponent<Coin>());
 		}
 
 		if (col.name == EnemyNames.ENEMY_TURRET) {

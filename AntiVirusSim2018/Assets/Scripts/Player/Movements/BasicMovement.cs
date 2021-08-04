@@ -8,7 +8,7 @@ public class BasicMovement : MonoBehaviour, IPlayerMovement {
 	private PlayerMovementModifiers modifiers;
 
 	public PlayerMovementModifiers MovementModifier {
-		get { return modifiers; }
+		get => modifiers;
 		set {
 			switch (value) {
 				case PlayerMovementModifiers.INVERT: {

@@ -12,7 +12,7 @@ public class Spike : MonoBehaviour {
 		get => spikesCollected;
 		set {
 			spikesCollected = value;
-			HUDisplay.script.UpdateSpikeCounter(value);
+			HUDisplay.Instance.UpdateSpikeCounter(value);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 		}
 	}
@@ -31,13 +31,13 @@ public class Spike : MonoBehaviour {
 
 	#endregion
 
-	private void OnSpikePickup(Player sender, GameObject spikeObj) {
+	private void OnSpikePickup(Player sender, Spike spike) {
 		SpikesCollected++;
 
 		gameObject.SetActive(false);
 
 		if (spikesCollected == 1) {
-			HUDisplay.script.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
+			HUDisplay.Instance.DisplayInfo("Follow the blinking arrows.\n They will guide you to your target.", "Be aware of every detail on the screen.");
 		}
 		//Finished avoidance
 		if (spikesCollected == 3) {

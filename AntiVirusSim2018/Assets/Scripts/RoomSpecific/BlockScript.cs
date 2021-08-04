@@ -8,7 +8,7 @@ public class BlockScript : MonoBehaviour {
 	private Vector3 startingPos;
 	private Quaternion defaultRotation = Quaternion.Euler(0, 0, 0);
 
-	public static bool pressurePlateTriggered = false;
+	public bool pressurePlateTriggered = false;
 	private bool preventSoftLock = false;
 
 	public bool FirstApproachHint { get; private set; }
@@ -56,7 +56,7 @@ public class BlockScript : MonoBehaviour {
 			}
 
 			if (!FirstApproachHint && dist < 10) {
-				HUDisplay.script.DisplayInfo("Find the activator and put the block in front of you on it.", null);
+				HUDisplay.Instance.DisplayInfo("Find the activator and put the block in front of you on it.", null);
 				FirstApproachHint = true;
 			}
 		}

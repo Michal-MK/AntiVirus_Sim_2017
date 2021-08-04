@@ -5,8 +5,6 @@ using Igor.Constants.Strings;
 
 public class Control : MonoBehaviour {
 
-	public bool allowTesting = false;
-
 	public static Control Instance { get; private set; }
 
 	public SaveManager saveManager;
@@ -41,68 +39,10 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	private void LoadManager_OnSaveDataLoaded(SaveData data) {
-		currDifficulty = data.core.difficulty;
-	}
-
-	public void StartNewGame(int difficulty) {
-		SaveManager.SaveNewGame(difficulty);
-		CamFadeOut.registerMenuMusicVolumeFade = true;
-		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
-		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
-		SceneManager.sceneLoaded += NewGameSceneLoaded;
-	}
-
-	private void NewGameSceneLoaded(Scene _, LoadSceneMode __) {
-		SceneManager.sceneLoaded -= NewGameSceneLoaded;
-		Player.GameProgression = 0;
-		Timer.ResetTimer();
-		Time.timeScale = 1;
-		CamFadeOut.Instance.Animator.speed = 0.75f;
-	}
-
-	private void TransitionToNewGame() {
-		CamFadeOut.OnCamFullyFaded -= TransitionToNewGame;
-		Destroy(MenuMusic.script.gameObject);
-		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
-	}
-
-	public void Restart() {
-		CamFadeOut.registerGameMusicVolumeFade = true;
-		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
-		CamFadeOut.OnCamFullyFaded += RestartTransition;
-	}
-
-	private void RestartTransition() {
-		PlayerMovement.CanMove = false;
-		Player.GameProgression = 0;
-		Timer.ResetTimer();
-		Time.timeScale = 1;
-		CamFadeOut.OnCamFullyFaded -= RestartTransition;
-		SceneManager.LoadScene(SceneNames.GAME1_SCENE);
-	}
-
-	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode _) {
-		if (scene.name == SceneNames.GAME1_SCENE) {
-			CamFadeOut.Instance.Animator.speed = 0.5f;
-		}
-		else if (scene.name == SceneNames.MENU_SCENE) {
-			if (!MenuMusic.script.isPlaying) {
-				MenuMusic.script.PlayMusic();
-			}
-		}
-		Time.timeScale = 1;
-		WindowManager.ClearWindows();
-	}
-
 	private void Update() {
 		if (Input.GetButtonDown(InputNames.ESCAPE)) {
 			OnEscapePressed?.Invoke();
 		}
-	}
-
-	public static void PressingEscape() {
-		OnEscapePressed?.Invoke();
 	}
 
 	private void OnDestroy() {
@@ -110,15 +50,61 @@ public class Control : MonoBehaviour {
 		SceneManager.sceneLoaded -= OnSceneFinishedLoading;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
+
+	private void LoadManager_OnSaveDataLoaded(SaveData data) {
+		currDifficulty = data.core.difficulty;
+	}
+
+	public void StartNewGame(int difficulty) {
+		//SaveManager.SaveNewGame(difficulty); TODO
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += TransitionToNewGame;
+
+		void TransitionToNewGame() {
+			CamFadeOut.OnCamFullyFaded -= TransitionToNewGame;
+			Destroy(MenuMusic.script.gameObject);
+			SceneManager.sceneLoaded += NewGameSceneLoaded;
+			SceneManager.LoadScene(SceneNames.GAME1_SCENE);
+		}
+		void NewGameSceneLoaded(Scene _, LoadSceneMode __) {
+			SceneManager.sceneLoaded -= NewGameSceneLoaded;
+			SetupGameScene();
+		}
+	}
+
+	public void Restart() {
+		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
+		CamFadeOut.OnCamFullyFaded += RestartTransition;
+		void RestartTransition() {
+			CamFadeOut.OnCamFullyFaded -= RestartTransition;
+			SceneManager.LoadScene(SceneNames.GAME1_SCENE);
+			SetupGameScene();
+		}
+	}
+
+	private void SetupGameScene() {
+		Player.GameProgression = 0;
+		Timer.ResetTimer();
+	}
+
+	private void OnSceneFinishedLoading(Scene scene, LoadSceneMode _) {
+		if (scene.name == SceneNames.MENU_SCENE) {
+			if (!MenuMusic.script.isPlaying) {
+				MenuMusic.script.PlayMusic();
+			}
+		}
+		Time.timeScale = 1;
+		WindowManager.ClearWindows();
+	}
 }
 
 /* List of Static variables
  * Control: ., currAttempt, currDifficulty, OnEscapePressed
   BossBehaviour: OnBossfightBegin, OnBossfightResult
   Coins: OnNewTarget
-  Spike: OnNewTarget, $_spikesCollected
+  Spike: OnNewTarget
   CameraMovement: .
-  CamFadeOut: ., OnCamFullyFaded, registerGameMusicVolumeFade, registerMenuMusicVolumeFade
+  CamFadeOut: ., OnCamFullyFaded
   HUDisplay: .
   UIControlScheme: .
   GameSettings: ., AudioVolume, FXVolume, $path, $fileContents
@@ -128,12 +114,11 @@ public class Control : MonoBehaviour {
   SaveManager: current, $_canSave
   SaveGameHelper: .
   Zoom: $_canZoom
-  Timer: ., getTime, timeFlowMultiplier 
+  Timer: .
   SignPost: OnAvoidanceBegin, $readPosts
   Player: ., PlayerState, EVENTS{5}, $gameProgression
   PlayerMovement: canMove, playerMovementSpeedMultiplier
   PlayerAttack: OnAmmoChanged, OnAmmoPickup
-  BlockScript: pressurePlateTriggered
   Maze: getMazeSpeedMultiplier
   MazeEntrance: OnMazeEnter
   MazeEscape: OnMazeEscape

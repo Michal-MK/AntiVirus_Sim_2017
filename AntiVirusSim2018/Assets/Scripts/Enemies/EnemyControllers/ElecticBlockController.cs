@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ElecticBlockController : IEnemyControler {
 
-
 	public Room ActiveRoom => MapData.Instance.GetRoom(1);
 
 	public bool RespawnOnReEntry => true;
@@ -36,7 +35,7 @@ public class ElecticBlockController : IEnemyControler {
 
 
 	public void Spawn() {
-		int totalBlocks = ((coin.CoinsCollected + 5) * (1 + Control.currDifficulty));
+		int totalBlocks = (coin.CoinsCollected + 5) * (1 + Control.currDifficulty);
 
 		for (int count = 0; count < totalBlocks; count++) {
 			float scale = Random.Range(0.5f, 1f);

@@ -44,7 +44,7 @@ namespace Igor.Boss.Attacks {
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, cagePosition, Time.deltaTime / 2, null));
 
 			yield return new WaitForSeconds(3);
-			HUDisplay.script.DisplayInfo(null, "Don't forget about the zooming feature :]");
+			HUDisplay.Instance.DisplayInfo(null, "Don't forget about the zooming feature :]");
 
 			bossBehaviour.StartCoroutine(Caged(positioningCage.gameObject, 1.1f));
 			SpriteRenderer arenaSprite = backgroundTransform.GetComponent<SpriteRenderer>();

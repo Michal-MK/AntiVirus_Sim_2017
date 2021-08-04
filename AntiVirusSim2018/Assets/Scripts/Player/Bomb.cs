@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour, IWeaponType {
 
-	public bool checkTriggers;
-	public bool checkColliders;
+	[SerializeField]
+	private bool checkTriggers = true;
+	[SerializeField]
+	private bool checkColliders = true;
+	[SerializeField]
+	private AudioClip bombFuse = null;
+	[SerializeField]
+	private AudioClip bombExplosion = null;
 
-	public WeaponType WeaponType { get; set; } = WeaponType.BOMB;
-	public int Damage { get; } = 1;
-
-
-	public AudioClip bombFuse;
-	public AudioClip bombExplosion;
+	public WeaponType WeaponType => WeaponType.BOMB;
+	public int Damage => 1;
 
 	void Start() {
 		StartCoroutine(Explode());

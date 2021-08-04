@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Reflection;
 
 public class AdvanceInGame : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class AdvanceInGame : MonoBehaviour {
 						for (int i = 0; i < 5; i++) {
 							FindObjectOfType<Coin>().OnCoinPickup(Player.Instance, null);
 						}
-						MapData.Instance.GetRoomLink(1,2).OpenDoor();
+						MapData.Instance.GetRoomLink(1, 2).OpenDoor();
 						FindObjectOfType<Spike>().transform.position = Vector3.zero;
 						Player.Instance.transform.position = Vector3.zero;
 						return;
@@ -23,16 +24,15 @@ public class AdvanceInGame : MonoBehaviour {
 					case 2: {
 						FindObjectOfType<BlockScript>().transform.position = FindObjectOfType<PressurePlate>().transform.position;
 						MapData.Instance.GetRoomLink(2, 3).OpenDoor();
-						Player.Instance.transform.position = FindObjectOfType<PressurePlate>().transform.position - new Vector3(20,0);
+						Player.Instance.transform.position = FindObjectOfType<PressurePlate>().transform.position - new Vector3(20, 0);
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = Player.Instance.transform.position;
 						return;
 					}
 					case 3: {
-						FindObjectOfType<Avoidance>().AvoidanceDuration = 6f;
-						FindObjectOfType<Avoidance>().GetType().GetMethod("SignPost_OnAvoidanceBegin", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(FindObjectOfType<Avoidance>(),null);
-						
-						FindObjectOfType<Avoidance>().StartAvoidance();
+						Avoidance av = FindObjectOfType<Avoidance>();
+						av.AvoidanceDuration = 4f;
+						av.StartAvoidance();
 						MapData.Instance.GetRoomLink(2, 3).OpenDoor();
 						GameObject.Find("Collectibles").transform.Find("Spike").gameObject.SetActive(true);
 						FindObjectOfType<Spike>().transform.position = Player.Instance.transform.position;
@@ -63,10 +63,11 @@ public class AdvanceInGame : MonoBehaviour {
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.PageUp)) {
-			print("++++");
-			FindObjectOfType<PlayerMovement>().SetMovementMode((PlayerMovementType)movementTypeCounter);
+			PlayerMovementType pmt = (PlayerMovementType)movementTypeCounter;
+			Player.Instance.pMovement.SetMovementMode(pmt);
+			print($"Setting movement mode to {pmt}");
 			movementTypeCounter++;
-			movementTypeCounter = movementTypeCounter % 4;
+			movementTypeCounter %= 4;
 		}
 	}
 

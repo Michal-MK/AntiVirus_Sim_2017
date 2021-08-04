@@ -68,10 +68,6 @@ public class SaveManager : MonoBehaviour {
 	public void Save(bool isAutomatic) {
 		BinaryFormatter formatter = new BinaryFormatter();
 		SaveFile newSave = current;
-		if (Control.Instance.allowTesting) {
-			print("No saving!");
-			return;
-		}
 		if (current.data.core.time != 0) {
 			newSave.saveHistory.previousSaves.Add(DeepCopy(current.data));
 		}
@@ -96,10 +92,10 @@ public class SaveManager : MonoBehaviour {
 			#region World data
 			newSave.data.world.blockPos = SaveGameHelper.script.boxPos;
 			newSave.data.world.blockZRotation = SaveGameHelper.script.ZRotationBlock;
-			newSave.data.world.blockPushAttempt = pPlate.attempts;
+			newSave.data.world.blockPushAttempt = pPlate.Attempts;
 			newSave.data.world.spikeActive = collectibles.Find("Spike").gameObject.activeSelf;
 			newSave.data.world.spikePos = SaveGameHelper.script.spikePos;
-			newSave.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
+			//newSave.data.world.pressurePlateTriggered = pPlate.alreadyTriggered;
 			newSave.data.world.doneAvoidance = avoidance.AvoidanceFinished;
 			newSave.data.world.boss1Killed = MapData.Instance.BossOneKilled;
 			newSave.data.world.postMazeDoorOpen = CameraMovement.Instance.IsInMaze == false && SaveGameHelper.script.spike.SpikesCollected >= 4 ? true : false;
@@ -112,13 +108,13 @@ public class SaveManager : MonoBehaviour {
 			#endregion
 
 			#region Hints data
-			newSave.data.shownHints.currentlyDisplayedSideInfo = HUDisplay.script.slideInText.text;
+			newSave.data.shownHints.currentlyDisplayedSideInfo = HUDisplay.Instance.SlideInText;
 			newSave.data.shownHints.shownBlockInfo = block.FirstApproachHint;
 			newSave.data.shownHints.shootingIntro = Player.Instance.pAttack.attackModeIntro;
 			#endregion
 
 			#region Core data
-			newSave.data.core.time = Timer.getTime;
+			newSave.data.core.time = Timer.Instance.ElapsedTime;
 			newSave.data.core.difficulty = Control.currDifficulty;
 			newSave.data.core.camSize = Camera.main.orthographicSize;
 			newSave.data.core.fileLocation = filePath;

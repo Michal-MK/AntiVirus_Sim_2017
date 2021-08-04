@@ -17,6 +17,7 @@ public class SoundFXHandler : SoundBase {
 	private void Awake() {
 		if (script == null) {
 			script = this;
+			GameSettings.Instance.OnFxVolumeChanged += UpdateFxVol;
 		}
 		else if (script != this) {
 			Destroy(gameObject);
@@ -28,7 +29,6 @@ public class SoundFXHandler : SoundBase {
 			sources.Add(s);
 			s.volume = GameSettings.FXVolume;
 		}
-		GameSettings.script.OnFxVolumeChanged += UpdateFxVol;
 	}
 
 	private void UpdateFxVol(float newValue) {
@@ -85,6 +85,7 @@ public class SoundFXHandler : SoundBase {
 	}
 
 	private void OnDestroy() {
+		GameSettings.Instance.OnFxVolumeChanged -= UpdateFxVol;
 		script = null;
 	}
 }

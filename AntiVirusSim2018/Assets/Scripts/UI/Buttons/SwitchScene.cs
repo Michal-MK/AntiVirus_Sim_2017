@@ -40,7 +40,7 @@ public class SwitchScene : MonoBehaviour {
 		}
 
 		quit.transform.position = new Vector3(0, -200, 10);
-		CamFadeOut.registerGameMusicVolumeFade = true;
+		//CamFadeOut.registerGameMusicVolumeFade = true;
 		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		sceneNameHolder = SceneNames.MENU_SCENE;

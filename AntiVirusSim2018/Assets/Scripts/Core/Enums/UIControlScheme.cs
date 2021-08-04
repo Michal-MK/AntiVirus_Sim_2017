@@ -8,27 +8,28 @@ public class UIControlScheme : MonoBehaviour {
 	private GameObject selectedGO;
 	private GameObject initialSceneFocus;
 
-	public bool Debug;
+	public bool debug;
 
-	public static UIControlScheme Instance { get; private set; }
-	public ControlScheme LastControlScheme { get; set; } = ControlScheme.Mouse;
-	public bool IsMouseScheme() => LastControlScheme == ControlScheme.Mouse;
-
-
-	private void Awake() {
-		if (Instance == null) {
-			Instance = this;
-			SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-		}
-		else {
-			Destroy(this);
+	private static UIControlScheme instance;
+	public static UIControlScheme Instance {
+		get {
+			if (instance != null) return instance;
+			else {
+				GameObject holder = new GameObject(nameof(UIControlScheme),typeof(UIControlScheme));
+				UIControlScheme inst = holder.GetComponent<UIControlScheme>();
+				SceneManager.sceneLoaded += inst.SceneManager_sceneLoaded;
+				return instance = inst;
+			}
 		}
 	}
+
+	public ControlScheme LastControlScheme { get; set; } = ControlScheme.Mouse;
+	public bool IsMouseScheme() => LastControlScheme == ControlScheme.Mouse;
 
 	private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode) {
 		selectedGO = initialSceneFocus = EventSystem.current.firstSelectedGameObject;
 
-		if (Debug)
+		if (debug)
 			print("Scene loaded: " + initialSceneFocus.name + " and control: " + LastControlScheme);
 
 		if (LastControlScheme == ControlScheme.Mouse) {
@@ -48,7 +49,7 @@ public class UIControlScheme : MonoBehaviour {
 
 		if (selectedGO != EventSystem.current.currentSelectedGameObject) {
 			selectedGO = EventSystem.current.currentSelectedGameObject;
-			if (selectedGO != null) {
+			if (selectedGO != null && debug) {
 				print(selectedGO.name);
 			}
 		}
@@ -63,7 +64,7 @@ public class UIControlScheme : MonoBehaviour {
 			if (selectedGO == null) {
 				selectedGO = initialSceneFocus;
 				EventSystem.current.SetSelectedGameObject(selectedGO);
-				if (Debug)
+				if (debug)
 					print("Keyboard/Controller: Selected ->" + selectedGO.name);
 			}
 			LastControlScheme = ControlScheme.Keyboard | ControlScheme.Controller;

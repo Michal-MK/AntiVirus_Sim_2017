@@ -79,14 +79,14 @@ public class MapData : MonoBehaviour {
 			case 1: {
 				GetRoomLink(1, 2).OpenDoor();
 				if (displayGuidance) {
-					HUDisplay.script.DisplayDirection(Directions.RIGHT);
+					HUDisplay.Instance.DisplayDirection(Directions.RIGHT);
 				}
 				break;
 			}
 			case 2: {
 				GetRoomLink(2, 3).OpenDoor();
 				if (displayGuidance) {
-					HUDisplay.script.DisplayDirection(Directions.TOP);
+					HUDisplay.Instance.DisplayDirection(Directions.TOP);
 				}
 				break;
 			}
@@ -95,7 +95,7 @@ public class MapData : MonoBehaviour {
 				GetRoomLink(2, 4).OpenDoor();
 				GetRoomLink(1, 2).CloseDoor();
 				if (displayGuidance) {
-					HUDisplay.script.DisplayDirection(Directions.BOTTOM);
+					HUDisplay.Instance.DisplayDirection(Directions.BOTTOM);
 				}
 				break;
 			}
@@ -104,7 +104,7 @@ public class MapData : MonoBehaviour {
 				GetRoomLink(4, 5).OpenDoor();
 				GetRoomLink(5, 6).OpenDoor();
 				if (displayGuidance) {
-					HUDisplay.script.DisplayDirection(Directions.RIGHT);
+					HUDisplay.Instance.DisplayDirection(Directions.RIGHT);
 				}
 				break;
 			}

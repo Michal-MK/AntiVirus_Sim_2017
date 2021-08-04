@@ -14,18 +14,19 @@ public class GameUI : MonoBehaviour {
 			WindowManager.CloseMostRecent();
 		}
 		else {
-			pauseGameOverlay.SetActive(e.isPaused);
+			pauseGameOverlay.SetActive(e.IsPaused);
 		}
 	}
 
 	private void M_Player_OnPlayerDeath(object sender, PlayerDeathEventArgs e) {
 		Animator gameOverAnim = GameObject.Find("GameOver").GetComponent<Animator>();
 		gameOverAnim.Play("GameOver");
+		Cursor.visible = true;
 		Player.OnPlayerDeath -= M_Player_OnPlayerDeath;
 	}
 
 
 	private void OnDestroy() {
-		PauseUnpause.OnPaused += OnGamePaused;
+		PauseUnpause.OnPaused -= OnGamePaused;
 	}
 }

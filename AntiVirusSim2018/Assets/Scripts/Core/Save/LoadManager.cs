@@ -7,8 +7,7 @@ using System.Collections;
 
 public class LoadManager {
 
-	public delegate void SaveState(SaveData data);
-	public static event SaveState OnSaveDataLoaded;
+	public static event SaveLoadedEventHandler OnSaveDataLoaded;
 
 	private SaveData save;
 
@@ -20,7 +19,7 @@ public class LoadManager {
 			saveFile = (SaveFile)bf.Deserialize(file);
 			save = saveFile.data;
 		}
-		CamFadeOut.registerMenuMusicVolumeFade = true;
+		//CamFadeOut.registerMenuMusicVolumeFade = true;
 		CamFadeOut.Instance.PlayTransition(CameraTransitionModes.TRANSITION_SCENES, 1f);
 		CamFadeOut.OnCamFullyFaded += CamFadeOut_OnCamFullyFaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
@@ -45,10 +44,8 @@ public class LoadManager {
 	}
 
 	private IEnumerator DelayLoad() {
-		yield return new WaitForEndOfFrame();
-		if (OnSaveDataLoaded != null) {
-			OnSaveDataLoaded(save);
-		}
+		yield return new WaitForEndOfFrame(); //TODO why is this in a coroutine?
+		OnSaveDataLoaded?.Invoke(save);
 	}
 
 	private void CamFadeOut_OnCamFullyFaded() {

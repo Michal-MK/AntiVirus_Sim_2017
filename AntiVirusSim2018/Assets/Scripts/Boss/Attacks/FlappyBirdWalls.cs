@@ -37,7 +37,7 @@ namespace Igor.Boss.Attacks {
 			yield return new WaitForSeconds(2);
 			if (informOnce) {
 				informOnce = false;
-				HUDisplay.script.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
+				HUDisplay.Instance.DisplayInfo("Flappy Bird!!! (Press \"UpArrow\" or \"W\") to flap. ", "Press \"Up or W\" to flap.");
 			}
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, (Vector2)arenaBackground.transform.position - arenaBackground.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, (Vector2)arenaBackground.transform.position - arenaBackground.sizeDelta / 2 + new Vector2(40, 20), Time.deltaTime / 2, null));

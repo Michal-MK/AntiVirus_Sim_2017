@@ -14,7 +14,7 @@ public class DisplaySaveHistory : MonoBehaviour {
 
 	public void Display() {
 		if (!isDisplaying) {
-			content = GameObject.Find("SaveSceneReferenceHolder").GetComponent<SaveSceneReferenceHolder>().content;
+			content = GameObject.Find("SaveSceneReferenceHolder").GetComponent<SaveSceneRefHolder>().content;
 			foreach (SaveData s in selfHistory) {
 				GameObject g = Instantiate(historyRep, content);
 				g.name = s.core.fileLocation;

@@ -33,10 +33,10 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	#region EventImplementation
-	private void M_Player_OnSpikePickup(Player sender, GameObject other) {
+	private void M_Player_OnSpikePickup(Player sender, Spike spike) {
 		Bullets++;
 		OnAmmoChanged(AttackType.BULLETS, Bullets);
-		if (other.GetComponent<Spike>().SpikesCollected == 5) {
+		if (spike.SpikesCollected == 5) {
 			string text;
 			if (attackModeIntro) {
 				text = "You found all the bullets.\nYou can fire them by switching into \"ShootMode\" (Space) and target using your mouse.\nThe bullets are limited, don't lose them!";
@@ -45,7 +45,7 @@ public class PlayerAttack : MonoBehaviour {
 			else {
 				text = "You found all the bullets.\n You can fire them by... oh, you already know. Well... don't lose them!";
 			}
-			HUDisplay.script.DisplayInfo(text, "Don't give up now.");
+			HUDisplay.Instance.DisplayInfo(text, "Don't give up now.");
 		}
 	}
 
@@ -57,7 +57,7 @@ public class PlayerAttack : MonoBehaviour {
 	#endregion
 
 	void Update() {
-		if (Player.GameProgression != -1 && !PauseUnpause.isPaused && Input.GetButtonDown("Attack")) {
+		if (Player.GameProgression != -1 && !PauseUnpause.IsPaused && Input.GetButtonDown("Attack")) {
 			inFireMode = !inFireMode;
 			if (inFireMode) {
 				face.sprite = attacking;
@@ -73,11 +73,11 @@ public class PlayerAttack : MonoBehaviour {
 			}
 
 			if (attackModeIntro) {
-				HUDisplay.script.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
-													"Use your mouse to aim.\n " +
-													"The bullets are limited and you HAVE to pick them up after you fire!\n" +
-													"Currently you have: " + Bullets + " bullets.\n " +
-													"Don't lose them", null);
+				HUDisplay.Instance.DisplayInfo("Wow, you figured out how to shoot ... ok.\n " +
+											   "Use your mouse to aim.\n " +
+											   "The bullets are limited and you HAVE to pick them up after you fire!\n" +
+											   "Currently you have: " + Bullets + " bullets.\n " +
+											   "Don't lose them", null);
 				attackModeIntro = false;
 				ammoType = SwitchAmmoType();
 				HUDElements elem = GameObject.Find("_Time and Collectibles").GetComponent<HUDElements>();
@@ -85,7 +85,7 @@ public class PlayerAttack : MonoBehaviour {
 				elem.SetVisibility(AttackType.BOMBS, true);
 			}
 		}
-		if (inFireMode && !PauseUnpause.isPaused) {
+		if (inFireMode && !PauseUnpause.IsPaused) {
 			if (Input.GetButtonDown(InputNames.RMB)) {
 				ammoType = SwitchAmmoType();
 			}
@@ -133,7 +133,6 @@ public class PlayerAttack : MonoBehaviour {
 		bullet.name = ObjNames.BULLET;
 		bullet.transform.parent = GameObject.Find("Collectibles").transform;
 		bullet.SetActive(true);
-		bullet.GetComponent<SpikeBullet>().player = this;
 		SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowSound);
 
 		Bullets--;
@@ -150,7 +149,7 @@ public class PlayerAttack : MonoBehaviour {
 	}
 
 	public IEnumerator RefreshBombs() {
-		HUDisplay.script.DisplayInfo(null, "Wait for the bomb to regenerate!");
+		HUDisplay.Instance.DisplayInfo(null, "Wait for the bomb to regenerate!");
 		yield return new WaitForSeconds(BombRechargeDelay);
 		Bombs++;
 		OnAmmoChanged(AttackType.BOMBS, Bombs);
@@ -162,7 +161,7 @@ public class PlayerAttack : MonoBehaviour {
 			Bombs++;
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.ArrowCollected);
 			OnAmmoPickup(AttackType.BOMBS, true);
-			HUDisplay.script.DisplayInfo("You found a bomb, it will be useful later on.", null);
+			HUDisplay.Instance.DisplayInfo("You found a bomb, it will be useful later on.", null);
 		}
 
 		if (collided.name == ObjNames.BULLET_PICKUP) {

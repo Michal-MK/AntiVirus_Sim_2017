@@ -5,14 +5,17 @@ using UnityEngine;
 public class SpikeBullet : MonoBehaviour, IWeaponType {
 
 
-	public GameObject bulletPickup;
-	public Rigidbody2D rg;
-	public float bulletSpeed;
-	public float bulletDuration = 1.5f;
-	public PlayerAttack player;
+	[SerializeField]
+	private GameObject bulletPickup = null;
+	[SerializeField]
+	private Rigidbody2D rg = null;
+	[SerializeField]
+	private float bulletSpeed = 40;
+	[SerializeField]
+	private float bulletDuration = 1.5f;
 
-	public WeaponType WeaponType { get; } = WeaponType.BULLET;
-	public int Damage { get; } = 1;
+	public WeaponType WeaponType => WeaponType.BULLET;
+	public int Damage => 1;
 
 	private void OnEnable() {
 		rg.velocity = transform.up * bulletSpeed;
@@ -46,7 +49,7 @@ public class SpikeBullet : MonoBehaviour, IWeaponType {
 		GameObject newspikeBullet = Instantiate(bulletPickup, impactPosition, transform.rotation);
 		newspikeBullet.transform.parent = GameObject.Find("Collectibles").transform;
 		newspikeBullet.name = "FiredBullet";
-		newspikeBullet.GetComponent<Collectible>().Collector = player.transform;
+		newspikeBullet.GetComponent<Collectible>().Collector = Player.Instance.transform;
 		Destroy(gameObject);
 	}
 }

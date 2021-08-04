@@ -40,13 +40,12 @@ public class Avoidance : MonoBehaviour {
 
 	private void SignPost_OnAvoidanceBegin() {
 		if (!AvoidanceFinished) {
-			HUDisplay.script.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
+			HUDisplay.Instance.DisplayInfo("MuHAhAHAHAHAHAHAHAHAHAHAAAAA!\n" +
 										 "You fell for my genius trap, now... DIE!", "Survive, You can zoom out using the Mouse Wheel");
 			StartAvoidance();
-			turrets = spawner.SpawnAvoidance();
 		}
 		else {
-			HUDisplay.script.DisplayInfo(null, "Nope, not doing that thing again!");
+			HUDisplay.Instance.DisplayInfo(null, "Nope, not doing that thing again!");
 		}
 	}
 
@@ -56,6 +55,7 @@ public class Avoidance : MonoBehaviour {
 
 	public void StartAvoidance() {
 		MapData.Instance.GetRoomLink(2, 3).CloseDoor();
+		turrets = spawner.SpawnAvoidance();
 		StartCoroutine(HoldAvoidance());
 		Control.Instance.saveManager.canSave = false;
 		CameraMovement.Instance.RaycastForRooms();
@@ -70,7 +70,7 @@ public class Avoidance : MonoBehaviour {
 		yield return new WaitForSeconds(5);
 		Control.Instance.saveManager.canSave = true;
 		spike.SetPosition();
-		HUDisplay.script.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
+		HUDisplay.Instance.DisplayInfo("Uff... it's over. Get the Spike and go to the next room.", "Head south to face the final challenge.");
 		AvoidanceFinished = true;
 		yield return new WaitForSeconds(10);
 		foreach (TurretAttack turret in turrets) {
@@ -82,7 +82,6 @@ public class Avoidance : MonoBehaviour {
 	}
 
 	private IEnumerator TimeLeft() {
-		Text SideText = HUDisplay.script.slideInText;
 		int timeLeft = (int)avoidDuration - 1;
 		bool show = false;
 
@@ -93,7 +92,7 @@ public class Avoidance : MonoBehaviour {
 				show = true;
 			}
 			if (show) {
-				SideText.text = string.Format("{0:00} seconds left!", timeLeft);
+				HUDisplay.Instance.UpdateSlideTextDirect(string.Format("{0:00} seconds left!", timeLeft));
 			}
 			if (timeLeft <= 0) {
 				StopCoroutine(TimeLeft());

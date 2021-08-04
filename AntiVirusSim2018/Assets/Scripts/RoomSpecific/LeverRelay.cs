@@ -8,7 +8,6 @@ public class LeverRelay : MonoBehaviour {
 	private Light redParticle = null;
 	[SerializeField]
 	private Light greenParticle = null;
-
 	[SerializeField]
 	private Lever[] levers = null;
 	/// <summary>
@@ -66,14 +65,14 @@ public class LeverRelay : MonoBehaviour {
 					ParticleSystem.LightsModule module = emmiters[0].lights;
 					module.light = greenParticle;
 					MusicHandler.script.TransitionMusic(MusicHandler.script.darkWorld);
-					HUDisplay.script.DisplayInfo(null, "The computer went to standby mode, be careful.");
+					HUDisplay.Instance.DisplayInfo(null, "The computer went to standby mode, be careful.");
 					break;
 				}
 				case 2: {
 					Player.Instance.pMovement.SetMovementModifier(PlayerMovementModifiers.INVERT);
 					ParticleSystem.LightsModule module = emmiters[1].lights;
 					module.light = greenParticle;
-					HUDisplay.script.DisplayInfo(".doog os leef t'nod I ,reayalp .rM ...gnineppah si tahW !yeH", "?thgirla gnihtyreve si ,egnarts si sihT");
+					HUDisplay.Instance.DisplayInfo(".doog os leef t'nod I ,reayalp .rM ...gnineppah si tahW !yeH", "?thgirla gnihtyreve si ,egnarts si sihT");
 					break;
 				}
 				case 3: {
@@ -95,9 +94,9 @@ public class LeverRelay : MonoBehaviour {
 	}
 
 	public void Interact() {
-		HUDisplay.script.DisplayInfo("Upon inspection, I was able to figure out, that this device is not fully operational.", "New path opened");
+		HUDisplay.Instance.DisplayInfo("Upon inspection, I was able to figure out, that this device is not fully operational.", "New path opened");
 		MapData.Instance.GetRoomLink(6, 7).OpenDoor();
-		HUDisplay.script.DisplayDirection(Directions.TOP);
+		HUDisplay.Instance.DisplayDirection(Directions.TOP);
 		CameraMovement.Instance.RaycastForRooms();
 	}
 }

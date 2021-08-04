@@ -47,7 +47,7 @@ public class BossBehaviour : Enemy {
 
 		PlayerMovement.CanMove = true;
 		Zoom.CanZoom = true;
-		HUDisplay.script.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my control. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
+		HUDisplay.Instance.DisplayInfo("Ahh I see, you are persistent.. but you won't escape this time!\n The system is fully under my control. You stand NO chance!", "Red = Invincible, Blue = Damageable. Aim for the things that extend from its body.");
 		yield return new WaitForSeconds(1);
 
 		StartCoroutine(Attack(Random.Range(0, attacks.Count)));

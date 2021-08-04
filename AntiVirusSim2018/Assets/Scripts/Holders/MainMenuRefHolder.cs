@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuRefs : MonoBehaviour {
+public class MainMenuRefHolder : MonoBehaviour {
 
 	#region Buttons
 	public Button startGame;
@@ -13,14 +13,14 @@ public class MainMenuRefs : MonoBehaviour {
 	#endregion
 
 
-	public Button[] getAllButtons {
+	public Button[] All {
 		get {
 			return new Button[] { startGame, leaderboard, loadSave, quitGame, help, settings };
 		}
 	}
 
 	public void ToggleButtons() {
-		foreach (Button b in getAllButtons) {
+		foreach (Button b in All) {
 			b.interactable = !b.interactable;
 		}
 	}

@@ -3,11 +3,11 @@ using UnityEngine;
 public class BossHitDetection : MonoBehaviour, IDamageable {
 	public BossHealth hp;
 
-	public WeaponType damagedByType { get; set; }
+	public WeaponType DamagedBy { get; set; }
 
-	public bool onKillDestroy => false;
+	public bool DestroyOnKill => false;
 
-	public bool onKillDeactivate => true;
+	public bool DeactivateOnKill => true;
 
 	public void TakeDamage(GameObject by, WeaponType type) {
 		switch (type) {
@@ -16,7 +16,7 @@ public class BossHitDetection : MonoBehaviour, IDamageable {
 				break;
 			}
 			case WeaponType.BOMB: {
-				if (onKillDeactivate) {
+				if (DeactivateOnKill) {
 					gameObject.SetActive(false);
 				}
 				return;

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class GameScene_Holder : MonoBehaviour {
+public class GameSceneRefHolder : MonoBehaviour {
+
 	public Button save;
 	public Button restart;
 	public Button quitToMenu;
@@ -17,7 +18,7 @@ public class GameScene_Holder : MonoBehaviour {
 		get { return new Button[] { save, restart, settings, quitToMenu }; }
 	}
 
-	public Button[] getButtonLoad {
+	public Button[] getButtonsLoad {
 		get { return new Button[] { load, restart, settings, quitToMenu }; }
 	}
 

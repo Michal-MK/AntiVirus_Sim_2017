@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour {
 
 	private Vector3 camMidPoint;
 	private float allowedCamWidth;
-	private float allowefCamHeight;
+	private float allowedCamHeight;
 
 	[SerializeField]
 	private List<RectTransform> accessibleBackgrounds = new List<RectTransform>();
@@ -24,6 +24,7 @@ public class CameraMovement : MonoBehaviour {
 	[SerializeField]
 	private bool inBossRoom = false;
 	public bool IsInBossRoom { get => inBossRoom; set { inBossRoom = value; } }
+
 	[SerializeField]
 	private bool inMaze = false;
 	public bool IsInMaze { get => inMaze; set { inMaze = value; } }
@@ -38,7 +39,6 @@ public class CameraMovement : MonoBehaviour {
 
 	private void Awake() {
 		BossBehaviour.OnBossfightBegin += BossBehaviour_OnBossfightBegin;
-		MazeEscape.OnMazeEscape += MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter += MazeEntrance_OnMazeEnter;
 		Instance = this;
 	}
@@ -53,7 +53,6 @@ public class CameraMovement : MonoBehaviour {
 
 	private void OnDestroy() {
 		BossBehaviour.OnBossfightBegin -= BossBehaviour_OnBossfightBegin;
-		MazeEscape.OnMazeEscape -= MazeEscape_OnMazeEscape;
 		MazeEntrance.OnMazeEnter -= MazeEntrance_OnMazeEnter;
 	}
 
@@ -67,7 +66,7 @@ public class CameraMovement : MonoBehaviour {
 		inMaze = true;
 	}
 
-	private void MazeEscape_OnMazeEscape(object sender, EventArgs e) {
+	public void OnMazeEscaped() {
 		ParticleSystem.ShapeModule shapeA = above.shape;
 		ParticleSystem.ShapeModule shapeB = below.shape;
 
@@ -90,13 +89,13 @@ public class CameraMovement : MonoBehaviour {
 		accessibleBackgrounds.Clear();
 
 		background = Player.Instance.GetCurrentBackground();
-		allowefCamHeight = background.sizeDelta.y / 2;
+		allowedCamHeight = background.sizeDelta.y / 2;
 		allowedCamWidth = background.sizeDelta.x / 2;
 
 		LayerMask mask = LayerMask.GetMask(Layers.BACKGROUNDS, Layers.WALLS);
 
-		RaycastHit2D[] up = Physics2D.RaycastAll(background.position, Vector2.up, allowefCamHeight + 10, mask.value);
-		RaycastHit2D[] down = Physics2D.RaycastAll(background.position, Vector2.down, allowefCamHeight + 10, mask.value);
+		RaycastHit2D[] up = Physics2D.RaycastAll(background.position, Vector2.up, allowedCamHeight + 10, mask.value);
+		RaycastHit2D[] down = Physics2D.RaycastAll(background.position, Vector2.down, allowedCamHeight + 10, mask.value);
 		RaycastHit2D[] left = Physics2D.RaycastAll(background.position, Vector2.left, allowedCamWidth + 10, mask.value);
 		RaycastHit2D[] right = Physics2D.RaycastAll(background.position, Vector2.right, allowedCamWidth + 10, mask.value);
 
@@ -119,7 +118,7 @@ public class CameraMovement : MonoBehaviour {
 	public void CalculateArea() {
 
 		allowedCamWidth = 0;
-		allowefCamHeight = 0;
+		allowedCamHeight = 0;
 		float maxYOffset = Mathf.NegativeInfinity;
 		float maxXOffset = Mathf.NegativeInfinity;
 		float minYOffset = Mathf.Infinity;
@@ -145,7 +144,7 @@ public class CameraMovement : MonoBehaviour {
 			}
 		}
 		allowedCamWidth = (-minXOffset + maxXOffset) / 2;
-		allowefCamHeight = (-minYOffset + maxYOffset) / 2;
+		allowedCamHeight = (-minYOffset + maxYOffset) / 2;
 		camMidPoint.x = (minXOffset + maxXOffset) / 2;
 		camMidPoint.y = (minYOffset + maxYOffset) / 2;
 	}
@@ -187,11 +186,11 @@ public class CameraMovement : MonoBehaviour {
 
 	public float camY {
 		get {
-			if (player.position.y > allowefCamHeight + camMidPoint.y - cam.orthographicSize) {
-				return allowefCamHeight + camMidPoint.y - cam.orthographicSize;
+			if (player.position.y > allowedCamHeight + camMidPoint.y - cam.orthographicSize) {
+				return allowedCamHeight + camMidPoint.y - cam.orthographicSize;
 			}
-			else if (player.position.y < -allowefCamHeight + camMidPoint.y + cam.orthographicSize) {
-				return -allowefCamHeight + camMidPoint.y + cam.orthographicSize;
+			else if (player.position.y < -allowedCamHeight + camMidPoint.y + cam.orthographicSize) {
+				return -allowedCamHeight + camMidPoint.y + cam.orthographicSize;
 			}
 			else {
 				return player.position.y;
@@ -221,7 +220,7 @@ public class CameraMovement : MonoBehaviour {
 		ParticleSystem.ShapeModule shapeA = above.shape;
 		below.gameObject.SetActive(false);
 		shapeA.radius = room != null ? room.sizeDelta.x : cam.aspect * cam.orthographicSize;
-		above.time = above.time * 4;
+		above.time *= 4;
 		above.transform.position = room != null ? room.transform.position + new Vector3(0, room.sizeDelta.y / 2) : cam.transform.position + new Vector3(0,cam.orthographicSize + 10);
 		ParticleSystem.MainModule main = above.main;
 		main.startLifetime = time;

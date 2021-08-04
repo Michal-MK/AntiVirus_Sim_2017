@@ -77,3 +77,10 @@ Ships:
 entering fire mode does not work
 populating ships should ask whther wou want to see the result of enter playmode afterwards
 ship visual sometimes does not place a ahip at the location, during random placement
+
+
+Icicles disapper immeadiately on entering transition
+After maze can not zoom ? Not tested -fixed
+After maze Matrix particles are f** -fixed
+Settings button stays highlighted...
+

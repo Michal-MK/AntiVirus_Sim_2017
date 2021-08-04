@@ -23,31 +23,31 @@ public class SignPost : MonoBehaviour {
 				break;
 			}
 			case "_SignPost Start": {
-				HUDisplay.script.DisplayInfo("The virus can not be damaged while it is attacking.", null);
+				HUDisplay.Instance.DisplayInfo("The virus can not be damaged while it is attacking.", null);
 				break;
 			}
 			case "_SignPost Room 1": {
-				HUDisplay.script.DisplayInfo("All the spikes you are collecting have a purpose, hold on to them.", null);
+				HUDisplay.Instance.DisplayInfo("All the spikes you are collecting have a purpose, hold on to them.", null);
 				break;
 			}
 			case "_SignPost PostAvoidance": {
-				HUDisplay.script.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
+				HUDisplay.Instance.DisplayInfo("Minions of the Virus are deadly, but you have to endure!", null);
 				break;
 			}
 			case "_SignPost Maze": {
-				HUDisplay.script.DisplayInfo("The coins are up to no use... yet", null);
+				HUDisplay.Instance.DisplayInfo("The coins are up to no use... yet", null);
 				break;
 			}
 			case "_SignPost PreBossEntrance": {
-				HUDisplay.script.DisplayInfo("Your real challenge awaits inside this portal. Are you prepared? Sorry I can not help.", null);
+				HUDisplay.Instance.DisplayInfo("Your real challenge awaits inside this portal. Are you prepared? Sorry I can not help.", null);
 				break;
 			}
 			case "_SignPost PreBoss": {
-				HUDisplay.script.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the target. Sorry for telling you this late lel. No regrets.", null);
+				HUDisplay.Instance.DisplayInfo("Fired bullets can be picked up and reused. Handy if you miss the target. Sorry for telling you this late lel. No regrets.", null);
 				break;
 			}
 			case "_SignPost LaserRoom": {
-				HUDisplay.script.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
+				HUDisplay.Instance.DisplayInfo(readPosts.Count == 6 ? "Good job, so far you found every single post, I think you deserve a reward." :
 																	"This is the seventh sign, but you found only " + readPosts.Count + " disappointed.", null);
 				if (readPosts.Count == 6) {
 					FindObjectOfType<Coin>().CoinsCollected++;
@@ -56,15 +56,15 @@ public class SignPost : MonoBehaviour {
 			}
 			case "_SignPost TeleportationRoom": {
 				if (Player.Instance.pMovement.CurrentMovementModifier == PlayerMovementModifiers.INVERT) {
-					HUDisplay.script.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
+					HUDisplay.Instance.DisplayInfo("The lightning in this room is very unstable, the path can disappear at any moment, and you do not want to misstep!", null);
 				}
 				else {
-					HUDisplay.script.DisplayInfo("!petssim ot tnaw ton od uoy dna ,tnemom yna ta raeppasid nac htap eht ,elbatsnu yrev si moor siht ni gninthgil ehT", null);
+					HUDisplay.Instance.DisplayInfo("!petssim ot tnaw ton od uoy dna ,tnemom yna ta raeppasid nac htap eht ,elbatsnu yrev si moor siht ni gninthgil ehT", null);
 				}
 				break;
 			}
 			case "_SignPost InvertingRoom": {
-				HUDisplay.script.DisplayInfo("!desruc si moor sihT", null);
+				HUDisplay.Instance.DisplayInfo("!desruc si moor sihT", null);
 				break;
 			}
 		}

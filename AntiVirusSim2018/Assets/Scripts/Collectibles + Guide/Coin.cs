@@ -36,10 +36,12 @@ public class Coin : MonoBehaviour {
 		}
 	}
 
-	public void OnCoinPickup(Player sender, GameObject coinObj) {
+	public void OnCoinPickup(Player sender, Coin coin) {
 		if (sender != null) {
 			CoinsCollected++;
 		}
+
+		Timer.StartTimer(1);
 
 		if (CoinsCollected <= 4) {
 			oldpos = gameObject.transform.position;
@@ -74,7 +76,7 @@ public class Coin : MonoBehaviour {
 		get => coinsCollected;
 		set {
 			coinsCollected = value;
-			HUDisplay.script.UpdateCoinCounter(value);
+			HUDisplay.Instance.UpdateCoinCounter(value);
 			SoundFXHandler.script.PlayFX(SoundFXHandler.script.CoinCollected);
 		}
 	}

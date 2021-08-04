@@ -42,7 +42,8 @@ public class EnemySpawner : MonoBehaviour {
 		}
 	}
 
-	private void M_Player_OnCoinPickup(Player sender, GameObject coinObj) {
+	private void M_Player_OnCoinPickup(Player sender, Coin coin) {
+		electicBlockController.coin = coin;
 		SpawnElecticalBlocks();
 	}
 

@@ -38,15 +38,16 @@ public class MazeEntrance : MonoBehaviour {
 		yield return new WaitUntil(() => CameraMovement.Instance.CameraStill);
 
 		StartCoroutine(PreventPlayerIdle());
-		HUDisplay.script.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
+		HUDisplay.Instance.DisplayInfo("What do we have here...? \nGrab the spike and let's get out of this place.", "A maze ... duh?!");
 
-		yield return new WaitWhile(() => HUDisplay.script.isRunning);
+		yield return new WaitWhile(() => HUDisplay.Instance.IsRunning);
 
 		if (Control.currDifficulty >= 3) {
 			StartCoroutine(LerpCamPos(CameraMovement.Instance.transform.position, Player.Instance.transform.position));
 			StartCoroutine(CameraMovement.Instance.LerpSize(Camera.main.orthographicSize, 80, 0.5f));
 		}
 		PlayerMovement.CanMove = true;
+		PlayerMovement.SpeedMultiplier = 4;
 	}
 
 	private void MazeTransition() {

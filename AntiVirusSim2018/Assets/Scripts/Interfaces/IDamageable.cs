@@ -1,17 +1,9 @@
-﻿using System;
-using UnityEngine;
-
-[Flags]
-public enum WeaponType {
-	BULLET,
-	BOMB,
-}
+﻿using UnityEngine;
 
 interface IDamageable {
-	WeaponType damagedByType { get; set; }
+	WeaponType DamagedBy { get; set; }
 
 	void TakeDamage(GameObject by, WeaponType type);
 
-	bool onKillDestroy { get; }
-	bool onKillDeactivate { get; }
+	bool DeactivateOnKill { get; }
 }

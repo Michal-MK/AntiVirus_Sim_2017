@@ -6,33 +6,39 @@ using System;
 
 public class HUDisplay : MonoBehaviour {
 
-	public static HUDisplay script;
+	public static HUDisplay Instance { get; private set; }
 
-	public Text slideInText;
-	private Animator slideAnim;
+	[SerializeField]
+	private Text coinCounter = null;
+	[SerializeField]
+	private Text spikeCounter = null;
+	[SerializeField]
+	private Text infoPanelText = null;
+	[SerializeField]
+	private Text slideInText = null;
+	public string SlideInText => slideInText.text;
+	[SerializeField]
+	private bool isRunning = false;
+	public bool IsRunning => isRunning;
 
-	public Text infoPanelText;
-	private Animator infoPanelAnim;
-
-	public Text coinCounter;
-	public Text spikeCounter;
 
 	private GameObject topDirectionArrows;
 	private GameObject rightDirectionArrows;
 	private GameObject bottomDirectionArrows;
 	private GameObject leftDirectionArrows;
 
-	public bool isRunning = false;
+	private Animator infoPanelAnim;
+	private Animator slideAnim;
 
 	private string tempDisplayedText;
 
 	private Coroutine displayingInfoRoutine;
 
 	private void Awake() {
-		if (script == null) {
-			script = this;
+		if (Instance == null) {
+			Instance = this;
 		}
-		else if (script != this) {
+		else if (Instance != this) {
 			Destroy(gameObject);
 		}
 		LoadManager.OnSaveDataLoaded += LoadManager_OnSaveDataLoaded;
@@ -46,7 +52,6 @@ public class HUDisplay : MonoBehaviour {
 	private void Start() {
 		slideAnim = slideInText.GetComponent<Animator>();
 		infoPanelAnim = infoPanelText.transform.parent.GetComponent<Animator>();
-		infoPanelText = infoPanelText.GetComponentInChildren<Text>();
 
 		Transform dirArrows = transform.Find("_DirectionArrows");
 		topDirectionArrows = dirArrows.Find("Up").gameObject;
@@ -73,7 +78,7 @@ public class HUDisplay : MonoBehaviour {
 		tempDisplayedText = displayedTextSide;
 
 		if (displayedTextMain != null) {
-			StartCoroutine(ReplaceText(displayedTextMain));
+			infoPanelText.text = displayedTextMain;
 			infoPanelAnim.SetTrigger("Down");
 			isRunning = true;
 			Time.timeScale = 0;
@@ -107,9 +112,8 @@ public class HUDisplay : MonoBehaviour {
 		slideAnim.SetTrigger("SlideIn");
 	}
 
-	private IEnumerator ReplaceText(string newText) {
-		yield return new WaitForSecondsRealtime(.15f);
-		infoPanelText.text = newText;
+	public void UpdateSlideTextDirect(string text) {
+		slideInText.text = text;
 	}
 
 	public void DisplayDirection(Directions dir) {
@@ -156,7 +160,7 @@ public class HUDisplay : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		script = null;
+		Instance = null;
 		LoadManager.OnSaveDataLoaded -= LoadManager_OnSaveDataLoaded;
 	}
 }
