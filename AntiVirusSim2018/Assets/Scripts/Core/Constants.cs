@@ -68,7 +68,7 @@ namespace Igor {
 
 			public class PrefabNames {
 				public const string ENEMY_PROJECTILE = "Enemies/EnemyProjectile";
-				public const string ENEMY_PROJECTILE_ICICLE = "Enemies/EnemyProjectile_Icicle";
+				public const string ENEMY_PROJECTILE_ICICLE = "Enemies/EnemyProjectile_Icicle_Explode";
 				public const string ENEMY_KILLERBLOCK_BOSS = "Enemies/Boss/Enemy_KillerBlockBoss";
 				public const string ENEMY_KILLERBLOCK = "Enemies/KillerBlock";
 				public const string ENEMY_TURRET = "Enemies/Turret";
@@ -136,4 +136,3 @@ namespace Igor {
 		}
 	}
 }
-

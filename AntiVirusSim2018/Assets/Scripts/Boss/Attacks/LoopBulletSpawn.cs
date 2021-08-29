@@ -38,7 +38,7 @@ namespace Igor.Boss.Attacks {
 
 		public IEnumerator Attack() {
 			isAttackInProgress = true;
-			PlayerMovement.SpeedMultiplier = 0.2f;
+			PlayerMovement.SpeedMultiplier = 1f;
 			GameObject positioningCage = Object.Instantiate(cageObj, Player.Instance.transform.position, Quaternion.identity);
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(positioningCage.gameObject, cagePosition, Time.deltaTime / 2, null));
 			bossBehaviour.StartCoroutine(LerpFunctions.LerpPosition(Player.Instance.gameObject, cagePosition, Time.deltaTime / 2, null));
@@ -61,7 +61,7 @@ namespace Igor.Boss.Attacks {
 				yield return new WaitForSeconds(timeToCover * positions.Length);
 			}
 			isAttackInProgress = false;
-			PlayerMovement.SpeedMultiplier = 1f;
+			PlayerMovement.SpeedMultiplier = 5f;
 			yield return new WaitForSeconds(2);
 			Object.Destroy(positioningCage.gameObject);
 		}

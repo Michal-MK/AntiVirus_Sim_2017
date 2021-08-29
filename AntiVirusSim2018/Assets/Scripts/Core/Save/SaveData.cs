@@ -20,8 +20,3 @@ public class SaveFile {
 	public SaveData data = new SaveData();
 	public SaveHistory saveHistory = new SaveHistory();
 }
-
-
-
-
-
