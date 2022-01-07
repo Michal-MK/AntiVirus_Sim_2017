@@ -157,6 +157,9 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	public Room GetCurrentRoom() {
+		return MapData.Instance.ParseRoom(currentBG_name);
+	}
 
 	private void OnDestroy() {
 		Instance = null;

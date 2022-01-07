@@ -3,13 +3,14 @@
 public class LeverRelay : MonoBehaviour {
 
 	[SerializeField]
-	private GameObject room10AvoidancePrefab = null;
+	private GameObject roomAvoidancePrefab = null;
 	[SerializeField]
 	private Light redParticle = null;
 	[SerializeField]
 	private Light greenParticle = null;
 	[SerializeField]
 	private Lever[] levers = null;
+
 	/// <summary>
 	/// All levers connected with this relay
 	/// </summary>
@@ -31,31 +32,34 @@ public class LeverRelay : MonoBehaviour {
 	private void Hazards(Lever sender, bool isOn) {
 		switch (sender.name) {
 			case "Lever_8": {
-				instantiatedAvoidance = Instantiate(room10AvoidancePrefab, MapData.Instance.GetRoom(10).Background.position, Quaternion.identity);
+				Room r = Player.Instance.GetCurrentRoom();
+				instantiatedAvoidance = Instantiate(roomAvoidancePrefab, r.Background.position, Quaternion.identity);
 				instantiatedAvoidance.transform.GetChild(0).GetComponent<TurretAttack>().target = Player.Instance.gameObject;
 				sender.OnLeverSwitch -= Hazards;
 				Player.OnRoomEnter += RemoveInstantiatedAvoidance;
 				return;
+				
+				void RemoveInstantiatedAvoidance(Player player, RectTransform background, RectTransform previous) {
+					if (r.Background == previous) {
+						Destroy(instantiatedAvoidance);
+						Player.OnRoomEnter -= RemoveInstantiatedAvoidance;
+					}
+				}
 			}
 			case "Lever_9": {
-
+				// TODO
 				sender.OnLeverSwitch -= Hazards;
 				return;
 			}
 			case "Lever_10": {
-
+				// TODO
 				sender.OnLeverSwitch -= Hazards;
 				return;
 			}
 		}
 	}
 
-	private void RemoveInstantiatedAvoidance(Player sender, RectTransform background, RectTransform previous) {
-		if (background == MapData.Instance.GetRoom(6).Background) {
-			Destroy(instantiatedAvoidance);
-			Player.OnRoomEnter -= RemoveInstantiatedAvoidance;
-		}
-	}
+
 
 	private void LeverActivation(Lever sender, bool isOn) {
 		if (isOn) {

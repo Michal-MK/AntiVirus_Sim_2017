@@ -82,8 +82,10 @@ public class Control : MonoBehaviour {
 		}
 	}
 
-	private void SetupGameScene() {
+	private static void SetupGameScene() {
 		Player.GameProgression = 0;
+		PlayerMovement.SpeedMultiplier = 1f;
+		Zoom.CanZoom = true;
 		Timer.ResetTimer();
 	}
 

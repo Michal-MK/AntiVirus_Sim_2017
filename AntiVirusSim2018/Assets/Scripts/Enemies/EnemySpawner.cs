@@ -11,9 +11,9 @@ public class EnemySpawner : MonoBehaviour {
 	public GameObject projectileWallPrefab;
 	#endregion
 
-	private List<ProjectileWallController> currentProjectileWalls = new List<ProjectileWallController>();
+	private readonly List<ProjectileWallController> currentProjectileWalls = new List<ProjectileWallController>();
 
-	private RectTransform arrowtrapBG;
+	private RectTransform arrowTrapBackground;
 
 	public TurretAttack[] turrets;
 
@@ -30,23 +30,24 @@ public class EnemySpawner : MonoBehaviour {
 
 	private void Start() {
 		UpdatePrefabs(MapData.Instance.CurrentMapMode);
-		arrowtrapBG = MapData.Instance.GetRoom(3).Background;
+		arrowTrapBackground = MapData.Instance.GetRoom(3).Background;
 		electicBlockController = new ElecticBlockController(deathBlock);
 	}
 
 	private void LoadManager_OnSaveDataLoaded(SaveData data) {
 		if (data.player.currentBGName == MapData.Instance.GetRoom(1).Background.name) {
 			for (int i = 0; i <= data.player.coinsCollected - 2; i++) {
-				SpawnElecticalBlocks();
+				electicBlockController.Spawn();
 			}
 		}
 	}
 
 	private void M_Player_OnCoinPickup(Player sender, Coin coin) {
 		electicBlockController.coin = coin;
-		SpawnElecticalBlocks();
+		electicBlockController.Spawn();
 	}
 
+	// TODO This is obscure! The spawning code should be located in the room it is targeting
 	private void M_Player_OnRoomEnter(Player sender, RectTransform background, RectTransform previous) {
 		if (background == MapData.Instance.GetRoom(2).Background) {
 			if (currentProjectileWalls.Count == 0) {
@@ -82,9 +83,9 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
 	public TurretAttack[] SpawnAvoidance() {
-		Vector3 pos = new Vector3(arrowtrapBG.position.x, arrowtrapBG.position.y, 0);
-		float bgx = arrowtrapBG.sizeDelta.x / 2;
-		float bgy = arrowtrapBG.sizeDelta.y / 2;
+		Vector3 pos = new Vector3(arrowTrapBackground.position.x, arrowTrapBackground.position.y, 0);
+		float bgx = arrowTrapBackground.sizeDelta.x / 2;
+		float bgy = arrowTrapBackground.sizeDelta.y / 2;
 		Vector2[] positions = new Vector2[4] {
 			new Vector3(bgx - 10, bgy - 10, 0),
 			new Vector3(-bgx + 10, bgy - 10, 0),
@@ -101,15 +102,6 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		return turrets;
 	}
-
-	public void SpawnElecticalBlocks() {
-		electicBlockController.Spawn();
-	}
-
-	private void ClearElecticalBlocks() {
-		electicBlockController.Clear();
-	}
-
 
 	public void UpdatePrefabs(MapMode mode) {
 		switch (mode) {

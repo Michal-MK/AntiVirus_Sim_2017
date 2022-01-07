@@ -7,9 +7,6 @@ public class TeleportRoomField : MonoBehaviour {
 
 	public GameObject[] warnings;
 
-	public Transform start;
-	public Transform end1;
-	public Transform end2;
 	private Transform signPost;
 
 	public LeverRelay relay;
@@ -18,8 +15,6 @@ public class TeleportRoomField : MonoBehaviour {
 	private List<Transform> pathFields = new List<Transform>();
 	private Transform dangerWarnings;
 
-	private const float xOffset = 16;
-	private const float yOffset = 9;
 	private const int MID_AXES = 5;
 
 	private void Awake() {
@@ -63,8 +58,9 @@ public class TeleportRoomField : MonoBehaviour {
 	}
 
 	private void OnTopRoomEnter(Player sender, RectTransform background, RectTransform previous) {
-		if(background == MapData.Instance.GetTransition(MapData.Instance.GetRoomLink(7,9))) {
+		if (background == MapData.Instance.GetTransition(MapData.Instance.GetRoomLink(7, 9))) {
 			print("Entering Transition to top room");
+			Player.Instance.pMovement.SetMovementMode(PlayerMovementType.TELEPORT);
 			MapData.Instance.GetRoom(9).Background.parent.Find("Cherries_Apples").gameObject.SetActive(true);
 			Player.OnRoomEnter -= OnTopRoomEnter;
 		}
@@ -85,37 +81,27 @@ public class TeleportRoomField : MonoBehaviour {
 
 	private void FillRoom() {
 		Vector2 start = new Vector2(5, 0);
-		bool isSharingPosible = Chance.Half();
+		bool isSharingPossible = Chance.Half();
 
 		Vector2 point1 = new Vector2(Random.Range(MID_AXES + 3, MID_AXES * 2), Random.Range(1, MID_AXES - 1));
 		Vector2 pointA = new Vector2(MID_AXES, MID_AXES);
-		Vector2 pointB = isSharingPosible ? new Vector2(Random.Range(1, MID_AXES - 1), Random.Range(MID_AXES + 1, MID_AXES * 2)) : new Vector2(Random.Range(MID_AXES + 2, MID_AXES * 2 - 1), Random.Range(MID_AXES + 2, MID_AXES * 2 - 1));
-		Vector2 pointC = isSharingPosible ? pointB : new Vector2(Random.Range(1, MID_AXES - 1), Random.Range(1, MID_AXES - 1));
+		Vector2 pointB = isSharingPossible ? new Vector2(Random.Range(1, MID_AXES - 1), Random.Range(MID_AXES + 1, MID_AXES * 2)) : new Vector2(Random.Range(MID_AXES + 2, MID_AXES * 2 - 1), Random.Range(MID_AXES + 2, MID_AXES * 2 - 1));
+		Vector2 pointC = isSharingPossible ? pointB : new Vector2(Random.Range(1, MID_AXES - 1), Random.Range(1, MID_AXES - 1));
 
-		Vector2 deadend = isSharingPosible ? new Vector2(Random.Range(MID_AXES + 2, MID_AXES * 2), Random.Range(MID_AXES + 1, MID_AXES * 2)) : new Vector2(Random.Range(0, MID_AXES), Random.Range(MID_AXES + 3, MID_AXES * 2));
+		Vector2 deadEnd = isSharingPossible ? new Vector2(Random.Range(MID_AXES + 2, MID_AXES * 2), Random.Range(MID_AXES + 1, MID_AXES * 2)) : new Vector2(Random.Range(0, MID_AXES), Random.Range(MID_AXES + 3, MID_AXES * 2));
 
 		Vector2 leftExit = new Vector2(0, 5);
 		Vector2 upperExit = new Vector2(5, 10);
 
 		ConnectPoints(start, point1);
-		if (isSharingPosible) {
-			ConnectPoints(point1, deadend);
-		}
-		else {
-			ConnectPoints(pointA, deadend);
-		}
+		ConnectPoints(isSharingPossible ? point1 : pointA, deadEnd);
 		ConnectPoints(point1, pointA);
 		ConnectPoints(pointA, pointB);
-		if (isSharingPosible) {
-			ConnectPoints(pointB, pointC);
-		}
-		else {
-			ConnectPoints(pointA, pointC);
-		}
+		ConnectPoints(isSharingPossible ? pointB : pointA, pointC);
 		ConnectPoints(pointB, upperExit);
 		ConnectPoints(pointC, leftExit);
 
-		signPost.position = fields[(int)deadend.x, (int)deadend.y].position;
+		signPost.position = fields[(int)deadEnd.x, (int)deadEnd.y].position;
 
 		FillHazards();
 	}

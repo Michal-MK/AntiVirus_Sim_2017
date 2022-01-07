@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Reflection;
 
 public class AdvanceInGame : MonoBehaviour {
 
 	public int currentStage = 0;
 	private int movementTypeCounter = 0;
 
+	private bool canAdvance = true;
+	
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.F2)) {
+			if (!canAdvance) return;
 			if (currentStage < 10) {
 				currentStage++;
 				switch (currentStage) {
@@ -58,6 +60,12 @@ public class AdvanceInGame : MonoBehaviour {
 					case 6: {
 						StartCoroutine(FirstBoss());
 						return;
+					}	
+					case 7: {
+						LeverRelay relay = FindObjectOfType<LeverRelay>();
+						Player.Instance.transform.position = relay.transform.position + Vector3.left * 10;
+						relay.Interact();
+						return;
 					}
 				}
 			}
@@ -72,6 +80,7 @@ public class AdvanceInGame : MonoBehaviour {
 	}
 
 	private IEnumerator FirstBoss() {
+		canAdvance = false;
 		Player.Instance.transform.position = FindObjectOfType<BossEntrance>().transform.position;
 		yield return new WaitForSeconds(2);
 		StartCoroutine(FindObjectOfType<BossHealth>().Death());
@@ -79,5 +88,6 @@ public class AdvanceInGame : MonoBehaviour {
 		MapData.Instance.GetRoomLink(5, 6).OpenDoor();
 		yield return new WaitUntil(() => CameraMovement.Instance.CameraStill);
 		Camera.main.orthographicSize = CameraMovement.DEFAULT_CAM_SIZE;
+		canAdvance = true;
 	}
 }

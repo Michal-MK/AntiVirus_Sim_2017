@@ -171,4 +171,13 @@ public class MapData : MonoBehaviour {
 		}
 		return r;
 	}
+
+	public Room ParseRoom(string backgroundName) {
+		string[] split = backgroundName.Split('_');
+		if (split.Length > 2) {
+			throw new Exception($"Cannot get the room data for background name: {backgroundName}, it is most likely a Boss Room!");
+		}
+		int id = int.Parse(backgroundName.Split('_')[1]);
+		return NumberToRoom(id);
+	}
 }

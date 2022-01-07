@@ -102,6 +102,7 @@ public class BossHealth : MonoBehaviour {
 		Control.Instance.saveManager.canSave = true;
 		PlayerMovement.SpeedMultiplier = 1;
 		PlayerMovement.CanMove = true;
+		Zoom.CanZoom = true;
 		Destroy(transform.parent.gameObject);
 		Destroy(healthIndicator.gameObject);
 		HUDisplay.Instance.DisplayInfoDelayed("Great job, lets perform a quick scan to see if we resolved the problem.", "Initiating...", 2);
